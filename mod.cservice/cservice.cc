@@ -223,7 +223,7 @@ RegisterCommand(new SCANCommand(this, "SCAN", "[email|hostmask|nick] string", 10
 RegisterCommand(new CHINFOCommand(this, "CHINFO", "[email|nick|verification] nick newvalue", 10));
 RegisterCommand(new DEBUGCommand(this, "DEBUG", "(lock [add|list|remove]) (servers)", 10));
 RegisterCommand(new GETLEVELCommand(this, "GETLEVEL", "command domain", 2));
-RegisterCommand(new OFFICIALCommand(this, "OFFICIAL", "(check <user>) (clear <user>) (set <user> <level>)", 5));
+RegisterCommand(new OFFICIALCommand(this, "OFFICIAL", "(check <user>) (clear <user>) (list) (set <user> <level>)", 5));
 
 cserviceConfig = new (std::nothrow) EConfig( args ) ;
 assert( cserviceConfig != 0 ) ;

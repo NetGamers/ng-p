@@ -4,7 +4,7 @@
  * (c) Copyright 2002 Rasmus Hansen (GK@panet)
  * Distributed under the GNU Public License
  *
- * $Id: ADMINCMDSCommand.cc,v 1.16 2003-01-14 21:52:15 jeekay Exp $
+ * $Id: ADMINCMDSCommand.cc,v 1.17 2003-01-19 21:07:03 jeekay Exp $
  */
 
 #include	<string>
@@ -14,7 +14,7 @@
 #include	"cservice.h"
 #include  "levels.h"
 
-const char ADMINCMDSCommand_cc_rcsId[] = "$Id: ADMINCMDSCommand.cc,v 1.16 2003-01-14 21:52:15 jeekay Exp $" ;
+const char ADMINCMDSCommand_cc_rcsId[] = "$Id: ADMINCMDSCommand.cc,v 1.17 2003-01-19 21:07:03 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -75,7 +75,7 @@ if(aLevel >= 800)
 	{
 	bot->Notice(theClient, "\002Level  800 - CSC Supervisor");
 	bot->Notice(theClient, "GLOBNOTICE (message)");
-	bot->Notice(theClient, "OFFICIAL (CHECK <user>) (CLEAR <user>) (SET <user> <level>");
+	bot->Notice(theClient, "OFFICIAL (CHECK <user>) (CLEAR <user>) (LIST) (SET <user> <level>");
 	bot->Notice(theClient, "SUSPEND * (nick) (duration) (reason)");
 	bot->Notice(theClient, "UNSUSPEND * (nick) (reason)");
 	bot->Notice(theClient, "\002");

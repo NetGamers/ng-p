@@ -3,7 +3,7 @@
  *
  * 20020308 GK@PAnet - Initial Writing
  *
- * $Id: REMUSERIDCommand.cc,v 1.14 2002-10-20 02:12:08 jeekay Exp $
+ * $Id: REMUSERIDCommand.cc,v 1.15 2003-01-19 21:07:03 jeekay Exp $
  */
 
 #include	<string>
@@ -14,7 +14,7 @@
 #include "cservice.h"
 #include "networkData.h"
 
-const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.14 2002-10-20 02:12:08 jeekay Exp $" ;
+const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.15 2003-01-19 21:07:03 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -57,7 +57,8 @@ if(!targetUser)
 
 if(!targetUser->getComment().empty())
   {
-  bot->Notice(theClient, "Sorry, this nick is commented and cannot be removed.");
+  bot->Notice(theClient, "Sorry, %s is commented and cannot be removed.",
+    targetUser->getUserName().c_str());
   return false;
   }
 
@@ -114,7 +115,8 @@ if(PGRES_TUPLES_OK != status)
 int chansOwned = atoi(bot->SQLDb->GetValue(0,0));
 if(chansOwned)
 	{
-	bot->Notice(theClient, "This user owns %d channels. Please deal with that first.",
+	bot->Notice(theClient, "%s owns %d channels. Please deal with that first.",
+    targetUser->getUserName().c_str(),
 		chansOwned);
 	return false;
 	}
@@ -280,11 +282,6 @@ if(PGRES_COMMAND_OK != status)
 	}
 
 bot->Notice(theClient, "Successfully removed %s from the database.", st[1].c_str());
-
-// Was the user logged in? Notice them
-if(targetUser->isAuthed())
-	bot->noticeAllAuthedClients(targetUser, "Your registered nick has been purged. You are no longer authenticated.");
-
 
 // The user has now been deleted from the database
 // We now want to clean the cache of this user

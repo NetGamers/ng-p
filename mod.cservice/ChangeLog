@@ -1,6 +1,7 @@
 2003-01-15 1.2.03 Jeekay
 * Added OFFICIAL LIST to display all available custom verifies
 * Changed SET AUTOJOIN to log a channel join when enabled
+* Changed REMUSERID to report username of failed removals
 * Bumped version to 1.2.03
 
 2003-01-09 1.2.02 Jeekay
