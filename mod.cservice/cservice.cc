@@ -2286,6 +2286,29 @@ serverNotice(tmpChan, message);
 return true;
 }
 
+bool cservice::logErrorMessage(const char* format, ... )
+{
+
+char buf[ 1024 ] = { 0 } ;
+va_list _list ;
+
+va_start( _list, format ) ;
+vsnprintf( buf, 1024, format, _list ) ;
+va_end( _list ) ;
+
+// Try and locate the relay channel.
+Channel* tmpChan = Network->findChannel(relayChan);
+if (!tmpChan)
+	{
+	elog	<< "cservice::logAdminMessage> Unable to locate relay "
+		<< "channel on network!"
+		<< endl;
+	return false;
+	}
+
+Message(tmpChan, string("\002ERROR\002: ") + string(buf));
+return true;
+}
 
 string cservice::userStatusFlags( const string& theUser )
 {

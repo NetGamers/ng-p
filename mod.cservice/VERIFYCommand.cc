@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.17 2003-01-14 17:08:11 jeekay Exp $" ;
+const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.18 2004-05-16 12:45:42 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -26,25 +26,21 @@ if( st.size() < 2 )
  
 string extra;
 
-sqlUser* tmpUser = bot->isAuthed(theClient, false);
 iClient* target = Network->findNick(st[1]); 
+
 if(!target)
 	{
-	bot->Notice(theClient, 
-		bot->getResponse(tmpUser,
-			language::dont_see_them,
-			string("Sorry, I don't see %s anywhere.")).c_str(), st[1].c_str());
-	return false;
+	bot->Notice(theClient, "Sorry, I don't see %s anywhere.",
+		st[1].c_str());
+	return true;
 	}
         
 if (target->getMode(iClient::MODE_SERVICES))
 	{
-	bot->Notice(theClient, 
-		bot->getResponse(tmpUser,
-			language::is_service_bot,
-			string("%s is a NetGamers Service Bot.")).c_str(), 
-		target->getNickName().c_str());
-	return false;
+	bot->Notice(theClient, "%s is a NetGamers Service Bot.",
+		target->getNickName().c_str()
+		);
+	return true;
 	}
 
 /* 
@@ -55,8 +51,7 @@ sqlUser* theUser = bot->isAuthed(target, false);
 
 if (target->isOper())
 	{
-	extra = bot->getResponse(tmpUser,
-		language::is_also_an_ircop, " and an IRC operator");
+	extra = " and an IRC operator";
 	}
 
 if (!theUser) 
@@ -64,41 +59,31 @@ if (!theUser)
 	if(target->isOper())
 		{ 
 		bot->Notice(theClient, "%s is an IRC operator and is NOT logged in.",
-			target->getNickUserHost().c_str());
+			target->getNickUserHost().c_str()
+			);
+		return true;
 		}
 	else
 		{
-		bot->Notice(theClient, 
-			bot->getResponse(tmpUser,
-			language::is_not_logged_in,
-			string("%s is NOT logged in.")).c_str(), 
-		target->getNickUserHost().c_str());
+		bot->Notice(theClient, "%s is NOT logged in.",
+			target->getNickUserHost().c_str()
+			);
 		}
-		return false;
+		return true;
 	}
-
-sqlChannel* theChan = bot->getChannelRecord("#coder-com");
-if (!theChan) elog << "Cannot find the #coder-com channel!" << endl;
 
 int oLevel = theUser->getVerify();
 if(bot->getVerify(oLevel).empty()) oLevel = 0;
 
 int level = bot->getAdminAccessLevel(theUser); 
 
-int cLevel;
-if (!theChan)	cLevel = 0;
-else cLevel = bot->getEffectiveAccessLevel(theUser, theChan, false);
-
-if ( (0 == level) && (100 > cLevel) && (0 == oLevel) ) 
+if ( (0 == level) && (0 == oLevel) ) 
 	{
-	bot->Notice(theClient, 
-		bot->getResponse(tmpUser,
-			language::logged_in_as,
-			string("%s is logged in as %s%s")).c_str(), 
+	bot->Notice(theClient, "%s is logged in as %s%s",
 		target->getNickUserHost().c_str(),
 		theUser->getUserName().c_str(),
 		extra.c_str());
-	return false;
+	return true;
 	}
 
 if ((level >= level::admin::base) && (level < level::admin::cadmin)) 
@@ -164,42 +149,6 @@ if (level >= level::admin::coder)
 	return true;
 	}
 
-if ((cLevel >= level::coder::base) && (cLevel <= level::coder::contrib))
-	{
-	bot->Notice(theClient, 
-		bot->getResponse(tmpUser,
-			language::is_coder_contrib,
-			string("%s is an Official Coder-Com Contributer%s and logged in as %s")).c_str(),
-		target->getNickUserHost().c_str(),
-		extra.c_str(),
-		theUser->getUserName().c_str());
-	return true;
-	}
-
-if ((cLevel > level::coder::contrib) && (cLevel <= level::coder::devel))
-	{
-	bot->Notice(theClient, 
-		bot->getResponse(tmpUser,
-			language::is_coder_devel,
-			string("%s is an Official Coder-Com Developer%s and logged in as %s")).c_str(),
-		target->getNickUserHost().c_str(),
-		extra.c_str(),
-		theUser->getUserName().c_str());
-	return true;
-	}
-
-if (cLevel > level::coder::devel)
-	{
-	bot->Notice(theClient, 
-		bot->getResponse(tmpUser,
-			language::is_coder_senior,
-			string("%s is an Official Coder-Com Senior%s and logged in as %s")).c_str(),
-		target->getNickUserHost().c_str(),
-		extra.c_str(),
-		theUser->getUserName().c_str());
-	return true;
-	}
-
 if(oLevel)
 	{
 	bot->Notice(theClient, "%s is %s%s and logged in as %s",
@@ -207,6 +156,8 @@ if(oLevel)
 		extra.c_str(), theUser->getUserName().c_str());
 	return true;
 	}
+
+bot->logErrorMessage("ERROR: Impossible situation in VERIFY reached.");
 
 return true ;
 }

@@ -1,5 +1,5 @@
 #ifndef __CSERVICECLASS_H
-#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.20 2004-01-25 16:01:09 jeekay Exp $"
+#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.21 2004-05-16 12:45:42 jeekay Exp $"
 
 #include <map>
 
@@ -98,6 +98,9 @@ public:
 
 	/* Log an debug message to the debug channel */
 	bool logDebugMessage(const char*, ... );
+	
+	/** Log a message to the administrative channel. */
+	bool logErrorMessage(const char*, ... );
 
 	/* Write a channel log */
 	void writeChannelLog(sqlChannel*, iClient*, unsigned short, const string&);

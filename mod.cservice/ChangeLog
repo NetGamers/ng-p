@@ -3,6 +3,7 @@
 * Allow users to either accept or reject notes from a set of users
 * Fix handling of +T on burst
 * UPDATES
+* Remove #coder-com verifies
 * Bumped version to 1.2.16
 
 2004-01-25 1.2.15 Jeekay
