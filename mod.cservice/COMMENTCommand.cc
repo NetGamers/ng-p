@@ -12,7 +12,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char COMMENTCommand_cc_rcsId[] = "$Id: COMMENTCommand.cc,v 1.4 2002-04-04 19:16:33 jeekay Exp $" ;
+const char COMMENTCommand_cc_rcsId[] = "$Id: COMMENTCommand.cc,v 1.5 2002-09-07 22:29:53 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -123,12 +123,17 @@ if (string_upper(st[2]) == "OFF")
 {
 	string comment = "(" + theUser->getUserName() + ") " + st.assemble(2);
 	targetUser->setComment(comment);
-        targetUser->commit();
+  targetUser->commit();
 	bot->Notice(theClient, "COMMENT for user %s set to: %s", targetUser->getUserName().c_str(),
 			st.assemble(2).c_str());
+  
+  // Make sure the rest of the world knows about it
 	bot->logAdminMessage("%s (%s) - COMMENT - %s - %s",
 		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
 		targetUser->getUserName().c_str(), st.assemble(2).c_str());
+  
+  // Log a user event to this effect
+  targetUser->writeEvent(sqlUser::EV_COMMENT, theUser, st.assemble(2));
 }
 
 return true ;
