@@ -679,6 +679,10 @@ int cservice::OnPrivateMessage( iClient* theClient, const string& Message,
  * handler.
  */
 
+/*
+ * Do flood checking - admins at 750 or above are excempt.
+ * N.B: Only check that *after* someone has flooded ;)
+ */
 if (isIgnored(theClient)) return 0;
 
 StringTokenizer st( Message ) ;
@@ -688,10 +692,6 @@ if( st.empty() )
 	return 0 ;
 	}
 
-/*
- * Do flood checking - admins at 750 or above are excempt.
- * N.B: Only check that *after* someone has flooded ;)
- */
 const string Command = string_upper( st[ 0 ] ) ;
 
 /*
@@ -711,7 +711,7 @@ if(myCommand != lockedCommands.end())
  */
 
 if (!secure && ((Command == "LOGIN") || (Command == "NEWPASS")
-		|| (Command == "AUTH") ))
+		|| (Command == "AUTH") || (Command == "RECOVER") ))
 	{
 	Notice(theClient, "To use %s, you must /msg %s@%s",
 		Command.c_str(), nickName.c_str(), getUplinkName().c_str());
