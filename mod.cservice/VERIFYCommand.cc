@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.13 2002-07-20 15:45:06 jeekay Exp $" ;
+const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.14 2002-08-01 21:48:40 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -130,6 +130,7 @@ if((level >= level::admin::nadmin) && (level < level::admin::director))
 		target->getNickUserHost().c_str(),
 		extra.c_str(),
 		theUser->getUserName().c_str());
+  return true;
 	}
 
 if ((level >= level::admin::director) && (level < level::admin::amanager)) 
