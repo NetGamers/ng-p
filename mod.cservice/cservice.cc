@@ -353,7 +353,8 @@ int cservice::BurstChannels()
 int cservice::OnConnect()
 {
 // Find our NS instance
-xNetwork::xClientVectorType::const_iterator myLocalClients;
+//xNetwork::xClientVectorType::const_iterator myLocalClients;
+xNetwork::const_localClientIterator myLocalClients;
 myLocalClients = Network->localClient_begin();
 while(myLocalClients != Network->localClient_end())
 	{
