@@ -1,4 +1,8 @@
-/* COMMENTCommand.cc */
+/* 
+ * COMMENTCommand.cc 
+ * 23/1/2001 Matthias Crauwels <ultimate_@wol.be
+ * 
+ */
 
 #include	<string>
 
@@ -8,7 +12,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char COMMENTCommand_cc_rcsId[] = "$Id: COMMENTCommand.cc,v 1.1 2002-01-23 01:12:53 ultimate Exp $" ;
+const char COMMENTCommand_cc_rcsId[] = "$Id: COMMENTCommand.cc,v 1.2 2002-01-23 17:17:24 ultimate Exp $" ;
 
 namespace gnuworld
 {
@@ -33,7 +37,6 @@ if (!theUser)
 	}
 
 int admLevel = bot->getAdminAccessLevel(theUser);
-if (admLevel < level::comment) return false;
 
 /*
  *  Check if we wanna comment a channel or a user!
@@ -41,6 +44,7 @@ if (admLevel < level::comment) return false;
 
 if(st[1][0] == '#') // we HAVE a channel!!
 {
+	if (admLevel < level::chancomment) return false;
 
 	sqlChannel* targetChan = bot->getChannelRecord(st[1]);
 	if(!targetChan)
@@ -78,6 +82,8 @@ return true;
 /*
  *  Check the person we're trying to add is actually registered.
  */
+
+if (admLevel < level::usercomment) return false;
 
 sqlUser* targetUser = bot->getUserRecord(st[1]);
 if (!targetUser)

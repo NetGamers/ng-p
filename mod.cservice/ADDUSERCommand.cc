@@ -11,7 +11,7 @@
  *
  * Caveats: None
  *
- * $Id: ADDUSERCommand.cc,v 1.1 2002-01-14 23:14:15 morpheus Exp $
+ * $Id: ADDUSERCommand.cc,v 1.2 2002-01-23 17:17:23 ultimate Exp $
  */
 
 #include	<string>
@@ -24,7 +24,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char ADDUSERCommand_cc_rcsId[] = "$Id: ADDUSERCommand.cc,v 1.1 2002-01-14 23:14:15 morpheus Exp $" ;
+const char ADDUSERCommand_cc_rcsId[] = "$Id: ADDUSERCommand.cc,v 1.2 2002-01-23 17:17:23 ultimate Exp $" ;
 
 namespace gnuworld
 {
@@ -69,6 +69,15 @@ if (!theChan)
 	);
 	return false;
 	}
+
+#ifdef FEATURE_FORCELOG
+unsigned short forcedAccess = bot->isForced(theChan, theUser);
+if (forcedAccess <= 900 && forcedAccess > 0)
+        {
+        bot->writeForceLog(theUser, theChan, Message);
+        }
+
+#endif
 
 /*
  *  Check the user has sufficient access on this channel.

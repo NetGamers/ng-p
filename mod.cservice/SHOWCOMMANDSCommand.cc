@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.7 2002-01-23 09:29:57 ultimate Exp $" ;
+const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.8 2002-01-23 17:17:25 ultimate Exp $" ;
 
 namespace gnuworld
 {
@@ -20,8 +20,8 @@ static const char* lvl_900_cmds = "\002Level  900\002: servnotice rehash say set
 static const char* lvl_850_cmds = "\002Level  850\002: * adduser remuser modinfo";
 static const char* lvl_800_cmds = "\002Level  800\002: set[nopurge|special|vacation|caution|neverreg]";
 static const char* lvl_750_cmds = "\002Level  750\002: suspend";
-static const char* lvl_600_cmds = "\002Level  600\002: purge removeall register addcomment set[suspend]";
-static const char* lvl_501_cmds = "\002Level  501\002: remignore invme set[comment|locked]";
+static const char* lvl_600_cmds = "\002Level  600\002: purge removeall register comment(user) set[suspend]";
+static const char* lvl_501_cmds = "\002Level  501\002: remignore invme set[locked] comment(chan)";
 static const char* lvl_500_cmds = "\002Level  500\002: set";
 static const char* lvl_450_cmds = "\002Level  450\002: part join";
 static const char* lvl_400_cmds = "\002Level  400\002: adduser%s clearmode modinfo%s remuser%s";
@@ -45,7 +45,7 @@ static const char* lvl_0_set_cmds = "\002Level   0\002: invisible lang coords al
 static const char* lvl_25_set_cmds = "\002Level  25\002: autoinvite";
 static const char* lvl_450_set_cmds = "\002Level 450\002: userflag autotopic url keywords desc mode welcome";
 static const char* lvl_500_set_cmds = "\002Level 500\002: massdeoppro noop strictop lang autojoin floatlim";
-static const char* lvl_501_set_cmds = "\002Level 501\002: comment locked";
+static const char* lvl_501_set_cmds = "\002Level 501\002: locked";
 static const char* lvl_600_set_cmds = "\002Level 600\002: suspend";
 static const char* lvl_800_set_cmds = "\002Level 800\002: nopurge special vacation caution neverreg";
 static const char* lvl_900_set_cmds = "\002Level 900\002: noforce";

@@ -13,7 +13,7 @@
  * Shouldn't really happen, as trying to MODINFO a forced access doesn't
  * make sense - adduser and then MODINFO that :)
  *
- * $Id: MODINFOCommand.cc,v 1.1 2002-01-14 23:14:18 morpheus Exp $
+ * $Id: MODINFOCommand.cc,v 1.2 2002-01-23 17:17:24 ultimate Exp $
  */
 
 #include	<string>
@@ -23,7 +23,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char MODINFOCommand_cc_rcsId[] = "$Id: MODINFOCommand.cc,v 1.1 2002-01-14 23:14:18 morpheus Exp $" ;
+const char MODINFOCommand_cc_rcsId[] = "$Id: MODINFOCommand.cc,v 1.2 2002-01-23 17:17:24 ultimate Exp $" ;
 
 namespace gnuworld
 {
@@ -72,6 +72,16 @@ if (!theChan)
 		st[1].c_str());
 	return false;
 	}
+
+
+#ifdef FEATURE_FORCELOG
+unsigned short forcedAccess = bot->isForced(theChan, theUser);
+if (forcedAccess <= 900  && forcedAccess > 0)
+        {
+        bot->writeForceLog(theUser, theChan, Message);
+        }
+
+#endif
 
 /*
  *  Check the user has sufficient access on this channel.

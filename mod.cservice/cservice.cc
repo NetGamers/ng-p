@@ -3764,4 +3764,37 @@ void Command::Usage( iClient* theClient )
 bot->Notice( theClient, string( "SYNTAX: " ) + getInfo() ) ;
 }
 
+#ifdef FEATURE_FORCELOG
+void cservice::writeForceLog(sqlUser* theUser, sqlChannel* theChan, const string& theMessage)
+{
+
+int uid = theUser->getID();
+int cid = theChan->getID();
+
+strstream theLog;
+theLog  << "INSERT INTO forcelog (ts, user_id, channel_id, message) VALUES ("
+        << "now()::abstime::int4"
+        << ", "
+        << uid
+        << ", "
+        << cid
+        << ", '"
+        << escapeSQLChars(theMessage)
+        << "');"
+        << ends;
+
+#ifdef LOG_SQL
+        elog    << "forceLog::write> "
+                << theLog.str()
+                << endl;
+#endif
+
+SQLDb->ExecCommandOk(theLog.str());
+
+delete[] theLog.str();
+
+}
+#endif
+
+
 } // namespace gnuworld

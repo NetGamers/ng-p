@@ -9,3 +9,12 @@ db needs next field:
 Added COMMENT command like CSC requested it.
 db update:
 	ALTER TABLE users ADD COLUMN comment VARCHAR(300);
+
+
+23/1/2001 ULtimaTe_
+Added FEATURE_FORCELOG. Can be (un)defined in cservice_commands.h
+Logs ADDUSER, BAN, CLEARMODE, DEOP, DEVOICE, INVITE, JOIN, KICK, MODINFO, OP,
+PART, REMUSER, SET, SUSPEND, TOPIC, UNBAN, UNSUSPEND, VOICE into forcelog table
+(overriden for coderlevel (>900))
+Run update.sql script to add the table.
+

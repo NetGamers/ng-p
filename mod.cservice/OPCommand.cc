@@ -20,7 +20,7 @@
  *
  * Caveats: None
  *
- * $Id: OPCommand.cc,v 1.1 2002-01-14 23:14:19 morpheus Exp $
+ * $Id: OPCommand.cc,v 1.2 2002-01-23 17:17:24 ultimate Exp $
  */
 
 #include	<string>
@@ -35,7 +35,7 @@
 
 using std::map ;
 
-const char OPCommand_cc_rcsId[] = "$Id: OPCommand.cc,v 1.1 2002-01-14 23:14:19 morpheus Exp $" ;
+const char OPCommand_cc_rcsId[] = "$Id: OPCommand.cc,v 1.2 2002-01-23 17:17:24 ultimate Exp $" ;
 
 namespace gnuworld
 {
@@ -86,6 +86,16 @@ if (!theChan->getInChan())
 			string("I'm not in that channel!")));
 	return false;
 	}
+
+
+#ifdef FEATURE_FORCELOG
+unsigned short forcedAccess = bot->isForced(theChan, theUser);
+if (forcedAccess <= 900  && forcedAccess > 0)
+        {
+	bot->writeForceLog(theUser, theChan, Message);        
+        }
+
+#endif
 
 
 /*

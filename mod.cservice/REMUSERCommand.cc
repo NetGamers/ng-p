@@ -9,7 +9,7 @@
  * Caveats: None
  *
  *
- * $Id: REMUSERCommand.cc,v 1.1 2002-01-14 23:14:21 morpheus Exp $
+ * $Id: REMUSERCommand.cc,v 1.2 2002-01-23 17:17:25 ultimate Exp $
  */
 
 #include	<string>
@@ -21,7 +21,7 @@
 #include	"libpq++.h"
 #include	"responses.h"
 
-const char REMUSERCommand_cc_rcsId[] = "$Id: REMUSERCommand.cc,v 1.1 2002-01-14 23:14:21 morpheus Exp $" ;
+const char REMUSERCommand_cc_rcsId[] = "$Id: REMUSERCommand.cc,v 1.2 2002-01-23 17:17:25 ultimate Exp $" ;
 
 namespace gnuworld
 {
@@ -65,6 +65,14 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 		return false;
 	}
 
+#ifdef FEATURE_FORCELOG
+	unsigned short forcedAccess = bot->isForced(theChan, theUser);
+	if (forcedAccess <= 900  && forcedAccess > 0)
+        	{
+	        bot->writeForceLog(theUser, theChan, Message);
+        	}
+
+#endif
 
 	/*
 	 *  Check the user has sufficient access on this channel.

@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: DEVOICECommand.cc,v 1.1 2002-01-14 23:14:16 morpheus Exp $
+ * $Id: DEVOICECommand.cc,v 1.2 2002-01-23 17:17:24 ultimate Exp $
  */
 
 #include	<string>
@@ -23,7 +23,7 @@
 
 using std::map ;
 
-const char DEVOICECommand_cc_rcsId[] = "$Id: DEVOICECommand.cc,v 1.1 2002-01-14 23:14:16 morpheus Exp $" ;
+const char DEVOICECommand_cc_rcsId[] = "$Id: DEVOICECommand.cc,v 1.2 2002-01-23 17:17:24 ultimate Exp $" ;
 
 namespace gnuworld
 {
@@ -63,6 +63,15 @@ bool DEVOICECommand::Exec( iClient* theClient, const string& Message )
 			st[1].c_str());
 		return false;
 	}
+
+#ifdef FEATURE_FORCELOG
+	unsigned short forcedAccess = bot->isForced(theChan, theUser);
+	if (forcedAccess <= 900  && forcedAccess > 0)
+        	{
+	        bot->writeForceLog(theUser, theChan, Message);
+        	}
+
+#endif
 
  	/* Check the bot is in the channel. */
 

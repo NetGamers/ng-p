@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.12 2002-01-22 22:37:02 ultimate Exp $
+ * $Id: SETCommand.cc,v 1.13 2002-01-23 17:17:25 ultimate Exp $
  */
 
 #include	<string>
@@ -30,7 +30,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.12 2002-01-22 22:37:02 ultimate Exp $" ;
+const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.13 2002-01-23 17:17:25 ultimate Exp $" ;
 
 namespace gnuworld
 {
@@ -257,6 +257,15 @@ if(!theChan)
 		st[1].c_str());
 	return false;
 	}
+
+#ifdef FEATURE_FORCELOG
+unsigned short forcedAccess = bot->isForced(theChan, theUser);
+if (forcedAccess <= 900  && forcedAccess > 0)
+        {
+        bot->writeForceLog(theUser, theChan, Message);
+        }
+
+#endif
 
 // Check level.
 

@@ -11,7 +11,7 @@
 *
 * Suggestion: Support several nicks by seperating them with a comma.
 *             IE: /msg E kick #coder-com nick1,nick2,nick3 get outta here!
-* $Id: KICKCommand.cc,v 1.1 2002-01-14 23:14:17 morpheus Exp $
+* $Id: KICKCommand.cc,v 1.2 2002-01-23 17:17:24 ultimate Exp $
 */
 
 #include        <string>
@@ -24,7 +24,7 @@
 #include        "responses.h"
 #include		"match.h"
 
-const char KICKCommand_cc_rcsId[] = "$Id: KICKCommand.cc,v 1.1 2002-01-14 23:14:17 morpheus Exp $" ;
+const char KICKCommand_cc_rcsId[] = "$Id: KICKCommand.cc,v 1.2 2002-01-23 17:17:24 ultimate Exp $" ;
 
 namespace gnuworld
 {
@@ -61,6 +61,15 @@ bool KICKCommand::Exec( iClient* theClient, const string& Message )
 		    st[1].c_str());
 		return false;
 	}
+
+#ifdef FEATURE_FORCELOG
+	unsigned short forcedAccess = bot->isForced(theChan, theUser);
+	if (forcedAccess <= 900  && forcedAccess > 0)
+        	{
+	        bot->writeForceLog(theUser, theChan, Message);
+        	}
+
+#endif
 
  	/* Check the bot is in the channel. */
 

@@ -1,5 +1,5 @@
 #ifndef __CSERVICE_H
-#define __CSERVICE_H "$Id: cservice.h,v 1.1 2002-01-14 23:14:23 morpheus Exp $"
+#define __CSERVICE_H "$Id: cservice.h,v 1.2 2002-01-23 17:17:25 ultimate Exp $"
 
 #include	<string>
 #include	<vector>
@@ -423,6 +423,10 @@ public:
 
 	void incStat(const string& name);
 	void incStat(const string& name, unsigned int amount);
+#ifdef FEATURE_FORCELOG
+        void writeForceLog(sqlUser*, sqlChannel*, const string&);
+#endif
+
 } ;
 
 const string escapeSQLChars(const string& theString);
