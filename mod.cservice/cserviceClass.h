@@ -1,11 +1,11 @@
 #ifndef __CSERVICECLASS_H
-#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.17 2003-04-29 18:37:35 jeekay Exp $"
+#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.18 2003-09-02 22:31:51 jeekay Exp $"
 
 #include <map>
 
 #include	"EConfig.h"
 #include	"sqlChannel.h"
-#include  "sqlCommandLevel.h"
+#include	"sqlCommandLevel.h"
 #include	"sqlLevel.h"
 #include	"sqlBan.h"
 #include	"sqlUser.h"
