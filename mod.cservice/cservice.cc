@@ -2834,6 +2834,10 @@ switch( whichEvent )
 			doAutoTopic(reggedChan);
 			}
 
+                /* is WELCOME set? if so send the WELCOME message!! */
+                if(reggedChan->getFlag(sqlChannel::F_WELCOME))
+                        Notice(theClient, reggedChan->getWelcome().c_str());
+
 		/* Is it time to deal with autolimit's? */ 
                 if (reggedChan->getFlag(sqlChannel::F_FLOATLIM) && 
                         (reggedChan->getLastLimitCheck() 

@@ -9,7 +9,7 @@
  * 30/12/2000: Moved static SQL data to constants.h --Gte
  * Set loadData up to take data from rows other than 0.
  *
- * $Id: sqlChannel.cc,v 1.2 2002-01-16 00:00:22 morpheus Exp $
+ * $Id: sqlChannel.cc,v 1.3 2002-01-22 22:37:02 ultimate Exp $
  */
 
 #include	<strstream>
@@ -25,7 +25,7 @@
 #include	"cservice_config.h"
 
 const char sqlChannel_h_rcsId[] = __SQLCHANNEL_H ;
-const char sqlChannel_cc_rcsId[] = "$Id: sqlChannel.cc,v 1.2 2002-01-16 00:00:22 morpheus Exp $" ;
+const char sqlChannel_cc_rcsId[] = "$Id: sqlChannel.cc,v 1.3 2002-01-22 22:37:02 ultimate Exp $" ;
 
 namespace gnuworld
 {
@@ -45,6 +45,7 @@ const sqlChannel::flagType sqlChannel::F_CAUTION  = 0x00000040 ;
 const sqlChannel::flagType sqlChannel::F_VACATION = 0x00000080 ;
 const sqlChannel::flagType sqlChannel::F_LOCKED   = 0x00000100 ;
 const sqlChannel::flagType sqlChannel::F_FLOATLIM = 0x00000200 ;
+const sqlChannel::flagType sqlChannel::F_WELCOME  = 0x00000400 ;
 
 const sqlChannel::flagType sqlChannel::F_ALWAYSOP  = 0x00010000 ;
 const sqlChannel::flagType sqlChannel::F_STRICTOP  = 0x00020000 ;
@@ -90,6 +91,7 @@ sqlChannel::sqlChannel(PgDatabase* _SQLDb)
    last_limit_check(0),
    limit_grace(2), 
    limit_max(0), 
+   welcome(), 
    SQLDb( _SQLDb )
 {
 }
@@ -218,6 +220,7 @@ limit_offset = atoi(SQLDb->GetValue(row,14));
 limit_period = atoi(SQLDb->GetValue(row,15));
 limit_grace = atoi(SQLDb->GetValue(row,16));
 limit_max = atoi(SQLDb->GetValue(row,17));
+welcome = SQLDb->GetValue(row,18);
 }
 
 bool sqlChannel::commit()
@@ -247,7 +250,8 @@ queryString	<< queryHeader
 		<< "limit_grace = " << limit_grace << ", "
 		<< "limit_max = " << limit_max << ", "
 		<< "description = '" << escapeSQLChars(description) << "', "
-		<< "comment = '" << escapeSQLChars(comment) << "' "
+		<< "comment = '" << escapeSQLChars(comment) << "', "
+		<< "welcome = '" << escapeSQLChars(welcome) << "' "
 		<< queryCondition << id
 		<< ends;
 

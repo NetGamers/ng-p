@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.11 2002-01-21 15:03:23 morpheus Exp $
+ * $Id: SETCommand.cc,v 1.12 2002-01-22 22:37:02 ultimate Exp $
  */
 
 #include	<string>
@@ -30,7 +30,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.11 2002-01-21 15:03:23 morpheus Exp $" ;
+const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.12 2002-01-22 22:37:02 ultimate Exp $" ;
 
 namespace gnuworld
 {
@@ -306,6 +306,7 @@ else
 				string("%s for %s is %s")).c_str(),
 			option.c_str(),
 			theChan->getName().c_str(),
+
 			theChan->getFlag(sqlChannel::F_LOCKED) ? "ON" : "OFF");
 
 	    return true;
@@ -361,8 +362,39 @@ else
 
 	if (option == "WELCOME")
 	{
-		bot->Notice(theClient, "Under development");
-		return true;
+//		bot->Notice(theClient, "Under development");
+//		return true;
+            string welcome = st.assemble(3);
+            if(level < level::set::welcome)
+            {
+                bot->Notice(theClient,
+                                  bot->getResponse(theUser,
+                                  language::insuf_access,
+                                  string("You do not have enough access!")));
+                return true;
+            }
+            if(strlen(welcome.c_str()) > 255)
+            {
+                        bot->Notice(theClient, "The WELCOME message can be a maximum of 255 chars!");
+                        return true;
+            }
+                theChan->setWelcome(welcome);
+
+                if(welcome == "")
+                {
+                        bot->Notice(theClient, "WELCOME message for %s is cleared.",
+                                theChan->getName().c_str());
+                        theChan->removeFlag(sqlChannel::F_WELCOME);
+                } else
+                {
+                        bot->Notice(theClient, "WELCOME message for %s is: %s",
+                                        theChan->getName().c_str(), welcome.c_str());
+                        theChan->setFlag(sqlChannel::F_WELCOME);
+                }
+                theChan->commit();
+
+            return true;
+
 	}
 
 	if(option == "NOREG")

@@ -1,7 +1,7 @@
 /* sqlChannel.h */
 
 #ifndef __SQLCHANNEL_H
-#define __SQLCHANNEL_H "$Id: sqlChannel.h,v 1.2 2002-01-16 00:00:22 morpheus Exp $"
+#define __SQLCHANNEL_H "$Id: sqlChannel.h,v 1.3 2002-01-22 22:37:02 ultimate Exp $"
 
 #include	<string>
 #include	<map>
@@ -32,6 +32,7 @@ public:
 	static const flagType	F_CAUTION;
 	static const flagType	F_VACATION;
 	static const flagType   F_LOCKED;
+	static const flagType	F_WELCOME;
 
 	static const flagType	F_ALWAYSOP;
 	static const flagType	F_STRICTOP;
@@ -135,6 +136,9 @@ public:
         inline const unsigned int& getLimitMax() const 
                 { return limit_max ; } 
 
+	inline const string&		getWelcome() const
+		{ return welcome ; }
+
 	/**
 	 * Load channel data from the backend using the channel name as
 	 * a key.
@@ -222,6 +226,9 @@ public:
         inline void setLimitMax( const unsigned int& _limit_max ) 
                 { limit_max = _limit_max; } 
 
+	inline void setWelcome( const string& _welcome )
+		{ welcome = _welcome; }
+
 	/**
 	 * Method to perform a SQL 'UPDATE' and commit changes to this
 	 * object back to the database.
@@ -268,6 +275,7 @@ protected:
         time_t last_limit_check; 
 	unsigned int limit_grace; 
         unsigned int limit_max; 
+	string		welcome;
 
 	PgDatabase*	SQLDb;
 
