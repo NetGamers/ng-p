@@ -4,6 +4,7 @@
 * Fix handling of +T on burst
 * UPDATES
 * Remove #coder-com verifies
+* Changed format of failed login log to clarify what is what
 * Bumped version to 1.2.16
 
 2004-01-25 1.2.15 Jeekay

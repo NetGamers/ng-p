@@ -15,7 +15,7 @@
 #include	"sqlLevel.h"
 #include	"sqlUser.h"
 
-const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.20 2004-05-16 15:20:21 jeekay Exp $" ;
+const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.21 2004-05-18 22:54:38 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -103,7 +103,7 @@ if(!bot->isPasswordRight(theUser, st.assemble(2)))
 	/* Notify other admins */
 	if(isAdmin) {
 		bot->logAdminMessage("LOGIN - FAILURE - BAD PASS - %s (%s)",
-			theClient->getNickName().c_str(),
+			theClient->getNickUserHost().c_str(),
 			theUser->getUserName().c_str());
 	}
 	
