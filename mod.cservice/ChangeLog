@@ -1,4 +1,6 @@
-2002-05-11 1.2.00 Jeekay
+2002-11-09 1.2.01 Jeekay
+* Added logging to UPDATEDB
+2002-11-05 1.2.00 Jeekay
 * Added USERFLAGS setting '3' to set autovoice for 25-99 and autoop for 100+
   when users are added.
 * Added the keyword 'COMMENTS' to the output of STATUS if a channel has an
