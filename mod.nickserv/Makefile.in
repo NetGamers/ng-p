@@ -10,7 +10,7 @@
 # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
 
-# "$Id: Makefile.in,v 1.5 2002-02-08 00:24:34 jeekay Exp $"
+# "$Id: Makefile.in,v 1.6 2002-02-20 19:32:36 morpheus Exp $"
 
 
 SHELL = @SHELL@
@@ -61,14 +61,19 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
+AMTAR = @AMTAR@
 AS = @AS@
+AWK = @AWK@
 BIN_PATH = @BIN_PATH@
 CC = @CC@
 CPP = @CPP@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
+DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
+EXEEXT = @EXEEXT@
 INCLTDL = @INCLTDL@
+INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LDFLAGS = @LDFLAGS@
 LIBLTDL = @LIBLTDL@
 LIBTOOL = @LIBTOOL@
@@ -78,14 +83,18 @@ LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
 MOD_DIRS = @MOD_DIRS@
 OBJDUMP = @OBJDUMP@
+OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 PGSQL_INCLUDE = @PGSQL_INCLUDE@
 PGSQL_LIB = @PGSQL_LIB@
 RANLIB = @RANLIB@
 SRC_PATH = @SRC_PATH@
 VERSION = @VERSION@
+am__include = @am__include@
+am__quote = @am__quote@
 bindir = @bindir@
 glibdir = @glibdir@
+install_sh = @install_sh@
 
 lib_LTLIBRARIES = libnickserv.la
 libnickserv_la_SOURCES = nickserv.cc 			nsUser.cc 			sqlnsUser.cc 			juUser.cc 			nickservCommands.cc 			JUPECommand.cc 			RELEASECommand.cc 			SAYCommand.cc 			STATSCommand.cc

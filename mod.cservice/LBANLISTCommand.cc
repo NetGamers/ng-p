@@ -8,7 +8,7 @@
  *
  * Caveats: None.
  *
- * $Id: LBANLISTCommand.cc,v 1.2 2002-02-18 03:33:44 jeekay Exp $
+ * $Id: LBANLISTCommand.cc,v 1.3 2002-02-20 19:32:35 morpheus Exp $
  */
 
 #include	<string>
@@ -23,7 +23,7 @@
 #include	"cservice_config.h"
 #include	"time.h"
 
-const char LBANLISTCommand_cc_rcsId[] = "$Id: LBANLISTCommand.cc,v 1.2 2002-02-18 03:33:44 jeekay Exp $" ;
+const char LBANLISTCommand_cc_rcsId[] = "$Id: LBANLISTCommand.cc,v 1.3 2002-02-20 19:32:35 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -43,7 +43,11 @@ if( st.size() < 3 )
 
 // Is the channel registered?
 
-sqlUser* theUser = bot->isAuthed(theClient, false);
+sqlUser* theUser = bot->isAuthed(theClient,true);
+if(!theUser)
+	{
+	return false;
+	}
 sqlChannel* theChan = bot->getChannelRecord(st[1]);
 if(!theChan)
 	{
