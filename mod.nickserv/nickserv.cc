@@ -23,7 +23,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.20 2002-02-08 00:24:34 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.21 2002-02-15 00:34:51 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -224,9 +224,23 @@ theServer->RegisterEvent( EVT_FORCEDEAUTH, this );
 
 // Start the counters rolling
 processQueueID = theServer->RegisterTimer(::time(NULL) + timeToLive, this, NULL);
+if(!processQueueID)
+	elog << "nickserv::ImplementServer> Unable to register timer for processQueueID" << endl;
+
 refreshAdminID = theServer->RegisterTimer(::time(NULL) + adminRefreshTime, this, NULL);
+if(!refreshAdminID)
+	elog << "nickserv::ImplementServer> Unable to register timer for refreshAdminID" << endl;
+
 dbConnCheckID  = theServer->RegisterTimer(::time(NULL) + dbConnCheckTime, this, NULL);
+if(!dbConnCheckID)
+	elog << "nickserv::ImplementServer> Unable to register timer for dbConnCheckID" << endl;
+
 jupeExpireID = theServer->RegisterTimer(::time(NULL) + jupeExpireTime, this, NULL);
+if(!jupeExpireID)
+	elog << "nickserv::ImplementServer> Unable to register timer for jupeExpireID" << endl;
+
+if(!processQueueID || !refreshAdminID || !dbConnCheckID || !jupeExpireID)
+	::exit(0);
 
 dbConnRetries = 0;
 
