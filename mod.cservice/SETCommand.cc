@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.13 2002-01-23 17:17:25 ultimate Exp $
+ * $Id: SETCommand.cc,v 1.14 2002-01-23 22:50:38 jeekay Exp $
  */
 
 #include	<string>
@@ -30,7 +30,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.13 2002-01-23 17:17:25 ultimate Exp $" ;
+const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.14 2002-01-23 22:50:38 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -1002,12 +1002,12 @@ else
                                   string("You do not have enough access!")));
 		return true;
 	    }
-	    if(strlen(desc.c_str()) > 80)
+	    if(strlen(desc.c_str()) > 128)
 	    {
 			bot->Notice(theClient,
 				bot->getResponse(theUser,
 					language::desc_max_len,
-					string("The DESCRIPTION can be a maximum of 80 chars!")));
+					string("The DESCRIPTION can be a maximum of 128 chars!")));
 			return true;
 	    }
 		theChan->setDescription(desc);
@@ -1276,7 +1276,9 @@ else
 
            theChan->commit(); 
     
-           bot->Notice(theClient, "Floating-limit Margin now set to %i", limit_offset); 
+           bot->Notice(theClient, "Floating-limit Margin now set to %i", limit_offset);
+					 
+					 return true;
 	}
 		if(option == "FLOATGRACE") 
            { 
