@@ -1,4 +1,8 @@
-libcservice.so.0 libnickserv.so.0 libcservice.la libgnuworld_db.la libnickserv.la libcservice.so libnickserv.so
+*.0
+*.la
+*.so
 gnuworld gnuworld.pid
 debug.log
 socket.log
+*core*
+
