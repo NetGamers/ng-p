@@ -13,7 +13,7 @@
  * Shouldn't really happen, as trying to MODINFO a forced access doesn't
  * make sense - adduser and then MODINFO that :)
  *
- * $Id: MODINFOCommand.cc,v 1.3 2002-02-08 23:08:45 ultimate Exp $
+ * $Id: MODINFOCommand.cc,v 1.4 2002-08-14 22:00:48 jeekay Exp $
  */
 
 #include	<string>
@@ -23,7 +23,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char MODINFOCommand_cc_rcsId[] = "$Id: MODINFOCommand.cc,v 1.3 2002-02-08 23:08:45 ultimate Exp $" ;
+const char MODINFOCommand_cc_rcsId[] = "$Id: MODINFOCommand.cc,v 1.4 2002-08-14 22:00:48 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -153,7 +153,7 @@ if (command == "ACCESS")
 	 * higher (or equal) than ours.
 	 */
 
-	if (level <= targetLevel)
+	if (level <= targetLevel || targetLevel >= 499)
 		{
 		/*
 		 * Let forced users modify their own user records in channels to

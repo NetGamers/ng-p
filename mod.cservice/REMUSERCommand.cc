@@ -9,7 +9,7 @@
  * Caveats: None
  *
  *
- * $Id: REMUSERCommand.cc,v 1.4 2002-07-01 00:33:07 jeekay Exp $
+ * $Id: REMUSERCommand.cc,v 1.5 2002-08-14 22:00:48 jeekay Exp $
  */
 
 #include	<string>
@@ -21,7 +21,7 @@
 #include	"libpq++.h"
 #include	"responses.h"
 
-const char REMUSERCommand_cc_rcsId[] = "$Id: REMUSERCommand.cc,v 1.4 2002-07-01 00:33:07 jeekay Exp $" ;
+const char REMUSERCommand_cc_rcsId[] = "$Id: REMUSERCommand.cc,v 1.5 2002-08-14 22:00:48 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -142,7 +142,7 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 	 *  Unless they are trying to remove themself.. in which case its ok ;)
 	 */
 
-	if ((level <= targetLevel) && (targetUser != theUser))
+	if ((level <= targetLevel) && (targetUser != theUser) || (targetLevel == 499 && !bot->isForced(theChan, theUser)))
 	{
 		bot->Notice(theClient,
 			bot->getResponse(theUser,

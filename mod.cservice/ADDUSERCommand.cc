@@ -11,7 +11,7 @@
  *
  * Caveats: None
  *
- * $Id: ADDUSERCommand.cc,v 1.5 2002-07-01 00:33:05 jeekay Exp $
+ * $Id: ADDUSERCommand.cc,v 1.6 2002-08-14 22:00:47 jeekay Exp $
  */
 
 #include	<string>
@@ -24,7 +24,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char ADDUSERCommand_cc_rcsId[] = "$Id: ADDUSERCommand.cc,v 1.5 2002-07-01 00:33:05 jeekay Exp $" ;
+const char ADDUSERCommand_cc_rcsId[] = "$Id: ADDUSERCommand.cc,v 1.6 2002-08-14 22:00:47 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -113,7 +113,7 @@ if (level < level::adduser)
  */
 int targetAccess = atoi(st[3].c_str());
 
-if (level <= targetAccess)
+if (level <= targetAccess || (targetAccess == 499 && !bot->isForced(theChan, theUser)))
 	{
 	bot->Notice(theClient,
 		bot->getResponse(theUser,
