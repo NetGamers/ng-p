@@ -23,7 +23,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.22 2002-02-15 01:52:09 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.23 2002-02-15 03:37:11 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -87,6 +87,8 @@ debugChan = conf.Require("debug_chan")->second;
 
 timeToLive = atoi((conf.Require("timeToLive")->second).c_str());
 initialWait = atoi((conf.Require("initialWait")->second).c_str());
+checkNickMax = atoi((conf.Require("checkNickMax")->second).c_str());
+
 adminRefreshTime = atoi((conf.Require("adminRefreshTime")->second).c_str());
 
 jupeNumericStart = atoi((conf.Require("jupeNumericStart")->second).c_str());
@@ -412,8 +414,10 @@ int nickserv::OnTimer(xServer::timerID timer_id, void* data)
 		delete[] strTemp.str();
 		unsigned int warnings = 0;
 		unsigned int kills = 0;
+		unsigned int iterations = 0;
 		for(killIterator pos = KillingQueue.begin(); pos != KillingQueue.end(); )
 		{ // Iterative loop
+		if(iterations >= checkNickMax) break; else ++iterations;
 			// Quick sanity checking
 		  nsUser* tmpNS = static_cast< nsUser* >( pos->second);
 			iClient* tmpClient = Network->findClient(tmpNS->getNumeric());
@@ -493,7 +497,7 @@ int nickserv::OnTimer(xServer::timerID timer_id, void* data)
 		} // Iterative loop
 
 		strstream summaryString;
-		summaryString << "Warnings: " << warnings << "; Kills: " << kills << ends;
+		summaryString << "Processed: " << iterations << "; Warnings: " << warnings << "; Kills: " << kills << ends;
 		logDebugMessage(summaryString.str());
 		delete[] summaryString.str();
 		processQueueID = MyUplink->RegisterTimer(::time(NULL) + timeToLive, this, NULL);

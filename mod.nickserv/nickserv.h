@@ -1,6 +1,6 @@
 
 #ifndef __NICKSERV_H
-#define __NICKSERV_H "$Id: nickserv.h,v 1.12 2002-02-15 01:52:09 jeekay Exp $"
+#define __NICKSERV_H "$Id: nickserv.h,v 1.13 2002-02-15 03:37:11 jeekay Exp $"
 
 
 #include	<string>
@@ -90,6 +90,7 @@ protected:
 	// How long to let clients live
 	int     timeToLive;
 	int initialWait;
+	unsigned int checkNickMax;
 
 	// How frequently we refresh admin records
 	int     adminRefreshTime;
@@ -106,8 +107,11 @@ protected:
 	int dbConnRetries;
 	
 public:
-	inline const string getDebugChannel()
+	inline const string getDebugChannel() const
 	  { return debugChan; }
+	
+	inline const unsigned int getCheckNickmax() const
+		{ return checkNickMax; }
 
 	/**
 	 * Default, and only constructor, receives the name
