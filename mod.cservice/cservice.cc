@@ -2440,8 +2440,7 @@ if (!tmpChan)
 	return false;
 	}
 
-string message = string( "[" ) + nickName + "] " + buf ;
-serverNotice(tmpChan, message);
+Message(relayChan, buf);
 return true;
 }
 
