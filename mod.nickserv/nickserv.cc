@@ -22,7 +22,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.1 2002-01-14 23:33:39 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.2 2002-01-15 18:36:13 jeekay Exp $" ;
 
 // If DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -77,6 +77,7 @@ string sqlPort = conf.Require( "sql_port" )->second;
 string sqlUser = conf.Require( "sql_user")->second;
 debugChan = conf.Require("debug_chan")->second;
 timeToLive = atoi((conf.Require("timeToLive")->second).c_str());
+adminRefreshTime = atoi((conf.Require("adminRefreshTime")->second).c_str());
 
 string Query = "host=" + sqlHost + " dbname=" + sqlDb + " port=" + sqlPort + " user=" +sqlUser;
 
@@ -117,6 +118,9 @@ authLen = atoi(conf.Require("authLen")->second.c_str());
 
 RegisterCommand( new LOGINCommand( this, "LOGIN", "<password>"
 	"\t\tAuthenticate you with the bot")) ;
+
+// Load all the admin names and levels
+refreshAdminAccessLevels();
 
 }
 
@@ -203,6 +207,7 @@ theServer->RegisterEvent( EVT_CHNICK, this );
 
 // Start the counters rolling
 processQueueID = theServer->RegisterTimer(::time(NULL) + timeToLive, this, NULL);
+refreshAdminID = theServer->RegisterTimer(::time(NULL) + adminRefreshTime, this, NULL);
 
 xClient::ImplementServer( theServer ) ;
 }
@@ -435,6 +440,12 @@ int nickserv::OnTimer(xServer::timerID timer_id, void* data)
 		processQueueID = MyUplink->RegisterTimer(::time(NULL) + timeToLive, this, NULL);
 	} // processQueueID
 
+  if(timer_id == refreshAdminID)
+    {
+      refreshAdminAccessLevels();
+      refreshAdminID = MyUplink->RegisterTimer(::time(NULL) + adminRefreshTime, this, NULL);
+    }
+
 return true;
 }
 
@@ -485,7 +496,7 @@ bool nickserv::checkUser(nsUser* tmpUser)
 {
 ExecStatusType status;
 strstream s;
-s << "SELECT id,user_name from Users Where lower(user_name) = '"
+s << "SELECT id,user_name,autokill from Users Where lower(user_name) = '"
 	    << string_lower(tmpUser->getNickName()) << "'" << ends;
 status = SQLDb->Exec(s.str());
 
@@ -497,9 +508,8 @@ if(PGRES_TUPLES_OK == status)
 	{
 	if(SQLDb->Tuples() > 0)
 		{
-		  /* tmpKill = atoi(SQLDb->GetValue(0, 2));
-		     return tmpKill; */
-		  return 1;
+		  tmpKill = atoi(SQLDb->GetValue(0, 2));
+		  return tmpKill;
 		}
 	return false;
 	}
@@ -521,6 +531,13 @@ void nickserv::authUser(iClient* tmpClient, const string& authNick)
 nsUser* tmpUser = static_cast < nsUser* >( tmpClient->getCustomData(this));
 tmpUser->setLoggedIn();
 tmpUser->setLoggedNick(authNick);
+if(int tmpAccess = getAdminAccessLevel(authNick))
+  {
+    strstream theNotice;
+    theNotice << "Authed with NS admin level: " << tmpAccess << ends;
+    Notice(tmpClient, theNotice.str());
+    delete[] theNotice.str();
+  }
 }
 
 void nickserv::removeFromQueue(iClient* theClient)
@@ -560,6 +577,58 @@ bool nickserv::logDebugMessage(const string& theMessage)
 
 }
 
+void nickserv::refreshAdminAccessLevels( void )
+{
+  strstream theQuery;
+  theQuery << "SELECT users.user_name,levels.access "
+           << "FROM users,levels,channels "
+           << "WHERE channels.name='" << debugChan << "' "
+           << "AND channels.id=levels.channel_id "
+           << "AND users.id=levels.user_id" << ends;
+
+  ExecStatusType status = SQLDb->Exec(theQuery.str());
+  delete[] theQuery.str();
+
+  adminList.clear();
+
+  if( PGRES_TUPLES_OK == status )
+  {
+    for(int i = 0; i < SQLDb->Tuples(); i++)
+    {
+      // Add new admin information to cache
+      string newAdmin = SQLDb->GetValue(i, 0);
+      short int newLevel = atoi(SQLDb->GetValue(i,1));
+      adminList[string_lower(newAdmin)] = newLevel;
+    }
+  }
+
+  elog << "nickserv::refreshAdminAccessLevels> Refresh complete" << endl;
+
+  strstream dbgMsg;
+  dbgMsg << "ns::rAAL> Admin map has been refreshed - Total entries: " << adminList.size() << ends;
+
+  logDebugMessage(dbgMsg.str());
+
+  delete[] dbgMsg.str();
+
+  return;
+}
+
+short int nickserv::getAdminAccessLevel( string theNick )
+{
+  adminIteratorType pos;
+  pos = adminList.find(string_lower(theNick));
+  if(pos == adminList.end())
+    {
+      return 0;
+    }
+  else
+    {
+      return pos->second;
+    }
+}
+
 } // namespace gnuworld
 
 }
+

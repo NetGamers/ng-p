@@ -1,6 +1,6 @@
 
 #ifndef __NICKSERV_H
-#define __NICKSERV_H "$Id: nickserv.h,v 1.1 2002-01-14 23:33:39 jeekay Exp $"
+#define __NICKSERV_H "$Id: nickserv.h,v 1.2 2002-01-15 18:36:13 jeekay Exp $"
 
 
 #include	<string>
@@ -68,16 +68,22 @@ protected:
 	 */
 	typedef commandMapType::value_type pairType ;
 
-	//typedef list<nsUser*> killQueue;
+	// This is where we store the people are are going to kill
 	typedef map<string, nsUser*> killQueue;
-	
 	typedef killQueue::iterator killIterator;
-	
+
+	// Lists of NS admins
+	typedef map<string, int> adminListType;
+	typedef adminListType::iterator adminIteratorType;
+
 	// Logs debug information
 	string  debugChan;
 
 	// How long to let clients live
 	int     timeToLive;
+
+	// How frequently we refresh admin records
+	int     adminRefreshTime;
 	
 public:
 
@@ -185,6 +191,9 @@ public:
 
 	bool    logDebugMessage(const string&);
 
+	short int getAdminAccessLevel( string theNick );
+	void refreshAdminAccessLevels( void );
+	
 	/*
 	 * The type of a constant iterator to the command map.
 	 */
@@ -256,7 +265,10 @@ protected:
 	
 	killQueue		KillingQueue;
 
+	adminListType adminList;
+
 	xServer::timerID processQueueID;
+	xServer::timerID refreshAdminID;
 	
 } ; 
  
