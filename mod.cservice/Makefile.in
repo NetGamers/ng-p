@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# "$Id: Makefile.in,v 1.13 2003-01-14 17:08:11 jeekay Exp $"
+# "$Id: Makefile.in,v 1.14 2003-04-09 21:12:00 jeekay Exp $"
 SHELL = @SHELL@
 
 srcdir = @srcdir@
@@ -148,7 +148,6 @@ libcservice_la_SOURCES = cservice.cc \
 	PARTCommand.cc \
 	PURGECommand.cc \
 	QUOTECommand.cc \
-	RANDOMCommand.cc \
 	RECOVERCommand.cc \
 	REGISTERCommand.cc \
 	REHASHCommand.cc \
@@ -201,7 +200,7 @@ am_libcservice_la_OBJECTS = cservice.lo networkData.lo sqlChannel.lo \
 	MODINFOCommand.lo MOTDCommand.lo NEWPASSCommand.lo \
 	NOTECommand.lo OFFICIALCommand.lo OPCommand.lo \
 	OPERJOINCommand.lo OPERPARTCommand.lo OPERSUSPENDCommand.lo \
-	PARTCommand.lo PURGECommand.lo QUOTECommand.lo RANDOMCommand.lo \
+	PARTCommand.lo PURGECommand.lo QUOTECommand.lo \
 	RECOVERCommand.lo REGISTERCommand.lo REHASHCommand.lo \
 	RELEASECommand.lo REMIGNORECommand.lo REMOVEALLCommand.lo \
 	REMUSERCommand.lo REMUSERIDCommand.lo SAYCommand.lo \
@@ -259,7 +258,6 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/PARTCommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/PURGECommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/QUOTECommand.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/RANDOMCommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/RECOVERCommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/REGISTERCommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/REHASHCommand.Plo \
@@ -392,7 +390,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PARTCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PURGECommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/QUOTECommand.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/RANDOMCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/RECOVERCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/REGISTERCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/REHASHCommand.Plo@am__quote@

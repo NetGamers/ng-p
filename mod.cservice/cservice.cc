@@ -151,79 +151,85 @@ cservice::cservice(const string& args)
  *  Register command handlers.
  */
 
-RegisterCommand(new SHOWCOMMANDSCommand(this, "SHOWCOMMANDS", "[#channel]", 3));
+/* Generic commands */
+RegisterCommand(new HELPCommand(this, "HELP", "[command]", 4));
+RegisterCommand(new ISREGCommand(this, "ISREG", "<#channel>", 4));
 RegisterCommand(new LOGINCommand(this, "LOGIN", "<username> <password>", 10));
 RegisterCommand(new LOGINCommand(this, "AUTH", "<username> <password>", 10));
-RegisterCommand(new RECOVERCommand(this, "RECOVER", "", 10));
-RegisterCommand(new ACCESSCommand(this, "ACCESS", "[channel] [username] [-min n] [-max n] [-op] [-voice] [-none] [-modif]", 5));
-RegisterCommand(new CHANINFOCommand(this, "CHANINFO", "<#channel>", 3));
-RegisterCommand(new ISREGCommand(this, "ISREG", "<#channel>", 4));
-RegisterCommand(new VERIFYCommand(this, "VERIFY", "<nick>", 3));
-RegisterCommand(new SEARCHCommand(this, "SEARCH", "<keywords>", 5));
 RegisterCommand(new MOTDCommand(this, "MOTD", "", 4));
-RegisterCommand(new HELPCommand(this, "HELP", "[command]", 4));
-RegisterCommand(new RANDOMCommand(this, "RANDOM", "", 4));
-RegisterCommand(new UPDATEDBCommand(this, "UPDATEDB", "", 20));
-RegisterCommand(new SHOWIGNORECommand(this, "SHOWIGNORE", "", 3));
-RegisterCommand(new SUPPORTCommand(this, "SUPPORT", "#channel <YES|NO>", 15));
-#ifdef FEATURE_MEMOSERV
+RegisterCommand(new NEWPASSCommand(this, "NEWPASS", "<new passphrase>", 8));
 RegisterCommand(new NOTECommand(this, "NOTE", "[SEND <username> <text>] | READ | ERASE [<id>|ALL] | ALLOW [(CLEAR|LIST)|(ADD|REM <nick>)]", 4));
+RegisterCommand(new RECOVERCommand(this, "RECOVER", "", 10));
 RegisterCommand(new RELEASECommand(this, "RELEASE", "", 4));
-#endif
+RegisterCommand(new SEARCHCommand(this, "SEARCH", "<keywords>", 5));
+RegisterCommand(new SHOWCOMMANDSCommand(this, "SHOWCOMMANDS", "[#channel]", 3));
+RegisterCommand(new SHOWIGNORECommand(this, "SHOWIGNORE", "", 3));
+RegisterCommand(new VERIFYCommand(this, "VERIFY", "<nick>", 3));
 
-RegisterCommand(new OPCommand(this, "OP", "<#channel> [nick] [nick] ..", 3));
-RegisterCommand(new DEOPCommand(this, "DEOP", "<#channel> [nick] [nick] ..", 3));
-RegisterCommand(new VOICECommand(this, "VOICE", "<#channel> [nick] [nick] ..", 3));
-RegisterCommand(new DEVOICECommand(this, "DEVOICE", "<#channel> [nick] [nick] ..", 3));
+/* Channel commands */
+RegisterCommand(new ACCESSCommand(this, "ACCESS", "[channel] [username] [-min n] [-max n] [-op] [-voice] [-none] [-modif]", 5));
 RegisterCommand(new ADDUSERCommand(this, "ADDUSER", "<#channel> <username> <access>", 8));
-RegisterCommand(new REMUSERCommand(this, "REMUSER", "<#channel> <username>", 4));
+RegisterCommand(new BANCommand(this, "BAN", "<#channel> <nick | *!*user@*.host> [duration] [level] [reason]", 5));
+RegisterCommand(new BANLISTCommand(this, "BANLIST", "<#channel>", 3));
+RegisterCommand(new CHANINFOCommand(this, "CHANINFO", "<#channel>", 3));
+RegisterCommand(new CHANINFOCommand(this, "INFO", "<username>", 3));
+RegisterCommand(new CLEARMODECommand(this, "CLEARMODE", "<#channel>", 4));
+RegisterCommand(new DEOPCommand(this, "DEOP", "<#channel> [nick] [nick] ..", 3));
+RegisterCommand(new DEVOICECommand(this, "DEVOICE", "<#channel> [nick] [nick] ..", 3));
+RegisterCommand(new INVITECommand(this, "INVITE", "<#channel>", 2));
+RegisterCommand(new JOINCommand(this, "JOIN", "<#channel>", 8));
+RegisterCommand(new KICKCommand(this, "KICK", "<#channel> <nick> <reason>", 4));
+RegisterCommand(new LBANLISTCommand(this, "LBANLIST", "<#channel> <banmask>", 5));
 RegisterCommand(new MODECommand(this, "MODE", "<#channel> <modestring>", 4));
 RegisterCommand(new MODINFOCommand(this, "MODINFO", "<#channel> [ACCESS <username> <level>] [AUTOMODE <username> <NONE|OP|VOICE>]", 6));
-RegisterCommand(new SETCommand(this, "SET", "[#channel] <variable> <value> or, SET <invisible> <ON|OFF>", 6));
-RegisterCommand(new INVITECommand(this, "INVITE", "<#channel>", 2));
-RegisterCommand(new TOPICCommand(this, "TOPIC", "<#channel> <topic>", 4));
-RegisterCommand(new CHANINFOCommand(this, "INFO", "<username>", 3));
-RegisterCommand(new BANLISTCommand(this, "BANLIST", "<#channel>", 3));
-RegisterCommand(new KICKCommand(this, "KICK", "<#channel> <nick> <reason>", 4));
-RegisterCommand(new STATUSCommand(this, "STATUS", "<#channel>", 4));
-RegisterCommand(new SUSPENDCommand(this, "SUSPEND", "<#channel> <nick> <duration> [level]", 5));
-RegisterCommand(new UNSUSPENDCommand(this, "UNSUSPEND", "<#channel> <nick>", 5));
-RegisterCommand(new BANCommand(this, "BAN", "<#channel> <nick | *!*user@*.host> [duration] [level] [reason]", 5));
-RegisterCommand(new UNBANCommand(this, "UNBAN", "<#channel> <*!*user@*.host>", 5));
-RegisterCommand(new LBANLISTCommand(this, "LBANLIST", "<#channel> <banmask>", 5));
-RegisterCommand(new NEWPASSCommand(this, "NEWPASS", "<new passphrase>", 8));
-RegisterCommand(new JOINCommand(this, "JOIN", "<#channel>", 8));
+RegisterCommand(new OPCommand(this, "OP", "<#channel> [nick] [nick] ..", 3));
 RegisterCommand(new PARTCommand(this, "PART", "<#channel>", 8));
-RegisterCommand(new OPERJOINCommand(this, "OPERJOIN", "<#channel>", 8));
-RegisterCommand(new OPERPARTCommand(this, "OPERPART", "<#channel>", 8));
-RegisterCommand(new CLEARMODECommand(this, "CLEARMODE", "<#channel>", 4));
-RegisterCommand(new SETTIMECommand(this, "SETTIME", "", 4));
-//RegisterCommand(new OPERSUSPENDCommand(this, "OPERSUSPEND", "<#channel>", 8));
+RegisterCommand(new REMUSERCommand(this, "REMUSER", "<#channel> <username>", 4));
+RegisterCommand(new SETCommand(this, "SET", "[#channel] <variable> <value> or, SET <invisible> <ON|OFF>", 6));
+RegisterCommand(new STATUSCommand(this, "STATUS", "<#channel>", 4));
+RegisterCommand(new SUPPORTCommand(this, "SUPPORT", "#channel <YES|NO>", 15));
+RegisterCommand(new SUSPENDCommand(this, "SUSPEND", "<#channel> <nick> <duration> [level]", 5));
+RegisterCommand(new TOPICCommand(this, "TOPIC", "<#channel> <topic>", 4));
+RegisterCommand(new UNBANCommand(this, "UNBAN", "<#channel> <*!*user@*.host>", 5));
+RegisterCommand(new UNSUSPENDCommand(this, "UNSUSPEND", "<#channel> <nick>", 5));
+RegisterCommand(new VOICECommand(this, "VOICE", "<#channel> [nick] [nick] ..", 3));
+
+/* Admin commands */
+RegisterCommand(new ADMINCMDSCommand(this, "ADMINCMDS", "", 2));
+RegisterCommand(new CHINFOCommand(this, "CHINFO", "[email|nick|verification] nick newvalue", 10));
+RegisterCommand(new COMMENTCommand(this, "COMMENT", "<username/channel> <comment/off>", 10));
+RegisterCommand(new FORCECommand(this, "FORCE", "<#channel>", 8));
+RegisterCommand(new GLOBNOTICECommand(this, "GLOBNOTICE", "<$*.target> <text>", 5));
 RegisterCommand(new GSUSPENDCommand(this, "GSUSPEND", "<chan/nick> <duration> <reason>", 5));
 RegisterCommand(new GUNSUSPENDCommand(this, "GUNSUSPEND", "<chan/nick> <reason>", 5));
 RegisterCommand(new INVMECommand(this, "INVME", "", 5));
-RegisterCommand(new REMIGNORECommand(this, "REMIGNORE", "<mask>", 5));
-RegisterCommand(new REGISTERCommand(this, "REGISTER", "<#channel> <username>", 8));
-RegisterCommand(new REMOVEALLCommand(this, "REMOVEALL", "<#channel>", 15));
+RegisterCommand(new OFFICIALCommand(this, "OFFICIAL", "(check <user>) (clear <user>) (list) (set <user> <level>)", 5));
 RegisterCommand(new PURGECommand(this, "PURGE", "<#channel> <reason>", 8));
+RegisterCommand(new REGISTERCommand(this, "REGISTER", "<#channel> <username>", 8));
+RegisterCommand(new REMIGNORECommand(this, "REMIGNORE", "<mask>", 5));
+RegisterCommand(new REMOVEALLCommand(this, "REMOVEALL", "<#channel>", 15));
 RegisterCommand(new REMUSERIDCommand(this, "REMUSERID", "<username> <reason>", 8));
-RegisterCommand(new FORCECommand(this, "FORCE", "<#channel>", 8));
-RegisterCommand(new UNFORCECommand(this, "UNFORCE", "<#channel>", 8));
-RegisterCommand(new SERVNOTICECommand(this, "SERVNOTICE", "<#channel> <text>", 5));
-RegisterCommand(new GLOBNOTICECommand(this, "GLOBNOTICE", "<$*.target> <text>", 5));
-RegisterCommand(new GLOBNOTICECommand(this, "GLOBALNOTICE", "<$*.target> <text>", 5));
-RegisterCommand(new SAYCommand(this, "SAY", "<#channel> <text>", 5));
-RegisterCommand(new QUOTECommand(this, "QUOTE", "<text>", 5));
-RegisterCommand(new REHASHCommand(this, "REHASH", "[commands|help|official|translations]", 5));
-RegisterCommand(new STATSCommand(this, "STATS", "", 8));
-RegisterCommand(new SHUTDOWNCommand(this, "SHUTDOWN", "<message>", 5));
-RegisterCommand(new COMMENTCommand(this, "COMMENT", "<username/channel> <comment/off>", 10));
-RegisterCommand(new ADMINCMDSCommand(this, "ADMINCMDS", "", 2));
 RegisterCommand(new SCANCommand(this, "SCAN", "[email|hostmask|nick] string", 10));
-RegisterCommand(new CHINFOCommand(this, "CHINFO", "[email|nick|verification] nick newvalue", 10));
+RegisterCommand(new STATSCommand(this, "STATS", "", 8));
+RegisterCommand(new UNFORCECommand(this, "UNFORCE", "<#channel>", 8));
+
+/* Oper commands */
+RegisterCommand(new GLOBNOTICECommand(this, "GLOBALNOTICE", "<$*.target> <text>", 5));
+RegisterCommand(new OPERJOINCommand(this, "OPERJOIN", "<#channel>", 8));
+RegisterCommand(new OPERPARTCommand(this, "OPERPART", "<#channel>", 8));
+//RegisterCommand(new OPERSUSPENDCommand(this, "OPERSUSPEND", "<#channel>", 8));
+
+/* Coder commands */
 RegisterCommand(new DEBUGCommand(this, "DEBUG", "(lock [add|list|remove]) (servers)", 10));
 RegisterCommand(new GETLEVELCommand(this, "GETLEVEL", "command domain", 2));
-RegisterCommand(new OFFICIALCommand(this, "OFFICIAL", "(check <user>) (clear <user>) (list) (set <user> <level>)", 5));
+RegisterCommand(new QUOTECommand(this, "QUOTE", "<text>", 5));
+RegisterCommand(new REHASHCommand(this, "REHASH", "[commands|help|official|translations]", 5));
+RegisterCommand(new SAYCommand(this, "SAY", "<#channel> <text>", 5));
+RegisterCommand(new SERVNOTICECommand(this, "SERVNOTICE", "<#channel> <text>", 5));
+RegisterCommand(new SETTIMECommand(this, "SETTIME", "", 4));
+RegisterCommand(new SHUTDOWNCommand(this, "SHUTDOWN", "<message>", 5));
+RegisterCommand(new UPDATEDBCommand(this, "UPDATEDB", "", 20));
+
 
 cserviceConfig = new (std::nothrow) EConfig( args ) ;
 assert( cserviceConfig != 0 ) ;
