@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.14 2002-03-09 22:06:19 morpheus Exp $" ;
+const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.15 2002-03-18 23:56:41 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -44,8 +44,9 @@ static const char* lvl_900_set_cmds = "\002Level 900\002: noforce";
 static const char* lvl_800_set_cmds = "\002Level 800\002: caution neverreg nopurge noreg special tempman vacation";
 static const char* lvl_600_set_cmds = "\002Level 600\002: suspend";
 static const char* lvl_501_set_cmds = "\002Level 501\002: locked";
-static const char* lvl_500_set_cmds = "\002Level 500\002: autojoin floatlim lang massdeoppro noop strictop strictvoice";
-static const char* lvl_450_set_cmds = "\002Level 450\002: autotopic desc keywords mode url userflag welcome";
+static const char* lvl_500_set_cmds = "\002Level 500\002: autojoin";
+static const char* lvl_499_set_cmds = "\002Level 499\002: lang massdeoppro noop strictop strictvoice";
+static const char* lvl_450_set_cmds = "\002Level 450\002: autotopic desc floatlim keywords mode url userflag welcome";
 static const char* lvl_24_set_cmds = "\002Level  24\002: autoinvite";
 static const char* lvl_0_set_cmds = "\002Level   0\002: alliance coords invisible lang note";
 
@@ -99,6 +100,7 @@ if(string_upper(st[1]) == "SET") {
  	if (level >= 600) bot->Notice(theClient, lvl_600_set_cmds);
  	if (level >= 501) bot->Notice(theClient, lvl_501_set_cmds);
  	if (level >= 500) bot->Notice(theClient, lvl_500_set_cmds);
+ 	if (level >= 499) bot->Notice(theClient, lvl_499_set_cmds);
  	if (level >= 450) bot->Notice(theClient, lvl_450_set_cmds);
  	if (level >= 24) bot->Notice(theClient,   lvl_24_set_cmds);
 	
