@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: msg_B.cc,v 1.5 2003-03-30 02:55:40 jeekay Exp $
+ * $Id: msg_B.cc,v 1.6 2004-05-10 20:33:00 jeekay Exp $
  */
 
 #include	<sys/types.h>
@@ -50,7 +50,7 @@ const char Channel_h_rcsId[] = __CHANNEL_H ;
 const char ChannelUser_h_rcsId[] = __CHANNELUSER_H ;
 const char Network_h_rcsId[] = __NETWORK_H ;
 const char iClient_h_rcsId[] = __ICLIENT_H ;
-const char msg_B_cc_rcsId[] = "$Id: msg_B.cc,v 1.5 2003-03-30 02:55:40 jeekay Exp $" ;
+const char msg_B_cc_rcsId[] = "$Id: msg_B.cc,v 1.6 2004-05-10 20:33:00 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -177,6 +177,10 @@ if( '+' == Param[ whichToken ][ 0 ] )
 				break ;
 			case 'S':
 				theServer->OnChannelModeS( theChan, true, 
+					0 ) ;
+				break ;
+			case 'T':
+				theServer->OnChannelModeT( theChan, true, 
 					0 ) ;
 				break ;
 			case 'c':
