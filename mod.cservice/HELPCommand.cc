@@ -8,7 +8,7 @@
  *
  * Caveats: Needs to be written :)
  *
- * $Id: HELPCommand.cc,v 1.2 2002-09-13 21:30:38 jeekay Exp $
+ * $Id: HELPCommand.cc,v 1.3 2002-09-14 14:45:52 jeekay Exp $
  */
 
 #include	<string>
@@ -18,12 +18,12 @@
 #include	"cservice.h" 
 #include 	"responses.h"
 
-const char HELPCommand_cc_rcsId[] = "$Id: HELPCommand.cc,v 1.2 2002-09-13 21:30:38 jeekay Exp $" ;
+const char HELPCommand_cc_rcsId[] = "$Id: HELPCommand.cc,v 1.3 2002-09-14 14:45:52 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
-const char* helpHeader = "\026 Planetarion(TM) IRC's Channel Service                   Version 2 \026";
+const char* helpHeader = "\002NetGamers IRC Channel Services - Version 3\002";
  
 bool HELPCommand::Exec( iClient* theClient, const string& Message )
 { 
@@ -35,37 +35,36 @@ bool HELPCommand::Exec( iClient* theClient, const string& Message )
 		return true;
 	}
 
-	if( st.size() < 2 )
-	{
-		bot->Notice(theClient, helpHeader);
-		bot->Notice(theClient, " ");
-		bot->Notice(theClient, "P is Planetarion(tm) IRC's channel service which is provided");
-		bot->Notice(theClient, "to the channel operators and users. On the channels registered");
-		bot->Notice(theClient, "with P, it can administrate channel modes, give channel ops or");
-		bot->Notice(theClient, "voice to authorised users, maintain access restrictions - banlists,");
-		bot->Notice(theClient, "channel topics, and various other options. It is also able to");
-		bot->Notice(theClient, "sit on or off the channel at the descresion of channel managers.");
-		bot->Notice(theClient, " ");
-		bot->Notice(theClient, "The Planetarion(tm) Administration or the author(s) of this service");
-		bot->Notice(theClient, "are \002not\002 responsible for the contents nor the events that occur");
-		bot->Notice(theClient, "within channels registered with P.");
-		bot->Notice(theClient, " ");
-		bot->Notice(theClient, "To register your nick or channel, goto: \002http://cservice.irc.planetarion.com\002");
-		bot->Notice(theClient, "If you require assistance or wish to ledge a formal complaint, you");
-		bot->Notice(theClient, "can type \002/join #cservice\002 and speak with a cservice representive.");
-		bot->Notice(theClient, "To check whether a nick is an official cservice representive, you can");
-		bot->Notice(theClient, "type \002/msg P verify <nick>\002.");
-		bot->Notice(theClient, " ");
-		bot->Notice(theClient, "Information on upgrades, maintenance and other important things about this");
-		bot->Notice(theClient, "service can be viewed with \002/msg P MOTD\002. This will show ");
-		bot->Notice(theClient, "P's Message Of The Day. It would be wise to check it regularly.");
-		bot->Notice(theClient, " ");
-		bot->Notice(theClient, "For a command list of available commands, type \002/msg P showcommands\002");
-		bot->Notice(theClient, "or \002/msg P showcommands #channel\002 for a specific channel.");
-		bot->Notice(theClient, "To get help about a certain command, type \002/msg P help <command>\002");
-		bot->Notice(theClient, "You can view a command list at \002http://cservice.irc.planetarion.com\002");
-		return true;
-	}		
+  if( st.size() < 2 ) {
+    bot->Notice(theClient, helpHeader);
+    bot->Notice(theClient, " ");
+    bot->Notice(theClient, "P is Netgamers IRC channel service which is provided to the channel");
+    bot->Notice(theClient, "operators and users. On the channels registered with P, it can");
+    bot->Notice(theClient, "administrate channel modes, give channel ops or voice to authorised");
+    bot->Notice(theClient, "users, maintain access restrictions - banlists, channel topics, and");
+    bot->Notice(theClient, "various other options. It is also able to sit on or off the channel at");
+    bot->Notice(theClient, "the discretion of channel managers.");
+    bot->Notice(theClient, " ");
+    bot->Notice(theClient, "The Netgamers Administration or the author(s) of this service are not");
+    bot->Notice(theClient, "responsible for the contents nor the events that occur within channels");
+    bot->Notice(theClient, "registered with P.");
+    bot->Notice(theClient, " ");
+    bot->Notice(theClient, "To register your nick or channel, goto: \002http://www.netgamers.org/\002");
+    bot->Notice(theClient, "If you require assistance or wish to ledge a formal complaint, you can");
+    bot->Notice(theClient, "type \002/join #cservice\002 and speak with a CService Administrator. To check");
+    bot->Notice(theClient, "whether a nick is an official CService Administrator, you can type:");
+    bot->Notice(theClient, "\002/msg P verify <nick>\002");
+    bot->Notice(theClient, " ");
+    bot->Notice(theClient, "Information on important things about this service can be viewed with");
+    bot->Notice(theClient, "/msg P MOTD. This will show P's Message of The Day.");
+    bot->Notice(theClient, "It would be wise to check it regularly.");
+    bot->Notice(theClient, " ");
+    bot->Notice(theClient, "For a command list of available commands, type \002/msg P showcommands\002 or");
+    bot->Notice(theClient, "\002/msg P showcommands #Example\002 for a specific channel.");
+    bot->Notice(theClient, "To get help about a certain command, type \002/msg P help <command>\002");
+    bot->Notice(theClient, "You can view a full command list at \002http://www.netgamers.org/\002");
+    return true;
+  }
 		
 	sqlUser* theUser = bot->isAuthed(theClient, false);
 	string msg = bot->getHelpMessage(theUser, string_upper(st.assemble(1)));
