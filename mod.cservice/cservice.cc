@@ -3073,8 +3073,6 @@ int cservice::OnChannelEvent( const channelEventType& whichEvent,
 
 iClient* theClient = 0 ;
 
-logDebugMessage("Caught channel event");
-
 switch( whichEvent )
 	{
 	case EVT_CREATE:
