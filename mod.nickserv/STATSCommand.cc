@@ -10,7 +10,7 @@
 #include "levels.h"
 #include "libpq-int.h"
 
-const char STATSCommand_cc_rcsId[] = "$Id: STATSCommand.cc,v 1.4 2002-03-18 20:01:45 jeekay Exp $";
+const char STATSCommand_cc_rcsId[] = "$Id: STATSCommand.cc,v 1.5 2002-03-19 19:59:37 jeekay Exp $";
 
 namespace gnuworld
 {
@@ -53,7 +53,7 @@ if(option == "ALL" && (adminAccess >= level::stats::all))
 
 if("PID" == option && (adminAccess >= level::stats::pid))
 {
-	const cmDatabase* SQLDb = bot->getSQLDb();
+	const nsDatabase* SQLDb = bot->getSQLDb();
 	bot->Notice(theClient, "Current Backend SQL PID: %d", SQLDb->getPID());
 	return true;
 }

@@ -23,7 +23,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.24 2002-03-18 20:01:46 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.25 2002-03-19 19:59:37 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -94,6 +94,8 @@ jupeNumericCount = atoi((conf.Require("jupeNumericCount")->second).c_str());
 jupeExpireTime = atoi((conf.Require("jupeExpireTime")->second).c_str());
 jupeDefaultLength = atoi((conf.Require("jupeDefaultLength")->second).c_str());
 
+nickCService = conf.Require("cserviceNick")->second;
+
 string Query = "host=" + confSqlHost + " dbname=" + confSqlDb + " port=" + confSqlPort + " user=" +confSqlUser+ " password="+confSqlPass;
 
 elog	<< "nickserv::nickserv> Attempting to connect to "
@@ -102,7 +104,7 @@ elog	<< "nickserv::nickserv> Attempting to connect to "
 	<< confSqlDb
 	<< endl;
  
-SQLDb = new (std::nothrow) cmDatabase( Query.c_str() ) ;
+SQLDb = new (std::nothrow) nsDatabase( Query.c_str() ) ;
 assert( SQLDb != 0 ) ;
 
 //-- Make sure we connected to the SQL database; if
@@ -135,18 +137,6 @@ RegisterCommand(new SAYCommand( this, "SAY", "<channel> <text>"));
 
 // Initialise list of juped numerics
 initialiseJupeNumerics();
-
-myCService = static_cast< gnuworld::cservice* >(Network->findLocalNick(conf.Require("cserviceNick")->second));
-
-if(!myCService)
-	{
-	elog << "nickserv::nickserv> Unable to find an instance of CService running." << endl;
-	::exit(0);
-	}
-else
-	{
-	elog << "nickserv::nickserv> Found CService at numeric: " << myCService->getCharYYXXX() << endl;
-	}
 
 }
 
@@ -251,6 +241,26 @@ if(!processQueueID || !dbConnCheckID || !jupeExpireID)
 dbConnRetries = 0;
 
 xClient::ImplementServer( theServer ) ;
+}
+
+int nickserv::OnConnect()
+{
+
+// Find our CService!
+
+myCService = static_cast< gnuworld::cservice* >(Network->findLocalNick(nickCService));
+
+if(!myCService)
+	{
+	elog << "nickserv::nickserv> Unable to find an instance of CService running." << endl;
+	::exit(0);
+	}
+else
+	{
+	elog << "nickserv::nickserv> Found CService at numeric: " << myCService->getCharYYXXX() << endl;
+	}
+
+return xClient::OnConnect();
 }
 
 int nickserv::OnPrivateMessage( iClient* theClient, const string& Message,
@@ -731,7 +741,7 @@ void nickserv::checkDBConnectionStatus( void )
 		
 		string Query = "host=" + confSqlHost +  " dbname=" + confSqlDb + " port=" + confSqlPort + " user=" + confSqlUser + " password=" + confSqlPass;
 		
-		SQLDb = new (std::nothrow) cmDatabase( Query.c_str() );
+		SQLDb = new (std::nothrow) nsDatabase( Query.c_str() );
 		assert( SQLDb != 0);
 		
 		if(SQLDb->ConnectionBad())
