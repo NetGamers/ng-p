@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.2 2002-01-17 01:24:25 jeekay Exp $" ;
+const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.3 2002-01-17 19:54:42 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -16,9 +16,9 @@ namespace gnuworld
 using std::string ;
 
 static const char* lvl_1000_cmds = "\002Level 1000\002: everything";
-static const char* lvl_900_cmds = "\002Level  900\002: shutdown servnotice rehash say";
+static const char* lvl_900_cmds = "\002Level  900\002: servnotice rehash say set[noforce]";
 static const char* lvl_850_cmds = "\002Level  850\002: * adduser remuser modinfo";
-static const char* lvl_800_cmds = "\002Level  800\002: set[nopurge|special|vacation|caution|neverreg";
+static const char* lvl_800_cmds = "\002Level  800\002: set[nopurge|special|vacation|caution|neverreg]";
 static const char* lvl_750_cmds = "\002Level  750\002: suspend";
 static const char* lvl_600_cmds = "\002Level  600\002: purge removeall register addcomment set[suspend]";
 static const char* lvl_501_cmds = "\002Level  501\002: remignore invme set[comment|locked]";
