@@ -12,7 +12,7 @@
  * Displays all "Level" records for a specified channel.
  * Can optionally narrow down selection using a number of switches.
  *
- * $Id: ACCESSCommand.cc,v 1.7 2002-10-29 18:01:55 jeekay Exp $
+ * $Id: ACCESSCommand.cc,v 1.8 2002-11-05 00:24:27 jeekay Exp $
  */
 
 #include	<string>
@@ -26,7 +26,7 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 
-const char ACCESSCommand_cc_rcsId[] = "$Id: ACCESSCommand.cc,v 1.7 2002-10-29 18:01:55 jeekay Exp $" ;
+const char ACCESSCommand_cc_rcsId[] = "$Id: ACCESSCommand.cc,v 1.8 2002-11-05 00:24:27 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -90,12 +90,23 @@ if (theChan->getName() == "*")
 		}
 	}
 
-if(!theUser || (!bot->getAccessLevel(theUser, theChan) && !bot->getAdminAccessLevel(theUser))) {
-  if(!theClient->isOper()) {
-    bot->Notice(theClient, "Sorry, you have insufficient access to list the users in %s.",
-      theChan->getName().c_str());
-    return true;
-  }
+/* 
+ * Should we allow them to see the access?
+ * If the channel is set INVISIBLE, only
+ * admins, opers and users with channel access may.
+ */
+
+/* Prettyness variables */
+bool hasAccess = bot->getAccessLevel(theUser, theChan);
+bool isAdmin = bot->getAdminAccessLevel(theUser);
+bool isInvis = theChan->getFlag(sqlChannel::F_INVISIBLE);
+bool isOper = theClient->isOper();
+
+/* Karnaugh maps ahoy! */
+if(!(hasAccess || !isInvis || isAdmin || isOper)) {
+  bot->Notice(theClient, "Sorry, you have insufficient access to list the users in %s.",
+    theChan->getName().c_str());
+  return true;
 }
 
 /*

@@ -9,7 +9,7 @@
  * 30/12/2000: Moved static SQL data to constants.h --Gte
  * Set loadData up to take data from rows other than 0.
  *
- * $Id: sqlChannel.cc,v 1.7 2002-10-30 23:58:42 jeekay Exp $
+ * $Id: sqlChannel.cc,v 1.8 2002-11-05 00:24:27 jeekay Exp $
  */
 
 #include	<string>
@@ -24,7 +24,7 @@
 #include	"cservice_config.h"
 
 const char sqlChannel_h_rcsId[] = __SQLCHANNEL_H ;
-const char sqlChannel_cc_rcsId[] = "$Id: sqlChannel.cc,v 1.7 2002-10-30 23:58:42 jeekay Exp $" ;
+const char sqlChannel_cc_rcsId[] = "$Id: sqlChannel.cc,v 1.8 2002-11-05 00:24:27 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -33,26 +33,29 @@ using std::string ;
 using std::endl ;
 using std::ends ;
 
-const sqlChannel::flagType sqlChannel::F_NOPURGE  = 0x00000001 ;
-const sqlChannel::flagType sqlChannel::F_SPECIAL  = 0x00000002 ;
-const sqlChannel::flagType sqlChannel::F_NOREG    = 0x00000004 ;
-const sqlChannel::flagType sqlChannel::F_NEVREG   = 0x00000008 ;
-const sqlChannel::flagType sqlChannel::F_SUSPEND  = 0x00000010 ;
-const sqlChannel::flagType sqlChannel::F_TEMP     = 0x00000020 ;
-const sqlChannel::flagType sqlChannel::F_CAUTION  = 0x00000040 ;
-const sqlChannel::flagType sqlChannel::F_VACATION = 0x00000080 ;
-const sqlChannel::flagType sqlChannel::F_LOCKED   = 0x00000100 ;
-const sqlChannel::flagType sqlChannel::F_FLOATLIM = 0x00000200 ;
-const sqlChannel::flagType sqlChannel::F_WELCOME  = 0x00000400 ;
+const sqlChannel::flagType sqlChannel::F_NOPURGE     = 0x00000001 ;
+const sqlChannel::flagType sqlChannel::F_SPECIAL     = 0x00000002 ;
 
-const sqlChannel::flagType sqlChannel::F_ALWAYSOP  = 0x00010000 ;
-const sqlChannel::flagType sqlChannel::F_STRICTOP  = 0x00020000 ;
-const sqlChannel::flagType sqlChannel::F_NOOP      = 0x00040000 ;
-const sqlChannel::flagType sqlChannel::F_AUTOTOPIC = 0x00080000 ;
-const sqlChannel::flagType sqlChannel::F_OPONLY    = 0x00100000 ; // Deprecated
-const sqlChannel::flagType sqlChannel::F_AUTOJOIN  = 0x00200000 ;
-const sqlChannel::flagType sqlChannel::F_NOFORCE   = 0x00400000 ;
+const sqlChannel::flagType sqlChannel::F_SUSPEND     = 0x00000010 ;
+const sqlChannel::flagType sqlChannel::F_TEMP        = 0x00000020 ;
+const sqlChannel::flagType sqlChannel::F_CAUTION     = 0x00000040 ;
+const sqlChannel::flagType sqlChannel::F_VACATION    = 0x00000080 ;
+
+const sqlChannel::flagType sqlChannel::F_LOCKED      = 0x00000100 ;
+const sqlChannel::flagType sqlChannel::F_FLOATLIM    = 0x00000200 ;
+const sqlChannel::flagType sqlChannel::F_WELCOME     = 0x00000400 ;
+
+const sqlChannel::flagType sqlChannel::F_STRICTOP    = 0x00020000 ;
+const sqlChannel::flagType sqlChannel::F_NOOP        = 0x00040000 ;
+const sqlChannel::flagType sqlChannel::F_AUTOTOPIC   = 0x00080000 ;
+
+const sqlChannel::flagType sqlChannel::F_AUTOJOIN    = 0x00200000 ;
+const sqlChannel::flagType sqlChannel::F_NOFORCE     = 0x00400000 ;
 const sqlChannel::flagType sqlChannel::F_STRICTVOICE = 0x00800000 ;
+
+const sqlChannel::flagType sqlChannel::F_INVISIBLE   = 0x01000000 ;
+
+/* Current mask for channel flags                      0x01EE07F3 */
 
 const int sqlChannel::EV_MISC     = 1 ;
 const int sqlChannel::EV_JOIN     = 2 ;

@@ -1,7 +1,7 @@
 /* sqlChannel.h */
 
 #ifndef __SQLCHANNEL_H
-#define __SQLCHANNEL_H "$Id: sqlChannel.h,v 1.7 2002-09-13 21:30:41 jeekay Exp $"
+#define __SQLCHANNEL_H "$Id: sqlChannel.h,v 1.8 2002-11-05 00:24:27 jeekay Exp $"
 
 #include	<vector>
 #include	<string>
@@ -29,26 +29,23 @@ public:
 
 	typedef unsigned int	flagType ;
 
-	static const flagType	F_NOPURGE;
-	static const flagType	F_SPECIAL;
-	static const flagType	F_NOREG;
-	static const flagType	F_NEVREG;
-	static const flagType	F_SUSPEND;
-	static const flagType	F_TEMP;
-	static const flagType	F_CAUTION;
-	static const flagType	F_VACATION;
-	static const flagType   F_LOCKED;
-	static const flagType	F_WELCOME;
+	static const flagType F_NOPURGE;
+	static const flagType F_SPECIAL;
+	static const flagType F_SUSPEND;
+	static const flagType F_TEMP;
+	static const flagType F_CAUTION;
+	static const flagType F_VACATION;
+	static const flagType F_LOCKED;
+	static const flagType F_WELCOME;
 
-	static const flagType	F_ALWAYSOP;
-	static const flagType   F_STRICTVOICE;
-	static const flagType	F_STRICTOP;
-	static const flagType	F_NOOP;
-	static const flagType	F_AUTOTOPIC;
-	static const flagType	F_OPONLY; 	// Deprecated.
-	static const flagType	F_AUTOJOIN;
-	static const flagType   F_FLOATLIM;
-	static const flagType   F_NOFORCE;
+	static const flagType F_STRICTVOICE;
+	static const flagType F_STRICTOP;
+	static const flagType F_NOOP;
+	static const flagType F_AUTOTOPIC;
+	static const flagType F_AUTOJOIN;
+	static const flagType F_FLOATLIM;
+	static const flagType F_NOFORCE;
+  static const flagType F_INVISIBLE;
 	/*
 	 *   Channel 'Event' Flags, used in the channelog table.
 	 *   These flags are used to filter channel log records.

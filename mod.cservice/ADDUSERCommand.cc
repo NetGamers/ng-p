@@ -11,7 +11,7 @@
  *
  * Caveats: None
  *
- * $Id: ADDUSERCommand.cc,v 1.9 2002-10-20 02:12:06 jeekay Exp $
+ * $Id: ADDUSERCommand.cc,v 1.10 2002-11-05 00:24:27 jeekay Exp $
  */
 
 #include	<string>
@@ -25,7 +25,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char ADDUSERCommand_cc_rcsId[] = "$Id: ADDUSERCommand.cc,v 1.9 2002-10-20 02:12:06 jeekay Exp $" ;
+const char ADDUSERCommand_cc_rcsId[] = "$Id: ADDUSERCommand.cc,v 1.10 2002-11-05 00:24:27 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -196,6 +196,10 @@ for(StringTokenizer::size_type counter = 0; counter < st2.size(); ++counter)
 
 	if (theChan->getUserFlags() == 1) targetFlags = sqlLevel::F_AUTOOP;
 	if (theChan->getUserFlags() == 2) targetFlags = sqlLevel::F_AUTOVOICE;
+  if (theChan->getUserFlags() == 3) {
+    if(targetAccess >= 25) targetFlags = sqlLevel::F_AUTOVOICE;
+    if(targetAccess >= 100) targetFlags = sqlLevel::F_AUTOOP;
+  }
 
 	/*
 	 *  Now, build up the SQL query & execute it!

@@ -805,7 +805,7 @@ else if(Command == "VERSION")
 	xClient::DoCTCP(theClient, CTCP,
 		"NetGamers P10 Channel Services II ["
 		__DATE__ " " __TIME__
-		"] Release 1.1pl4");
+		"] Release 1.2.00");
 	}
 else if(Command == "PROBLEM?")
 	{
@@ -823,8 +823,6 @@ else if(Command == "DCC")
 	{
 	xClient::DoCTCP(theClient, CTCP.c_str(), "REJECT");
 	}
-else if(Command == "FLOOD")
-	/* Ignored */;
 else if(Command == "PAGE")
 	{
 	xClient::DoCTCP(theClient, CTCP.c_str(), "I'm always here, no need to page");
@@ -1065,6 +1063,9 @@ return 0;
 
 sqlLevel* cservice::getLevelRecord( sqlUser* theUser, sqlChannel* theChan )
 {
+
+if(!theUser || !theChan) return 0;
+
 // Check if the record is already in the cache.
 pair<int, int> thePair( theUser->getID(), theChan->getID() );
 
@@ -1098,15 +1099,16 @@ return 0;
 short int cservice::getAdminAccessLevel( sqlUser* theUser )
 {
 
+if(!theUser) return 0;
+
 /*
  *  First thing, check if this ACCOUNT has been globally
  *  suspended.
  */
 
-if (theUser->getFlag(sqlUser::F_GLOBAL_SUSPEND))
-	{
-	return 0;
-	}
+if (theUser->getFlag(sqlUser::F_GLOBAL_SUSPEND)) {
+  return 0;
+}
 
 sqlChannel* theChan = getChannelRecord("*");
 if (!theChan)
@@ -1118,13 +1120,11 @@ if (!theChan)
 	}
 
 sqlLevel* theLevel = getLevelRecord(theUser, theChan);
-if(theLevel)
-	{
+if(theLevel) {
 	// Check that the admin access has not been suspended
-	if (theLevel->getSuspendExpire() != 0)
-		{ return 0; }
+	if (theLevel->getSuspendExpire() != 0) return 0;
 	return theLevel->getAccess();
-	}
+}
 
 // By default, users have level 0 admin access.
 return 0;
@@ -1242,15 +1242,16 @@ return theLevel->getAccess();
 short int cservice::getAccessLevel( sqlUser* theUser,
 	sqlChannel* theChan )
 {
+
+if(!theUser || !theChan) return 0;
+
 sqlLevel* theLevel = getLevelRecord(theUser, theChan);
-if(theLevel)
-	{
-	return theLevel->getAccess();
- 	}
+
+if(theLevel) return theLevel->getAccess();
 
 /* By default, users have level 0 access on a channel. */
 return 0;
- } 
+} 
     
    /** 
     * Returns the help message for the specified topic in 

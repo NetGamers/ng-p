@@ -10,7 +10,7 @@
 #include	"Network.h"
 #include	"cservice_config.h"
 
-const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.16 2002-10-29 18:08:27 jeekay Exp $" ;
+const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.17 2002-11-05 00:24:27 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -182,22 +182,21 @@ bot->Notice(theClient, "MassDeopPro: %i",
 	    theChan->getMassDeopPro());
 
 string flagsSet;
-if (theChan->getFlag(sqlChannel::F_NOPURGE)) flagsSet += "NOPURGE ";
-if (theChan->getFlag(sqlChannel::F_SPECIAL)) flagsSet += "SPECIAL ";
-if (theChan->getFlag(sqlChannel::F_NOREG)) flagsSet += "NOREG ";
-if (theChan->getFlag(sqlChannel::F_NEVREG)) flagsSet += "NEVERREG ";
-if (theChan->getFlag(sqlChannel::F_SUSPEND)) flagsSet += "SUSPEND ";
-if (theChan->getFlag(sqlChannel::F_TEMP)) flagsSet += "TEMP ";
-if (theChan->getFlag(sqlChannel::F_CAUTION)) flagsSet += "CAUTION ";
-if (theChan->getFlag(sqlChannel::F_VACATION)) flagsSet += "VACATION ";
-if (theChan->getFlag(sqlChannel::F_ALWAYSOP)) flagsSet += "ALWAYSOP ";
-if (theChan->getFlag(sqlChannel::F_STRICTOP)) flagsSet += "STRICTOP ";
-if (theChan->getFlag(sqlChannel::F_NOOP)) flagsSet += "NOOP ";
-if (theChan->getFlag(sqlChannel::F_AUTOTOPIC)) flagsSet += "AUTOTOPIC ";
-if (theChan->getFlag(sqlChannel::F_AUTOJOIN)) flagsSet += "AUTOJOIN ";
-if (theChan->getFlag(sqlChannel::F_LOCKED)) flagsSet += "LOCKED ";
-if (theChan->getFlag(sqlChannel::F_NOFORCE)) flagsSet += "NOFORCE ";
+if (theChan->getFlag(sqlChannel::F_NOPURGE))     flagsSet += "NOPURGE ";
+if (theChan->getFlag(sqlChannel::F_SPECIAL))     flagsSet += "SPECIAL ";
+if (theChan->getFlag(sqlChannel::F_SUSPEND))     flagsSet += "SUSPEND ";
+if (theChan->getFlag(sqlChannel::F_TEMP))        flagsSet += "TEMP ";
+if (theChan->getFlag(sqlChannel::F_CAUTION))     flagsSet += "CAUTION ";
+if (theChan->getFlag(sqlChannel::F_VACATION))    flagsSet += "VACATION ";
+if (theChan->getFlag(sqlChannel::F_STRICTOP))    flagsSet += "STRICTOP ";
+if (theChan->getFlag(sqlChannel::F_NOOP))        flagsSet += "NOOP ";
+if (theChan->getFlag(sqlChannel::F_AUTOTOPIC))   flagsSet += "AUTOTOPIC ";
+if (theChan->getFlag(sqlChannel::F_AUTOJOIN))    flagsSet += "AUTOJOIN ";
+if (theChan->getFlag(sqlChannel::F_LOCKED))      flagsSet += "LOCKED ";
+if (theChan->getFlag(sqlChannel::F_NOFORCE))     flagsSet += "NOFORCE ";
 if (theChan->getFlag(sqlChannel::F_STRICTVOICE)) flagsSet += "STRICTVOICE ";
+if (theChan->getFlag(sqlChannel::F_INVISIBLE))   flagsSet += "INVISIBLE ";
+if (!theChan->getComment().empty())              flagsSet += "COMMENT ";
 if (theChan->getFlag(sqlChannel::F_FLOATLIM)) 
            { 
            stringstream floatLim; 

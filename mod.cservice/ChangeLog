@@ -1,4 +1,16 @@
-CHANGELOG for mod.cservice
+2002-05-11 1.2.00 Jeekay
+* Added USERFLAGS setting '3' to set autovoice for 25-99 and autoop for 100+
+  when users are added.
+* Added the keyword 'COMMENTS' to the output of STATUS if a channel has an
+  active comment for it.
+* Added channel flag INVISIBLE to prevent people without access in the
+  channel seeing the channel access lists.
+* Altered behaviour of get(Admin)AccessLevel to return 0 if either argument
+  is a null pointer.
+* Removed various unused flags from sqlChannel
+* Bumped version to 1.2.00 - I think we've made enough changes to justify
+  this.
+* Started maintaining ChangeLog again
 
 22/1/2001 ULtimaTe_
 Added WELCOME message onjoin
