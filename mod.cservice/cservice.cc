@@ -1432,12 +1432,24 @@ for (expireVectorType::const_iterator resultPtr = expireVector.begin();
 void cservice::expireGlobalSuspends()
 {
 /*
--- Real SQL possibly:
+-- Real SQL for channels (possibly):
+(sqlChannel::EV_UNSUSPEND=13, sqlChannel::F_SUSPEND=0x10(16))
 BEGIN TRANSACTION
 
 INSERT INTO channellog (ts,channelid,event,message,last_updated) SELECT now()::abstime::int4, channels.id, sqlChannel::EV_UNSUSPEND, 'Auto Unsuspend', now()::abstime::int4 FROM channels WHERE now()::abstime::int4 > channels.suspend_expires_ts AND channels.suspend_expires_ts <> 0;
 
-UPDATE channels SET flags = (flags & ~F_SUSPEND), last_updated=now()::abstime::int4, suspend_expires_ts = 0 WHERE now()::abstime::int4 > suspend_expires_ts AND suspend_expires_ts <> 0;
+UPDATE channels SET flags = (flags & ~sqlChannel::F_SUSPEND), last_updated=now()::abstime::int4, suspend_expires_ts = 0 WHERE now()::abstime::int4 > suspend_expires_ts AND suspend_expires_ts <> 0;
+
+COMMIT
+
+
+-- Real SQL for users (possibly):
+(sqlUser::EV_UNSUSPEND=2, sqlUser::F_GLOBAL_SUSPEND=0x01(1))
+BEGIN TRANSACTION
+
+INSERT INTO userlog (ts,user_id,event,message,last_updated) SELECT now()::abstime::int4, users.id, sqlUser::EV_UNSUSPEND, 'Auto Unsuspend', now()::abstime::int4 FROM users WHERE now()::abstime::int4 > users.suspended_expire_ts AND users.suspended_expire_ts <> 0;
+
+UPDATE users SET flags = (flags & ~sqlUser::F_GLOBAL_SUSPEND), last_updated=now()::abstime::int4, suspended_expire_ts=0 WHERE now()::abstime::int4 > suspended_expire_ts AND suspended_expire_ts <> 0;
 
 COMMIT
 */
@@ -1449,24 +1461,28 @@ COMMIT
 
 unsigned int Time = currentTime();
 
-strstream insertQuery;
-insertQuery << "INSERT INTO channellog (ts,channelid,event,message,last_updated)"
+/*
+ * Deal with channels first
+ */
+
+strstream insertChanQuery;
+insertChanQuery << "INSERT INTO channellog (ts,channelid,event,message,last_updated)"
 						<< " SELECT " << Time << ", channels.id, " << sqlChannel::EV_UNSUSPEND << ","
 						<< " 'Auto Unsuspend', " << Time
 						<< " FROM channels WHERE " << Time << " > channels.suspend_expires_ts"
 						<< " AND channels.suspend_expires_ts <> 0"
 						<< ends;
 
-strstream updateQuery;
-updateQuery << "UPDATE channels SET flags = (flags & ~" << sqlChannel::F_SUSPEND << "),"
+strstream updateChanQuery;
+updateChanQuery << "UPDATE channels SET flags = (flags & ~" << sqlChannel::F_SUSPEND << "),"
 						<< " last_updated=" << Time << ", suspend_expires_ts = 0"
 						<< " WHERE " << Time << " > suspend_expires_ts AND"
 						<< " suspend_expires_ts <> 0"
 						<< ends;
 
 #ifdef LOG_SQL
-elog << "expireGlobalSuspends> " << insertQuery.str() << endl;
-elog << "expireGlobalSuspends> " << updateQuery.str() << endl;
+elog << "expireGlobalSuspends> " << insertChanQuery.str() << endl;
+elog << "expireGlobalSuspends> " << updateChanQuery.str() << endl;
 #endif
 
 ExecStatusType status;
@@ -1474,42 +1490,113 @@ ExecStatusType status;
 status = SQLDb->Exec("BEGIN");
 if(PGRES_COMMAND_OK != status)
 	{
-	elog << "expireGlobalSuspends:BEGIN> SQL Error: "
+	elog << "expireGlobalSuspends:Chan:BEGIN> SQL Error: "
 			 << SQLDb->ErrorMessage() << endl;
-	delete[] updateQuery.str();
-	delete[] insertQuery.str();
+	delete[] updateChanQuery.str();
+	delete[] insertChanQuery.str();
 	return;
 	}
 
-SQLDb->Exec(insertQuery.str());
+status = SQLDb->Exec(insertChanQuery.str());
 if(PGRES_COMMAND_OK != status)
 	{
-	elog << "expireGlobalSuspends:insert> SQL Error: "
+	elog << "expireGlobalSuspends:Chan:insert> SQL Error: "
 			 << SQLDb->ErrorMessage() << endl;
-	delete[] updateQuery.str();
-	delete[] insertQuery.str();
+	delete[] updateChanQuery.str();
+	delete[] insertChanQuery.str();
 	return;
 	}
 
-status = SQLDb->Exec(updateQuery.str());
+status = SQLDb->Exec(updateChanQuery.str());
 if(PGRES_COMMAND_OK != status)
 	{
-	elog << "expireGlobalSuspends:update> SQL Error: "
+	elog << "expireGlobalSuspends:Chan:update> SQL Error: "
 			 << SQLDb->ErrorMessage() << endl;
-	delete[] updateQuery.str();
-	delete[] insertQuery.str();
+	delete[] updateChanQuery.str();
+	delete[] insertChanQuery.str();
 	return;
 	}
 
-SQLDb->ExecCommandOk("COMMIT");
+status = SQLDb->Exec("COMMIT");
 if(PGRES_COMMAND_OK != status)
 	{
-	elog << "expireGlobalSuspends:COMMIT> SQL Error: "
+	elog << "expireGlobalSuspends:Chan:COMMIT> SQL Error: "
 			 << SQLDb->ErrorMessage() << endl;
-	delete[] updateQuery.str();
-	delete[] insertQuery.str();
+	delete[] updateChanQuery.str();
+	delete[] insertChanQuery.str();
 	return;
 	}
+
+delete[] insertChanQuery.str();
+delete[] updateChanQuery.str();
+
+
+/*
+ * Now take care of any user suspends
+ */
+
+strstream insertUserQuery;
+insertUserQuery << "INSERT INTO userlog (ts,user_id,event,message,last_updated)"
+	<< " SELECT " << Time << ", users.id, " << sqlUser::EV_UNSUSPEND << ","
+	<< " 'Auto Unsuspend', " << Time
+	<< " FROM users WHERE " << Time << " > users.suspended_expire_ts AND"
+	<< " users.suspended_expire_ts <> 0"
+	<< ends;
+
+strstream updateUserQuery;
+updateUserQuery << "UPDATE users SET flags = (flags & ~" << sqlUser::F_GLOBAL_SUSPEND << "),"
+	<< "last_updated=" << Time << ",suspended_expire_ts=0"
+	<< " WHERE " << Time << " > suspended_expire_ts AND suspended_expire_ts <> 0"
+	<< ends;
+
+#ifdef LOG_SQL
+elog << "expireGlobalSuspends> " << insertUserQuery.str() << endl;
+elog << "expireGlobalSuspends> " << updateUserQuery.str() << endl;
+#endif
+
+status = SQLDb->Exec("BEGIN");
+if(PGRES_COMMAND_OK != status)
+	{
+	elog << "expireGlobalSuspends:User:BEGIN> SQL Error: "
+		<< SQLDb->ErrorMessage() << endl;
+	delete[] updateUserQuery.str();
+	delete[] insertUserQuery.str();
+	return;
+	}
+
+status = SQLDb->Exec(insertUserQuery.str());
+if(PGRES_COMMAND_OK != status)
+	{
+	elog << "expireGlobalSuspends:User:INSERT> SQL Error: "
+		<< SQLDb->ErrorMessage() << endl;
+	delete[] updateUserQuery.str();
+	delete[] insertUserQuery.str();
+	return;
+	}
+
+status = SQLDb->Exec(updateUserQuery.str());
+if(PGRES_COMMAND_OK != status)
+	{
+	elog << "expireGlobalSuspends:User:UPDATE> SQL Error: "
+		<< SQLDb->ErrorMessage() << endl;
+	delete[] updateUserQuery.str();
+	delete[] insertUserQuery.str();
+	return;
+	}
+
+status = SQLDb->Exec("COMMIT");
+if(PGRES_COMMAND_OK != status)
+	{
+	elog << "expireGlobalSuspends:User:COMMIT> SQL Error: "
+		<< SQLDb->ErrorMessage() << endl;
+	delete[] updateUserQuery.str();
+	delete[] insertUserQuery.str();
+	return;
+	}
+
+
+delete[] insertUserQuery.str();
+delete[] updateUserQuery.str();
 
 return;
 }

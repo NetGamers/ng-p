@@ -13,7 +13,7 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.6 2002-03-05 21:28:55 jeekay Exp $
+ * $Id: CHANINFOCommand.cc,v 1.7 2002-03-06 19:21:37 jeekay Exp $
  */
 
 #include	<string>
@@ -26,7 +26,7 @@
 #include	"libpq++.h"
 #include	"cservice_config.h"
 
-const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.6 2002-03-05 21:28:55 jeekay Exp $" ;
+const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.7 2002-03-06 19:21:37 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -202,8 +202,8 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 		string reason = theUser->getLastEvent(sqlUser::EV_UNSUSPEND, theTime);
 		if (!reason.empty())
 			{
-			bot->Notice(theClient, "Account was unsuspended %s ago%s", bot->prettyDuration(theTime).c_str(),
-				reason.c_str());
+			bot->Notice(theClient, "Account was unsuspended %s ago", bot->prettyDuration(theTime).c_str());
+			bot->Notice(theClient, "Unsuspend Reason: %s", reason.c_str());
 			}
 		}
 	}

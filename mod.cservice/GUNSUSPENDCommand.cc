@@ -3,7 +3,7 @@
  *
  * Allow global unsuspending of nicks/channels
  *
- * $Id: GUNSUSPENDCommand.cc,v 1.1 2002-02-16 21:40:01 jeekay Exp $
+ * $Id: GUNSUSPENDCommand.cc,v 1.2 2002-03-06 19:21:37 jeekay Exp $
  */
 
 #include <string>
@@ -12,7 +12,7 @@
 #include "cservice.h"
 #include "levels.h"
 
-const char GUNSUSPENDCommand_cc_rcsId[] = "$Id: GUNSUSPENDCommand.cc,v 1.1 2002-02-16 21:40:01 jeekay Exp $";
+const char GUNSUSPENDCommand_cc_rcsId[] = "$Id: GUNSUSPENDCommand.cc,v 1.2 2002-03-06 19:21:37 jeekay Exp $";
 
 namespace gnuworld
 {
@@ -92,7 +92,7 @@ if(admLevel >= level::nsuspend)
 	// Is the target suspended?
 	if(!targetUser->getFlag(sqlUser::F_GLOBAL_SUSPEND))
 		{
-		bot->Notice(theClient, "%s is already globally suspended.", target.c_str());
+		bot->Notice(theClient, "%s is not globally suspended.", target.c_str());
 		return true;
 		}
 	
