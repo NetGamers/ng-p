@@ -876,12 +876,16 @@ return 0;
  */
 sqlUser* cservice::getUserRecord(const string& id)
 {
+
+// Abstraction!
+string findNick = id;
+
 /*
  *  Check if this is a lookup by nick
  */
-if (id[0]=='=')
+if (findNick[0]=='=')
 	{
-	const char* theNick = id.c_str();
+	const char* theNick = findNick.c_str();
 	// Skip the '='
 	++theNick;
 
@@ -890,17 +894,50 @@ if (id[0]=='=')
 
 	return 0;
 	}
+
+/*
+ * Check if this is a lookup by id
+ */
+if(findNick[0] == '-')
+	{
+	/* Quick DB lookup */
+	const char* theID = findNick.c_str();
+	++theID;
+	
+	if(!IsNumeric(theID)) { return false; }
+	
+	strstream findID;
+	findID << "SELECT user_name FROM users WHERE id = " << theID
+		<< ends;
+#ifdef LOG_SQL
+	elog << "gUR:SQL> " << findID.str() << endl;
+#endif
+	ExecStatusType statusFindID = SQLDb->Exec(findID.str());
+	delete[] findID.str();
+	
+	if(PGRES_TUPLES_OK != statusFindID)
+		{
+		elog << "gUR:SQLError> " << SQLDb->ErrorMessage() << endl;
+		return false;
+		}
+	
+	if(SQLDb->Tuples() != 1) { return false; }
+	
+	string myFindNick = SQLDb->GetValue(0,0);
+	findNick = myFindNick;
+	}
+
 /*
  *  Check if this record is already in the cache.
  */
 
-sqlUserHashType::iterator ptr = sqlUserCache.find(id);
+sqlUserHashType::iterator ptr = sqlUserCache.find(findNick);
 if(ptr != sqlUserCache.end())
 	{
 	// Found something!
 	#ifdef LOG_CACHE_HITS
 		elog	<< "cmaster::getUserRecord> Cache hit for "
-			<< id
+			<< findNick
 			<< endl;
 	#endif
 
@@ -917,9 +954,9 @@ if(ptr != sqlUserCache.end())
 sqlUser* theUser = new (std::nothrow) sqlUser(SQLDb);
 assert( theUser != 0 ) ;
 
-if (theUser->loadData(id))
+if (theUser->loadData(findNick))
 	{
- 	sqlUserCache.insert(sqlUserHashType::value_type(id, theUser));
+ 	sqlUserCache.insert(sqlUserHashType::value_type(findNick, theUser));
 
 	#ifdef LOG_SQL
 		elog	<< "cmaster::getUserRecord> There are "
