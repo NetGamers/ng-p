@@ -11,7 +11,7 @@
  *
  * Caveats: None
  *
- * $Id: ADDUSERCommand.cc,v 1.11 2003-02-18 21:33:33 jeekay Exp $
+ * $Id: ADDUSERCommand.cc,v 1.12 2003-09-02 23:12:07 jeekay Exp $
  */
 
 #include	<string>
@@ -25,7 +25,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char ADDUSERCommand_cc_rcsId[] = "$Id: ADDUSERCommand.cc,v 1.11 2003-02-18 21:33:33 jeekay Exp $" ;
+const char ADDUSERCommand_cc_rcsId[] = "$Id: ADDUSERCommand.cc,v 1.12 2003-09-02 23:12:07 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -170,7 +170,7 @@ for(StringTokenizer::size_type counter = 0; counter < st2.size(); ++counter)
 			bot->getResponse(theUser,
 				language::not_registered).c_str(),
 			st2[counter].c_str() );
-		return false;
+		continue;
 		} // if(!targetUser)
 
 	/*
@@ -190,7 +190,7 @@ for(StringTokenizer::size_type counter = 0; counter < st2.size(); ++counter)
 			targetUser->getUserName().c_str(),
 			theChan->getName().c_str(),
 			levelTest);
-		return false;
+		continue;
 		} // if(levelTest != 0)
 
 	/*
@@ -201,10 +201,10 @@ for(StringTokenizer::size_type counter = 0; counter < st2.size(); ++counter)
 
 	if (theChan->getUserFlags() == 1) targetFlags = sqlLevel::F_AUTOOP;
 	if (theChan->getUserFlags() == 2) targetFlags = sqlLevel::F_AUTOVOICE;
-  if (theChan->getUserFlags() == 3) {
-    if(targetAccess >= 25) targetFlags = sqlLevel::F_AUTOVOICE;
-    if(targetAccess >= 100) targetFlags = sqlLevel::F_AUTOOP;
-  }
+	if (theChan->getUserFlags() == 3) {
+		if(targetAccess >= 25) targetFlags = sqlLevel::F_AUTOVOICE;
+		if(targetAccess >= 100) targetFlags = sqlLevel::F_AUTOOP;
+	}
 
 	/*
 	 *  Now, build up the SQL query & execute it!

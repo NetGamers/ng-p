@@ -1,4 +1,5 @@
 2003-05-29 1.2.10 Jeekay
+* Fixed code to allow ADDUSER to continue after an adding failure
 * Bumped version to 1.2.10
 
 2003-04-20 1.2.09 Jeekay
