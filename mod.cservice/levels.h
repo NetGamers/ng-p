@@ -1,5 +1,5 @@
 #ifndef __LEVELS_H
-#define __LEVELS_H "$Id: levels.h,v 1.3 2002-01-17 19:24:04 morpheus Exp $"
+#define __LEVELS_H "$Id: levels.h,v 1.4 2002-01-17 22:24:48 jeekay Exp $"
 
 /* 
  * levels.h
@@ -9,7 +9,7 @@
  * 
  * Defines access level constants for use in command handlers. 
  *
- * $Id: levels.h,v 1.3 2002-01-17 19:24:04 morpheus Exp $
+ * $Id: levels.h,v 1.4 2002-01-17 22:24:48 jeekay Exp $
  */
 
 namespace gnuworld {
@@ -55,23 +55,22 @@ namespace gnuworld {
   const int setcmd = 450;
 
   const int logs = 501; // Level that logs are visible at 
-  
   const int invme = 501;
-  
-  const int globalbanlist = 600;
-
-  const int addcommentcmd = 600;
-  const int registercmd = 600;
-  const int globalsuspend = 750;
-  const int rehash = 900;
-
-  const int purge = 600; 
-  const int removeall = 600;
-
   const int remignore = 501;
 
-  const int servnotice = 900;
+  const int addcommentcmd = 600;
+  const int globalbanlist = 600;
+  const int purge = 600; 
+  const int registercmd = 600;
+  const int removeall = 600;
+
+  const int globalsuspend = 750;
+
+  const int force2 = 850; // Allow forcing of NOFORCE channels
+
+  const int rehash = 900;
   const int say = 900;
+  const int servnotice = 900;
 
   // Debug Commands
   const int shutdown = 900;
