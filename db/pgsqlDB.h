@@ -1,5 +1,5 @@
 /**
- * gnuworldDB.h
+ * pgsqlDB.h
  * Copyright (C) 2002 Daniel Karrels <dan@karrels.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -17,16 +17,20 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: gnuworldDB.h,v 1.2 2002-07-01 00:14:22 jeekay Exp $
+ * $Id: pgsqlDB.h,v 1.1 2002-07-01 00:14:22 jeekay Exp $
  */
 
-#ifndef __GNUWORLDDB_H
-#define __GNUWORLDDB_H "$Id: gnuworldDB.h,v 1.2 2002-07-01 00:14:22 jeekay Exp $"
+#ifndef __PGSQLDB_H
+#define __PGSQLDB_H "$Id: pgsqlDB.h,v 1.1 2002-07-01 00:14:22 jeekay Exp $"
+
+#include	<sys/types.h>
 
 #include	<string>
 #include	<sstream>
+#include	<exception>
 
-#include	<sys/types.h>
+#include	"libpq++.h"
+#include	"gnuworldDB.h"
 
 namespace gnuworld
 {
@@ -34,45 +38,30 @@ namespace gnuworld
 using std::stringstream ;
 using std::string ;
 
-class gnuworldDB
+class pgsqlDB : public gnuworldDB
 {
-
 protected:
-	string			dbHost ;
-	unsigned short int	dbPort ;
-	string			dbName ;
-	string			userName ;
-	string			password ;
+	PgDatabase*		theDB ;
 
 public:
 
-	gnuworldDB( const string& dbHost,
+	pgsqlDB( const string& dbHost,
 		const unsigned short int dbPort,
 		const string& dbName,
 		const string& userName,
-		const string& password ) ;
-	virtual ~gnuworldDB() ;
+		const string& password ) throw( std::exception ) ;
+	virtual ~pgsqlDB() ;
 
-	virtual bool		Exec( const stringstream& ) = 0 ;
-	virtual bool		Exec( const string& ) = 0 ;
-	virtual bool		isConnected() const = 0 ;
+	virtual bool		Exec( const string& ) ;
+	virtual bool		Exec( const stringstream& ) ;
+	virtual bool		isConnected() const ;
 
-	virtual unsigned int	countTuples() const = 0 ;
+	virtual unsigned int	countTuples() const ;
+	virtual const string	ErrorMessage() const ;
 
-	virtual const string	ErrorMessage() const = 0 ;
+	// tuple number, field number
 	virtual const string	GetValue( const unsigned int&,
-					const unsigned int& ) const = 0 ;
-
-	inline const string&	getDBHost() const
-		{ return dbHost ; }
-	inline const unsigned short int	getDBPort() const
-		{ return dbPort ; }
-	inline const string&	getDBName() const
-		{ return dbName ; }
-	inline const string&	getUserName() const
-		{ return userName ; }
-	inline const string&	getPassword() const
-		{ return password ; }
+					const unsigned int& ) const ;
 
 protected:
 
@@ -81,4 +70,4 @@ protected:
 
 } // namespace gnuworld
 
-#endif // __GNUWORLDDB_H
+#endif // __PGSQLDB_H

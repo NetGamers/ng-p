@@ -1,3 +1,4 @@
 .deps .libs
 Makefile
 libgnuworld_db.la
+*.lo
