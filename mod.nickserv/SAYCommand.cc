@@ -3,7 +3,7 @@
  *
  * 20020130 - Jeekay - Initial version
  *
- * $Id: SAYCommand.cc,v 1.2 2002-02-04 04:26:36 jeekay Exp $
+ * $Id: SAYCommand.cc,v 1.3 2002-03-18 20:01:45 jeekay Exp $
  */
 
 #include <string>
@@ -31,8 +31,7 @@ if(st.size() < 3)
 	return true;
 	}
 
-nsUser* theUser = static_cast< nsUser* >( theClient->getCustomData(bot) );
-int admLevel = bot->getAdminAccessLevel(theUser->getLoggedNick());
+int admLevel = bot->getAdminAccessLevel(theClient);
 if(admLevel < level::say)
 	{
 	return false;

@@ -9,7 +9,7 @@
 #include "nickserv.h"
 #include "levels.h"
 
-const char JUPECommand_cc_rcsId[] = "$Id: JUPECommand.cc,v 1.5 2002-03-04 20:32:57 jeekay Exp $";
+const char JUPECommand_cc_rcsId[] = "$Id: JUPECommand.cc,v 1.6 2002-03-18 20:01:45 jeekay Exp $";
 
 namespace gnuworld
 {
@@ -21,8 +21,6 @@ using namespace gnuworld;
 
 bool JUPECommand::Exec( iClient* theClient, const string& Message )
 {
-
-nsUser* theUser = static_cast< nsUser* >(theClient->getCustomData(bot));
 
 StringTokenizer st( Message );
 
@@ -62,7 +60,7 @@ else
 string option = string_upper(st[1]);
 
 iClient* targetClient = Network->findNick(nick);
-int adminAccess = bot->getAdminAccessLevel(theUser->getLoggedNick());
+int adminAccess = bot->getAdminAccessLevel(theClient);
 
 if("ADD" == option && (adminAccess >= level::jupe::add))
 	{

@@ -1,6 +1,6 @@
 
 #ifndef __NICKSERV_H
-#define __NICKSERV_H "$Id: nickserv.h,v 1.13 2002-02-15 03:37:11 jeekay Exp $"
+#define __NICKSERV_H "$Id: nickserv.h,v 1.14 2002-03-18 20:01:46 jeekay Exp $"
 
 
 #include	<string>
@@ -12,7 +12,6 @@
 
 #include	"client.h"
 #include	"iClient.h"
-//#include	"iServer.h"
 #include	"server.h"
 #include	"libpq++.h"
 #include	"libpq-int.h"
@@ -22,8 +21,10 @@
 #include	"nsUser.h"
 #include	"juUser.h"
 
+#include "../mod.cservice/cserviceClass.h"
+
 // The flag in the cservice db
-#define F_AUTOKILL 0x08
+#define NS_F_AUTOKILL 0x08
 
 namespace gnuworld
 {
@@ -35,7 +36,6 @@ namespace nserv
 {
 
 class Command;
-//using gnuworld::xServer;
 /*
  *  Subclass the postgres API to create our own accessor
  *  to get at the PID information.
@@ -51,9 +51,6 @@ public:
 	inline int getPID() const
 		{ return pgConn->be_pid; }
 };
-
-/// Forward declaration of command handler class
-//class Command ;
 
 class nickserv : public xClient
 {
@@ -76,10 +73,6 @@ protected:
 	typedef map<string, nsUser*> killQueue;
 	typedef killQueue::iterator killIterator;
 
-	// Lists of NS admins
-	typedef map<string, int> adminListType;
-	typedef adminListType::iterator adminIteratorType;
-	
 	// Lists of juped nicks
 	typedef map<string, juUser*> jupeNickType;
 	typedef jupeNickType::iterator jupeIteratorType;
@@ -106,7 +99,13 @@ protected:
 	int dbConnCheckMax;
 	int dbConnRetries;
 	
+	// Where is our cservice?
+	gnuworld::cservice* myCService;
+	
 public:
+	inline gnuworld::cservice* getCService()
+		{ return myCService; }
+
 	inline const string getDebugChannel() const
 	  { return debugChan; }
 	
@@ -209,17 +208,11 @@ public:
 	
 	void removeFromQueue(iClient*);
 	
-	nsUser*	isAuth(iClient*);
-
-	void	authUser(iClient*, const string&);
+	void authUser(iClient*, const string&);
 	
-	bool	isInQueue(iClient*);
+	/* Allow logging of debug messages */
+	bool logDebugMessage(const char*, ...);
 
-	bool    logDebugMessage(const string&);
-
-	short int getAdminAccessLevel( string theNick );
-	void refreshAdminAccessLevels( void );
-	
 	/* How to jupe nicks */
 	void initialiseJupeNumerics( void );
 	bool jupeNick( string theNick, string hostMask, string theReason, time_t duration );
@@ -229,6 +222,9 @@ public:
 	
 	// Check the DB connection is ok
 	void checkDBConnectionStatus( void );
+	
+	// Get NS admin access level
+	int getAdminAccessLevel( iClient* );
 	
 	/*
 	 * The type of a constant iterator to the command map.
@@ -297,12 +293,9 @@ protected:
 	
 	killQueue		KillingQueue;
 
-	adminListType adminList;
-	
 	jupeNickType jupedNickList;
 	
 	xServer::timerID processQueueID;
-	xServer::timerID refreshAdminID;
 	xServer::timerID dbConnCheckID;
 	xServer::timerID jupeExpireID;
 	

@@ -23,7 +23,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.23 2002-02-15 03:37:11 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.24 2002-03-18 20:01:46 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -89,8 +89,6 @@ timeToLive = atoi((conf.Require("timeToLive")->second).c_str());
 initialWait = atoi((conf.Require("initialWait")->second).c_str());
 checkNickMax = atoi((conf.Require("checkNickMax")->second).c_str());
 
-adminRefreshTime = atoi((conf.Require("adminRefreshTime")->second).c_str());
-
 jupeNumericStart = atoi((conf.Require("jupeNumericStart")->second).c_str());
 jupeNumericCount = atoi((conf.Require("jupeNumericCount")->second).c_str());
 jupeExpireTime = atoi((conf.Require("jupeExpireTime")->second).c_str());
@@ -135,11 +133,20 @@ RegisterCommand(new RELEASECommand( this, "RELEASE", "<nick>"));
 RegisterCommand(new STATSCommand( this, "STATS", "<stat>"));
 RegisterCommand(new SAYCommand( this, "SAY", "<channel> <text>"));
 
-// Load all the admin names and levels
-refreshAdminAccessLevels();
-
 // Initialise list of juped numerics
 initialiseJupeNumerics();
+
+myCService = static_cast< gnuworld::cservice* >(Network->findLocalNick(conf.Require("cserviceNick")->second));
+
+if(!myCService)
+	{
+	elog << "nickserv::nickserv> Unable to find an instance of CService running." << endl;
+	::exit(0);
+	}
+else
+	{
+	elog << "nickserv::nickserv> Found CService at numeric: " << myCService->getCharYYXXX() << endl;
+	}
 
 }
 
@@ -230,10 +237,6 @@ processQueueID = theServer->RegisterTimer(::time(NULL) + timeToLive + initialWai
 if(!processQueueID)
 	elog << "nickserv::ImplementServer> Unable to register timer for processQueueID" << endl;
 
-refreshAdminID = theServer->RegisterTimer(::time(NULL) + adminRefreshTime, this, NULL);
-if(!refreshAdminID)
-	elog << "nickserv::ImplementServer> Unable to register timer for refreshAdminID" << endl;
-
 dbConnCheckID  = theServer->RegisterTimer(::time(NULL) + dbConnCheckTime, this, NULL);
 if(!dbConnCheckID)
 	elog << "nickserv::ImplementServer> Unable to register timer for dbConnCheckID" << endl;
@@ -242,7 +245,7 @@ jupeExpireID = theServer->RegisterTimer(::time(NULL) + jupeExpireTime, this, NUL
 if(!jupeExpireID)
 	elog << "nickserv::ImplementServer> Unable to register timer for jupeExpireID" << endl;
 
-if(!processQueueID || !refreshAdminID || !dbConnCheckID || !jupeExpireID)
+if(!processQueueID || !dbConnCheckID || !jupeExpireID)
 	::exit(0);
 
 dbConnRetries = 0;
@@ -406,12 +409,8 @@ int nickserv::OnTimer(xServer::timerID timer_id, void* data)
 
   if((timer_id == processQueueID) && (MyUplink->IsEndOfBurst()))
 	{ // processQueueID
-	  strstream strTemp;
-	  strTemp << "Processing kill queue - "
-	          << KillingQueue.size()
-	          << " entr" << ((KillingQueue.size() == 1) ? ("y") : ("ies")) << "." << ends;
-	  logDebugMessage(strTemp.str());
-		delete[] strTemp.str();
+		logDebugMessage("Processing kill queue - %d entr%s.",
+			KillingQueue.size(), (KillingQueue.size() == 1) ? ("y") : ("ies"));
 		unsigned int warnings = 0;
 		unsigned int kills = 0;
 		unsigned int iterations = 0;
@@ -425,16 +424,13 @@ int nickserv::OnTimer(xServer::timerID timer_id, void* data)
 			// Sanity checking
 			if(!tmpClient || !tmpNS)
 			{ // Somehow we have a non-existant numeric
-				logDebugMessage(string("Wierd error with numeric ") + tmpNS->getNumeric());
+				logDebugMessage("Wierd error with numeric %s", tmpNS->getNumeric().c_str());
 				KillingQueue.erase(pos++);
 				continue;
 			}
 			
 #if __NS_DEBUGINFO >= 2
-			strstream debugString;
-			debugString << "Processing numeric " << tmpNS->getNumeric() << ends;
-			logDebugMessage(debugString.str());
-			delete[] debugString.str();
+			logDebugMessage("Processing numeric %s", tmpNS->getNumeric().c_str());
 #endif
 			if(! (tmpNS->getInQueue()) )
 			{ // This user is not in the queue
@@ -444,7 +440,7 @@ int nickserv::OnTimer(xServer::timerID timer_id, void* data)
 					tmpNS->setInQueue();
 					tmpNS->setCheckTime();
 #if __NS_DEBUGINFO >= 1
-					logDebugMessage(tmpNS->getNumeric() + " - Warned");
+					logDebugMessage("%s - Warned", tmpNS->getNumeric().c_str());
 #endif
 					++warnings;
 #ifndef __NS_DEBUG
@@ -465,7 +461,7 @@ int nickserv::OnTimer(xServer::timerID timer_id, void* data)
 				if((::time(NULL) - (tmpNS->getCheckTime())) >= timeToLive)
 				{ // User has expired their time. Kill them.
 #if __NS_DEBUGINFO >= 1
-					logDebugMessage(tmpClient->getCharYYXXX() + " - Killed");
+					logDebugMessage("%s - Killed", tmpClient->getCharYYXXX().c_str());
 #endif
 					++kills;
 
@@ -496,19 +492,11 @@ int nickserv::OnTimer(xServer::timerID timer_id, void* data)
 			} // User has INQUEUE set
 		} // Iterative loop
 
-		strstream summaryString;
-		summaryString << "Processed: " << iterations << "; Warnings: " << warnings << "; Kills: " << kills << ends;
-		logDebugMessage(summaryString.str());
-		delete[] summaryString.str();
+		logDebugMessage("Processed: %d; Warnings: %d; Kills: %d",
+			iterations, warnings, kills);
 		processQueueID = MyUplink->RegisterTimer(::time(NULL) + timeToLive, this, NULL);
 	} // processQueueID
 
-  if(timer_id == refreshAdminID)
-    {
-      refreshAdminAccessLevels();
-      refreshAdminID = MyUplink->RegisterTimer(::time(NULL) + adminRefreshTime, this, NULL);
-    }
-	
 	if(timer_id == dbConnCheckID)
 		{
 		checkDBConnectionStatus();
@@ -584,7 +572,7 @@ if(PGRES_TUPLES_OK == status)
 	if(SQLDb->Tuples() > 0)
 		{
 		  userFlags = atoi(SQLDb->GetValue(0, 2));
-		  return userFlags & F_AUTOKILL;
+		  return userFlags & NS_F_AUTOKILL;
 		}
 	return false;
 	}
@@ -592,24 +580,11 @@ elog << " Query error!" << endl;
 return false;
 }
 
-nsUser* nickserv::isAuth(iClient* tmpClient)
-{
-nsUser* tmpUser = static_cast < nsUser* >( tmpClient->getCustomData(this));
-if(tmpUser->getLoggedIn())
-	return tmpUser;
-return NULL;
-
-}
-
 void nickserv::authUser(iClient* tmpClient, const string& authNick)
 {
 nsUser* tmpUser = static_cast < nsUser* >( tmpClient->getCustomData(this));
 tmpUser->setLoggedIn();
 tmpUser->setLoggedNick(authNick);
-if(int tmpAccess = getAdminAccessLevel(authNick))
-  {
-    Notice(tmpClient, "Authed with NS admin level: %d", tmpAccess);
-  }
 }
 
 void nickserv::removeFromQueue(iClient* theClient)
@@ -617,87 +592,25 @@ void nickserv::removeFromQueue(iClient* theClient)
   KillingQueue.erase(theClient->getCharYYXXX());
 }
 
-bool nickserv::isInQueue(iClient* tmpClient)
+bool nickserv::logDebugMessage(const char* format, ...)
 {
-nsUser* tmpUser = static_cast < nsUser* >( tmpClient->getCustomData(this));
-return tmpUser->getInQueue();
-}
+char buf[1024] = { 0 };
+va_list _list;
 
-bool nickserv::logDebugMessage(const string& theMessage)
-{
-  // Check we live
-  Channel* tmpChan = Network->findChannel(debugChan);
-  if(!tmpChan)
-    {
-      elog << "nickserv::logDebugMessage> Unable to find debug channel ";
-      elog << debugChan;
-      elog << endl;
-      return false;
-    }
+va_start(_list, format);
+vsnprintf(buf, 1024, format, _list);
+va_end(_list);
 
-  ChannelUser* tmpChanUser = tmpChan->findUser(this->getInstance());
-  if(!tmpChanUser)
-    {
-      elog << "nickserv::logDebugMessage> We do not appear to be in the debug";
-      elog << " channel " << debugChan << endl;
-      return false;
-    }
-
-  // We are alive and in the right channel. Lets message it!
-  this->Message(tmpChan, theMessage + "\n");
-  return true;
-
-}
-
-void nickserv::refreshAdminAccessLevels( void )
-{
-  strstream theQuery;
-  theQuery << "SELECT users.user_name,levels.access "
-           << "FROM users,levels,channels "
-           << "WHERE channels.name='" << debugChan << "' "
-           << "AND channels.id=levels.channel_id "
-           << "AND users.id=levels.user_id" << ends;
-
-  ExecStatusType status = SQLDb->Exec(theQuery.str());
-  delete[] theQuery.str();
-
-  adminList.clear();
-
-  if( PGRES_TUPLES_OK == status )
+Channel* tmpChan = Network->findChannel(debugChan);
+if(!tmpChan)
   {
-    for(int i = 0; i < SQLDb->Tuples(); i++)
-    {
-      // Add new admin information to cache
-      string newAdmin = SQLDb->GetValue(i, 0);
-      short int newLevel = atoi(SQLDb->GetValue(i,1));
-      adminList[string_lower(newAdmin)] = newLevel;
-    }
+    elog << "nickserv::logDebugMessage> Unable to find debug channel "
+    	<< debugChan << endl;
+    return false;
   }
 
-  elog << "nickserv::refreshAdminAccessLevels> Refresh complete" << endl;
-
-  strstream dbgMsg;
-  dbgMsg << "ns::rAAL> Admin map has been refreshed - Total entries: " << adminList.size() << ends;
-
-  logDebugMessage(dbgMsg.str());
-
-  delete[] dbgMsg.str();
-
-  return;
-}
-
-short int nickserv::getAdminAccessLevel( string theNick )
-{
-  adminIteratorType pos;
-  pos = adminList.find(string_lower(theNick));
-  if(pos == adminList.end())
-    {
-      return 0;
-    }
-  else
-    {
-      return pos->second;
-    }
+Message(debugChan, buf);
+return true;
 }
 
 void nickserv::initialiseJupeNumerics( void )
@@ -845,6 +758,27 @@ void nickserv::checkDBConnectionStatus( void )
 			} // Good connection now
 		} // Bad connection found
 } // nickserv::checkDBConnectionStatus
+
+int nickserv::getAdminAccessLevel( iClient* theClient )
+{
+// We are guaranteed that iClient is NOT null
+
+// Attempt to get admin access in #ns.console
+sqlChannel* csChan = myCService->getChannelRecord(debugChan);
+if(!csChan)
+	{ // NS debug chan isnt registered
+	elog << "nickserv> " << debugChan.c_str()
+		<< " isnt registered with CService." << endl;
+	return false;
+	}
+
+sqlUser* csUser = myCService->isAuthed(theClient, false);
+if(!csUser) { return false; }
+
+return myCService->getEffectiveAccessLevel(csUser, csChan, false);
+
+
+}
 
 } // namespace nserv
 

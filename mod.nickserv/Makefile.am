@@ -1,10 +1,9 @@
 ## Process this file with automake to produce Makefile.in
-# "$Id: Makefile.am,v 1.6 2002-02-08 00:24:34 jeekay Exp $"
+# "$Id: Makefile.am,v 1.7 2002-03-18 20:01:45 jeekay Exp $"
 
 lib_LTLIBRARIES = libnickserv.la
 libnickserv_la_SOURCES = nickserv.cc \
 			nsUser.cc \
-			sqlnsUser.cc \
 			juUser.cc \
 			nickservCommands.cc \
 			JUPECommand.cc \
