@@ -20,7 +20,7 @@
  *
  * Caveats: None
  *
- * $Id: VOICECommand.cc,v 1.3 2002-01-23 23:13:55 jeekay Exp $
+ * $Id: VOICECommand.cc,v 1.4 2002-01-29 23:27:44 jeekay Exp $
  */
 
 #include	<string>
@@ -37,7 +37,7 @@
 using std::map ;
 using std::vector ;
 
-const char VOICECommand_cc_rcsId[] = "$Id: VOICECommand.cc,v 1.3 2002-01-23 23:13:55 jeekay Exp $" ;
+const char VOICECommand_cc_rcsId[] = "$Id: VOICECommand.cc,v 1.4 2002-01-29 23:27:44 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -204,7 +204,7 @@ while (counter < st2.size())
 	sqlBan* tmpBan = bot->isBannedOnChan(theChan, tmpChanUser->getClient());
 	if( tmpBan && (tmpBan->getLevel() >= 25) )
 	{
-		bot->Notice(theClient, "%s isn't allowed to be voice in %s",
+		bot->Notice(theClient, "%s isn't allowed to be voiced in %s",
 								tmpChanUser->getClient()->getNickName().c_str(),
 								theChan->getName().c_str());
 		counter++;
@@ -222,27 +222,10 @@ while (counter < st2.size())
 		// Don't send a notice to the person who issued the command.
 		if(target != theClient)
 			{
-			sqlUser* tmpTargetUser = bot->isAuthed(target, false);
-			if (tmpTargetUser)
-				{
-				bot->Notice(target,
-					bot->getResponse(tmpTargetUser,
-						language::youre_voiced_by).c_str(),
-					theClient->getNickName().c_str(),
-					theUser->getUserName().c_str(),
-					theChan->getName().c_str());
-				}
-			else
-				{
-				bot->Notice(target,
-					bot->getResponse(theUser,
-						language::youre_voiced_by).c_str(),
-					theClient->getNickName().c_str(),
-					theUser->getUserName().c_str(),
-					theChan->getName().c_str());
-				}
+				bot->Notice(target, "You are voiced in %s by %s", theChan->getName().c_str(),
+																													theClient->getNickName().c_str());
 			} // Don't send to person who issued.
-	   	} // Not a duplicate.
+	  } // Not a duplicate.
 
 	counter++;
 	}

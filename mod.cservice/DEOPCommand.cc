@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: DEOPCommand.cc,v 1.2 2002-01-23 17:17:24 ultimate Exp $
+ * $Id: DEOPCommand.cc,v 1.3 2002-01-29 23:27:44 jeekay Exp $
  */
 
 #include	<string>
@@ -21,7 +21,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char DEOPCommand_cc_rcsId[] = "$Id: DEOPCommand.cc,v 1.2 2002-01-23 17:17:24 ultimate Exp $" ;
+const char DEOPCommand_cc_rcsId[] = "$Id: DEOPCommand.cc,v 1.3 2002-01-29 23:27:44 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -231,21 +231,8 @@ while( counter < st2.size())
 	// Don't send a notice to the person who issued the command.
 	if(target != theClient)
 		{
-		sqlUser* tmpTargetUser = bot->isAuthed(target, false);
-		if (tmpTargetUser)
-			{
-			bot->Notice(target,
-				bot->getResponse(tmpTargetUser, language::youre_deopped_by).c_str(),
-				theClient->getNickName().c_str(),
-				theUser->getUserName().c_str());
-			}
-		else
-			{
-			bot->Notice(target,
-				bot->getResponse(theUser, language::youre_deopped_by).c_str(),
-				theClient->getNickName().c_str(),
-				theUser->getUserName().c_str());
-			}
+		bot->Notice(target, "You are deopped in %s by %s", theChan->getName().c_str(),
+																											 theClient->getNickName().c_str());
 		} // Don't send to person who issued.
 
 	++counter ;

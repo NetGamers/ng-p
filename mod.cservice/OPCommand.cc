@@ -20,7 +20,7 @@
  *
  * Caveats: None
  *
- * $Id: OPCommand.cc,v 1.2 2002-01-23 17:17:24 ultimate Exp $
+ * $Id: OPCommand.cc,v 1.3 2002-01-29 23:27:44 jeekay Exp $
  */
 
 #include	<string>
@@ -35,7 +35,7 @@
 
 using std::map ;
 
-const char OPCommand_cc_rcsId[] = "$Id: OPCommand.cc,v 1.2 2002-01-23 17:17:24 ultimate Exp $" ;
+const char OPCommand_cc_rcsId[] = "$Id: OPCommand.cc,v 1.3 2002-01-29 23:27:44 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -261,11 +261,11 @@ for( ; counter < st2.size() ; ++counter )
 		}
 
 	/*
-	 * If the user is banned <75, don't allow them to be opp'd either
+	 * If the user is banned, don't allow them to be opp'd either
 	 */
 
 	sqlBan* tmpBan = bot->isBannedOnChan(theChan, tmpChanUser->getClient());
-	if( tmpBan && (tmpBan->getLevel() <= 75) )
+	if( tmpBan )
 		{
 		/* Tell the person doing the op'ing this is bad */
 		bot->Notice(theClient,
@@ -288,27 +288,10 @@ for( ; counter < st2.size() ; ++counter )
 		// Don't send a notice to the person who issued the command.
 		if(target != theClient)
 			{
-			sqlUser* tmpTargetUser = bot->isAuthed(target, false);
-			if (tmpTargetUser)
-				{
-				bot->Notice(target,
-					bot->getResponse(tmpTargetUser,
-					language::youre_opped_by).c_str(),
-					theClient->getNickName().c_str(),
-					theUser->getUserName().c_str(),
-					theChan->getName().c_str());
-				}
-			else
-				{
-				bot->Notice(target,
-					bot->getResponse(theUser,
-					language::youre_opped_by).c_str(),
-					theClient->getNickName().c_str(),
-					theUser->getUserName().c_str(),
-					theChan->getName().c_str());
-				}
+			bot->Notice(target, "You are opped in %s by %s", theChan->getName().c_str(),
+																												theClient->getNickName().c_str());
 			} // Don't send to person who issued.
-	   	} // Not a duplicate.
+	  } // Not a duplicate.
 	}
 
 // Op them.

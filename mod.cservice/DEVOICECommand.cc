@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: DEVOICECommand.cc,v 1.2 2002-01-23 17:17:24 ultimate Exp $
+ * $Id: DEVOICECommand.cc,v 1.3 2002-01-29 23:27:44 jeekay Exp $
  */
 
 #include	<string>
@@ -23,7 +23,7 @@
 
 using std::map ;
 
-const char DEVOICECommand_cc_rcsId[] = "$Id: DEVOICECommand.cc,v 1.2 2002-01-23 17:17:24 ultimate Exp $" ;
+const char DEVOICECommand_cc_rcsId[] = "$Id: DEVOICECommand.cc,v 1.3 2002-01-29 23:27:44 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -178,20 +178,10 @@ bool DEVOICECommand::Exec( iClient* theClient, const string& Message )
 
 				if(target != theClient) // Don't send a notice to the person who issued the command.
 				{
-					sqlUser* tmpTargetUser = bot->isAuthed(target, false);
-					if (tmpTargetUser)
-					{
-						bot->Notice(target, bot->getResponse(tmpTargetUser, language::youre_devoiced_by).c_str(),
-							theClient->getNickName().c_str(),
-							theUser->getUserName().c_str());
-					} else
-					{
-						bot->Notice(target, bot->getResponse(theUser, language::youre_devoiced_by).c_str(),
-							theClient->getNickName().c_str(),
-							theUser->getUserName().c_str());
-					}
+					bot->Notice(target, "You are devoiced in %s by %s", tmpChan->getName().c_str(),
+																														 theClient->getNickName().c_str());
 				} // Don't send to person who issued.
-		   	} // Not a duplicate.
+		  } // Not a duplicate.
 		}
 
 		cont = true;
