@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.34 2004-11-20 19:58:54 jeekay Exp $
+ * $Id: SETCommand.cc,v 1.35 2004-11-20 23:11:00 jeekay Exp $
  */
 
 #include  <string>
@@ -376,7 +376,7 @@ else
 	
 	theChan->commit();
 	
-	bot->logAdminMessage("%s (%s) - SET - SPECIAL - %s %s",
+	bot->logAdminMessage("%s (%s) - SET - PARTNER - %s %s",
 		theClient->getNickName().c_str(),
 		theUser->getUserName().c_str(),
 		theChan->getName().c_str(),
@@ -391,19 +391,19 @@ else
 	return;
   }
 
-  if(option == "SPECIAL")
+  if(option == "NOPART")
   {
       // Check for admin access
       sqlChannel* admChan = bot->getChannelRecord("*");
       int admLevel = bot->getAccessLevel(theUser, admChan);
-      if(admLevel < level::set::special)
+      if(admLevel < level::set::nopart)
       {
       // No need to tell users about admin commands.
       Usage(theClient);
       return ;
       }
-      if(value == "ON") theChan->setFlag(sqlChannel::F_SPECIAL);
-      else if(value == "OFF") theChan->removeFlag(sqlChannel::F_SPECIAL);
+      if(value == "ON") theChan->setFlag(sqlChannel::F_NOPART);
+      else if(value == "OFF") theChan->removeFlag(sqlChannel::F_NOPART);
       else
       {
     bot->Notice(theClient,
@@ -414,7 +414,7 @@ else
     return ;
       }
       theChan->commit();
-      bot->logAdminMessage("%s (%s) - SET - SPECIAL - %s %s",
+      bot->logAdminMessage("%s (%s) - SET - NOPART - %s %s",
         theClient->getNickName().c_str(), theUser->getUserName().c_str(),
         theChan->getName().c_str(), value.c_str());
       bot->Notice(theClient,
@@ -423,7 +423,7 @@ else
         string("%s for %s is %s")).c_str(),
       option.c_str(),
       theChan->getName().c_str(),
-      theChan->getFlag(sqlChannel::F_SPECIAL) ? "ON" : "OFF");
+      theChan->getFlag(sqlChannel::F_NOPART) ? "ON" : "OFF");
 
       return ;
   }

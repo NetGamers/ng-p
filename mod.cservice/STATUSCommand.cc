@@ -184,7 +184,7 @@ bot->Notice(theClient, "MassDeopPro: %i",
 
 string flagsSet;
 if (theChan->getFlag(sqlChannel::F_NOPURGE))     flagsSet += "NOPURGE ";
-if (theChan->getFlag(sqlChannel::F_SPECIAL))     flagsSet += "SPECIAL ";
+if (theChan->getFlag(sqlChannel::F_NOPART))      flagsSet += "NOPART ";
 if (theChan->getFlag(sqlChannel::F_PARTNER))     flagsSet += "PARTNER ";
 if (theChan->getFlag(sqlChannel::F_SUSPEND))     flagsSet += "SUSPEND ";
 if (theChan->getFlag(sqlChannel::F_TEMP))        flagsSet += "TEMP ";

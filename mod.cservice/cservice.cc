@@ -1789,7 +1789,7 @@ void cservice::cacheExpireLevels()
 		/* Part after idleChannelPartPeriod seconds */
 		if ( 	(currentTime() - theChan->getLastUsed()) >= idleChannelPartPeriod
 			&& theChan->getInChan() 
-			&& !theChan->getFlag(sqlChannel::F_SPECIAL) )
+			&& !theChan->getFlag(sqlChannel::F_NOPART) )
 		{
 			/*
 			 * So long! and thanks for all the fish.
