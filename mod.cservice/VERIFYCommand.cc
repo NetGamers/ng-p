@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.11 2002-04-21 12:28:37 jeekay Exp $" ;
+const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.12 2002-07-18 11:26:26 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -160,18 +160,6 @@ if ((level > level::admin::manager) && (level <= level::admin::coder))
 	}
 
 if ((cLevel >= level::coder::base) && (cLevel <= level::coder::contrib))
-	{
-	bot->Notice(theClient, 
-		bot->getResponse(tmpUser,
-			language::is_coder_rep,
-			string("%s is an Official Coder-Com Representative%s and logged in as %s")).c_str(),
-		target->getNickUserHost().c_str(),
-		extra.c_str(),
-		theUser->getUserName().c_str());
-	return true;
-	}
-
-if ((cLevel > level::coder::base) && (cLevel <= level::coder::contrib))
 	{
 	bot->Notice(theClient, 
 		bot->getResponse(tmpUser,

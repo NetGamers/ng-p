@@ -3,7 +3,7 @@
  *
  * Allow global suspending of nicks/channels
  *
- * $Id: GSUSPENDCommand.cc,v 1.3 2002-03-25 01:20:16 jeekay Exp $
+ * $Id: GSUSPENDCommand.cc,v 1.4 2002-07-18 11:26:25 jeekay Exp $
  */
 
 #include <string>
@@ -12,7 +12,7 @@
 #include "cservice.h"
 #include "levels.h"
 
-const char GSUSPENDCommand_cc_rcsId[] = "$Id: GSUSPENDCommand.cc,v 1.3 2002-03-25 01:20:16 jeekay Exp $";
+const char GSUSPENDCommand_cc_rcsId[] = "$Id: GSUSPENDCommand.cc,v 1.4 2002-07-18 11:26:25 jeekay Exp $";
 
 namespace gnuworld
 {
@@ -43,6 +43,8 @@ string target = st[1];
 int duration;
 string reason;
 
+/* Find reason - time is optional so work around that */
+
 if(IsNumeric(st[2]))
 	{
 	duration = atoi(st[2].c_str());
@@ -55,10 +57,6 @@ else
 	}
 
 int maxduration = 168;
-if(admLevel >= 800) maxduration = 672; // 1 month
-if(admLevel >= 850) maxduration = 8736; // 1 year
-
-if(duration > maxduration) duration = maxduration;
 
 /* Are we suspending a channel?
  * If so, need to check:
@@ -69,6 +67,11 @@ if(duration > maxduration) duration = maxduration;
 
 if((target[0] == '#') && (admLevel >= level::csuspend))
 	{ // We are suspending a channel
+  /* Establish max allowable suspend */
+  if(admLevel >= 650) maxduration = 672; // 1 month
+  if(admLevel >= 850) maxduration = 8736; // 1 year
+  if(duration > maxduration) duration = maxduration;
+
 	sqlChannel* theChan = bot->getChannelRecord(target);
 	
 	// Does the channel exist?
@@ -104,6 +107,11 @@ if((target[0] == '#') && (admLevel >= level::csuspend))
 // We are suspending a nick
 if(admLevel >= level::nsuspend)
 	{
+  /* Establish max allowable suspend */
+  if(admLevel >= 750) maxduration = 672; // 1 month
+  if(admLevel >= 850) maxduration = 8736; // 1 year
+  if(duration > maxduration) duration = maxduration;
+
 	sqlUser* targetUser = bot->getUserRecord(target);
 	if(!targetUser)
 		{

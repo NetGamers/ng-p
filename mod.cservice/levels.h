@@ -1,5 +1,5 @@
 #ifndef __LEVELS_H
-#define __LEVELS_H "$Id: levels.h,v 1.30 2002-03-25 03:35:36 jeekay Exp $"
+#define __LEVELS_H "$Id: levels.h,v 1.31 2002-07-18 11:26:26 jeekay Exp $"
 
 /* 
  * levels.h
@@ -9,7 +9,7 @@
  * 
  * Defines access level constants for use in command handlers. 
  *
- * $Id: levels.h,v 1.30 2002-03-25 03:35:36 jeekay Exp $
+ * $Id: levels.h,v 1.31 2002-07-18 11:26:26 jeekay Exp $
  */
 
 namespace gnuworld {
@@ -57,38 +57,42 @@ namespace gnuworld {
   const int part = 450;
   const int setcmd = 450;
 
+// Admin commands
+
+  const int remignore = 100;
+
+  const int invme = 400;
+  const int usercomment = 400;
+
   const int logs = 501; // Level that logs are visible at 
 
-  const int invme = 600;
-  const int remignore = 600;
+  const int csuspend = 600; // Level required to suspend a channel
+  const int registercmd = 600;
   const int removeall = 600;
-	const int scan = 600;
+  const int scan = 600;
 
   const int chancomment = 650;
-  const int registercmd = 650;
+  const int purge = 650; 
 
-  const int csuspend = 700; // Level required to suspend a channel
-  const int purge = 700; 
+  const int nsuspend = 700; // Level required to suspend a nick
 
   const int globalsuspend = 750;
-  const int nsuspend = 750; // Level required to suspend a nick
   const int remuserid = 750;
-  const int usercomment = 750;
 
+  const int globnotice = 800;
   const int susadmin = 800; // (un)suspending of *
 
   const int force2 = 850; // Allow forcing of NOFORCE channels
   const int chgadmin = 850; // changing ppl on * (add/del/mod)
-  const int globnotice = 850;
   
   const int rehash = 900;
   const int say = 900;
   const int servnotice = 900;
-  const int shutdown = 900;
 
   // Debug Commands
 	const int debug = 950; // debug command
   const int quote = 950;
+  const int shutdown = 950;
   const int boostall = 1000;
  
   namespace set {
@@ -116,21 +120,27 @@ namespace gnuworld {
 
 // Owner commands
 
-    const int oponly = 500;
     const int floodpro = 500;
     const int autojoin = 500;
+
+// Admin commands
+
+    const int caution = 400;
+    const int comment = 400;
+
+    const int locked = 450;
+    const int vacation = 450;
+
+    const int oponly = 500;
     
-    const int comment = 501;
 
-    const int locked = 650;
+    const int tempman = 550;
 
-    const int nopurge = 800;
-    const int special = 800;
-    const int noreg = 800;
     const int neverreg = 800;
-    const int tempman = 800;
-    const int caution = 800;
-    const int vacation = 800;
+    const int noreg = 800;
+
+    const int nopurge = 850;
+    const int special = 850;
 
     const int noforce = 900;
   }
@@ -161,7 +171,7 @@ namespace gnuworld {
   }
 
   namespace coder {
-	const int base = 1;
+	const int base = 100;
 	const int contrib = 200;
 	const int devel = 400;
 	const int senior = 499;
