@@ -162,6 +162,7 @@ RegisterCommand(new SEARCHCommand(this, "SEARCH", "<keywords>", 5));
 RegisterCommand(new MOTDCommand(this, "MOTD", "", 4));
 RegisterCommand(new HELPCommand(this, "HELP", "[command]", 4));
 RegisterCommand(new RANDOMCommand(this, "RANDOM", "", 4));
+RegisterCommand(new UPDATEDBCommand(this, "UPDATEDB", "", 20));
 RegisterCommand(new SHOWIGNORECommand(this, "SHOWIGNORE", "", 3));
 RegisterCommand(new SUPPORTCommand(this, "SUPPORT", "#channel <YES|NO>", 15));
 #ifdef FEATURE_MEMOSERV
@@ -3071,6 +3072,8 @@ int cservice::OnChannelEvent( const channelEventType& whichEvent,
 {
 
 iClient* theClient = 0 ;
+
+logDebugMessage("Caught channel event");
 
 switch( whichEvent )
 	{
