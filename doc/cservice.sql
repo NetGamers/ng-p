@@ -1,8 +1,13 @@
-------------------------------------------------------------------------------------
--- "$Id: cservice.sql,v 1.1 2002-01-14 23:19:19 morpheus Exp $"
+-- "$Id: cservice.sql,v 1.2 2002-01-16 22:17:12 morpheus Exp $"
 -- Channel service DB SQL file for PostgreSQL.
 
 -- ChangeLog:
+-- 2001-12-29: nighty
+--             Added two fields to 'channels' to reflect changes on FLOATING LIMIT in mod.cservice
+-- 2001-12-06: nighty
+--             Added two fields to 'users' table to take care of an abuse hunting module.
+-- 2001-10-14: nighty
+--             Corrected bogus table entries and added missing fields / tables.
 -- 2001-04-30: Gte
 --             Redesigned deletion system, new table called deletion_transactions
 --             to store deletion details for CMaster's to clear cached values.
@@ -48,7 +53,8 @@ CREATE TABLE languages (
 	id SERIAL,
 	code VARCHAR( 16 ) UNIQUE,
 	name VARCHAR( 16 ),
-	last_updated INT4 NOT NULL 
+	last_updated INT4 NOT NULL,
+	deleted INT2 DEFAULT '0' 
 --	PRIMARY KEY(id)
 );
 
@@ -59,17 +65,19 @@ CREATE TABLE translations (
 	response_id INT4 NOT NULL DEFAULT '0',
 	text TEXT,
 	last_updated INT4 NOT NULL, 
+	deleted INT2 DEFAULT '0',
 
 	PRIMARY KEY (language_id, response_id)
 );
 
 CREATE TABLE help (
-	topic VARCHAR(20) NOT NULL UNIQUE,
-	language_id INT4 CONSTRAINT help_language_id_ref REFERENCES languages ( id ),
-	contents text
+	topic VARCHAR(20) NOT NULL,
+	language_id INT4 CONSTRAINT help_language_id_ref REFERENCES languages ( id ),	
+	contents TEXT
 );
 
 CREATE INDEX help_topic_idx ON help (topic);
+CREATE INDEX help_language_id_idx ON help (language_id);
  
 -- Create the channel table first since we'll be referring back to it
 -- frequently.
@@ -117,7 +125,14 @@ CREATE TABLE channels (
 -- 2: AutoVOICE
 
 	userflags INT2 DEFAULT '0',
+
+	limit_offset INT4 DEFAULT '3',
+	limit_period INT4 DEFAULT '20',
+	limit_grace INT4 DEFAULT '1',
+	limit_max INT4 DEFAULT '0',
+	
 	last_updated INT4 NOT NULL, 
+	deleted INT2 DEFAULT '0',
 
 	PRIMARY KEY (id)
 );
@@ -139,6 +154,7 @@ CREATE TABLE bans (
 	expires INT4,					-- Expiration timestamp.
 	reason VARCHAR (128), 
 	last_updated INT4 NOT NULL, 
+	deleted INT2 DEFAULT '0',
 
 	PRIMARY KEY (banmask,channel_id)
 );
@@ -166,14 +182,21 @@ CREATE TABLE users (
 -- 0x00 01 -- Suspended globally.
 -- 0x00 02 -- Logged in (Depricated).
 -- 0x00 04 -- Invisible.
+-- 0x00 08 -- Fraud username.
 	last_updated_by VARCHAR (128),		-- nick!user@host
 	last_updated INT4 NOT NULL, 
+	deleted INT2 DEFAULT '0',
+	signup_cookie VARCHAR(255) DEFAULT '',
+	signup_ts INT4,
+	signup_ip VARCHAR(15),
 
 	PRIMARY KEY ( id )
 ) ;
 
 CREATE INDEX users_username_idx ON users( lower(user_name) );
 CREATE INDEX users_email_idx ON users( lower(email) );
+CREATE INDEX users_signup_ts_idx ON users( signup_ts );
+CREATE INDEX users_signup_ip_idx ON users( signup_ip );
  
 -- This table used to store the "Last Seen" informatation previously
 -- routinely updated in the users table.
@@ -204,6 +227,7 @@ CREATE TABLE levels (
 	last_Modif INT4,
 	last_Modif_By VARCHAR( 128 ),
 	last_Updated INT4 NOT NULL, 
+	deleted INT2 DEFAULT '0',
 
 	PRIMARY KEY( channel_id, user_id )
 );
@@ -228,8 +252,10 @@ CREATE TABLE channellog (
 -- 9  -- EV_COMMENT - Generic comments.
 -- 10 -- EV_REMOVEALL - When REMOVEALL command is used.
 -- 11 -- EV_IDLE - When a channel is idle for > 48 hours.
+-- 12 -- EV_MGRCHANGE - When a channel switched managers either temporarily or permanently
 	message TEXT,
-	last_updated INT4 NOT NULL 
+	last_updated INT4 NOT NULL,
+	deleted INT2 DEFAULT '0'
 );
 
 CREATE INDEX channellog_channelID_idx ON channellog(channelID);
@@ -241,6 +267,10 @@ CREATE TABLE userlog (
 	event INT4 DEFAULT '0',
 -- 1 -- EV_SUSPEND - Notification/Reason for suspension.
 -- 2 -- EV_UNSUSPEND - Notification of an unsuspend.
+-- 3 -- EV_MODIF - Modification of user record by an admin.
+-- 4 -- EV_MISC - Uncategorised event.
+-- 5 -- EV_COMMENT - Admin comment on username.
+-- 6 -- EV_MGRCHANGE - When a user status is to swith manager with another user (also logged) on a channel
 	message TEXT,
 	last_updated INT4 NOT NULL 
 );
@@ -261,6 +291,8 @@ CREATE TABLE supporters (
 -- Number of times this 'supporter' has joined the channel.
 -- Field updated by CMaster to reflect channel 'traffic'.
 	last_updated INT4 NOT NULL, 
+	deleted INT2 DEFAULT '0',
+
 	PRIMARY KEY(channel_id,user_id)
 );
 
@@ -315,6 +347,8 @@ CREATE TABLE domain (
 -- 0x00 02 - Good Domain.
 -- 0x00 04 - Pending Domain.
 	last_updated INT4 NOT NULL, 
+	deleted INT2 DEFAULT '0',
+
 	PRIMARY KEY(id)
 ); 
 
@@ -352,6 +386,7 @@ CREATE TABLE noreg (
 	-- 1 - Non-support registered against this channel/manager application.
 	-- 2 - Abuse.
 	-- 3 - Elective.
+	-- 4 - Fraud Username.
 	never_reg INT4 NOT NULL DEFAULT '0',
 	-- Never, ever register this channel, or user or pair.
 	for_review INT4 NOT NULL DEFAULT '0',
@@ -438,7 +473,8 @@ CREATE TRIGGER t_update_levels AFTER UPDATE ON levels FOR EACH ROW EXECUTE PROCE
 CREATE FUNCTION new_user() RETURNS OPAQUE AS '
 -- creates the users associated last_seen record
 BEGIN
-	INSERT INTO users_lastseen (user_id, last_seen, last_updated) VALUES(NEW.id, now()::abstime::int4,  now()::abstime::int4);
+	INSERT INTO users_lastseen (user_id, last_seen, last_updated) VALUES(NEW.id, now()::abstime::int4,  
+now()::abstime::int4);
 	RETURN NEW;
 END;
 ' LANGUAGE 'plpgsql';
@@ -498,7 +534,4 @@ END;
 ' LANGUAGE 'plpgsql';
 
 CREATE TRIGGER t_delete_ban AFTER DELETE ON bans FOR EACH ROW EXECUTE PROCEDURE delete_ban();
-
-
------------------------------------------------------------------------------------------
 
