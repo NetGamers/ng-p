@@ -5,7 +5,7 @@
  *
  * Sends a notice to all users as 'CService'
  *
- * $Id: GLOBALNOTICECommand.cc,v 1.2 2005-03-20 16:40:28 jeekay Exp $
+ * $Id: GLOBALNOTICECommand.cc,v 1.3 2005-03-31 23:46:37 jeekay Exp $
  */
 
 #include	<string>
@@ -46,7 +46,7 @@ if((admLevel < globalNoticeLevel->getLevel()) && !(theClient->isOper())) { retur
 
 bot->incStat("COMMANDS.GLOBALNOTICE");
 
-// GLOBALNOTICE subject $target.dom Message
+// GLOBALNOTICE subject Message
 StringTokenizer st( Message );
 if(st.size() < 4) {
 	Usage(theClient);
@@ -67,14 +67,7 @@ if( subject == bot->globals.end() ) {
 sourceNick = subject->second;
 sourceUser = string_lower(subject->first);
 
-if(st[2][0] != '$')
-	{
-	bot->Notice(theClient, "Target should be of the form $*.org");
-	return ;
-	}
-
-string outString = st.assemble(3);
-string outTarget = st[2];
+string outString = st.assemble(2);
 
 // Lets introduce the nick
 
@@ -85,7 +78,7 @@ bot->Write("%s N %s 1 31337 %s announce.netgamers.org +iodk B]AAAB %s]]] :Global
 	sourceUser.c_str(),
 	charYY
 	);
-bot->Write("%s]]] O %s :%s", charYY, outTarget.c_str(), outString.c_str());
+bot->Write("%s]]] O $*.org :%s", charYY, outString.c_str());
 bot->Write("%s]]] Q :Done", charYY);
 
 bot->Notice(theClient, "Successfully global noticed.");
