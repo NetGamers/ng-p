@@ -17,11 +17,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: config.h,v 1.3 2002-07-27 14:54:07 jeekay Exp $
+ * $Id: config.h,v 1.4 2002-09-24 22:06:11 jeekay Exp $
  */
 
 #ifndef __CONFIG_H
-#define __CONFIG_H "$Id: config.h,v 1.3 2002-07-27 14:54:07 jeekay Exp $"
+#define __CONFIG_H "$Id: config.h,v 1.4 2002-09-24 22:06:11 jeekay Exp $"
 
 /* config.h */
 /* GNUWorld main configuration file */
@@ -104,7 +104,7 @@
  * The suffix to be appended to the authenticated username
  * to form the hidden host-mask when a user sets +x.
  */
-#define HIDDEN_HOST ".users.undernet.org"
+#define HIDDEN_HOST ".users.netgamers.org"
 
 /**
  * TOPIC_TRACK
