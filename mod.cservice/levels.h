@@ -1,5 +1,5 @@
 #ifndef __LEVELS_H
-#define __LEVELS_H "$Id: levels.h,v 1.18 2002-02-16 21:40:02 jeekay Exp $"
+#define __LEVELS_H "$Id: levels.h,v 1.19 2002-02-18 03:33:45 jeekay Exp $"
 
 /* 
  * levels.h
@@ -9,23 +9,22 @@
  * 
  * Defines access level constants for use in command handlers. 
  *
- * $Id: levels.h,v 1.18 2002-02-16 21:40:02 jeekay Exp $
+ * $Id: levels.h,v 1.19 2002-02-18 03:33:45 jeekay Exp $
  */
 
 namespace gnuworld {
 
  namespace level {
   const int access = 0;
-  const int banlist = 0;
   const int chaninfo = 0;
   const int deauth = 0; // Depreciated?
   const int help = 0;
-  const int lbanlist = 0;
-  const int map = 0;
   const int motd = 0;
   
-  const int status = 1;
+  const int banlist = 1;
   const int force = 1; // And by definition, unforce.
+  const int lbanlist = 1;
+  const int status = 1;
   
   const int voice = 25;
   const int devoice = 25;

@@ -9,7 +9,7 @@
  *
  * Caveats: None.
  *
- * $Id: BANLISTCommand.cc,v 1.1 2002-01-14 23:14:16 morpheus Exp $
+ * $Id: BANLISTCommand.cc,v 1.2 2002-02-18 03:33:44 jeekay Exp $
  */
 
 #include        <string>
@@ -20,7 +20,7 @@
 #include        "levels.h"
 #include        "responses.h"
 
-const char BANLISTCommand_cc_rcsId[] = "$Id: BANLISTCommand.cc,v 1.1 2002-01-14 23:14:16 morpheus Exp $" ;
+const char BANLISTCommand_cc_rcsId[] = "$Id: BANLISTCommand.cc,v 1.2 2002-02-18 03:33:44 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -67,7 +67,7 @@ if (!tmpChan)
 int level = bot->getEffectiveAccessLevel(theUser, theChan, true);
 int admLevel = bot->getAdminAccessLevel(theUser);
 
-if ((!level)&&(admLevel < level::globalbanlist))
+if ( (level < level::banlist) && (admLevel < level::globalbanlist) )
 	{
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::insuf_access).c_str());

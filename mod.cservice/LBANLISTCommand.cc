@@ -8,7 +8,7 @@
  *
  * Caveats: None.
  *
- * $Id: LBANLISTCommand.cc,v 1.1 2002-01-14 23:14:18 morpheus Exp $
+ * $Id: LBANLISTCommand.cc,v 1.2 2002-02-18 03:33:44 jeekay Exp $
  */
 
 #include	<string>
@@ -23,7 +23,7 @@
 #include	"cservice_config.h"
 #include	"time.h"
 
-const char LBANLISTCommand_cc_rcsId[] = "$Id: LBANLISTCommand.cc,v 1.1 2002-01-14 23:14:18 morpheus Exp $" ;
+const char LBANLISTCommand_cc_rcsId[] = "$Id: LBANLISTCommand.cc,v 1.2 2002-02-18 03:33:44 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -52,6 +52,15 @@ if(!theChan)
 			language::chan_not_reg,
 			string("Sorry, %s isn't registered with me.")).c_str(),
 		st[1].c_str());
+	return false;
+	}
+
+int level = bot->getEffectiveAccessLevel(theUser, theChan, true);
+int admLevel = bot->getAdminAccessLevel(theUser);
+
+if( (level < level::banlist) && (admLevel < level::globalbanlist) )
+	{
+	bot->Notice(theClient, "Sorry, you have insufficient access to perform that command");
 	return false;
 	}
 
