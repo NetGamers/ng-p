@@ -12,7 +12,7 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 
-const char RECOVERCommand_cc_rcsId[] = "$Id: RECOVERCommand.cc,v 1.2 2002-01-15 22:51:37 jeekay Exp $" ;
+const char RECOVERCommand_cc_rcsId[] = "$Id: RECOVERCommand.cc,v 1.3 2002-01-28 22:14:55 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -53,38 +53,19 @@ if (tmpUser)
 		{
 		iClient* tmpClient = Network->findNick(tmpUser->getUserName());
 		if(tmpClient != NULL)
-			{
-		
-		        strstream s;
-        		s       << bot->getCharYY()
-                		<< " D "
-				<< tmpClient->getCharYYXXX() << " :" << bot->getNickName()
-				<< " [RECOVER] Ghost removed by " << theClient->getNickName()
-                		<< ends;
-        		bot->Write(s.str());
-        		delete[] s.str();
-        		sqlUser* tmpSqlUser = bot->isAuthed(tmpClient, false);
-        		if (tmpSqlUser)
-               			{
-               			tmpSqlUser->networkClient = NULL;
-           		        tmpSqlUser->removeFlag(sqlUser::F_LOGGEDIN);
-               			elog    << "cservice::OnEvent> Deauthenticated "
-                       			<< "user "
-                       			<< tmpSqlUser->getUserName()
-                      		 	<< endl;
-               		}
-         
-         		// Clear up the custom data structure we appended to
-         		// this iClient.
-         		networkData* tmpData = static_cast< networkData* >(
-       			tmpClient->getCustomData(bot) ) ;
-         		tmpClient->removeCustomData(bot);
-        
-       			delete(tmpData);
-        		bot->customDataAlloc--;
-        		delete(Network->removeClient(tmpClient->getCharYYXXX()));
-			bot->Notice(theClient,"Recover Successfull For %s",tmpUser->getUserName().c_str());
-        		return true;
+			{ // Client is already authenticated as the nick he is recovering
+		  	strstream s;
+        s       << bot->getCharYY()
+             		<< " D "
+								<< tmpClient->getCharYYXXX() << " :" << bot->getNickName()
+								<< " [RECOVER] Ghost removed by " << theClient->getNickName()
+                << ends;
+        bot->Write(s.str());
+        delete[] s.str();
+        		
+				server->PostEvent(gnuworld::EVT_NSKILL, static_cast<void*>(tmpClient));
+				bot->Notice(theClient,"Recover Successful For %s",tmpUser->getUserName().c_str());
+        return true;
 		}
 		else
 			{
@@ -195,27 +176,9 @@ if(tmpClient != NULL)
         	<< ends;
         bot->Write(s.str());
 	delete[] s.str();
-	sqlUser* tmpSqlUser = bot->isAuthed(tmpClient, false);
-        if (tmpSqlUser)
-               {  
-               tmpSqlUser->networkClient = NULL;
-               tmpSqlUser->removeFlag(sqlUser::F_LOGGEDIN);  
-               elog    << "cservice::OnEvent> Deauthenticated " 
-                       << "user "
-                       << tmpSqlUser->getUserName() 
-                       << endl;
-               }
-        
-         // Clear up the custom data structure we appended to
-         // this iClient.
-         networkData* tmpData = static_cast< networkData* >(
-         tmpClient->getCustomData(bot) ) ;
-         tmpClient->removeCustomData(bot);
-                 
-        delete(tmpData);
-        bot->customDataAlloc--;
-	delete(Network->removeClient(tmpClient->getCharYYXXX()));
-	bot->Notice(theClient,"Recover Successfull For %s",st[1].c_str());
+
+	server->PostEvent(gnuworld::EVT_NSKILL, static_cast<void*>(tmpClient));
+	bot->Notice(theClient,"Recover Successful For %s",st[1].c_str());
 	return true;
 	}
 else

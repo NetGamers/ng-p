@@ -140,6 +140,7 @@ theServer->RegisterEvent( EVT_KILL, this );
 theServer->RegisterEvent( EVT_QUIT, this );
 theServer->RegisterEvent( EVT_NICK, this );
 theServer->RegisterEvent( EVT_BURST_ACK, this );
+theServer->RegisterEvent( EVT_NSKILL, this );
 
 xClient::ImplementServer( theServer ) ;
 }
@@ -2492,15 +2493,21 @@ switch( theEvent )
 		}
 	case EVT_QUIT:
 	case EVT_KILL:
+	case EVT_NSKILL:
 		{
 		/*
 		 *  We need to deauth this user if they're authed.
 		 *  Also, clean up their custom data memory.
 		 */
-
-		iClient* tmpUser = (theEvent == EVT_QUIT) ?
-			static_cast< iClient* >( data1 ) :
-			static_cast< iClient* >( data2 ) ;
+	
+		iClient* tmpUser;
+		
+		switch( theEvent )
+			{
+			case EVT_QUIT   : tmpUser = static_cast< iClient* >( data1); break;
+			case EVT_KILL   : tmpUser = static_cast< iClient* >( data2); break;
+			case EVT_NSKILL : tmpUser = static_cast< iClient* >( data1); break;
+			}
 
 		sqlUser* tmpSqlUser = isAuthed(tmpUser, false);
 		if (tmpSqlUser)
@@ -2521,6 +2528,8 @@ switch( theEvent )
 
 		delete(tmpData);
 		customDataAlloc--;
+		
+		if(EVT_NSKILL == theEvent) { delete(Network->removeClient(tmpUser->getCharYYXXX())); elog << "cservice::OnEvent> Got EVT_NSKILL\n"; }
 
 		break ;
 		} // case EVT_KILL/case EVT_QUIT
