@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.6 2002-01-17 21:08:24 morpheus Exp $
+ * $Id: SETCommand.cc,v 1.7 2002-01-17 21:51:28 morpheus Exp $
  */
 
 #include	<string>
@@ -30,7 +30,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.6 2002-01-17 21:08:24 morpheus Exp $" ;
+const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.7 2002-01-17 21:51:28 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -187,6 +187,32 @@ queryString     << "SELECT id"
 		return true;
 	}
 */
+	if (option == "NS")
+	{
+		if (value == "ON")
+                {
+                        theUser->setFlag(sqlUser::F_AUTOKILL);
+                        theUser->commit();
+                        bot->Notice(theClient, "Your NICKSERV setting is now ON.");
+                        return true;
+                }
+                
+                if (value == "OFF")
+                {
+                        theUser->removeFlag(sqlUser::F_AUTOKILL);
+                        theUser->commit();
+                        bot->Notice(theClient, "Your NICKSERV setting is now OFF.");
+			return true;
+                }
+                
+                bot->Notice(theClient,
+                        bot->getResponse(theUser,
+                                language::set_cmd_syntax_on_off,
+                                string("value of %s must be ON or OFF")).c_str(),
+                        option.c_str());
+		return true;
+	}
+
 	bot->Notice(theClient,
 		bot->getResponse(theUser,
 			language::invalid_option,

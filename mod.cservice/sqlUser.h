@@ -1,7 +1,7 @@
 /* sqlUser.h */
 
 #ifndef __SQLUSER_H
-#define __SQLUSER_H "$Id: sqlUser.h,v 1.1 2002-01-14 23:14:26 morpheus Exp $"
+#define __SQLUSER_H "$Id: sqlUser.h,v 1.2 2002-01-17 21:51:28 morpheus Exp $"
 
 #include	<string>
 #include	<ctime>
@@ -26,7 +26,8 @@ public:
 	static const flagType F_GLOBAL_SUSPEND;
 	static const flagType F_LOGGEDIN; // Deprecated.
 	static const flagType F_INVIS;
-
+	static const flagType F_AUTOKILL;
+	
 	/*
 	 *   User 'Event' Flags, used in the userlog table.
 	 */
