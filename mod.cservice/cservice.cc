@@ -2463,8 +2463,16 @@ if( !deopList.empty() )
 if ((theChanUser) && (deopCounter >= reggedChan->getMassDeopPro())
 	&& (reggedChan->getMassDeopPro() > 0))
 	{
-		doInternalBanAndKick(reggedChan, theChanUser->getClient(),
-			"### MASSDEOPPRO TRIGGERED! ###");
+		sqlUser* theSqlUser = isAuthed(theChanUser->getClient(), false);
+		sqlChannel* theSqlChan = getChannelRecord(theChan->getName());
+		if(!theSqlUser || !theSqlChan)
+		{ doInternalBanAndKick(reggedChan, theChanUser->getClient(), "### MASSDEOPPRO TRIGGERED! ###"); }
+		else
+		{
+			int level = getEffectiveAccessLevel(theSqlUser, theSqlChan, false);
+			if(level < 499)
+			{	doInternalBanAndKick(reggedChan, theChanUser->getClient(), "### MASSDEOPPRO TRIGGERED! ###"); }
+		}
 	}
 }
 
