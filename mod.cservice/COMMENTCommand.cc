@@ -12,7 +12,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char COMMENTCommand_cc_rcsId[] = "$Id: COMMENTCommand.cc,v 1.5 2002-09-07 22:29:53 jeekay Exp $" ;
+const char COMMENTCommand_cc_rcsId[] = "$Id: COMMENTCommand.cc,v 1.6 2002-09-07 22:40:35 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -110,27 +110,30 @@ if(strlen(st.assemble(2).c_str()) > 230)
 	}
 
 
-if (string_upper(st[2]) == "OFF")
-{
-        targetUser->setComment("");
-	targetUser->commit();
-	bot->Notice(theClient, "COMMENT for user %s has been removed!", 
-		targetUser->getUserName().c_str());
-	bot->logAdminMessage("%s (%s) - COMMENT - %s - <cleared>",
-		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
-		targetUser->getUserName().c_str());
-} else
-{
-	string comment = "(" + theUser->getUserName() + ") " + st.assemble(2);
-	targetUser->setComment(comment);
+if (string_upper(st[2]) == "OFF") {
+  targetUser->setComment("");
   targetUser->commit();
-	bot->Notice(theClient, "COMMENT for user %s set to: %s", targetUser->getUserName().c_str(),
-			st.assemble(2).c_str());
+  bot->Notice(theClient, "COMMENT for user %s has been removed!", 
+    targetUser->getUserName().c_str());
   
   // Make sure the rest of the world knows about it
-	bot->logAdminMessage("%s (%s) - COMMENT - %s - %s",
-		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
-		targetUser->getUserName().c_str(), st.assemble(2).c_str());
+  bot->logAdminMessage("%s (%s) - COMMENT - %s - <cleared>",
+    theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+    targetUser->getUserName().c_str());
+  
+  // Log a user event to this effect
+  targetUser->writeEvent(sqlUser::EV_COMMENT, theUser, "Comment Removed");
+} else {
+  string comment = "(" + theUser->getUserName() + ") " + st.assemble(2);
+  targetUser->setComment(comment);
+  targetUser->commit();
+  bot->Notice(theClient, "COMMENT for user %s set to: %s", targetUser->getUserName().c_str(),
+    st.assemble(2).c_str());
+  
+  // Make sure the rest of the world knows about it
+  bot->logAdminMessage("%s (%s) - COMMENT - %s - %s",
+    theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+    targetUser->getUserName().c_str(), st.assemble(2).c_str());
   
   // Log a user event to this effect
   targetUser->writeEvent(sqlUser::EV_COMMENT, theUser, st.assemble(2));
