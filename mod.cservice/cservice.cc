@@ -791,33 +791,16 @@ if( st.empty() )
 
 const string Command = string_upper(st[0]);
 
-if(Command == "PING" || Command=="ECHO")
+if(Command == "PING" || Command == "ECHO")
 	{
 	xClient::DoCTCP(theClient, CTCP, Message);
-	}
-else if(Command == "GENDER")
-	{
-	xClient::DoCTCP(theClient, CTCP,
-		"Tried to be a man again - there was a slip - now I'm an IT");
 	}
 else if(Command == "VERSION")
 	{
 	xClient::DoCTCP(theClient, CTCP,
 		"NetGamers P10 Channel Services II ["
 		__DATE__ " " __TIME__
-		"] Release 1.2.01");
-	}
-else if(Command == "PROBLEM?")
-	{
-	xClient::DoCTCP(theClient, CTCP.c_str(), "Blame Gte!");
-	}
-else if(Command == "WHAT_YOU_SAY?")
-	{
-	xClient::DoCTCP(theClient, CTCP.c_str(), "Move 'Zig'!");
-	}
-else if(Command == "SOUND")
-	{
-	xClient::DoCTCP(theClient, CTCP.c_str(), "I'm deaf, remember?");
+		"] Release 1.2.02");
 	}
 else if(Command == "DCC")
 	{
@@ -826,10 +809,6 @@ else if(Command == "DCC")
 else if(Command == "PAGE")
 	{
 	xClient::DoCTCP(theClient, CTCP.c_str(), "I'm always here, no need to page");
-	}
-else if(Command == "USERINFO")
-	{
-	xClient::DoCTCP(theClient, CTCP.c_str(), "I'm a user, not an abuser");
 	}
 else if(Command == "TIME")
 	{

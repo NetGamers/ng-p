@@ -10,7 +10,7 @@
 #include	"Network.h"
 #include	"cservice_config.h"
 
-const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.19 2002-12-10 16:52:58 jeekay Exp $" ;
+const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.20 2003-01-09 23:04:57 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -274,6 +274,9 @@ for (int i = 0 ; i < bot->SQLDb->Tuples(); i++)
      *
      * Loop around all people auth'd as this nick and append their nicks
 		 */
+     
+     string authedClients;
+     
     for(sqlUser::networkClientListType::iterator ptr = currentUser->networkClientList.begin();
       ptr != currentUser->networkClientList.end(); ++ptr) {
       
@@ -283,11 +286,14 @@ for (int i = 0 ; i < bot->SQLDb->Tuples(); i++)
 		  if (tmpChan) showNick = (tmpChan->findUser(tmpClient) || admLevel);
 
 		  if (showNick)	{
-			  nextPerson += tmpClient->getNickName();
+        if(!authedClients.empty()) authedClients += "\002,\002";
+			  authedClients += tmpClient->getNickName();
       }
     }
 
-		nextPerson += "\002[";
+    nextPerson += "(";
+    nextPerson += authedClients;
+		nextPerson += ")\002[";
 		nextPerson += bot->SQLDb->GetValue(i, 1);
 		nextPerson += "] ";
 
