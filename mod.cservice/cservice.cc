@@ -2474,7 +2474,7 @@ return true ;
 }
 
 void cservice::OnChannelModeV( Channel* theChan, ChannelUser* theChanUser,
-															 const xServer::voiceVectorType& theTargets)
+				const xServer::voiceVectorType& theTargets)
 {
 /*
  * A user has been voiced in the channel.
@@ -2492,76 +2492,59 @@ if(!reggedChan)
 
 // List of clients to devoice
 vector< iClient* > devoiceList;
+vector< iClient* > deopList;
 
 for( xServer::voiceVectorType::const_iterator ptr = theTargets.begin();
 		 ptr != theTargets.end(); ++ptr)
 	{ // Iterate through voiced
 	bool polarity = ptr->first;
-	ChannelUser* tmpUser = ptr->second;
 	
 	if(polarity)
 		{ // Someone is being voiced
+		ChannelUser* tmpUser = ptr->second;
 		
 		// Find the sqlUser if we can
 		sqlUser* authUser = isAuthed(tmpUser->getClient(), false);
 		
-		// Is the invitee banned on this channel?
+		// Is the voicee banned on this channel?
 		sqlBan* theBan = isBannedOnChan(reggedChan, tmpUser->getClient());
-		if(theBan && (theBan->getLevel() >= 25))
+		if(theBan && (theBan->getLevel() >= 25) && !tmpUser->getClient()->getMode(iClient::MODE_SERVICES))
 			{ // Ban >= 25
-			if(!tmpUser->getClient()->getMode(iClient::MODE_SERVICES) )
-				{ // Voicee is not a service
-				devoiceList.push_back(tmpUser->getClient());
-				Notice(tmpUser->getClient(), "You are not allowed to be voiced in %s",
+			devoiceList.push_back(tmpUser->getClient());
+			Notice(tmpUser->getClient(), "You are not allowed to be voiced in %s",
+						 reggedChan->getName().c_str());
+			if(theChanUser && !theChanUser->getClient()->getMode(iClient::MODE_SERVICES) )
+				{ // Voicer is not a service or a server
+				Notice(theChanUser->getClient(), "%s is not allowed to be voiced in %s",
+							 tmpUser->getClient()->getNickName().c_str(),
 							 reggedChan->getName().c_str());
-				if(theChanUser && !theChanUser->getClient()->getMode(iClient::MODE_SERVICES) )
-					{ // Voicer is not a service
-					Notice(theChanUser->getClient(), "%s is not allowed to be voiced in %s",
-								 tmpUser->getClient()->getNickName().c_str(),
-								 reggedChan->getName().c_str());
-					} // Voicer is not a service
-				} // Voicee is not a service
+				deopList.push_back(theChanUser->getClient());
+				} // Voicer is not a service
 			} // Ban >= 25
 		
 #ifdef FEATURE_STRICTVOICE
 		// Is this channel set F_STRICTVOICE?
-		if(reggedChan->getFlag(sqlChannel::F_STRICTVOICE))
-			{
-			if(!authUser)
-				{
-				if(!tmpUser->getClient()->getMode(iClient::MODE_SERVICES))
-					{
-					if(theChanUser)
-						Notice(theChanUser->getClient(), "%s is not allowed to be voiced in %s due to STRICTVOICE",
-							tmpUser->getNickName().c_str(), reggedChan->getName().c_str());
-					Notice(tmpUser->getClient(), "You are not allowed to be voiced in %s",
-								 reggedChan->getName().c_str());
-					devoiceList.push_back(tmpUser->getClient());
-					} // Voicee is not a service
-				} // Voicee is not authed
-			else if(!(getEffectiveAccessLevel(authUser, reggedChan, false) >= level::voice))
-				{
-				if(!tmpUser->getClient()->getMode(iClient::MODE_SERVICES))
-					{
-					if(theChanUser)
-						Notice(theChanUser->getClient(), "%s is not allowed to be voiced in %s due to STRICTVOICE",
-							tmpUser->getNickName().c_str(), reggedChan->getName().c_str());
-					Notice(tmpUser->getClient(), "You are not allowed to be voiced in %s",
-								 reggedChan->getName().c_str());
-					devoiceList.push_back(tmpUser->getClient());
-					} // Voicee is not a service
-				} // Authed but doesnt have enough access
-			} // Does the channel have F_STRICTVOICE set?
+		if(reggedChan->getFlag(sqlChannel::F_STRICTVOICE)) {
+			if((!authUser || getEffectiveAccessLevel(authUser, reggedChan, false) <= level::voice) &&
+				!tmpUser->getClient()->getMode(iClient::MODE_SERVICES)) {
+				if(theChanUser) {
+					Notice(theChanUser->getClient(), "%s is not allowed to be voiced in %s due to STRICTVOICE",
+						tmpUser->getNickName().c_str(), reggedChan->getName().c_str());
+					deopList.push_back(theChanUser->getClient());
+				}
+				Notice(tmpUser->getClient(), "You are not allowed to be voiced in %s",
+							 reggedChan->getName().c_str());
+				devoiceList.push_back(tmpUser->getClient());
+			}
+		} // Does the channel have F_STRICTVOICE set?
 #endif
 			
 		} // Someone is being voiced
 	} // Iterate through voiced
 
 // Perform devoicings if necessary
-if( !devoiceList.empty() )
-	{ // devoiceList not empty
-	DeVoice(theChan, devoiceList);
-	} // devoiceList not empty
+if( !devoiceList.empty() ) DeVoice(theChan, devoiceList);
+if( !deopList.empty() ) DeOp(theChan, deopList);
 } // cservice::OnChannelModeV
 
 void cservice::OnChannelModeO( Channel* theChan, ChannelUser* theChanUser,
