@@ -4,7 +4,7 @@
  * (c) Copyright 2002 Rasmus Hansen (GK@panet)
  * Distributed under the GNU Public License
  *
- * $Id: ADMINCMDSCommand.cc,v 1.13 2002-07-20 15:45:06 jeekay Exp $
+ * $Id: ADMINCMDSCommand.cc,v 1.14 2002-08-13 09:03:51 jeekay Exp $
  */
 
 #include	<string>
@@ -14,7 +14,7 @@
 #include	"cservice.h"
 #include  "levels.h"
 
-const char ADMINCMDSCommand_cc_rcsId[] = "$Id: ADMINCMDSCommand.cc,v 1.13 2002-07-20 15:45:06 jeekay Exp $" ;
+const char ADMINCMDSCommand_cc_rcsId[] = "$Id: ADMINCMDSCommand.cc,v 1.14 2002-08-13 09:03:51 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -137,6 +137,8 @@ if(aLevel >= 400)
   bot->Notice(theClient, "\002Level  400 - CSC Junior Administrator");
 	bot->Notice(theClient, "COMMENT (chan) (comment)");
 	bot->Notice(theClient, "COMMENT (nick) (comment)");
+	bot->Notice(theClient, "FORCE (chan)");
+	bot->Notice(theClient, "UNFORCE (chan)");
 	bot->Notice(theClient, "INVME");
   bot->Notice(theClient, "\002");
   }
@@ -152,8 +154,6 @@ if(aLevel >= 1)
 	{
 	bot->Notice(theClient, "\002Level    1 - CSC Junior Administrator");
 	bot->Notice(theClient, "ADMINCMDS");
-	bot->Notice(theClient, "FORCE (chan)");
-	bot->Notice(theClient, "UNFORCE (chan)");
 	bot->Notice(theClient, "INFO (nick)");
 	bot->Notice(theClient, "STATS *");
 	bot->Notice(theClient, "STATUS *");
