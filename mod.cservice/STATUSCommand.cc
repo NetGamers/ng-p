@@ -10,7 +10,7 @@
 #include	"Network.h"
 #include	"cservice_config.h"
 
-const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.15 2002-09-24 20:06:18 jeekay Exp $" ;
+const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.16 2002-10-29 18:08:27 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -73,9 +73,7 @@ if (st[1] == "*")
 			string("CMaster Channel Services internal status:")));
 
 	bot->Notice(theClient,
-		bot->getResponse(theUser,
-			language::status_user_rec,
-			string("[        User Record Stats] \002Cached Entries:\002 %i    \002DB Requests:\002 %i    \002Cache Hits:\002 %i    \002Efficiency:\002 %.2f%%")).c_str(),
+		"[User Record Stats] \002Cached Entries:\002 %i    \002DB Requests:\002 %i    \002Cache Hits:\002 %i    \002Efficiency:\002 %.2f%%",
 		bot->sqlUserCache.size(),
 		bot->userHits,
 		bot->userCacheHits,
