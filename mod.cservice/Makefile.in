@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# "$Id: Makefile.in,v 1.14 2003-04-09 21:12:00 jeekay Exp $"
+# "$Id: Makefile.in,v 1.15 2003-04-29 18:37:35 jeekay Exp $"
 SHELL = @SHELL@
 
 srcdir = @srcdir@
@@ -119,6 +119,7 @@ libcservice_la_SOURCES = cservice.cc \
 	CHINFOCommand.cc \
 	CLEARMODECommand.cc \
 	COMMENTCommand.cc \
+	CONFIGCommand.cc \
 	DEBUGCommand.cc \
 	DEOPCommand.cc \
 	DEVOICECommand.cc \
@@ -191,26 +192,26 @@ am_libcservice_la_OBJECTS = cservice.lo networkData.lo sqlChannel.lo \
 	sqlPendingChannel.lo sqlPendingTraffic.lo ACCESSCommand.lo \
 	ADDUSERCommand.lo ADMINCMDSCommand.lo BANCommand.lo \
 	BANLISTCommand.lo CHANINFOCommand.lo CHINFOCommand.lo \
-	CLEARMODECommand.lo COMMENTCommand.lo DEBUGCommand.lo \
-	DEOPCommand.lo DEVOICECommand.lo FORCECommand.lo \
-	GETLEVELCommand.lo GLOBNOTICECommand.lo GSUSPENDCommand.lo \
-	GUNSUSPENDCommand.lo HELPCommand.lo INVITECommand.lo \
-	INVMECommand.lo ISREGCommand.lo JOINCommand.lo KICKCommand.lo \
-	LBANLISTCommand.lo LOGINCommand.lo MODECommand.lo \
-	MODINFOCommand.lo MOTDCommand.lo NEWPASSCommand.lo \
-	NOTECommand.lo OFFICIALCommand.lo OPCommand.lo \
-	OPERJOINCommand.lo OPERPARTCommand.lo OPERSUSPENDCommand.lo \
-	PARTCommand.lo PURGECommand.lo QUOTECommand.lo \
-	RECOVERCommand.lo REGISTERCommand.lo REHASHCommand.lo \
-	RELEASECommand.lo REMIGNORECommand.lo REMOVEALLCommand.lo \
-	REMUSERCommand.lo REMUSERIDCommand.lo SAYCommand.lo \
-	SCANCommand.lo SEARCHCommand.lo SERVNOTICECommand.lo \
-	SETCommand.lo SETTIMECommand.lo SHOWCOMMANDSCommand.lo \
-	SHOWIGNORECommand.lo SHUTDOWNCommand.lo STATSCommand.lo \
-	STATUSCommand.lo SUPPORTCommand.lo SUSPENDCommand.lo \
-	TOPICCommand.lo UNBANCommand.lo UNFORCECommand.lo \
-	UNSUSPENDCommand.lo UPDATEDBCommand.lo VERIFYCommand.lo \
-	VOICECommand.lo
+	CLEARMODECommand.lo COMMENTCommand.lo CONFIGCommand.lo \
+	DEBUGCommand.lo DEOPCommand.lo DEVOICECommand.lo \
+	FORCECommand.lo GETLEVELCommand.lo GLOBNOTICECommand.lo \
+	GSUSPENDCommand.lo GUNSUSPENDCommand.lo HELPCommand.lo \
+	INVITECommand.lo INVMECommand.lo ISREGCommand.lo JOINCommand.lo \
+	KICKCommand.lo LBANLISTCommand.lo LOGINCommand.lo \
+	MODECommand.lo MODINFOCommand.lo MOTDCommand.lo \
+	NEWPASSCommand.lo NOTECommand.lo OFFICIALCommand.lo \
+	OPCommand.lo OPERJOINCommand.lo OPERPARTCommand.lo \
+	OPERSUSPENDCommand.lo PARTCommand.lo PURGECommand.lo \
+	QUOTECommand.lo RECOVERCommand.lo REGISTERCommand.lo \
+	REHASHCommand.lo RELEASECommand.lo REMIGNORECommand.lo \
+	REMOVEALLCommand.lo REMUSERCommand.lo REMUSERIDCommand.lo \
+	SAYCommand.lo SCANCommand.lo SEARCHCommand.lo \
+	SERVNOTICECommand.lo SETCommand.lo SETTIMECommand.lo \
+	SHOWCOMMANDSCommand.lo SHOWIGNORECommand.lo SHUTDOWNCommand.lo \
+	STATSCommand.lo STATUSCommand.lo SUPPORTCommand.lo \
+	SUSPENDCommand.lo TOPICCommand.lo UNBANCommand.lo \
+	UNFORCECommand.lo UNSUSPENDCommand.lo UPDATEDBCommand.lo \
+	VERIFYCommand.lo VOICECommand.lo
 libcservice_la_OBJECTS = $(am_libcservice_la_OBJECTS)
 
 DEFS = @DEFS@
@@ -229,6 +230,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/CHINFOCommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/CLEARMODECommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/COMMENTCommand.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/CONFIGCommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/DEBUGCommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/DEOPCommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/DEVOICECommand.Plo \
@@ -361,6 +363,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CHINFOCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CLEARMODECommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/COMMENTCommand.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CONFIGCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DEBUGCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DEOPCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DEVOICECommand.Plo@am__quote@

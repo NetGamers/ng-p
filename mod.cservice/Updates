@@ -1,3 +1,20 @@
+2003-04-29 1.2.09
+**
+CREATE TABLE config (
+	name VARCHAR(30),
+	contents text,
+	hint text,
+	last_updated INT4,
+	PRIMARY KEY(name)
+);
+**
+INSERT INTO config(name,contents,hint,last_updated) VALUES
+('MOTD','If your nick is idle more than 30 days it will be purged due to inactivity and any channels owned will be removed.','The Message of the Day shown at login.',now()::abstime::int4);
+**
+INSERT INTO commands (command_name,domain,level,comment,description,last_updated_by) VALUES
+('CONFIG','ADMIN',900,'Allow user to change runtime configuration','Allow user to change runtime configuration','Jeekay');
+**
+
 2002-01-09 1.2.02 Jeekay
 **
 CREATE TABLE "verifies" (

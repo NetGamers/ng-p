@@ -1,5 +1,5 @@
 #ifndef __CSERVICECLASS_H
-#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.16 2003-01-14 21:52:15 jeekay Exp $"
+#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.17 2003-04-29 18:37:35 jeekay Exp $"
 
 #include <map>
 
@@ -28,11 +28,13 @@ class cservice : public xClient
 protected:
 
 	EConfig* cserviceConfig; /* Configfile */
+	
+	/* Command listings */
 	typedef map< string, Command*, noCaseCompare > commandMapType ;
 	typedef commandMapType::value_type pairType ;
 	commandMapType          commandMap;
 	
-	// What is our NS instance called?
+	/* What is our NS instance called? */
 	string nickNickServ;
 
 public:
@@ -128,11 +130,11 @@ public:
 	/* Returns what access a user has in the coder channel */
 	short getCoderAccessLevel( sqlUser* );
   
-  /* Returns what access is required for a given command */
-  sqlCommandLevel* getLevelRequired(string, string, bool = true);
+	/* Returns what access is required for a given command */
+	sqlCommandLevel* getLevelRequired(string, string, bool = true);
   
-  /* Returns the verify for a given sqlUser* */
-  string getVerify(const unsigned int&);
+	/* Returns the verify for a given sqlUser* */
+	string getVerify(const unsigned int&);
 
 	/* Fetch a user record for a user. */
 	sqlUser* getUserRecord( const string& );
@@ -184,13 +186,13 @@ public:
 	// User hash, Key is Username.
 	typedef map< string, sqlUser*, noCaseCompare > sqlUserHashType ;
 
-  // Typedef's for command levels
-  typedef map< pair <string, string>, sqlCommandLevel* > sqlCommandLevelsType;
-  sqlCommandLevelsType sqlCommandLevels;
+	// Typedef's for command levels
+	typedef map< pair <string, string>, sqlCommandLevel* > sqlCommandLevelsType;
+	sqlCommandLevelsType sqlCommandLevels;
 
-  // Typedef's for verifies
-  typedef map< unsigned int, string > verifiesType;
-  verifiesType verifies;
+	// Typedef's for verifies
+	typedef map< unsigned int, string > verifiesType;
+	verifiesType verifies;
 
 	// Channel hash, Key is channelname.
 	typedef map< string, sqlChannel*, noCaseCompare > sqlChannelHashType ;
@@ -352,6 +354,12 @@ public:
 	typedef map < string, sqlPendingChannel*, noCaseCompare > pendingChannelListType;
 	pendingChannelListType pendingChannelList;
 
+	/* List of configuration values */
+	typedef map <string, string, noCaseCompare > configListType;
+	configListType configList;
+	
+	const string getConfigItem(string);
+
 	/* Check for a correct user password */
 	bool isPasswordRight(sqlUser* theUser, const string& password);
 
@@ -425,10 +433,11 @@ public:
 
 	void preloadBanCache();
 	void preloadChannelCache();
-  int preloadCommandLevelsCache();
+	unsigned short int preloadCommandLevelsCache();
+	unsigned short int preloadConfigCache();
 	void preloadLevelsCache();
 	void preloadUserCache();
-  unsigned int preloadVerifiesCache();
+	unsigned short int preloadVerifiesCache();
 
 	void updateChannels();
 	void updateUsers();
@@ -442,9 +451,9 @@ public:
 	void incStat(const string& name);
 	void incStat(const string& name, unsigned int amount);
   
-  void noticeAllAuthedClients(sqlUser* theUser, const char* Message, ... );
+	void noticeAllAuthedClients(sqlUser* theUser, const char* Message, ... );
   
-  unsigned int totalCommands;
+	unsigned int totalCommands;
   
 #ifdef FEATURE_FORCELOG
         void writeForceLog(sqlUser*, sqlChannel*, const string&);

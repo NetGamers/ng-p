@@ -198,6 +198,7 @@ RegisterCommand(new VOICECommand(this, "VOICE", "<#channel> [nick] [nick] ..", 3
 RegisterCommand(new ADMINCMDSCommand(this, "ADMINCMDS", "", 2));
 RegisterCommand(new CHINFOCommand(this, "CHINFO", "[email|nick|verification] nick newvalue", 10));
 RegisterCommand(new COMMENTCommand(this, "COMMENT", "<username/channel> <comment/off>", 10));
+RegisterCommand(new CONFIGCommand(this, "CONFIG", "(VIEW) (SET <var> <value>)", 5));
 RegisterCommand(new FORCECommand(this, "FORCE", "<#channel>", 8));
 RegisterCommand(new GLOBNOTICECommand(this, "GLOBNOTICE", "<$*.target> <text>", 5));
 RegisterCommand(new GSUSPENDCommand(this, "GSUSPEND", "<chan/nick> <duration> <reason>", 5));
@@ -316,6 +317,9 @@ preloadLevelsCache();
 
 /* Preload the CommandLevel cache */
 preloadCommandLevelsCache();
+
+/* Preload config */
+preloadConfigCache();
 
 /* Preload any user accounts we want to */
 preloadUserCache();
@@ -3631,7 +3635,7 @@ return retMe ;
 bool cservice::sendMOTD(const iClient* theClient)
 {
 	if(!theClient) { return false; }
-	Notice(theClient, "MOTD: If your nick is idle more than 30 days it will be purged due to inactivity and any channels owned will be removed.");
+	Notice(theClient, "MOTD: %s", getConfigItem("MOTD").c_str());
 	return true;
 }
 
@@ -3844,6 +3848,16 @@ if( PGRES_TUPLES_OK == status )
 
 }
 
+const string cservice::getConfigItem(string theItemName)
+{
+	configListType::const_iterator ptr = configList.find(theItemName);
+	if(ptr == configList.end()) {
+		return "";
+	} else {
+		return ptr->second;
+	}
+}
+
 void cservice::checkDbConnectionStatus()
 {
 	if(SQLDb->Status() == CONNECTION_BAD)
@@ -3972,7 +3986,7 @@ elog	<< "*** [CMaster::preloadBanCache]: Done. Loaded "
 		<< endl;
 }
 
-int cservice::preloadCommandLevelsCache()
+unsigned short int cservice::preloadCommandLevelsCache()
 {
 stringstream theQuery;
 theQuery << "SELECT "
@@ -4007,7 +4021,42 @@ elog << "*** [CMaster:preloadCommandLevelsCache] Done. Loaded "
 return sqlCommandLevels.size();
 }
 
-unsigned int cservice::preloadVerifiesCache()
+unsigned short int cservice::preloadConfigCache()
+{
+stringstream theQuery;
+theQuery	<< "SELECT "
+		<< sql::config_fields
+		<< " FROM config";
+elog	<< "*** [CMaster::preloadConfigCache] Precaching Config table."
+	<< endl;
+	
+ExecStatusType status = SQLDb->Exec(theQuery.str().c_str());
+if(PGRES_TUPLES_OK != status) {
+	elog	<< "*** [CMaster::preloadConfigCache] Error precaching config: "
+		<< SQLDb->ErrorMessage()
+		<< endl;
+	::exit(0);
+}
+
+configList.clear();
+
+for(unsigned short int i = 0; i < SQLDb->Tuples(); ++i) {
+	string theName = SQLDb->GetValue(i, 0);
+	string theContents = SQLDb->GetValue(i, 1);
+	
+	configList.insert( configListType::value_type(theName, theContents) );
+}
+
+elog	<< "*** [CMaster::preloadConfigCache] Done. Loaded "
+	<< configList.size()
+	<< " config items."
+	<< endl;
+
+return configList.size();
+
+}
+
+unsigned short int cservice::preloadVerifiesCache()
 {
 stringstream theQuery;
 theQuery << "SELECT "
