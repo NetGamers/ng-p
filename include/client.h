@@ -21,7 +21,7 @@
  */
 
 #ifndef __CLIENT_H
-#define __CLIENT_H "$Id: client.h,v 1.3 2002-07-27 14:54:07 jeekay Exp $"
+#define __CLIENT_H "$Id: client.h,v 1.4 2002-10-25 22:41:23 jeekay Exp $"
 
 #include	<sstream>
 #include	<string>
@@ -267,6 +267,33 @@ public:
 	 * setting the mode.
 	 */
 	virtual void OnChannelModeT( Channel*, bool polarity,
+			ChannelUser* ) ;
+
+	/**
+	 * This method is invoked when a user sets or removes
+	 * channel mode t (topic).  Keep in mind that the
+	 * source ChannelUser may be NULL if a server is
+	 * setting the mode.
+	 */
+	virtual void OnChannelModeC( Channel*, bool polarity,
+			ChannelUser* ) ;
+
+	/**
+	 * This method is invoked when a user sets or removes
+	 * channel mode t (topic).  Keep in mind that the
+	 * source ChannelUser may be NULL if a server is
+	 * setting the mode.
+	 */
+	virtual void OnChannelModeStrip( Channel*, bool polarity,
+			ChannelUser* ) ;
+
+	/**
+	 * This method is invoked when a user sets or removes
+	 * channel mode t (topic).  Keep in mind that the
+	 * source ChannelUser may be NULL if a server is
+	 * setting the mode.
+	 */
+	virtual void OnChannelModeR( Channel*, bool polarity,
 			ChannelUser* ) ;
 
 	/**
