@@ -4,7 +4,7 @@
  * (c) Copyright 2002 Rasmus Hansen (GK@panet)
  * Distributed under the GNU Public License
  *
- * $Id: ADMINCMDSCommand.cc,v 1.14 2002-08-13 09:03:51 jeekay Exp $
+ * $Id: ADMINCMDSCommand.cc,v 1.15 2002-10-19 20:57:11 jeekay Exp $
  */
 
 #include	<string>
@@ -14,7 +14,7 @@
 #include	"cservice.h"
 #include  "levels.h"
 
-const char ADMINCMDSCommand_cc_rcsId[] = "$Id: ADMINCMDSCommand.cc,v 1.14 2002-08-13 09:03:51 jeekay Exp $" ;
+const char ADMINCMDSCommand_cc_rcsId[] = "$Id: ADMINCMDSCommand.cc,v 1.15 2002-10-19 20:57:11 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -118,46 +118,41 @@ if(aLevel >= 600)
 	bot->Notice(theClient, "\002");
 	}
 
-if(aLevel >= 550)
-  {
+if(aLevel >= 550) {
   bot->Notice(theClient, "\002Level  550 - CSC Junior Administrator");
-	bot->Notice(theClient, "SET (chan) TEMPMAN (on/off)");
+  bot->Notice(theClient, "SET (chan) TEMPMAN (on/off)");
   bot->Notice(theClient, "\002");
-  }
+}
 
-if(aLevel >= 450)
-  {
+if(aLevel >= 450) {
   bot->Notice(theClient, "\002Level  450 - CSC Junior Administrator");
-	bot->Notice(theClient, "SET (chan) LOCKED (on/off)");
+  bot->Notice(theClient, "SET (chan) LOCKED (on/off)");
   bot->Notice(theClient, "\002");
-  }
+}
 
-if(aLevel >= 400)
-  {
+if(aLevel >= 400) {
   bot->Notice(theClient, "\002Level  400 - CSC Junior Administrator");
-	bot->Notice(theClient, "COMMENT (chan) (comment)");
-	bot->Notice(theClient, "COMMENT (nick) (comment)");
-	bot->Notice(theClient, "FORCE (chan)");
-	bot->Notice(theClient, "UNFORCE (chan)");
-	bot->Notice(theClient, "INVME");
+  bot->Notice(theClient, "FORCE (chan)");
+  bot->Notice(theClient, "UNFORCE (chan)");
   bot->Notice(theClient, "\002");
-  }
+}
 
-if(aLevel >= 100)
-  {
+if(aLevel >= 100) {
   bot->Notice(theClient, "\002Level  100 - Senior Helper");
-	bot->Notice(theClient, "REMIGNORE (hostmask)");
+  bot->Notice(theClient, "REMIGNORE (hostmask)");
   bot->Notice(theClient, "\002");
-  }
+}
 
-if(aLevel >= 1)
-	{
-	bot->Notice(theClient, "\002Level    1 - CSC Junior Administrator");
-	bot->Notice(theClient, "ADMINCMDS");
-	bot->Notice(theClient, "INFO (nick)");
-	bot->Notice(theClient, "STATS *");
-	bot->Notice(theClient, "STATUS *");
-	}
+if(aLevel >= 1) {
+  bot->Notice(theClient, "\002Level    1 - CSC Junior Administrator");
+  bot->Notice(theClient, "ADMINCMDS");
+  bot->Notice(theClient, "COMMENT (chan) (comment)");
+  bot->Notice(theClient, "COMMENT (nick) (comment)");
+  bot->Notice(theClient, "INFO (nick)");
+  bot->Notice(theClient, "INVME");
+  bot->Notice(theClient, "STATS *");
+  bot->Notice(theClient, "STATUS *");
+}
 
 return true ;
 } // ADMINCMDSCommand::Exec
