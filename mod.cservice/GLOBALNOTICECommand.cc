@@ -1,10 +1,11 @@
-/* GLOBNOTICECommand.cc
+/* GLOBALNOTICECommand.cc
  *
  * 20020209 - GK@panet - Initial creation
+ * 20050320 - GK@ng    - Rename to GLOBALNOTICE
  *
  * Sends a notice to all users as 'CService'
  *
- * $Id: GLOBNOTICECommand.cc,v 1.8 2005-03-20 16:12:07 jeekay Exp $
+ * $Id: GLOBALNOTICECommand.cc,v 1.1 2005-03-20 16:39:25 jeekay Exp $
  */
 
 #include	<string>
@@ -20,11 +21,11 @@
 namespace gnuworld
 {
 
-void GLOBNOTICECommand::Exec( iClient* theClient, const string& Message )
+void GLOBALNOTICECommand::Exec( iClient* theClient, const string& Message )
 {
 
 /*
- * To use this command, the user must either have level::globnotice * access
+ * To use this command, the user must either have level::globalnotice * access
  * or be an IRCop. If the user is neither, just return. No point in telling
  * everyone about the admin commands.
  */
@@ -37,13 +38,13 @@ int admLevel;
 if(theUser) admLevel = bot->getAdminAccessLevel(theUser);
 else admLevel = 0;
 
-sqlCommandLevel* globalNoticeLevel = bot->getLevelRequired("GLOBNOTICE", "ADMIN");
+sqlCommandLevel* globalNoticeLevel = bot->getLevelRequired("GLOBALNOTICE", "ADMIN");
 
 if((admLevel < globalNoticeLevel->getLevel()) && !(theClient->isOper())) { return ; }
 
 // Lets actually get on with the command now ;)
 
-bot->incStat("COMMANDS.GLOBNOTICE");
+bot->incStat("COMMANDS.GLOBALNOTICE");
 
 // GLOB[AL]NOTICE subject $target.dom Message
 StringTokenizer st( Message );
@@ -90,6 +91,6 @@ bot->Write("%s]]] Q :Done", charYY);
 bot->Notice(theClient, "Successfully global noticed.");
 return ;
 
-} // GLOBNOTICECommand::Exec
+} // GLOBALNOTICECommand::Exec
 
 } // namespace gnuworld

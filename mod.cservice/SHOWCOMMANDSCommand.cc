@@ -17,7 +17,7 @@ using std::string ;
 /*static const char* lvl_1000_cmds = "\002Level 1000\002: everything";
 static const char* lvl_950_cmds  = "\002Level  950\002: quote";
 static const char* lvl_900_cmds  = "\002Level  900\002: servnotice rehash say shutdown";
-static const char* lvl_850_cmds  = "\002Level  850\002: *(adduser remuser modinfo) globnotice";
+static const char* lvl_850_cmds  = "\002Level  850\002: *(adduser remuser modinfo) globalnotice";
 static const char* lvl_800_cmds  = "\002Level  800\002: *(suspend unsuspend)";
 static const char* lvl_750_cmds  = "\002Level  750\002: gsuspend(user) gunsuspend(user) remuserid";
 static const char* lvl_700_cmds  = "\002Level  700\002: chan(gsuspend gunsuspend) purge";

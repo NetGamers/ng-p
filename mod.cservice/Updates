@@ -25,6 +25,10 @@ VALUES ('ng', 'NetGamers', 'Jeekay', 'Jeekay');
 -- Add Planetarion subject
 INSERT INTO global (subject,expanded,created_by,last_updated_by)
 VALUES ('pa', 'Planetarion', 'Jeekay', 'Jeekay');
+
+
+-- Rename GLOBNOTICE command to GLOBALNOTICE
+UPDATE commands SET command_name='GLOBALNOTICE' WHERE command_name='GLOBNOTICE';
 **
 
 2004-11-24 1.2.19 Jeekay

@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# "$Id: Makefile.in,v 1.17 2004-05-16 15:20:21 jeekay Exp $"
+# "$Id: Makefile.in,v 1.18 2005-03-20 16:39:26 jeekay Exp $"
 SHELL = @SHELL@
 
 srcdir = @srcdir@
@@ -125,7 +125,7 @@ libcservice_la_SOURCES = cservice.cc \
 	DEVOICECommand.cc \
 	FORCECommand.cc \
 	GETLEVELCommand.cc \
-	GLOBNOTICECommand.cc \
+	GLOBALNOTICECommand.cc \
 	GSUSPENDCommand.cc \
 	GUNSUSPENDCommand.cc \
 	HELPCommand.cc \
@@ -194,7 +194,7 @@ am_libcservice_la_OBJECTS = cservice.lo networkData.lo sqlChannel.lo \
 	BANLISTCommand.lo CHANINFOCommand.lo CHINFOCommand.lo \
 	CLEARMODECommand.lo COMMENTCommand.lo CONFIGCommand.lo \
 	DEBUGCommand.lo DEOPCommand.lo DEVOICECommand.lo \
-	FORCECommand.lo GETLEVELCommand.lo GLOBNOTICECommand.lo \
+	FORCECommand.lo GETLEVELCommand.lo GLOBALNOTICECommand.lo \
 	GSUSPENDCommand.lo GUNSUSPENDCommand.lo HELPCommand.lo \
 	INVITECommand.lo INVMECommand.lo JOINCommand.lo KICKCommand.lo \
 	LBANLISTCommand.lo LOGINCommand.lo MODECommand.lo \
@@ -236,7 +236,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/DEVOICECommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/FORCECommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/GETLEVELCommand.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/GLOBNOTICECommand.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/GLOBALNOTICECommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/GSUSPENDCommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/GUNSUSPENDCommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/HELPCommand.Plo \
@@ -369,7 +369,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DEVOICECommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/FORCECommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GETLEVELCommand.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GLOBNOTICECommand.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GLOBALNOTICECommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GSUSPENDCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GUNSUSPENDCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/HELPCommand.Plo@am__quote@

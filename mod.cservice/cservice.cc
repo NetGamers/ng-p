@@ -205,7 +205,6 @@ RegisterCommand(new CHINFOCommand(this, "CHINFO", "[email|nick|verification] nic
 RegisterCommand(new COMMENTCommand(this, "COMMENT", "<username/channel> <comment/off>", 10));
 RegisterCommand(new CONFIGCommand(this, "CONFIG", "(VIEW) (SET <var> <value>)", 5));
 RegisterCommand(new FORCECommand(this, "FORCE", "<#channel>", 8));
-RegisterCommand(new GLOBNOTICECommand(this, "GLOBNOTICE", "<$*.target> <text>", 5));
 RegisterCommand(new GSUSPENDCommand(this, "GSUSPEND", "<chan/nick> <duration> <reason>", 5));
 RegisterCommand(new GUNSUSPENDCommand(this, "GUNSUSPEND", "<chan/nick> <reason>", 5));
 RegisterCommand(new INVMECommand(this, "INVME", "", 5));
@@ -220,7 +219,7 @@ RegisterCommand(new STATSCommand(this, "STATS", "", 8));
 RegisterCommand(new UNFORCECommand(this, "UNFORCE", "<#channel>", 8));
 
 /* Oper commands */
-RegisterCommand(new GLOBNOTICECommand(this, "GLOBALNOTICE", "<subject> <$*.target> <text>", 5));
+RegisterCommand(new GLOBALNOTICECommand(this, "GLOBALNOTICE", "<subject> <$*.target> <text>", 5));
 RegisterCommand(new OPERJOINCommand(this, "OPERJOIN", "<#channel>", 8));
 RegisterCommand(new OPERPARTCommand(this, "OPERPART", "<#channel>", 8));
 //RegisterCommand(new OPERSUSPENDCommand(this, "OPERSUSPEND", "<#channel>", 8));
