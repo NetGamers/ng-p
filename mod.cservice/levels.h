@@ -1,5 +1,5 @@
 #ifndef __LEVELS_H
-#define __LEVELS_H "$Id: levels.h,v 1.38 2002-11-23 07:27:31 jeekay Exp $"
+#define __LEVELS_H "$Id: levels.h,v 1.39 2003-01-14 17:08:12 jeekay Exp $"
 
 /* 
  * levels.h
@@ -9,7 +9,7 @@
  * 
  * Defines access level constants for use in command handlers. 
  *
- * $Id: levels.h,v 1.38 2002-11-23 07:27:31 jeekay Exp $
+ * $Id: levels.h,v 1.39 2003-01-14 17:08:12 jeekay Exp $
  */
 
 namespace gnuworld {
@@ -56,48 +56,6 @@ namespace gnuworld {
   const int part = 450;
   const int setcmd = 450;
 
-// Admin commands
-
-#if 0
-  const int chancomment = 1;
-  const int invme = 1;
-  const int usercomment = 1;
-
-  const int remignore = 100;
-
-  const int force = 400; // And by definition, unforce.
-
-  const int logs = 501; // Level that logs are visible at 
-
-  const int csuspend = 600; // Level required to suspend a channel
-  const int registercmd = 600;
-  const int removeall = 600;
-  const int scan = 600;
-
-  const int purge = 650; 
-
-  const int nsuspend = 700; // Level required to suspend a nick
-
-  const int globalsuspend = 750;
-  const int remuserid = 750;
-
-  const int globnotice = 800;
-  const int susadmin = 800; // (un)suspending of *
-
-  const int force2 = 850; // Allow forcing of NOFORCE channels
-  const int chgadmin = 850; // changing ppl on * (add/del/mod)
-  
-  const int rehash = 900;
-  const int say = 900;
-  const int servnotice = 900;
-
-  // Debug Commands
-	const int debug = 950; // debug command
-  const int quote = 950;
-  const int shutdown = 950;
-  const int boostall = 1000;
-#endif
- 
   namespace set {
 #ifdef FEATURE_INVITE
     const int autoinvite = 24;

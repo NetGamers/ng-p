@@ -4,7 +4,7 @@
  * Storage class for accessing user information either from the backend
  * or internal storage.
  *
- * $Id: sqlUser.cc,v 1.14 2002-10-23 19:49:02 jeekay Exp $
+ * $Id: sqlUser.cc,v 1.15 2003-01-14 17:08:12 jeekay Exp $
  */
 
 #include	<string.h>
@@ -25,17 +25,17 @@ using std::endl ;
 using std::ends ;
 
 const sqlUser::flagType sqlUser::F_GLOBAL_SUSPEND =	0x01 ;
-const sqlUser::flagType sqlUser::F_LOGGEDIN =		0x02 ;
-const sqlUser::flagType sqlUser::F_INVIS =		0x04 ;
-const sqlUser::flagType sqlUser::F_AUTOKILL =		0x08 ;
-const sqlUser::flagType sqlUser::F_NOTE =		0x10 ;
-const sqlUser::flagType sqlUser::F_NOPURGE =		0x20 ;
-const sqlUser::flagType sqlUser::F_BOT =		0x40 ;
+const sqlUser::flagType sqlUser::F_LOGGEDIN       = 0x02 ;
+const sqlUser::flagType sqlUser::F_INVIS          = 0x04 ;
+const sqlUser::flagType sqlUser::F_AUTOKILL       = 0x08 ;
+const sqlUser::flagType sqlUser::F_NOTE           = 0x10 ;
+const sqlUser::flagType sqlUser::F_NOPURGE        = 0x20 ;
+const sqlUser::flagType sqlUser::F_BOT            = 0x40 ;
 
 
-const unsigned int sqlUser::EV_SUSPEND 		= 1;
-const unsigned int sqlUser::EV_UNSUSPEND	= 2;
-const unsigned int sqlUser::EV_COMMENT          = 3;
+const unsigned int sqlUser::EV_SUSPEND    = 1;
+const unsigned int sqlUser::EV_UNSUSPEND  = 2;
+const unsigned int sqlUser::EV_COMMENT    = 3;
 
 sqlUser::sqlUser(PgDatabase* _SQLDb)
  : id( 0 ),
@@ -50,6 +50,7 @@ sqlUser::sqlUser(PgDatabase* _SQLDb)
    last_hostmask(),
    comment(),
    maxlogins(0),
+   verify(0),
    SQLDb( _SQLDb )
 {
 }
@@ -175,6 +176,7 @@ suspendedExpire = atoi(SQLDb->GetValue(row, 10));
 questionID = atoi(SQLDb->GetValue(row, 11));
 verificationData = SQLDb->GetValue(row, 12);
 maxlogins = atoi(SQLDb->GetValue(row, 13));
+verify = atoi(SQLDb->GetValue(row, 14));
 
 /* Fetch the "Last Seen" time from the users_lastseen table. */
 
@@ -202,7 +204,8 @@ queryString	<< queryHeader
 		<< "question_id = " << questionID << ", "
 		<< "verificationdata = '" << escapeSQLChars(verificationData) << "', "
 		<< "email = '" << escapeSQLChars(email) << "', "
-    << "maxlogins = " << maxlogins << " "
+    << "maxlogins = " << maxlogins << ", "
+    << "verify = " << verify << " "
 		<< queryCondition << id
 		<< ends;
 

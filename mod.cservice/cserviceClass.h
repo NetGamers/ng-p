@@ -1,5 +1,5 @@
 #ifndef __CSERVICECLASS_H
-#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.14 2002-10-20 02:12:10 jeekay Exp $"
+#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.15 2003-01-14 17:08:12 jeekay Exp $"
 
 #include <map>
 
@@ -21,18 +21,6 @@ class Command;
 using std::map;
 using std::string;
 
-/**
- *  Subclass the postgres API to create our own accessor
- *  to get at the PID information.
- */
-class cmDatabase : public PgDatabase
-{
-public:
-	cmDatabase(const char* conninfo)
-	  : PgDatabase(conninfo) {}
-	virtual ~cmDatabase() {}
-};
-
 class Command;
 
 class cservice : public xClient
@@ -49,7 +37,7 @@ protected:
 
 public:
 
-	cmDatabase* SQLDb; /* PostgreSQL Database */
+	PgDatabase* SQLDb; /* PostgreSQL Database */
 	string confSqlHost;
 	string confSqlPass;
 	string confSqlDb;
@@ -70,8 +58,8 @@ public:
 	cservice(const string& args);
 	virtual ~cservice();
 
-	// Return a cmDatabase* to the current SQLDb
-	inline const cmDatabase* getSQLDb( void ) const
+	// Return a PgDatabase* to the current SQLDb
+	inline const PgDatabase* getSQLDb( void ) const
 		{ return SQLDb; }
 
 	virtual int OnConnect();
@@ -142,6 +130,9 @@ public:
   
   /* Returns what access is required for a given command */
   sqlCommandLevel* getLevelRequired(string, string, bool = true);
+  
+  /* Returns the verify for a given sqlUser* */
+  string getVerify(const unsigned int&);
 
 	/* Fetch a user record for a user. */
 	sqlUser* getUserRecord( const string& );
@@ -165,9 +156,6 @@ public:
 
 	/* Formats a timestamp into a "X Days, XX:XX:XX" from 'Now'. */
 	const string prettyDuration( int, const string& = "all" ) const ;
-	
-	/* Retrieve a users verify based on a level */
-	const string getVerify(const int officialLevel);
 
 	/* Returns the current "Flood Points" this iClient has. */
  	unsigned short getFloodPoints(iClient*);
@@ -199,6 +187,10 @@ public:
   // Typedef's for command levels
   typedef map< pair <string, string>, sqlCommandLevel* > sqlCommandLevelsType;
   sqlCommandLevelsType sqlCommandLevels;
+
+  // Typedef's for verifies
+  typedef map< unsigned int, string > verifiesType;
+  verifiesType verifies;
 
 	// Channel hash, Key is channelname.
 	typedef map< string, sqlChannel*, noCaseCompare > sqlChannelHashType ;
@@ -436,6 +428,7 @@ public:
   int preloadCommandLevelsCache();
 	void preloadLevelsCache();
 	void preloadUserCache();
+  void preloadVerifiesCache();
 
 	void updateChannels();
 	void updateUsers();

@@ -1,6 +1,7 @@
 2003-01-09 1.2.02 Jeekay
 * Fixed STATUS annoyance with MAXLOGINS and users authed clients in channels
 * Removed various CTCP replies
+* Added OFFICIAL command and removed old #official based verifies.
 * Bumped version to 1.2.02
 
 2002-11-09 1.2.01 Jeekay

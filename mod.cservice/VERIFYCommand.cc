@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.16 2002-10-11 13:02:36 jeekay Exp $" ;
+const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.17 2003-01-14 17:08:11 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -80,19 +80,14 @@ if (!theUser)
 sqlChannel* theChan = bot->getChannelRecord("#coder-com");
 if (!theChan) elog << "Cannot find the #coder-com channel!" << endl;
 
-sqlChannel* officialChan = bot->getChannelRecord("#official");
-if (!officialChan) elog << "Cannot find #official channel!" << endl;
-
+int oLevel = theUser->getVerify();
+if(bot->getVerify(oLevel).empty()) oLevel = 0;
 
 int level = bot->getAdminAccessLevel(theUser); 
 
 int cLevel;
 if (!theChan)	cLevel = 0;
 else cLevel = bot->getEffectiveAccessLevel(theUser, theChan, false);
-
-int oLevel;
-if(!officialChan) oLevel = 0;
-else oLevel = bot->getEffectiveAccessLevel(theUser, officialChan, false);
 
 if ( (0 == level) && (100 > cLevel) && (0 == oLevel) ) 
 	{

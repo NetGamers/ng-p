@@ -1,7 +1,7 @@
 /* sqlUser.h */
 
 #ifndef __SQLUSER_H
-#define __SQLUSER_H "$Id: sqlUser.h,v 1.11 2002-10-23 19:49:02 jeekay Exp $"
+#define __SQLUSER_H "$Id: sqlUser.h,v 1.12 2003-01-14 17:08:12 jeekay Exp $"
 
 #include <ctime>
 #include <string>
@@ -112,6 +112,9 @@ public:
   inline const unsigned int& getMaxLogins() const
     { return maxlogins; }
 
+  inline const unsigned int& getVerify() const
+    { return verify; }
+
 	/*
 	 *  Methods to set data atrributes.
 	 */
@@ -154,6 +157,9 @@ public:
   
   inline void setMaxLogins(const unsigned int& _maxlogins)
     { maxlogins = _maxlogins; }
+  
+  inline void setVerify(const unsigned int& _verify)
+    { verify = _verify; }
 
 	/*
 	 * Method to perform a SQL 'UPDATE' and commit changes to this
@@ -193,6 +199,7 @@ protected:
 	unsigned int questionID;
 	string verificationData;
   unsigned int maxlogins;
+  unsigned int verify;
 
 	PgDatabase*	SQLDb;
 } ;

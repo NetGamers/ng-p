@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# "$Id: Makefile.in,v 1.12 2002-11-14 13:57:29 jeekay Exp $"
+# "$Id: Makefile.in,v 1.13 2003-01-14 17:08:11 jeekay Exp $"
 SHELL = @SHELL@
 
 srcdir = @srcdir@
@@ -140,6 +140,7 @@ libcservice_la_SOURCES = cservice.cc \
 	MOTDCommand.cc \
 	NEWPASSCommand.cc \
 	NOTECommand.cc \
+	OFFICIALCommand.cc \
 	OPCommand.cc \
 	OPERJOINCommand.cc \
 	OPERPARTCommand.cc \
@@ -198,9 +199,9 @@ am_libcservice_la_OBJECTS = cservice.lo networkData.lo sqlChannel.lo \
 	INVMECommand.lo ISREGCommand.lo JOINCommand.lo KICKCommand.lo \
 	LBANLISTCommand.lo LOGINCommand.lo MODECommand.lo \
 	MODINFOCommand.lo MOTDCommand.lo NEWPASSCommand.lo \
-	NOTECommand.lo OPCommand.lo OPERJOINCommand.lo \
-	OPERPARTCommand.lo OPERSUSPENDCommand.lo PARTCommand.lo \
-	PURGECommand.lo QUOTECommand.lo RANDOMCommand.lo \
+	NOTECommand.lo OFFICIALCommand.lo OPCommand.lo \
+	OPERJOINCommand.lo OPERPARTCommand.lo OPERSUSPENDCommand.lo \
+	PARTCommand.lo PURGECommand.lo QUOTECommand.lo RANDOMCommand.lo \
 	RECOVERCommand.lo REGISTERCommand.lo REHASHCommand.lo \
 	RELEASECommand.lo REMIGNORECommand.lo REMOVEALLCommand.lo \
 	REMUSERCommand.lo REMUSERIDCommand.lo SAYCommand.lo \
@@ -250,6 +251,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/MOTDCommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/NEWPASSCommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/NOTECommand.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/OFFICIALCommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/OPCommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/OPERJOINCommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/OPERPARTCommand.Plo \
@@ -382,6 +384,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MOTDCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/NEWPASSCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/NOTECommand.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OFFICIALCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OPCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OPERJOINCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OPERPARTCommand.Plo@am__quote@

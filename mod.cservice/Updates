@@ -1,0 +1,18 @@
+2002-01-09 1.2.02 Jeekay
+**
+CREATE TABLE "verifies" (
+"id" SERIAL,
+"domain" varchar (10) DEFAULT 'NG' NOT NULL,
+"title" varchar (50) DEFAULT 'NetGamers' NOT NULL,
+"comment" varchar (256) DEFAULT 'Not In Use' NOT NULL,
+"flags" int4 NOT NULL DEFAULT 0,
+PRIMARY KEY ("id"));
+**
+ALTER TABLE users ADD COLUMN "verify" int4;
+UPDATE users SET verify = 0;
+ALTER TABLE users ALTER COLUMN verify SET NOT NULL;
+ALTER TABLE users ALTER COLUMN verify SET DEFAULT 0;
+**
+INSERT INTO commands (command_name,domain,level,comment,description,last_updated_by) VALUES
+('OFFICIAL','ADMIN','900','Changes verify for a user','Changes verify for a user','Jeekay');
+**

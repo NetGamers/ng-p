@@ -223,6 +223,7 @@ RegisterCommand(new SCANCommand(this, "SCAN", "[email|hostmask|nick] string", 10
 RegisterCommand(new CHINFOCommand(this, "CHINFO", "[email|nick|verification] nick newvalue", 10));
 RegisterCommand(new DEBUGCommand(this, "DEBUG", "(lock [add|list|remove]) (servers)", 10));
 RegisterCommand(new GETLEVELCommand(this, "GETLEVEL", "command domain", 2));
+RegisterCommand(new OFFICIALCommand(this, "OFFICIAL", "(check <user>) (clear <user>) (set <user> <level>)", 5));
 
 cserviceConfig = new (std::nothrow) EConfig( args ) ;
 assert( cserviceConfig != 0 ) ;
@@ -241,7 +242,7 @@ elog	<< "*** [CMaster]: Attempting to make PostgreSQL connection to: "
 		<< confSqlDb
 		<< endl;
 
-SQLDb = new (std::nothrow) cmDatabase( Query.c_str() ) ;
+SQLDb = new (std::nothrow) PgDatabase( Query.c_str() ) ;
 assert( SQLDb != 0 ) ;
 
 if (SQLDb->ConnectionBad ())
@@ -312,6 +313,9 @@ preloadCommandLevelsCache();
 
 /* Preload any user accounts we want to */
 preloadUserCache();
+
+/* Preload verifies */
+preloadVerifiesCache();
 
 }
 
@@ -3857,7 +3861,7 @@ void cservice::checkDbConnectionStatus()
 
 		string Query = "host=" + confSqlHost + " dbname=" + confSqlDb + " port=" + confSqlPort + " user=" + confSqlUser + " password=" + confSqlPass;
 
-		SQLDb = new (std::nothrow) cmDatabase( Query.c_str() ) ;
+		SQLDb = new (std::nothrow) PgDatabase( Query.c_str() ) ;
 		assert( SQLDb != 0 ) ;
 
 		if (SQLDb->ConnectionBad())
@@ -4006,7 +4010,38 @@ elog << "*** [CMaster:preloadCommandLevelsCache] Done. Loaded "
      << endl;
 
 return sqlCommandLevels.size();
+}
 
+void cservice::preloadVerifiesCache()
+{
+stringstream theQuery;
+theQuery << "SELECT "
+         << sql::verify_fields
+         << " FROM verifies";
+
+elog << "*** [CMaster::preloadVerifiesCache] Precaching Verifies table: "
+     << endl;
+
+ExecStatusType status = SQLDb->Exec(theQuery.str().c_str());
+if(PGRES_TUPLES_OK != status) {
+  elog << "*** [CMaster::preloadVerifiesCache] Error precaching verifies: "
+       << SQLDb->ErrorMessage()
+       << endl;
+  ::exit(0);
+}
+
+verifies.clear();
+
+for(int i = 0; i < SQLDb->Tuples(); ++i) {
+  unsigned int id = atoi(SQLDb->GetValue(i, 0));
+  string title = SQLDb->GetValue(i, 1);
+  
+  verifies.insert( verifiesType::value_type(id, title) );
+}
+
+elog << "*** [CMaster::preloadVerifiesCache] Done. Loaded "
+     << verifies.size() << " verifies."
+     << endl;
 }
 
 void cservice::preloadLevelsCache()
@@ -4134,7 +4169,18 @@ void cservice::incStat(const string& name, unsigned int amount)
            { 
                            ptr->second += amount; 
                    } 
-   } 
+   }
+
+string cservice::getVerify( const unsigned int& theVerifyLevel )
+{
+  verifiesType::const_iterator ptr = verifies.find(theVerifyLevel);
+
+  if(ptr != verifies.end()) {
+    return ptr->second;
+  } else {
+    return "";
+  }
+}
 
 void Command::Usage( iClient* theClient )
 {
@@ -4170,26 +4216,6 @@ SQLDb->ExecCommandOk(theLog.str().c_str());
 
 }
 #endif
-
-const string cservice::getVerify(const int officialLevel)
-{
-	typedef map<int, string> verifyTableType;
-	verifyTableType verifyTable;
-	verifyTable[1] = "an Official Planetarion Bot";
-	verifyTable[2] = "a VirusFix Member";
-	verifyTable[3] = "a Planetarion Team Member";
-	verifyTable[4] = "a Planetarion Team Leader";
-	verifyTable[50] = "an CSC Junior Helper";
-	verifyTable[99] = "a Planetarion Creator";
-	
-	verifyTableType::const_iterator ptr = verifyTable.find(officialLevel);
-	if(ptr != verifyTable.end())
-		{
-		return ptr->second;
-		}
-
-	return "Somehow Official";
-}
 
 /*
  * Checks if the password supplied correctly matches the password for this user
