@@ -3,7 +3,7 @@
  *
  * 20020308 GK@PAnet - Initial Writing
  *
- * $Id: REMUSERIDCommand.cc,v 1.7 2002-03-26 00:51:39 jeekay Exp $
+ * $Id: REMUSERIDCommand.cc,v 1.8 2002-05-03 18:21:05 jeekay Exp $
  */
 
 #include	<string>
@@ -14,7 +14,7 @@
 #include "levels.h"
 #include "networkData.h"
 
-const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.7 2002-03-26 00:51:39 jeekay Exp $" ;
+const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.8 2002-05-03 18:21:05 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -85,6 +85,7 @@ if(authTestUser)
 		}
 	
 	tmpData->currentUser = NULL;
+	targetUser->networkClient = NULL;
 	server->PostEvent(gnuworld::EVT_FORCEDEAUTH, static_cast< void* >( authTestUser));
 	}
 
@@ -116,7 +117,8 @@ if(PGRES_TUPLES_OK != status)
 int chansOwned = atoi(bot->SQLDb->GetValue(0,0));
 if(chansOwned)
 	{
-	bot->Notice(theClient, "This user owns channels. Please deal with that first.");
+	bot->Notice(theClient, "This user owns %d channels. Please deal with that first.",
+		chansOwned);
 	return false;
 	}
 
@@ -300,7 +302,7 @@ if(ptr != bot->sqlUserCache.end())
 	
 	// **NOTE: From here on, targetUser is an invalid pointer
 	delete(ptr->second);
-	bot->sqlUserCache.erase(ptr->first);
+	bot->sqlUserCache.erase(ptr);
 	
 	bot->Notice(theClient, "Successfully removed %s from the user cache.", st[1].c_str());
 	}
