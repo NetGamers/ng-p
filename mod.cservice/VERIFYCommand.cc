@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.4 2002-01-23 22:25:53 jeekay Exp $" ;
+const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.5 2002-02-03 22:16:57 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -213,7 +213,7 @@ if (level == level::admin::manager)
 		theUser->getUserName().c_str());
 	return true;
 	}
-
+/*
 if (level == level::admin::webcoder) 
 	{
 	bot->Notice(theClient, "%s is an Official CService Web Designer%s and logged in as %s",target->getNickUserHost().c_str(),
@@ -221,7 +221,7 @@ if (level == level::admin::webcoder)
 		theUser->getUserName().c_str());
 	return true;
 	}
-
+*/
 if (level == level::admin::manager)
 	{
 	bot->Notice(theClient, "%s is an Official CService Manager%s and logged in as %s",target->getNickUserHost().c_str(),
