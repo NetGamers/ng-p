@@ -3803,6 +3803,13 @@ if( PGRES_TUPLES_OK == status )
 
 		} // for()
 	} // if()
+else
+	{
+	elog	<< "*** [CMaster::preloadChannelCache]: Unable to cache channels: "
+		<< SQLDb->ErrorMessage()
+		<< endl;
+	::exit(1);
+	}
 
 elog	<< "*** [CMaster::preloadChannelCache]: Done. Loaded "
 		<< SQLDb->Tuples()
@@ -3870,7 +3877,8 @@ elog	<< "*** [CMaster::preloadCommandLevelsCache] Precaching Commands table: "
 
 ExecStatusType status = SQLDb->Exec(theQuery.str().c_str());
 if(PGRES_TUPLES_OK != status) {
-  elog << "[CMaster::preloadCommandLevelsCache] Error precaching commands."
+  elog << "[CMaster::preloadCommandLevelsCache] Error precaching commands: "
+    << SQLDb->ErrorMessage()
     << endl;
   ::exit(0);
 } // if(PGRES_TUPLES_OK != status)
