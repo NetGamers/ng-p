@@ -1,5 +1,5 @@
 #ifndef __CSERVICECOMMANDS_H
-#define __CSERVICECOMMANDS_H "$Id: cserviceCommands.h,v 1.1 2002-01-14 23:14:23 morpheus Exp $"
+#define __CSERVICECOMMANDS_H "$Id: cserviceCommands.h,v 1.2 2002-01-16 23:14:42 morpheus Exp $"
 
 #include	<string>
 #include	"iClient.h"
@@ -80,6 +80,7 @@ DECLARE_COMMAND( SHOWIGNORE )
 DECLARE_COMMAND( VERIFY )
 DECLARE_COMMAND( RANDOM )
 DECLARE_COMMAND( SUPPORT )
+DECLARE_COMMAND( NOTE )
 DECLARE_COMMAND( RECOVER )
 // Channel user level commands.
 

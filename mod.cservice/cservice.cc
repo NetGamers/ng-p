@@ -165,6 +165,9 @@ RegisterCommand(new HELPCommand(this, "HELP", "[command]", 4));
 RegisterCommand(new RANDOMCommand(this, "RANDOM", "", 4));
 RegisterCommand(new SHOWIGNORECommand(this, "SHOWIGNORE", "", 3));
 RegisterCommand(new SUPPORTCommand(this, "SUPPORT", "#channel <YES|NO>", 15));
+#ifdef FEATURE_MEMOSEV
+RegisterCommand(new NOTECommand(this, "NOTE", "[SEND <username> <text>] | READ | [ERASE <id>|ALL]", 4));
+#endif
 
 RegisterCommand(new OPCommand(this, "OP", "<#channel> [nick] [nick] ..", 3));
 RegisterCommand(new DEOPCommand(this, "DEOP", "<#channel> [nick] [nick] ..", 3));
