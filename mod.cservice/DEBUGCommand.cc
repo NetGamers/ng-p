@@ -4,7 +4,7 @@
  *
  * Distributed under the GNU Public Licence
  *
- * $Id: DEBUGCommand.cc,v 1.2 2002-03-26 02:07:46 jeekay Exp $
+ * $Id: DEBUGCommand.cc,v 1.3 2002-03-31 22:11:30 jeekay Exp $
  */
 
 #include	<string>
@@ -15,7 +15,7 @@
 #include "cservice.h"
 #include "levels.h"
 
-const char DEBUGCommand_cc_rcsId[] = "$Id: DEBUGCommand.cc,v 1.2 2002-03-26 02:07:46 jeekay Exp $" ;
+const char DEBUGCommand_cc_rcsId[] = "$Id: DEBUGCommand.cc,v 1.3 2002-03-31 22:11:30 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -54,7 +54,8 @@ string command = string_upper(st[1]);
 
 if("SERVERS" == command)
 	{
-	xNetwork::serverVectorType::const_iterator netServers;
+	//xNetwork::serverVectorType::const_iterator netServers;
+	xNetwork::const_serverIterator netServers;
 	netServers = Network->server_begin();
 	while(netServers != Network->server_end())
 		{
