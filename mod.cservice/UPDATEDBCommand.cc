@@ -17,7 +17,7 @@
 
 #include	"cservice.h"
 
-const char UPDATEDBCommand_cc_rcsId[] = "$Id: UPDATEDBCommand.cc,v 1.5 2002-10-20 02:12:09 jeekay Exp $" ;
+const char UPDATEDBCommand_cc_rcsId[] = "$Id: UPDATEDBCommand.cc,v 1.6 2002-11-09 20:38:01 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -68,6 +68,10 @@ for(myChanItr = bot->sqlChannelIDCache.begin(); myChanItr != bot->sqlChannelIDCa
 }
 
 bot->Notice(theClient, "Total mismatches found: %d", mismatchCount);
+
+bot->logAdminMessage("%s (%s) - UPDATEDB - Updated %d channels",
+  theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+  mismatchCount);
 
 return true ;
 }
