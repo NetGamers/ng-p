@@ -13,7 +13,7 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.11 2002-03-24 17:50:56 jeekay Exp $
+ * $Id: CHANINFOCommand.cc,v 1.12 2002-03-26 01:50:13 morpheus Exp $
  */
 
 #include	<string>
@@ -26,7 +26,7 @@
 #include	"libpq++.h"
 #include	"cservice_config.h"
 
-const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.11 2002-03-24 17:50:56 jeekay Exp $" ;
+const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.12 2002-03-26 01:50:13 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -232,7 +232,7 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 				myQuestions[1] = "What's your mother's maiden name?";
 				myQuestions[2] = "What's your dog's (or cat's) name?";
 				myQuestions[3] = "What's your father's birthdate?";
-				myQuestions[4] = "What's your spose's name?";
+				myQuestions[4] = "What's your spouse's name?";
 		
 				bot->Notice(theClient, "Verification Question: %s", myQuestions[theUser->getQuestionID()].c_str());
 				bot->Notice(theClient, "Verification Answer  : %s", theUser->getVerificationData().c_str());
