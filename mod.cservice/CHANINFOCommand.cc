@@ -13,7 +13,7 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.8 2002-03-23 17:29:21 jeekay Exp $
+ * $Id: CHANINFOCommand.cc,v 1.9 2002-03-23 19:45:55 morpheus Exp $
  */
 
 #include	<string>
@@ -26,7 +26,7 @@
 #include	"libpq++.h"
 #include	"cservice_config.h"
 
-const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.8 2002-03-23 17:29:21 jeekay Exp $" ;
+const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.9 2002-03-23 19:45:55 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -101,7 +101,7 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 		bot->Notice(theClient," - The one that was, the one that is, the one that will be.");
 	}
 
-	if (theUser->getID() == 42)
+	if (theUser->getID() == 66)
 	{
 		bot->Notice(theClient," - What do you mean you want to demolish Planetarion to make way for a new"
 		" hyperspace expressway?");
