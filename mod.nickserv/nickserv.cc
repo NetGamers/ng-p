@@ -23,7 +23,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.17 2002-02-05 03:13:45 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.18 2002-02-06 01:06:50 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -475,7 +475,7 @@ int nickserv::OnTimer(xServer::timerID timer_id, void* data)
 					delete tmpData;
 					tmpClient->removeCustomData(this);
 					
-					jupeNick(tmpClient->getNickName(), "AutoKill Juped Nick", 0);
+					jupeNick(tmpClient->getNickName(), tmpClient->getNickUserHost(), "AutoKill Juped Nick", 0);
 
 					MyUplink->PostEvent(gnuworld::EVT_NSKILL, static_cast<void*>(tmpClient));
 #endif
@@ -702,7 +702,7 @@ void nickserv::initialiseJupeNumerics( void )
 		}
 }
 
-bool nickserv::jupeNick( string theNick, string theReason, time_t duration )
+bool nickserv::jupeNick( string theNick, string hostMask, string theReason, time_t duration )
 {
 	elog << "nickserv::jupeNick> Juping nick " << theNick << endl;
 	
@@ -720,7 +720,7 @@ bool nickserv::jupeNick( string theNick, string theReason, time_t duration )
 		{
 		if(NULL == pos->second)
 			{ // We have found a free numeric!
-			juUser* theUser = new juUser(theNick, pos->first, ::time(NULL), ::time(NULL)+duration, theReason);
+			juUser* theUser = new juUser(theNick, pos->first, ::time(NULL), ::time(NULL)+duration, theReason, hostMask);
 			pos->second = theUser;
 			
 			strstream outNick;

@@ -14,7 +14,7 @@ class juUser
 {
 
 public:
-	juUser(string theNick, string theNumeric, time_t set, time_t expires, string theReason);
+	juUser(string theNick, string theNumeric, time_t set, time_t expires, string theReason, string hostMask);
 	
 	virtual ~juUser();
 	
@@ -32,6 +32,9 @@ public:
 	
 	inline const string getReason( void ) const
 		{ return _Reason; }
+	
+	inline const string getHostMask( void ) const
+		{ return _HostMask;}
 
 protected:
 	string _NickName;
@@ -39,6 +42,7 @@ protected:
 	time_t _Set;
 	time_t _Expires;
 	string _Reason;
+	string _HostMask;
 
 }; // class juUser
 

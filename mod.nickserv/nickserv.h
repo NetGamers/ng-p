@@ -1,6 +1,6 @@
 
 #ifndef __NICKSERV_H
-#define __NICKSERV_H "$Id: nickserv.h,v 1.9 2002-02-05 03:13:45 jeekay Exp $"
+#define __NICKSERV_H "$Id: nickserv.h,v 1.10 2002-02-06 01:06:50 jeekay Exp $"
 
 
 #include	<string>
@@ -217,7 +217,7 @@ public:
 	
 	/* How to jupe nicks */
 	void initialiseJupeNumerics( void );
-	bool jupeNick( string theNick, string theReason, time_t duration );
+	bool jupeNick( string theNick, string hostMask, string theReason, time_t duration );
 	bool removeJupeNick( string theNick, string theReason = "End Of Jupe" );
 	juUser* findJupeNick( string theNick );
 	void checkJupeExpire( void );

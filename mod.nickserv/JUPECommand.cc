@@ -9,7 +9,7 @@
 #include "nickserv.h"
 #include "levels.h"
 
-const char JUPECommand_cc_rcsId[] = "$Id: JUPECommand.cc,v 1.3 2002-02-05 03:13:45 jeekay Exp $";
+const char JUPECommand_cc_rcsId[] = "$Id: JUPECommand.cc,v 1.4 2002-02-06 01:06:49 jeekay Exp $";
 
 namespace gnuworld
 {
@@ -61,18 +61,18 @@ else
 
 string option = string_upper(st[1]);
 
+iClient* targetClient = Network->findNick(nick);
 int adminAccess = bot->getAdminAccessLevel(theUser->getLoggedNick());
 
 if("ADD" == option && (adminAccess >= level::jupe::add))
 	{
-	iClient* targetClient = Network->findNick(nick);
 	if(targetClient)
 		{ // We cant jupe someone already on the network!
 		bot->Notice(theClient, "%s already exists on the network!", nick.c_str());
 		return false;
 		}
 	
-	if(bot->jupeNick(nick, reason, duration))
+	if(bot->jupeNick(nick, "unknown", reason, duration))
 		{
 		bot->Notice(theClient, "%s successfully juped.", nick.c_str());
 		}
@@ -98,7 +98,10 @@ if("DEL" == option && (adminAccess >= level::jupe::del))
 
 if("FORCEADD" == option && (adminAccess >= level::jupe::force))
 	{
-	if(bot->jupeNick(nick, reason, duration))
+	string hostMask;
+	if(targetClient) { hostMask = targetClient->getNickUserHost(); }
+	else { hostMask = "unknown"; }
+	if(bot->jupeNick(nick, hostMask, reason, duration))
 		{
 		bot->Notice(theClient, "%s successfully juped.", nick.c_str());
 		}
@@ -122,6 +125,7 @@ if("INFO" == option && (adminAccess >= level::jupe::info))
 		bot->Notice(theClient, "Jupe Numeric   : %s%s", bot->getUplinkCharYY(), theUser->getNumeric().c_str());
 		bot->Notice(theClient, "Jupe Activated : %s", ctime(theUser->getSet()));
 		bot->Notice(theClient, "Jupe Expires   : %s", ctime(theUser->getExpires()));
+		bot->Notice(theClient, "Last Hostmask  : %s", theUser->getHostMask().c_str());
 		bot->Notice(theClient, "Jupe Reason    : %s", theUser->getReason().c_str());
 		}
 	return true;
