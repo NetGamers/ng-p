@@ -1,5 +1,5 @@
 #ifndef __NICKSERVCLASS_H
-#define __NICKSERVCLASS_H "$Id: nickservClass.h,v 1.1 2002-03-19 19:59:37 jeekay Exp $"
+#define __NICKSERVCLASS_H "$Id: nickservClass.h,v 1.2 2002-04-01 18:31:28 jeekay Exp $"
 
 #include	"libpq-int.h"
 #include	"nsUser.h"
@@ -211,6 +211,9 @@ public:
 	
 	// Get NS admin access level
 	int getAdminAccessLevel( iClient* );
+	
+	// Process kill queue
+	void processKillQueue( void );
 	
 	/*
 	 * The type of a constant iterator to the command map.

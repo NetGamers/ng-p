@@ -23,7 +23,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.25 2002-03-19 19:59:37 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.26 2002-04-01 18:31:28 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -419,91 +419,7 @@ int nickserv::OnTimer(xServer::timerID timer_id, void* data)
 
   if((timer_id == processQueueID) && (MyUplink->IsEndOfBurst()))
 	{ // processQueueID
-		logDebugMessage("Processing kill queue - %d entr%s.",
-			KillingQueue.size(), (KillingQueue.size() == 1) ? ("y") : ("ies"));
-		unsigned int warnings = 0;
-		unsigned int kills = 0;
-		unsigned int iterations = 0;
-		for(killIterator pos = KillingQueue.begin(); pos != KillingQueue.end(); )
-		{ // Iterative loop
-		if(iterations >= checkNickMax) break; else ++iterations;
-			// Quick sanity checking
-		  nsUser* tmpNS = static_cast< nsUser* >( pos->second);
-			iClient* tmpClient = Network->findClient(tmpNS->getNumeric());
-			
-			// Sanity checking
-			if(!tmpClient || !tmpNS)
-			{ // Somehow we have a non-existant numeric
-				logDebugMessage("Wierd error with numeric %s", tmpNS->getNumeric().c_str());
-				KillingQueue.erase(pos++);
-				continue;
-			}
-			
-#if __NS_DEBUGINFO >= 2
-			logDebugMessage("Processing numeric %s", tmpNS->getNumeric().c_str());
-#endif
-			if(! (tmpNS->getInQueue()) )
-			{ // This user is not in the queue
-				if(checkUser(tmpNS))
-				{ // Nick is registered
-					tmpNS->clearFlags();
-					tmpNS->setInQueue();
-					tmpNS->setCheckTime();
-#if __NS_DEBUGINFO >= 1
-					logDebugMessage("%s - Warned", tmpNS->getNumeric().c_str());
-#endif
-					++warnings;
-#ifndef __NS_DEBUG
-					Notice(tmpClient, "Your nickname is registered. Please login or change your nick.");
-#endif
-				} // Nick is registered
-				else
-				{ // Nick is not registered
-					KillingQueue.erase(pos++);
-					continue;
-				} // Nick is not registered
-				++pos;
-	      continue;
-			} // User not in queue
-	  	else
-			{ // User has INQUEUE set
-				// Check time
-				if((::time(NULL) - (tmpNS->getCheckTime())) >= timeToLive)
-				{ // User has expired their time. Kill them.
-#if __NS_DEBUGINFO >= 1
-					logDebugMessage("%s - Killed", tmpClient->getCharYYXXX().c_str());
-#endif
-					++kills;
-
-#ifndef __NS_DEBUG
-					Notice(tmpClient, "You have not logged into NickServ. You will now be autokilled.");
-					strstream s;
-					s << getCharYY()
-					  << " D "
-					  << tmpClient->getCharYYXXX()
-					  << " :" << getNickName() << " [NickServ] AutoKill" << ends;
-					Write(s.str());
-					delete[] s.str();
-					
-					// Remove GNUworld data about user
-					nsUser *tmpData = static_cast< nsUser* >( tmpClient->getCustomData(this) );
-					delete tmpData;
-					tmpClient->removeCustomData(this);
-					
-					jupeNick(tmpClient->getNickName(), tmpClient->getNickUserHost(), "AutoKill Juped Nick", 0);
-
-					MyUplink->PostEvent(gnuworld::EVT_NSKILL, static_cast<void*>(tmpClient));
-#endif
-					
-					KillingQueue.erase(pos++);
-					continue;
-				} // User has expired their time.
-				++pos;
-			} // User has INQUEUE set
-		} // Iterative loop
-
-		logDebugMessage("Processed: %d; Warnings: %d; Kills: %d",
-			iterations, warnings, kills);
+		processKillQueue();
 		processQueueID = MyUplink->RegisterTimer(::time(NULL) + timeToLive, this, NULL);
 	} // processQueueID
 
@@ -786,8 +702,104 @@ sqlUser* csUser = myCService->isAuthed(theClient, false);
 if(!csUser) { return false; }
 
 return myCService->getEffectiveAccessLevel(csUser, csChan, false);
+} // nickserv::getAdminAccessLevel
 
+void nickserv::processKillQueue( void )
+{
+clock_t startTime = ::clock();
+clock_t endTime = 0;
 
+logDebugMessage("Processing kill queue - %d entr%s.",
+	KillingQueue.size(), (KillingQueue.size() == 1) ? ("y") : ("ies"));
+
+unsigned int warnings = 0;
+unsigned int kills = 0;
+unsigned int iterations = 0;
+
+for(killIterator pos = KillingQueue.begin(); pos != KillingQueue.end(); )
+{ // Iterative loop
+	if(iterations >= checkNickMax) break; else ++iterations;
+	// Quick sanity checking
+	nsUser* tmpNS = static_cast< nsUser* >( pos->second);
+	iClient* tmpClient = Network->findClient(tmpNS->getNumeric());
+			
+	// Sanity checking
+	if(!tmpClient || !tmpNS)
+	{ // Somehow we have a non-existant numeric
+		logDebugMessage("Wierd error with numeric %s", tmpNS->getNumeric().c_str());
+		KillingQueue.erase(pos++);
+		continue;
+	}
+			
+#if __NS_DEBUGINFO >= 2
+	logDebugMessage("Processing numeric %s", tmpNS->getNumeric().c_str());
+#endif
+
+	if(! (tmpNS->getInQueue()) )
+	{ // This user is not in the queue
+		if(checkUser(tmpNS))
+		{ // Nick is registered
+			tmpNS->clearFlags();
+			tmpNS->setInQueue();
+			tmpNS->setCheckTime();
+#if __NS_DEBUGINFO >= 1
+			logDebugMessage("%s - Warned", tmpNS->getNumeric().c_str());
+#endif
+			++warnings;
+#ifndef __NS_DEBUG
+			Notice(tmpClient, "Your nickname is registered. Please login or change your nick.");
+#endif
+		} // Nick is registered
+		else
+		{ // Nick is not registered
+			KillingQueue.erase(pos++);
+			continue;
+		} // Nick is not registered
+		++pos;
+     continue;
+	} // User not in queue
+ 	else
+	{ // User has INQUEUE set
+		// Check time
+		if((::time(NULL) - (tmpNS->getCheckTime())) >= timeToLive)
+		{ // User has expired their time. Kill them.
+#if __NS_DEBUGINFO >= 1
+			logDebugMessage("%s - Killed", tmpClient->getCharYYXXX().c_str());
+#endif
+			++kills;
+
+#ifndef __NS_DEBUG
+			Notice(tmpClient, "You have not logged into NickServ. You will now be autokilled.");
+			strstream s;
+				s << getCharYY()
+					<< " D "
+					<< tmpClient->getCharYYXXX()
+					<< " :" << getNickName() << " [NickServ] AutoKill" << ends;
+			Write(s.str());
+			delete[] s.str();
+					
+			// Remove GNUworld data about user
+			nsUser *tmpData = static_cast< nsUser* >( tmpClient->getCustomData(this) );
+			delete tmpData;
+			tmpClient->removeCustomData(this);
+					
+			jupeNick(tmpClient->getNickName(), tmpClient->getNickUserHost(), "AutoKill Juped Nick", 0);
+
+			MyUplink->PostEvent(gnuworld::EVT_NSKILL, static_cast<void*>(tmpClient));
+#endif
+					
+			KillingQueue.erase(pos++);
+			continue;
+			} // User has expired their time.
+		++pos;
+		} // User has INQUEUE set
+	} // Iterative loop
+
+endTime = ::clock();
+logDebugMessage("Processed: %d; Warnings: %d; Kills: %d; Duration: %d ms",
+	iterations, warnings, kills, (endTime - startTime) / CLOCKS_PER_SEC);
+
+return;
 }
 
 } // namespace nserv
