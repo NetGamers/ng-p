@@ -12,7 +12,7 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 
-const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.1 2002-01-14 23:14:18 morpheus Exp $" ;
+const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.2 2002-01-16 23:16:25 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -365,6 +365,36 @@ for (autoOpVectorType::const_iterator resultPtr = autoOpVector.begin();
 		}
 
 	}
+
+#ifdef FEATURE_MEMOSEV
+	/*
+	 *  Now check if we have any notes
+	 */
+	
+	strstream notesQuery;
+	notesQuery	<< "SELECT COUNT(id) FROM notes WHERE to_id = " << theUser->getID() << ends;
+#ifdef LOG_SQL
+	elog	<< "LOGIN::sqlQuery> "
+		<< notesQuery.str()
+		<< endl;
+#endif
+	status = bot->SQLDb->Exec(notesQuery.str()) ;
+	delete[] notesQuery.str() ;
+
+if( PGRES_TUPLES_OK != status )
+	{
+	elog	<< "LOGIN> SQL Error: "
+		<< bot->SQLDb->ErrorMessage()
+		<< endl ;
+	return false ;
+	}
+
+if (bot->SQLDb->Tuples() > 0 && atoi(bot->SQLDb->GetValue(0, 0)) > 0)
+	{
+		bot->Notice(theClient, "You have %d note(s). To view them, type \002/msg X note read\002.",
+			atoi(bot->SQLDb->GetValue(0, 0)));
+	}
+#endif
 
 /*
  *  And last but by no means least, see if we have been nominated as
