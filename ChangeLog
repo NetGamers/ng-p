@@ -1,28 +1,37 @@
+2003-01-15 17:30  jeekay
+
+	* ChangeLog (1.4): Test commit
+
 2003-01-15 12:54  jeekay
 
-	* mod.cservice/: OFFICIALCommand.cc (1.2), SETCommand.cc (1.26),
-	cservice.cc (1.67): Added OFFICIAL LIST and added logging of SET
-	AUTOJOIN ON
+	* mod.cservice/: ChangeLog (1.12), OFFICIALCommand.cc (1.2),
+	SETCommand.cc (1.26), cservice.cc (1.67): Added OFFICIAL LIST and
+	added logging of SET AUTOJOIN ON
 
 2003-01-14 21:52  jeekay
 
-	* mod.cservice/: ADMINCMDSCommand.cc (1.16), REHASHCommand.cc
-	(1.3), cservice.cc (1.66), cserviceClass.h (1.16): Minor cleanups
-	for OFFICIAL support
+	* mod.cservice/: ADMINCMDSCommand.cc (1.16), ChangeLog (1.11),
+	REHASHCommand.cc (1.3), cservice.cc (1.66), cserviceClass.h (1.16):
+	Minor cleanups for OFFICIAL support
 
 2003-01-14 17:08  jeekay
 
-	* mod.cservice/: Makefile.am (1.16), Makefile.in (1.13),
-	OFFICIALCommand.cc (1.1), Updates (1.1), VERIFYCommand.cc (1.17),
-	constants.h (1.10), cservice.cc (1.65), cserviceClass.h (1.15),
-	cserviceCommands.h (1.17), levels.h (1.39), sqlUser.cc (1.15),
-	sqlUser.h (1.12): Altering of the custom verifies to be based on
-	OFFICIAL rather than #official.
+	* mod.cservice/: ChangeLog (1.10), Makefile.am (1.16), Makefile.in
+	(1.13), OFFICIALCommand.cc (1.1), Updates (1.1), VERIFYCommand.cc
+	(1.17), constants.h (1.10), cservice.cc (1.65), cserviceClass.h
+	(1.15), cserviceCommands.h (1.17), levels.h (1.39), sqlUser.cc
+	(1.15), sqlUser.h (1.12): Altering of the custom verifies to be
+	based on OFFICIAL rather than #official.
 
 2003-01-09 23:04  jeekay
 
-	* mod.cservice/: STATUSCommand.cc (1.20), cservice.cc (1.64): Fixed
-	STATUS output for channels, removed some CTCP replies
+	* mod.cservice/: ChangeLog (1.9), STATUSCommand.cc (1.20),
+	cservice.cc (1.64): Fixed STATUS output for channels, removed some
+	CTCP replies
+
+2002-12-10 16:54  jeekay
+
+	* mod.cservice/ChangeLog (1.8): ChangeLog updates
 
 2002-12-10 16:52  jeekay
 
@@ -31,13 +40,13 @@
 
 2002-11-25 00:14  jeekay
 
-	* mod.cservice/: cservice.cc (1.63), STATUSCommand.cc (1.18): Made
-	FLOATGRACE be functional again
+	* mod.cservice/: ChangeLog (1.7), cservice.cc (1.63),
+	STATUSCommand.cc (1.18): Made FLOATGRACE be functional again
 
 2002-11-23 07:27  jeekay
 
-	* mod.cservice/: SETCommand.cc (1.25), levels.h (1.38): Fixed SET
-	#CHAN INVISIBLE access bug
+	* mod.cservice/: ChangeLog (1.6), SETCommand.cc (1.25), levels.h
+	(1.38): Fixed SET #CHAN INVISIBLE access bug
 
 2002-11-14 13:57  jeekay
 
@@ -46,8 +55,8 @@
 
 2002-11-09 20:39  jeekay
 
-	* mod.cservice/cservice.cc (1.62): Incremented version, maintained
-	ChangeLog
+	* mod.cservice/: ChangeLog (1.5), cservice.cc (1.62): Incremented
+	version, maintained ChangeLog
 
 2002-11-09 20:38  jeekay
 
@@ -57,11 +66,11 @@
 2002-11-05 00:24  jeekay
 
 	* mod.cservice/: ACCESSCommand.cc (1.8), ADDUSERCommand.cc (1.10),
-	SETCommand.cc (1.24), STATUSCommand.cc (1.17), cservice.cc (1.61),
-	sqlChannel.cc (1.8), sqlChannel.h (1.8): Bumped patchlevel to
-	1.2.00 - read ChangeLog for details. Added USERFLAGS '3', channel
-	flag INVISIBLE and COMMENTS to output of status for commented
-	channels.
+	ChangeLog (1.4), SETCommand.cc (1.24), STATUSCommand.cc (1.17),
+	cservice.cc (1.61), sqlChannel.cc (1.8), sqlChannel.h (1.8): Bumped
+	patchlevel to 1.2.00 - read ChangeLog for details. Added USERFLAGS
+	'3', channel flag INVISIBLE and COMMENTS to output of status for
+	commented channels.
 
 2002-11-01 21:30  jeekay
 
@@ -773,6 +782,11 @@
 	* mod.cservice/REMUSERIDCommand.cc (1.8, pre-core-update): Lets see
 	if we can fix these REMUSERID cores
 
+2002-04-21 13:32  jeekay
+
+	* ChangeLog (1.3, pre-multi-logins, pre-core-update): Update of
+	ChangeLog
+
 2002-04-21 13:28  jeekay
 
 	* mod.cservice/: VERIFYCommand.cc (1.11, pre-core-update),
@@ -794,7 +808,8 @@
 
 2002-04-14 14:16  morpheus
 
-	* cvs2cl.pl (1.1, pre-multi-logins, pre-core-update): 
+	* ChangeLog (1.2), cvs2cl.pl (1.1, pre-multi-logins,
+	pre-core-update): 
 	Added cvs2cl.pl file.  Changed ChangeLog file aswell.
 
 2002-04-12 23:28  jeekay
@@ -1670,14 +1685,16 @@
 	* mod.cservice/: ADDUSERCommand.cc (1.2, pre-nskill), BANCommand.cc
 	(1.2), CLEARMODECommand.cc (1.2, pre-core-update, pre-remuserid,
 	pre-gsuspend, pre-nskill), COMMENTCommand.cc (1.2, pre-remuserid,
-	pre-gsuspend, pre-nskill), DEOPCommand.cc (1.2, pre-nskill),
-	DEVOICECommand.cc (1.2, pre-nskill), INVITECommand.cc (1.2,
+	pre-gsuspend, pre-nskill), ChangeLog (1.3, pre-multi-logins,
 	pre-gcc32, pre-core-update, pre-remuserid, pre-gsuspend,
-	pre-nskill), JOINCommand.cc (1.2, pre-multi-logins, pre-gcc32,
+	pre-nskill), DEOPCommand.cc (1.2, pre-nskill), DEVOICECommand.cc
+	(1.2, pre-nskill), INVITECommand.cc (1.2, pre-gcc32,
 	pre-core-update, pre-remuserid, pre-gsuspend, pre-nskill),
-	KICKCommand.cc (1.2, pre-gcc32, pre-core-update, pre-remuserid,
-	pre-gsuspend, pre-nskill), MODINFOCommand.cc (1.2, pre-nskill),
-	OPCommand.cc (1.2, pre-nskill), PARTCommand.cc (1.2, pre-nskill),
+	JOINCommand.cc (1.2, pre-multi-logins, pre-gcc32, pre-core-update,
+	pre-remuserid, pre-gsuspend, pre-nskill), KICKCommand.cc (1.2,
+	pre-gcc32, pre-core-update, pre-remuserid, pre-gsuspend,
+	pre-nskill), MODINFOCommand.cc (1.2, pre-nskill), OPCommand.cc
+	(1.2, pre-nskill), PARTCommand.cc (1.2, pre-nskill),
 	REMUSERCommand.cc (1.2, pre-nskill), SETCommand.cc (1.13),
 	SHOWCOMMANDSCommand.cc (1.8, pre-nskill), SUSPENDCommand.cc (1.2,
 	pre-nskill), TOPICCommand.cc (1.2, pre-core-update, pre-remuserid,
@@ -1702,11 +1719,11 @@
 2002-01-23 01:12  ultimate
 
 	* mod.cservice/: CHANINFOCommand.cc (1.2), COMMENTCommand.cc (1.1),
-	Makefile.am (1.3, pre-nskill), constants.h (1.3, pre-gsuspend,
-	pre-nskill), cservice.cc (1.6), cserviceCommands.h (1.3,
-	pre-nskill), sqlUser.cc (1.4, pre-gsuspend, pre-nskill), sqlUser.h
-	(1.4, pre-gsuspend, pre-nskill): Added new COMMENT system and
-	removed old ADDCOMMENT read ChangeLog before running!!
+	ChangeLog (1.2), Makefile.am (1.3, pre-nskill), constants.h (1.3,
+	pre-gsuspend, pre-nskill), cservice.cc (1.6), cserviceCommands.h
+	(1.3, pre-nskill), sqlUser.cc (1.4, pre-gsuspend, pre-nskill),
+	sqlUser.h (1.4, pre-gsuspend, pre-nskill): Added new COMMENT system
+	and removed old ADDCOMMENT read ChangeLog before running!!
 
 2002-01-23 01:05  jeekay
 
@@ -1735,8 +1752,8 @@
 
 2002-01-22 23:14  ultimate
 
-	* mod.cservice/levels.h (1.6): Added a changelog The levels.h
-	change is currently unused but it update this to :(
+	* mod.cservice/: ChangeLog (1.1), levels.h (1.6): Added a changelog
+	The levels.h change is currently unused but it update this to :(
 
 2002-01-22 22:37  ultimate
 
@@ -2029,9 +2046,11 @@
 
 2002-01-15 19:09  jeekay
 
-	* INSTALL (1.1), NEWS (1.1), AUTHORS (1.1), COPYING (1.1) (utags:
-	pre-core-update, pre-multi-logins, pre-nskill): These nice files
-	are 'required' for compilation
+	* INSTALL (1.1, pre-multi-logins, pre-core-update), NEWS (1.1,
+	pre-multi-logins, pre-core-update), AUTHORS (1.1, pre-multi-logins,
+	pre-core-update), COPYING (1.1, pre-multi-logins, pre-core-update),
+	ChangeLog (1.1) (utags: pre-nskill): These nice files are
+	'required' for compilation
 
 2002-01-15 18:58  jeekay
 
@@ -2046,7 +2065,7 @@
 
 	* mod.cservice/: .cvsignore (1.1), FORCECommand.cc (1.2),
 	Makefile.in (1.2): Backed out NOFORCE mod to FORCECommand as it
-	didnt even compile :) Added .cvsignore Changed $Id: ChangeLog,v 1.4 2003-01-15 17:30:03 jeekay Exp $ take in
+	didnt even compile :) Added .cvsignore Changed $Id: ChangeLog,v 1.5 2003-01-15 17:32:57 jeekay Exp $ take in
 	Makefile.in to *be* .in and not .am
 
 2002-01-15 18:37  jeekay
