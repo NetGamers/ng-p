@@ -1,6 +1,6 @@
 
 #ifndef __NICKSERV_H
-#define __NICKSERV_H "$Id: nickserv.h,v 1.5 2002-01-23 01:05:47 jeekay Exp $"
+#define __NICKSERV_H "$Id: nickserv.h,v 1.6 2002-02-04 00:44:31 jeekay Exp $"
 
 
 #include	<string>
@@ -87,6 +87,11 @@ protected:
 
 	// How frequently we refresh admin records
 	int     adminRefreshTime;
+	
+	// DB connection times
+	int dbConnCheckTime;
+	int dbConnCheckMax;
+	int dbConnRetries;
 	
 public:
 	inline const string getDebugChannel()
@@ -199,6 +204,9 @@ public:
 	short int getAdminAccessLevel( string theNick );
 	void refreshAdminAccessLevels( void );
 	
+	// Check the DB connection is ok
+	void checkDBConnectionStatus( void );
+	
 	/*
 	 * The type of a constant iterator to the command map.
 	 */
@@ -274,6 +282,14 @@ protected:
 
 	xServer::timerID processQueueID;
 	xServer::timerID refreshAdminID;
+	xServer::timerID dbConnCheckID;
+	
+	// All our DB config information
+	string confSqlHost;
+	string confSqlDb;
+	string confSqlPort;
+	string confSqlUser;
+	string confSqlPass;
 	
 } ; 
  

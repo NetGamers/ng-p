@@ -22,7 +22,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.12 2002-02-01 03:30:16 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.13 2002-02-04 00:44:31 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -73,20 +73,23 @@ nickserv::nickserv( const string& configFileName )
 // Read the config file
 EConfig conf( configFileName ) ;
 
-string sqlHost = conf.Require("sql_host" )->second;
-string sqlDb = conf.Require( "sql_db" )->second;
-string sqlPort = conf.Require( "sql_port" )->second;
-string sqlUser = conf.Require( "sql_user")->second;
+confSqlHost = conf.Require("sql_host" )->second;
+confSqlDb = conf.Require( "sql_db" )->second;
+confSqlPort = conf.Require( "sql_port" )->second;
+confSqlUser = conf.Require( "sql_user" )->second;
+confSqlPass = conf.Require( "sql_pass" )->second;
 debugChan = conf.Require("debug_chan")->second;
 timeToLive = atoi((conf.Require("timeToLive")->second).c_str());
 adminRefreshTime = atoi((conf.Require("adminRefreshTime")->second).c_str());
+dbConnCheckTime = atoi((conf.Require("dbConnCheckTime")->second).c_str());
+dbConnCheckMax = atoi((conf.Require("dbConnCheckMax")->second).c_str());
 
-string Query = "host=" + sqlHost + " dbname=" + sqlDb + " port=" + sqlPort + " user=" +sqlUser;
+string Query = "host=" + confSqlHost + " dbname=" + confSqlDb + " port=" + confSqlPort + " user=" +confSqlUser+ " password="+confSqlPass;
 
 elog	<< "nickserv::nickserv> Attempting to connect to "
-	<< sqlHost
+	<< confSqlHost
 	<< "; Database: "
-	<< sqlDb
+	<< confSqlDb
 	<< endl;
  
 SQLDb = new (std::nothrow) cmDatabase( Query.c_str() ) ;
@@ -213,6 +216,9 @@ theServer->RegisterEvent( EVT_FORCEDEAUTH, this );
 // Start the counters rolling
 processQueueID = theServer->RegisterTimer(::time(NULL) + timeToLive, this, NULL);
 refreshAdminID = theServer->RegisterTimer(::time(NULL) + adminRefreshTime, this, NULL);
+dbConnCheckID  = theServer->RegisterTimer(::time(NULL) + dbConnCheckTime, this, NULL);
+
+dbConnRetries = 0;
 
 xClient::ImplementServer( theServer ) ;
 }
@@ -480,6 +486,12 @@ int nickserv::OnTimer(xServer::timerID timer_id, void* data)
       refreshAdminAccessLevels();
       refreshAdminID = MyUplink->RegisterTimer(::time(NULL) + adminRefreshTime, this, NULL);
     }
+	
+	if(timer_id == dbConnCheckID)
+		{
+		checkDBConnectionStatus();
+		dbConnCheckID = MyUplink->RegisterTimer(::time(NULL) + dbConnCheckTime, this, NULL);
+		}
 
 return true;
 }
@@ -659,6 +671,46 @@ short int nickserv::getAdminAccessLevel( string theNick )
       return pos->second;
     }
 }
+
+void nickserv::checkDBConnectionStatus( void )
+{
+	if(SQLDb->Status() == CONNECTION_BAD)
+		{
+		logDebugMessage("\002WARNING:\002 Backend database connection has been lost, attempting to reconnect.");
+		elog << "nickserv::nickserv> Database connection died. Attempting to reconnect." << endl;
+		
+		// Remove old SQL object
+		delete(SQLDb);
+		
+		string Query = "host=" + confSqlHost +  " dbname=" + confSqlDb + " port=" + confSqlPort + " user=" + confSqlUser + " password=" + confSqlPass;
+		
+		SQLDb = new (std::nothrow) cmDatabase( Query.c_str() );
+		assert( SQLDb != 0);
+		
+		if(SQLDb->ConnectionBad())
+			{
+			elog << "nickserv::nickserv> Unable to connect to SQL server." << endl;
+			elog << "nickserv::nickserv> PostgreSQL error message: " << SQLDb->ErrorMessage() << endl;
+			
+			++dbConnRetries;
+			if(dbConnRetries >= dbConnCheckMax)
+				{
+				logDebugMessage("\002ERROR:\002 Unable to reconnect to database.");
+				MyUplink->flushBuffer();
+				::exit(0);
+				} // Max retries exceeded
+			else
+				{
+				logDebugMessage("\002WARNING:\002 Connection failed. Retrying.");
+				} // Retrying
+			} // Bad connection still
+		else
+			{
+			logDebugMessage("Successfully reconnected to the database server. Panic over :)");
+			dbConnRetries = 0;
+			} // Good connection now
+		} // Bad connection found
+} // nickserv::checkDBConnectionStatus
 
 } // namespace nserv
 
