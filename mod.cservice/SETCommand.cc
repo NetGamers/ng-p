@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.7 2002-01-17 21:51:28 morpheus Exp $
+ * $Id: SETCommand.cc,v 1.8 2002-01-17 23:29:37 jeekay Exp $
  */
 
 #include	<string>
@@ -30,7 +30,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.7 2002-01-17 21:51:28 morpheus Exp $" ;
+const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.8 2002-01-17 23:29:37 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -187,7 +187,7 @@ queryString     << "SELECT id"
 		return true;
 	}
 */
-	if (option == "NS")
+	if (option == "NS" || option == "NICKSERV" || option == "AUTOKILL")
 	{
 		if (value == "ON")
                 {
