@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.35 2004-11-20 23:11:00 jeekay Exp $
+ * $Id: SETCommand.cc,v 1.36 2004-11-26 22:39:52 jeekay Exp $
  */
 
 #include  <string>
@@ -1078,10 +1078,26 @@ else
       return ;
     }
     
-    if("ON" == value) theChan->setFlag(sqlChannel::F_INVISIBLE);
-    else if("OFF" == value) theChan->removeFlag(sqlChannel::F_INVISIBLE);
+    int tempvalue = atoi(value.c_str());
+    
+    if("ON" == value) {
+    	theChan->setFlag(sqlChannel::F_INVISIBLE);
+	theChan->setInvisible(1);
+    }
+    else if("OFF" == value) {
+    	theChan->removeFlag(sqlChannel::F_INVISIBLE);
+	theChan->setInvisible(0);
+    }
+    else if( tempvalue >= 0 && tempvalue <= level::adduser ) {
+    	if( tempvalue == 0 ) {
+		theChan->removeFlag(sqlChannel::F_INVISIBLE);
+	} else {
+	    	theChan->setFlag(sqlChannel::F_INVISIBLE);
+	}
+	theChan->setInvisible(tempvalue);
+    }
     else {
-      bot->Notice(theClient, "Value of INVISIBLE must be ON or OFF");
+      bot->Notice(theClient, "Value of INVISIBLE must be ON, OFF or a level");
       return ;
     }
     

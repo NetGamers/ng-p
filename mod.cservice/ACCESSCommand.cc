@@ -12,7 +12,7 @@
  * Displays all "Level" records for a specified channel.
  * Can optionally narrow down selection using a number of switches.
  *
- * $Id: ACCESSCommand.cc,v 1.11 2004-08-25 20:32:24 jeekay Exp $
+ * $Id: ACCESSCommand.cc,v 1.12 2004-11-26 22:39:52 jeekay Exp $
  */
 
 #include	<string>
@@ -99,13 +99,13 @@ if (theChan->getName() == "*")
  */
 
 /* Prettyness variables */
-bool hasAccess = bot->getAccessLevel(theUser, theChan);
+bool level = bot->getAccessLevel(theUser, theChan);
 bool isAdmin = bot->getAdminAccessLevel(theUser);
-bool isInvis = theChan->getFlag(sqlChannel::F_INVISIBLE);
+unsigned int invisLevel = theChan->getInvisible();
 bool isOper = theClient->isOper();
 
 /* Karnaugh maps ahoy! */
-if(!(hasAccess || !isInvis || isAdmin || isOper)) {
+if(!( (level >= invisLevel) || isAdmin || isOper )) {
   bot->Notice(theClient, "Sorry, you have insufficient access to list the users in %s.",
     theChan->getName().c_str());
   return ;

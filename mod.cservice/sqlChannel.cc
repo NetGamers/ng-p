@@ -9,7 +9,7 @@
  * 30/12/2000: Moved static SQL data to constants.h --Gte
  * Set loadData up to take data from rows other than 0.
  *
- * $Id: sqlChannel.cc,v 1.12 2004-11-20 23:11:00 jeekay Exp $
+ * $Id: sqlChannel.cc,v 1.13 2004-11-26 22:39:52 jeekay Exp $
  */
 
 #include	<string>
@@ -24,7 +24,7 @@
 #include	"cservice_config.h"
 
 const char sqlChannel_h_rcsId[] = __SQLCHANNEL_H ;
-const char sqlChannel_cc_rcsId[] = "$Id: sqlChannel.cc,v 1.12 2004-11-20 23:11:00 jeekay Exp $" ;
+const char sqlChannel_cc_rcsId[] = "$Id: sqlChannel.cc,v 1.13 2004-11-26 22:39:52 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -99,7 +99,8 @@ sqlChannel::sqlChannel(PgDatabase* _SQLDb)
    limit_grace(2), 
    limit_max(0), 
    welcome(),
-	 suspendExpires(0),
+   suspendExpires(0),
+   invisible(0),
    SQLDb( _SQLDb )
 {
 }
@@ -228,6 +229,7 @@ limit_grace = atoi(SQLDb->GetValue(row,16));
 limit_max = atoi(SQLDb->GetValue(row,17));
 welcome = SQLDb->GetValue(row,18);
 suspendExpires = atoi(SQLDb->GetValue(row, 19));
+invisible = atoi(SQLDb->GetValue(row, 20));
 }
 
 bool sqlChannel::commit()
@@ -259,7 +261,8 @@ queryString	<< queryHeader
 		<< "description = '" << escapeSQLChars(description) << "', "
 		<< "comment = '" << escapeSQLChars(comment) << "', "
 		<< "welcome = '" << escapeSQLChars(welcome) << "', "
-		<< "suspend_expires_ts = " << suspendExpires << " "
+		<< "suspend_expires_ts = " << suspendExpires << ", "
+		<< "invisible = " << invisible << " "
 		<< queryCondition << id
 		;
 

@@ -1,3 +1,13 @@
+2004-11-24 1.2.19 Jeekay
+**
+-- Add new invisible column to store invisible level
+ALTER TABLE channels ADD COLUMN invisible INTEGER;
+ALTER TABLE channels ALTER COLUMN invisible SET DEFAULT 0;
+UPDATE channels SET invisible=1 WHERE (flags & 16777216) <> 0;
+UPDATE channels SET invisible=0 WHERE invisible IS NULL;
+ALTER TABLE channels ALTER COLUMN invisible SET NOT NULL;
+**
+
 2004-11-20 1.2.18 Jeekay
 **
 ALTER TABLE commands DROP CONSTRAINT commands_pkey;

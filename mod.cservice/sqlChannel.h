@@ -1,7 +1,7 @@
 /* sqlChannel.h */
 
 #ifndef __SQLCHANNEL_H
-#define __SQLCHANNEL_H "$Id: sqlChannel.h,v 1.11 2004-11-20 23:11:00 jeekay Exp $"
+#define __SQLCHANNEL_H "$Id: sqlChannel.h,v 1.12 2004-11-26 22:39:52 jeekay Exp $"
 
 #include	<vector>
 #include	<string>
@@ -151,6 +151,9 @@ public:
 	
 	inline const time_t& getSuspendExpires() const
 		{ return suspendExpires; }
+	
+	inline const unsigned int getInvisible() const
+		{ return invisible; }
 
 	/**
 	 * Load channel data from the backend using the channel name as
@@ -244,6 +247,9 @@ public:
 	
 	inline void setSuspendExpires( const time_t& _suspendExpires )
 		{ suspendExpires = _suspendExpires; }
+	
+	inline void setInvisible( const unsigned int _invisible )
+		{ invisible = _invisible; }
 
 	/**
 	 * Method to perform a SQL 'UPDATE' and commit changes to this
@@ -288,13 +294,14 @@ protected:
 	time_t		last_topic ;
 	bool		inChan;
 	time_t		last_used;
-	unsigned int limit_offset; 	 
-        time_t limit_period; 
-        time_t last_limit_check; 
-	unsigned int limit_grace; 
-        unsigned int limit_max; 
+	unsigned int	limit_offset; 	 
+	time_t		limit_period; 
+	time_t		last_limit_check; 
+	unsigned int	limit_grace; 
+	unsigned int	limit_max; 
 	string		welcome;
 	time_t		suspendExpires;
+	unsigned int	invisible;
 
 	PgDatabase*	SQLDb;
 

@@ -179,6 +179,14 @@ if (tmpChan)
 if ((level >= level::status2) || (admLevel >= 1) || theClient->isOper())
 	bot->Notice(theClient, "Welcome: %s", theChan->getWelcome().c_str());
 
+/* We check invisible level here. If the invisible level is higher than
+ * the users channel access, return immediately. Obviously let CSC admins
+ * and opers through this check.
+ */
+if( level < theChan->getInvisible() && !admLevel && !theClient->isOper() ) {
+	return ;
+}
+
 bot->Notice(theClient, "MassDeopPro: %i",
 	    theChan->getMassDeopPro());
 
@@ -197,7 +205,14 @@ if (theChan->getFlag(sqlChannel::F_AUTOJOIN))    flagsSet += "AUTOJOIN ";
 if (theChan->getFlag(sqlChannel::F_LOCKED))      flagsSet += "LOCKED ";
 if (theChan->getFlag(sqlChannel::F_NOFORCE))     flagsSet += "NOFORCE ";
 if (theChan->getFlag(sqlChannel::F_STRICTVOICE)) flagsSet += "STRICTVOICE ";
-if (theChan->getFlag(sqlChannel::F_INVISIBLE))   flagsSet += "INVISIBLE ";
+if (theChan->getFlag(sqlChannel::F_INVISIBLE)) {
+	stringstream invisible;
+	invisible	<< "INVISIBLE("
+			<< theChan->getInvisible()
+			<< ")"
+			;
+	flagsSet += invisible.str();
+}
 if (theChan->getFlag(sqlChannel::F_IDLE))        flagsSet += "IDLE ";
 if (!theChan->getComment().empty() && admLevel)  flagsSet += "COMMENT ";
 if (theChan->getFlag(sqlChannel::F_FLOATLIM)) 
