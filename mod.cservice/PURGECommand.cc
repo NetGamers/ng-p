@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: PURGECommand.cc,v 1.8 2002-03-31 20:51:42 morpheus Exp $
+ * $Id: PURGECommand.cc,v 1.9 2002-04-20 19:51:28 jeekay Exp $
  */
 
 #include	<string>
@@ -22,7 +22,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.8 2002-03-31 20:51:42 morpheus Exp $" ;
+const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.9 2002-04-20 19:51:28 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -266,6 +266,8 @@ if( status != PGRES_COMMAND_OK )
 	return false ;
 	}
 
+/*
+ * No longer needed as we do not kill forcelog entries on purge
 strstream theQuery2 ;
 theQuery2        << "DELETE FROM forcelog WHERE channel_id = "
                 << theChan->getID()
@@ -287,6 +289,7 @@ if( status != PGRES_COMMAND_OK )
                 << endl ;
         return false ;
         }
+*/
 
 /* 
  * Bin 'em all. 
