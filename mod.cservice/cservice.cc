@@ -2288,66 +2288,6 @@ if (timer_id == cache_timerID)
 	cache_timerID = MyUplink->RegisterTimer(theTime, this, NULL);
 	}
 
-if (timer_id == pending_timerID)
-	{
-	/*
-	 * Load the list of pending channels and calculate/save some stats.
-	 */
-
-	loadPendingChannelList();
-
-	/*
-	 * Load a list of channels in NOTIFICATION stage and send them
-	 * a notice.
-	 */
-
-	stringstream theQuery;
-	theQuery	<<  "SELECT channels.name,channels.id,pending.created_ts"
-				<< " FROM pending,channels"
-				<< " WHERE channels.id = pending.channel_id"
-				<< " AND pending.status = 2;"
-				<< ends;
-
-#ifdef LOG_SQL
-		elog	<< "cmaster::loadPendingChannelList> "
-			<< theQuery.str()
-			<< endl;
-#endif
-
-	ExecStatusType status = SQLDb->Exec(theQuery.str().c_str()) ;
-	unsigned int noticeCount = 0;
-
-	if( PGRES_TUPLES_OK == status )
-		{
-		for (int i = 0 ; i < SQLDb->Tuples(); i++)
-			{
-			noticeCount++;
-			string channelName = SQLDb->GetValue(i,0);
-			unsigned int channel_id = atoi(SQLDb->GetValue(i, 1));
-			Channel* tmpChan = Network->findChannel(channelName);
-
-			if (tmpChan)
-				{
-				serverNotice(tmpChan,
-				"This channel is currently being processed for registration. "
-				"If you wish to view the details of the application or to object, please visit: "
-				"%s?id=%i", pendingPageURL.c_str(), channel_id);
-				}
-			}
-		}
-
-	logDebugMessage("Loaded Pending Channels notification list, I have just notified %i channels that they are under registration.",
-		noticeCount);
-
-
-	/* Refresh Timer */
-
-	time_t theTime = time(NULL) +pendingChanPeriod;
-	pending_timerID = MyUplink->RegisterTimer(theTime, this, NULL);
-	}
-
-
-return 0 ;
 }
 
 /**
