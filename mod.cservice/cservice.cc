@@ -3126,8 +3126,9 @@ while (ptr != theChan->banList.end())
 	{
 	sqlBan* theBan = *ptr;
 
-	if( match(theBan->getBanMask(),
-		theClient->getNickUserHost()) == 0)
+	if( match(theBan->getBanMask(), theClient->getHiddenNickUserHost()) == 0 ||
+	    match(theBan->getBanMask(), theClient->getRealNickUserHost()) == 0
+	    )
 			{
 			return theBan;
 			}
