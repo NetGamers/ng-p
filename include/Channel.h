@@ -18,11 +18,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: Channel.h,v 1.6 2003-03-30 02:52:53 jeekay Exp $
+ * $Id: Channel.h,v 1.7 2003-11-02 16:47:02 jeekay Exp $
  */
 
 #ifndef __CHANNEL_H
-#define __CHANNEL_H "$Id: Channel.h,v 1.6 2003-03-30 02:52:53 jeekay Exp $"
+#define __CHANNEL_H "$Id: Channel.h,v 1.7 2003-11-02 16:47:02 jeekay Exp $"
 
 #include	<string>
 #include	<map>
@@ -85,6 +85,9 @@ public:
 
 	/// Bit representing channel mode +S
 	static const modeType	MODE_S ;
+  
+	/// Bit representing channel mode +T
+	static const modeType	MODE_T ;
   
 	/// Bit representing channel mode +c
 	static const modeType	MODE_c ;
@@ -454,6 +457,12 @@ protected:
 	 * or unset.
 	 */
 	virtual void	onModeS( bool ) ;
+
+	/**
+	 * This method is called when channel mode 'T' is set
+	 * or unset.
+	 */
+	virtual void	onModeT( bool ) ;
 
 	/**
 	 * This method is called when channel mode 'c' is set

@@ -23,7 +23,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: server.cc,v 1.7 2003-09-22 10:56:23 jeekay Exp $
+ * $Id: server.cc,v 1.8 2003-11-02 16:47:11 jeekay Exp $
  */
 
 #include	<sys/time.h>
@@ -72,7 +72,7 @@
 #include	"ConnectionHandler.h"
 #include	"Connection.h"
 
-const char server_cc_rcsId[] = "$Id: server.cc,v 1.7 2003-09-22 10:56:23 jeekay Exp $" ;
+const char server_cc_rcsId[] = "$Id: server.cc,v 1.8 2003-11-02 16:47:11 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -2756,6 +2756,48 @@ for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 	ptr != end ; ++ptr )
 	{
 	(*ptr)->OnChannelModeS( theChan, polarity, sourceUser ) ;
+	}
+}
+
+// Handle a channel mode change
+// theChan is the channel on which the mode change occured
+// polarity is true if the mode is being set, false otherwise
+// sourceUser is the source of the mode change; this variable
+// may be NULL if a server is setting the mode
+void xServer::OnChannelModeT( Channel* theChan, bool polarity,
+	ChannelUser* sourceUser )
+{
+theChan->onModeT( polarity ) ;
+
+// First deliver this channel event to any listeners for all channel
+// events.
+channelEventMapType::iterator allChanPtr =
+	channelEventMap.find( CHANNEL_ALL ) ;
+if( allChanPtr != channelEventMap.end() )
+	{
+	for( list< xClient* >::iterator ptr = allChanPtr->second->begin(),
+		endPtr = allChanPtr->second->end() ; ptr != endPtr ; ++ptr )
+		{
+		(*ptr)->OnChannelModeT( theChan, polarity, sourceUser ) ;
+		}
+	}
+
+// Find listeners for this specific channel
+channelEventMapType::iterator chanPtr =
+	channelEventMap.find( theChan->getName() ) ;
+if( chanPtr == channelEventMap.end() )
+	{
+	// No listeners for this channel's events
+	return ;
+	}
+
+// Iterate through the listeners for this channel's events
+// and notify each listener of the event
+list< xClient* >* listPtr = chanPtr->second ;
+for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
+	ptr != end ; ++ptr )
+	{
+	(*ptr)->OnChannelModeT( theChan, polarity, sourceUser ) ;
 	}
 }
 

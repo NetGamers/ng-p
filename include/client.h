@@ -21,7 +21,7 @@
  */
 
 #ifndef __CLIENT_H
-#define __CLIENT_H "$Id: client.h,v 1.5 2003-03-30 02:52:53 jeekay Exp $"
+#define __CLIENT_H "$Id: client.h,v 1.6 2003-11-02 16:47:02 jeekay Exp $"
 
 #include	<sstream>
 #include	<string>
@@ -231,6 +231,15 @@ public:
 	 * setting the mode.
 	 */
 	virtual void OnChannelModeS( Channel*, bool polarity,
+			ChannelUser* ) { } ;
+
+	/**
+	 * This method is invoked when a user sets or removes
+	 * channel mode T (amsg strip).  Keep in mind that the
+	 * source ChannelUser may be NULL if a server is
+	 * setting the mode.
+	 */
+	virtual void OnChannelModeT( Channel*, bool polarity,
 			ChannelUser* ) { } ;
 
 	/**

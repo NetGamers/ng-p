@@ -5,6 +5,7 @@
 * Added IDLE flag for channels that have been autoparted
 * Check we are opped before issuing modes
 * If we join a channel, set AUTOJOIN
+* Added support for cmode +T
 * Bumped version to 1.2.12
 
 2003-10-02 1.2.11 Jeekay

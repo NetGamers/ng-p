@@ -3,7 +3,7 @@
  *
  * 20020201 - Jeekay - Initial Version
  *
- * $Id: MODECommand.cc,v 1.9 2003-10-30 16:49:52 jeekay Exp $
+ * $Id: MODECommand.cc,v 1.10 2003-11-02 16:47:16 jeekay Exp $
  */
 
 #include <string>
@@ -14,7 +14,7 @@
 #include "levels.h"
 #include "ELog.h"
 
-const char MODECommand_cc_rcsId[] = "$Id: MODECommand.cc,v 1.9 2003-10-30 16:49:52 jeekay Exp $";
+const char MODECommand_cc_rcsId[] = "$Id: MODECommand.cc,v 1.10 2003-11-02 16:47:16 jeekay Exp $";
 
 namespace gnuworld
 {
@@ -92,6 +92,7 @@ if(!tmpBotUser || !tmpBotUser->getMode(ChannelUser::MODE_O)) {
 #define CF_r	0x0080
 #define CF_s	0x0100
 #define CF_t	0x0200
+#define CF_T	0x0400
 #define CF_l	0x1000
 #define CF_k	0x2000
 
@@ -113,6 +114,7 @@ for( string::const_iterator itr = modeString.begin() ;
 		case '-' : polarity = false;	break;
 		case 'C' : curFlag = CF_C;	break;
 		case 'S' : curFlag = CF_S;	break;
+		case 'T' : curFlag = CF_T;	break;
 		case 'c' : curFlag = CF_c;	break;
 		case 'i' : curFlag = CF_i;	break;
 		case 'm' : curFlag = CF_m;	break;
@@ -230,6 +232,7 @@ string posString, negString;
 
 if(positive & CF_C) { posString += "C"; theChan->setMode(Channel::MODE_C); }
 if(positive & CF_S) { posString += "S"; theChan->setMode(Channel::MODE_S); }
+if(positive & CF_T) { posString += "T"; theChan->setMode(Channel::MODE_T); }
 if(positive & CF_c) { posString += "c"; theChan->setMode(Channel::MODE_c); }
 if(positive & CF_i) { posString += "i"; theChan->setMode(Channel::MODE_i); }
 if(positive & CF_m) { posString += "m"; theChan->setMode(Channel::MODE_m); }
@@ -243,6 +246,7 @@ if(positive & CF_l) { posString += "l"; theChan->setMode(Channel::MODE_l); }
 
 if(negative & CF_C) { negString += "C"; theChan->removeMode(Channel::MODE_C); }
 if(negative & CF_S) { negString += "S"; theChan->removeMode(Channel::MODE_S); }
+if(negative & CF_T) { negString += "T"; theChan->removeMode(Channel::MODE_T); }
 if(negative & CF_c) { negString += "c"; theChan->removeMode(Channel::MODE_c); }
 if(negative & CF_i) { negString += "i"; theChan->removeMode(Channel::MODE_i); }
 if(negative & CF_m) { negString += "m"; theChan->removeMode(Channel::MODE_m); }

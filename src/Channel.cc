@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: Channel.cc,v 1.8 2003-03-30 02:55:40 jeekay Exp $
+ * $Id: Channel.cc,v 1.9 2003-11-02 16:47:10 jeekay Exp $
  */
 
 #include	<new>
@@ -37,7 +37,7 @@
 #include	"server.h"
 #include	"ConnectionManager.h"
 
-const char Channel_cc_rcsId[]	= "$Id: Channel.cc,v 1.8 2003-03-30 02:55:40 jeekay Exp $" ;
+const char Channel_cc_rcsId[]	= "$Id: Channel.cc,v 1.9 2003-11-02 16:47:10 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -57,6 +57,7 @@ const Channel::modeType Channel::MODE_p     = 0x0040 ;
 const Channel::modeType Channel::MODE_s     = 0x0080 ;
 const Channel::modeType Channel::MODE_r     = 0x0100 ;
 const Channel::modeType Channel::MODE_t     = 0x0200 ;
+const Channel::modeType Channel::MODE_T     = 0x0400 ;
 const Channel::modeType Channel::MODE_k     = 0x1000 ;
 const Channel::modeType Channel::MODE_l     = 0x2000 ;
 
@@ -301,6 +302,12 @@ if(polarity)	setMode ( MODE_S );
 else		removeMode( MODE_S );
 }
 
+void Channel::onModeT( bool polarity )
+{
+if(polarity)	setMode ( MODE_T );
+else		removeMode( MODE_T );
+}
+
 void Channel::onModec( bool polarity )
 {
 if(polarity)	setMode ( MODE_c );
@@ -491,6 +498,7 @@ string argString ;
 
 if( modes & MODE_C )	modeString += 'C' ;
 if( modes & MODE_S )	modeString += 'S' ;
+if( modes & MODE_T )	modeString += 'T' ;
 if( modes & MODE_c )	modeString += 'c' ;
 if( modes & MODE_i )	modeString += 'i' ;
 if( modes & MODE_m )	modeString += 'm' ;

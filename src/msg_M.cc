@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: msg_M.cc,v 1.6 2003-03-30 02:55:40 jeekay Exp $
+ * $Id: msg_M.cc,v 1.7 2003-11-02 16:47:10 jeekay Exp $
  */
 
 #include	<new>
@@ -37,7 +37,7 @@
 #include	"StringTokenizer.h"
 #include	"ServerCommandHandler.h"
 
-const char msg_M_cc_rcsId[] = "$Id: msg_M.cc,v 1.6 2003-03-30 02:55:40 jeekay Exp $" ;
+const char msg_M_cc_rcsId[] = "$Id: msg_M.cc,v 1.7 2003-11-02 16:47:10 jeekay Exp $" ;
 const char misc_h_rcsId[] = __MISC_H ;
 const char events_h_rcsId[] = __EVENTS_H ;
 const char server_h_rcsId[] = __SERVER_H ;
@@ -176,6 +176,9 @@ for( const char* modePtr = Param[ 2 ] ; *modePtr ; ++modePtr )
 			break;
 		case 'S':
 			theServer->OnChannelModeS( theChan, polarity, theUser ) ;
+			break;
+		case 'T':
+			theServer->OnChannelModeT( theChan, polarity, theUser ) ;
 			break;
 		case 'c':
 			theServer->OnChannelModec( theChan, polarity, theUser ) ;
