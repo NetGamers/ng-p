@@ -1,3 +1,6 @@
+2003-02-21 1.2.06 Jeekay
+* Bumped version to 1.2.06
+
 2003-02-05 1.2.05 Jeekay
 * BAN now devoices clients if a ban level 25-74 is set
 * If a voicee is ever devoiced by us, deop the voicer

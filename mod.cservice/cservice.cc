@@ -804,7 +804,7 @@ else if(Command == "VERSION")
 	xClient::DoCTCP(theClient, CTCP,
 		"NetGamers P10 Channel Services II ["
 		__DATE__ " " __TIME__
-		"] Release 1.2.05");
+		"] Release 1.2.06");
 	}
 else if(Command == "DCC")
 	{
