@@ -1,5 +1,5 @@
 #ifndef __CSERVICECLASS_H
-#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.4 2002-03-25 03:35:36 jeekay Exp $"
+#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.5 2002-03-31 20:51:42 morpheus Exp $"
 
 #include	"EConfig.h"
 #include	"sqlChannel.h"
@@ -57,6 +57,7 @@ public:
 	unsigned int connectCheckFreq;
 	unsigned int connectRetry;
 	unsigned int limitCheckPeriod;
+	unsigned int loginDelay;
 
 	void checkDbConnectionStatus();
 	string pendingPageURL;

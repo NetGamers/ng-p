@@ -12,6 +12,7 @@
 #include	<ctime>
 #include	<cstdlib>
 #include	<cstring>
+#include        <stdarg.h>
 
 #include	"client.h"
 #include  	"cservice.h"
@@ -271,6 +272,7 @@ connectCheckFreq = atoi((cserviceConfig->Require( "connection_check_frequency" )
 connectRetry = atoi((cserviceConfig->Require( "connection_retry_total" )->second).c_str());
 limitCheckPeriod = atoi((cserviceConfig->Require( "limit_check" )->second).c_str());
 nickNickServ = cserviceConfig->Require("nickservNick")->second;
+loginDelay = atoi((cserviceConfig->Require( "login_delay" )->second).c_str());
 
 userHits = 0;
 userCacheHits = 0;

@@ -12,7 +12,7 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 #include	"events.h"
-const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.9 2002-02-18 02:59:06 jeekay Exp $" ;
+const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.10 2002-03-31 20:51:41 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -34,6 +34,18 @@ if( st.size() < 3 )
 	Usage(theClient);
 	return true;
 	}
+
+
+/*
+ * Are we allowing logins yet?
+ */
+unsigned int loginTime = bot->getUplink()->getStartTime() + bot->loginDelay;
+if(loginTime >= (unsigned int)bot->currentTime())
+{
+	bot->Notice(theClient, "AUTHENTICATION FAILED as %s. (Unable to login during reconnection, please try again in %i seconds)",
+		st[1].c_str(), (loginTime - bot->currentTime()));
+	return false;
+}
 
 /*
  * Allow the login ONLY after burst
