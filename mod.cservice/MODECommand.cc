@@ -3,7 +3,7 @@
  *
  * 20020201 - Jeekay - Initial Version
  *
- * $Id: MODECommand.cc,v 1.8 2003-03-30 12:07:00 jeekay Exp $
+ * $Id: MODECommand.cc,v 1.9 2003-10-30 16:49:52 jeekay Exp $
  */
 
 #include <string>
@@ -14,7 +14,7 @@
 #include "levels.h"
 #include "ELog.h"
 
-const char MODECommand_cc_rcsId[] = "$Id: MODECommand.cc,v 1.8 2003-03-30 12:07:00 jeekay Exp $";
+const char MODECommand_cc_rcsId[] = "$Id: MODECommand.cc,v 1.9 2003-10-30 16:49:52 jeekay Exp $";
 
 namespace gnuworld
 {
@@ -67,6 +67,16 @@ if(level < level::mode)
 	bot->Notice(theClient, "Sorry, you have insufficient access to perform that command");
 	return false;
 	} // if(level < level::mode)
+
+
+/* Check we are actually opped first */
+ChannelUser *tmpBotUser = theChan->findUser(bot->getInstance());
+if(!tmpBotUser || !tmpBotUser->getMode(ChannelUser::MODE_O)) {
+	bot->Notice(theClient, "I'm not opped in %s.",
+		theChan->getName().c_str()
+		);
+	return false;
+}
 
 /*************************************
  * P A R S I N G   D O N E   H E R E *
