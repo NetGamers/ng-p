@@ -1,9 +1,10 @@
 #ifndef __NICKSERVCLASS_H
-#define __NICKSERVCLASS_H "$Id: nickservClass.h,v 1.4 2002-04-02 02:57:50 jeekay Exp $"
+#define __NICKSERVCLASS_H "$Id: nickservClass.h,v 1.5 2002-04-03 20:41:52 jeekay Exp $"
 
 #include	"libpq-int.h"
 #include	"nsUser.h"
 #include	"juUser.h"
+#include	<set>
 
 namespace gnuworld
 {
