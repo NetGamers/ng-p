@@ -1,0 +1,18 @@
+Make ban 25-74 stop voice from channel ops
+(?) Make suspended people not able to use recover
+Make suspended people not get auto-invited
+Make P not do this on /msg P op #chan:
+[01:09:28] <Gen> [02:09:18] *** P sets mode: +o Gen
+[01:09:28] <Gen> [02:09:18] -P- You are not allowed to be opped on #gktest01
+[01:09:28] <Gen> [02:09:18] *** P sets mode: -o Gen
+
+1. Error?! When STRICTOP is ON autovoice doesn't work, if possible, can this be changed ?
+2. purge nick ( /msg p purge nick reason ) would clear all access/purge all owned channels and delete the nick in the db (admin cmd - not important as we now have a user function like that on the web)
+3. Lots of ppl wants the description as long as topic (250 chars).. I know this will require a db change and all current descriptions will be erased, but I think ppl will be happy if it's settled.
+7. Suggestion: The possibility to ban a *registered* nick from a channel, so the person cannot enter if he/she is logged in to P. (NBAN - Level 400+)
+8. Correction: /msg p auth/login answer.. Full syntax instead of just /msg p@cservice.planetarion.com
+10. Suggestion: Channel Transfer cmd.. ie. /msg p chowner #chan <oldowner> <newowner>
+13. Suggestion: A level 500 cmd to clear lvl specified users with prefix -min & -max (ie. "/msg p remuser #chan -min 100 -max 100" would clear ALL users added in the specified channel with lvl 100 (lvl 500 of course wouldn't be allowed to remove himself, giving a syntax -min 0 -max 500 would clear from 0-499)
+14. Suggestion: StrictVOICE option.. same terms as StrictOP only what regards to voiced users only being allowed voice if added to the channel with minimum lvl 25 
+15. Suggestion: Mode change via P ( ie. /msg p mode #chan +i )
+17. Add a functiuon that would allow channel owners to hide their channel's access list from those not on it (/msg p access #chan */-min/-max etc.)
