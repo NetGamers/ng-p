@@ -12,7 +12,7 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 #include	"events.h"
-const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.6 2002-01-17 21:13:33 mrbean Exp $" ;
+const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.7 2002-01-25 01:01:51 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -315,7 +315,16 @@ for (autoOpVectorType::const_iterator resultPtr = autoOpVector.begin();
 	if(!tmpChanUser)
 		{
 		#ifdef FEATURE_INVITE
-		if ( resultPtr->flags & sqlLevel::F_AUTOINVITE )
+		int isSuspended = 0;
+		sqlChannel* curChan = bot->getChannelRecord(netChan->getName());
+		sqlLevel* curLevel = bot->getLevelRecord(theUser, curChan);
+		isSuspended = curLevel->getSuspendExpire();
+		if(isSuspended)
+			{
+			bot->Notice(theClient, "You have not been invited to %s as your channel access has been suspended.", netChan->getName().c_str());
+			continue;
+			}
+		if ( resultPtr->flags & sqlLevel::F_AUTOINVITE)
 			{
 			bot->Invite(theClient, netChan->getName());
 			}

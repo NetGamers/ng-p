@@ -1,6 +1,6 @@
 Make ban 25-74 stop voice from channel ops
 (?) Make suspended people not able to use recover
-Make suspended people not get auto-invited
+/GK/Make suspended people not get auto-invited
 Make P not do this on /msg P op #chan:
 [01:09:28] <Gen> [02:09:18] *** P sets mode: +o Gen
 [01:09:28] <Gen> [02:09:18] -P- You are not allowed to be opped on #gktest01
