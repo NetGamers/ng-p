@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.14 2002-08-01 21:48:40 jeekay Exp $" ;
+const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.15 2002-09-14 14:48:26 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -94,7 +94,7 @@ int oLevel;
 if(!officialChan) oLevel = 0;
 else oLevel = bot->getEffectiveAccessLevel(theUser, officialChan, false);
 
-if ( (0 == level) && (0 == cLevel) && (0 == oLevel) ) 
+if ( (0 == level) && (100 > cLevel) && (0 == oLevel) ) 
 	{
 	bot->Notice(theClient, 
 		bot->getResponse(tmpUser,
