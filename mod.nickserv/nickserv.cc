@@ -23,7 +23,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.31 2002-04-02 02:57:32 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.32 2002-04-12 22:28:25 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -491,10 +491,9 @@ autokillQuery << "SELECT lower(user_name) FROM users WHERE (flags & "
 statusQuery = SQLDb->Exec(autokillQuery.str());
 delete[] autokillQuery.str();
 
+autoKillList.clear();
 for(int i = 0; i < SQLDb->Tuples(); i++)
-	{
 	autoKillList.insert(SQLDb->GetValue(i, 0));
-	}
 }
 
 bool nickserv::checkUser(nsUser* tmpUser)
@@ -800,8 +799,9 @@ for(killIterator pos = KillingQueue.begin(); pos != KillingQueue.end(); )
 
 gettimeofday(&endTime, NULL);
 
-logDebugMessage("Processed: %d; Warnings: %d; Kills: %d; Duration: %d ms",
-	iterations, warnings, kills, (endTime.tv_sec - startTime.tv_sec) * 1000 + (endTime.tv_usec - startTime.tv_usec) / 1000);
+logDebugMessage("Processed: %d; Warnings: %d; Kills: %d; Enabled: %d; Duration: %d ms",
+	iterations, warnings, kills, autoKillList.size(),
+	(endTime.tv_sec - startTime.tv_sec) * 1000 + (endTime.tv_usec - startTime.tv_usec) / 1000);
 
 return;
 }
