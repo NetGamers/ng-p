@@ -23,7 +23,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.15 2002-02-04 05:55:35 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.16 2002-02-05 02:27:56 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -90,6 +90,8 @@ adminRefreshTime = atoi((conf.Require("adminRefreshTime")->second).c_str());
 
 jupeNumericStart = atoi((conf.Require("jupeNumericStart")->second).c_str());
 jupeNumericCount = atoi((conf.Require("jupeNumericCount")->second).c_str());
+jupeExpireTime = atoi((conf.Require("jupeExpireTime")->second).c_str());
+jupeDefaultLength = atoi((conf.Require("jupeDefaultLength")->second).c_str());
 
 string Query = "host=" + confSqlHost + " dbname=" + confSqlDb + " port=" + confSqlPort + " user=" +confSqlUser+ " password="+confSqlPass;
 
@@ -121,9 +123,6 @@ else
 		<< SQLDb->getPID()
 		<< endl ;
 	}
-
-
-authLen = atoi(conf.Require("authLen")->second.c_str());
 
 
 // Be sure to use all capital letters for the command name
@@ -228,6 +227,7 @@ theServer->RegisterEvent( EVT_FORCEDEAUTH, this );
 processQueueID = theServer->RegisterTimer(::time(NULL) + timeToLive, this, NULL);
 refreshAdminID = theServer->RegisterTimer(::time(NULL) + adminRefreshTime, this, NULL);
 dbConnCheckID  = theServer->RegisterTimer(::time(NULL) + dbConnCheckTime, this, NULL);
+jupeExpireID = theServer->RegisterTimer(::time(NULL) + jupeExpireTime, this, NULL);
 
 dbConnRetries = 0;
 
@@ -505,6 +505,12 @@ int nickserv::OnTimer(xServer::timerID timer_id, void* data)
 		checkDBConnectionStatus();
 		dbConnCheckID = MyUplink->RegisterTimer(::time(NULL) + dbConnCheckTime, this, NULL);
 		}
+	
+	if(timer_id == jupeExpireID)
+		{
+		checkJupeExpire();
+		jupeExpireID = MyUplink->RegisterTimer(::time(NULL) + jupeExpireTime, this, NULL);
+		}
 
 return true;
 }
@@ -696,9 +702,11 @@ void nickserv::initialiseJupeNumerics( void )
 		}
 }
 
-bool nickserv::jupeNick( string theNick, string theReason = "Juped Nick" )
+bool nickserv::jupeNick( string theNick, string theReason = "Juped Nick", time_t duration = 0 )
 {
 	elog << "nickserv::jupeNick> Juping nick " << theNick << endl;
+	
+	if(0 == duration) { duration = jupeDefaultLength; }
 	
 	// Check this user does not already exist here
 	for(jupeIteratorType pos = jupedNickList.begin(); pos != jupedNickList.end(); ++pos)
@@ -712,7 +720,7 @@ bool nickserv::jupeNick( string theNick, string theReason = "Juped Nick" )
 		{
 		if(NULL == pos->second)
 			{ // We have found a free numeric!
-			juUser* theUser = new juUser(theNick, pos->first, ::time(NULL)+(60*15), theReason);
+			juUser* theUser = new juUser(theNick, pos->first, ::time(NULL), ::time(NULL)+duration, theReason);
 			pos->second = theUser;
 			
 			strstream outNick;
@@ -722,12 +730,6 @@ bool nickserv::jupeNick( string theNick, string theReason = "Juped Nick" )
 							<< " :" << theReason << ends;
 			Write(outNick.str());
 			delete[] outNick.str();
-			
-			/*strstream outMode;
-			outMode << charYY << pos->first << " M "
-							<< theNick << " :+id" << ends;
-			Write(outMode.str());
-			delete[] outMode.str();*/
 			
 			Channel* theChan = Network->findChannel(debugChan);
 			if(theChan)
@@ -750,7 +752,7 @@ bool nickserv::removeJupeNick( string theNick, string theReason = "End Of Jupe" 
 	for(jupeIteratorType pos = jupedNickList.begin(); pos != jupedNickList.end(); ++pos)
 		{
 		juUser* theUser = pos->second;
-		if(theUser && string_lower(theUser->getNickName()) == string_lower(theNick))
+		if(theUser && (string_lower(theUser->getNickName()) == string_lower(theNick)))
 			{ // This is our nick
 			strstream outQuit;
 			outQuit << charYY << pos->first << " Q :" << theReason << ends;
@@ -763,6 +765,36 @@ bool nickserv::removeJupeNick( string theNick, string theReason = "End Of Jupe" 
 			} // Right nick?
 		} // Iteration
 	return false;
+}
+
+juUser* nickserv::findJupeNick( string theNick )
+{
+	for(jupeIteratorType pos = jupedNickList.begin(); pos != jupedNickList.end(); ++pos)
+		{
+		juUser* theUser = pos->second;
+		if(theUser && (string_lower(theUser->getNickName()) == string_lower(theNick)))
+			{ return theUser; }
+		}
+	return NULL;
+}
+
+void nickserv::checkJupeExpire( void )
+{
+	time_t timeNow = ::time(NULL);
+	for(jupeIteratorType pos = jupedNickList.begin(); pos != jupedNickList.end(); ++pos)
+		{
+		juUser* theUser = pos->second;
+		if(theUser && (timeNow > *(theUser->getExpires())))
+			{
+			strstream outQuit;
+			outQuit << charYY << pos->first << " Q :Jupe Expired" << ends;
+			Write(outQuit.str());
+			delete[] outQuit.str();
+			
+			delete theUser;
+			pos->second = NULL;
+			}
+		}
 }
 
 void nickserv::checkDBConnectionStatus( void )

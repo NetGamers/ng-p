@@ -14,7 +14,7 @@ class juUser
 {
 
 public:
-	juUser(string theNick, string theNumeric, time_t expires, string theReason);
+	juUser(string theNick, string theNumeric, time_t set, time_t expires, string theReason);
 	
 	virtual ~juUser();
 	
@@ -24,8 +24,11 @@ public:
 	inline const string getNumeric( void ) const
 		{ return _Numeric; }
 	
-	inline const time_t getExpires( void ) const
-		{ return _Expires; }
+	inline const time_t* getSet( void ) const
+		{ return &_Set; }
+	
+	inline const time_t* getExpires( void ) const
+		{ return &_Expires; }
 	
 	inline const string getReason( void ) const
 		{ return _Reason; }
@@ -33,6 +36,7 @@ public:
 protected:
 	string _NickName;
 	string _Numeric;
+	time_t _Set;
 	time_t _Expires;
 	string _Reason;
 

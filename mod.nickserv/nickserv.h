@@ -1,6 +1,6 @@
 
 #ifndef __NICKSERV_H
-#define __NICKSERV_H "$Id: nickserv.h,v 1.7 2002-02-04 04:45:34 jeekay Exp $"
+#define __NICKSERV_H "$Id: nickserv.h,v 1.8 2002-02-05 02:27:56 jeekay Exp $"
 
 
 #include	<string>
@@ -94,9 +94,10 @@ protected:
 	int     adminRefreshTime;
 	
 	// How often do we kill juped nicks
-	unsigned int jupeRefreshTime;
 	unsigned int jupeNumericStart;
 	unsigned int jupeNumericCount;
+	unsigned int jupeExpireTime;
+	unsigned int jupeDefaultLength;
 	
 	// DB connection times
 	int dbConnCheckTime;
@@ -216,8 +217,10 @@ public:
 	
 	/* How to jupe nicks */
 	void initialiseJupeNumerics( void );
-	bool jupeNick( string theNick, string theReason = "Juped Nick" );
+	bool jupeNick( string theNick, string theReason = "Juped Nick", time_t duration = 0 );
 	bool removeJupeNick( string theNick, string theReason = "End Of Jupe" );
+	juUser* findJupeNick( string theNick );
+	void checkJupeExpire( void );
 	
 	// Check the DB connection is ok
 	void checkDBConnectionStatus( void );
@@ -289,8 +292,6 @@ protected:
 	 */
 	commandMapType		commandMap ;
 	
-	unsigned int		authLen;
-	
 	killQueue		KillingQueue;
 
 	adminListType adminList;
@@ -300,6 +301,7 @@ protected:
 	xServer::timerID processQueueID;
 	xServer::timerID refreshAdminID;
 	xServer::timerID dbConnCheckID;
+	xServer::timerID jupeExpireID;
 	
 	// All our DB config information
 	string confSqlHost;
