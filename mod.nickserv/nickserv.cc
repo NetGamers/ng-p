@@ -23,7 +23,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.28 2002-04-01 22:27:10 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.29 2002-04-02 02:14:52 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -481,31 +481,28 @@ if( !isOnChannel( theChan->getName() ) )
 return xClient::Kick( theChan, theClient, reason ) ;
 }
 
+void nickserv::refreshAutoKillList( void )
+{
+ExecStatusType statusQuery;
+strstream autokillQuery;
+autokillQuery << "SELECT user_name FROM users WHERE (flags & "
+	<< sqlUser::F_AUTOKILL << " <> 0)"
+	<< ends;
+statusQuery = SQLDb->Exec(autokillQuery.str());
+delete[] autokillQuery.str();
+
+for(int i = 0; i < SQLDb->Tuples(); i++)
+	{
+	autoKillList.insert(SQLDb->GetValue(i, 0));
+	elog << "Autokill Nick: " << SQLDb->GetValue(i, 0) << endl;
+	}
+}
+
 bool nickserv::checkUser(nsUser* tmpUser)
 {
-unsigned short int userFlags;
+autoKillListType::const_iterator ptr = autoKillList.find(tmpUser->getNickName());
 
-ExecStatusType status;
-strstream s;
-s << "SELECT id,user_name,flags from Users Where lower(user_name) = '"
-	    << escapeSQLChars(string_lower(tmpUser->getNickName())) << "'" << ends;
-status = SQLDb->Exec(s.str());
-
-delete[] s.str();
-
-if(PGRES_TUPLES_OK == status)
-	{
-	if(SQLDb->Tuples() > 0)
-		{
-		  userFlags = atoi(SQLDb->GetValue(0, 2));
-		  return userFlags & NS_F_AUTOKILL;
-		}
-	return false;
-	}
-elog << "nickserv::checkUser> Query error : "
-	<< SQLDb->ErrorMessage()
-	<< endl;
-return false;
+return (ptr == autoKillList.end());
 }
 
 void nickserv::authUser(iClient* tmpClient, const string& authNick)
@@ -711,6 +708,9 @@ void nickserv::processKillQueue( void )
 timeval startTime, endTime;
 
 gettimeofday(&startTime, NULL);
+
+// Initialise our autokill list
+refreshAutoKillList();
 
 logDebugMessage("Processing kill queue - %d entr%s.",
 	KillingQueue.size(), (KillingQueue.size() == 1) ? ("y") : ("ies"));

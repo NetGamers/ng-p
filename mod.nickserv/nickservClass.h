@@ -1,5 +1,5 @@
 #ifndef __NICKSERVCLASS_H
-#define __NICKSERVCLASS_H "$Id: nickservClass.h,v 1.2 2002-04-01 18:31:28 jeekay Exp $"
+#define __NICKSERVCLASS_H "$Id: nickservClass.h,v 1.3 2002-04-02 02:14:52 jeekay Exp $"
 
 #include	"libpq-int.h"
 #include	"nsUser.h"
@@ -48,6 +48,9 @@ protected:
 	// This is where we store the people are are going to kill
 	typedef map<string, nsUser*> killQueue;
 	typedef killQueue::iterator killIterator;
+
+	// This is the type where we store the current DB users with autokill set
+	typedef set<string,eqstr> autoKillListType;
 
 	// Lists of juped nicks
 	typedef map<string, juUser*> jupeNickType;
@@ -212,6 +215,9 @@ public:
 	// Get NS admin access level
 	int getAdminAccessLevel( iClient* );
 	
+	// Fill in the list of autokillers
+	void refreshAutoKillList( void );
+	
 	// Process kill queue
 	void processKillQueue( void );
 	
@@ -283,6 +289,8 @@ protected:
 	killQueue		KillingQueue;
 
 	jupeNickType jupedNickList;
+	
+	autoKillListType autoKillList;
 	
 	xServer::timerID processQueueID;
 	xServer::timerID dbConnCheckID;

@@ -1,12 +1,13 @@
 
 #ifndef __NICKSERV_H
-#define __NICKSERV_H "$Id: nickserv.h,v 1.15 2002-03-19 19:59:37 jeekay Exp $"
+#define __NICKSERV_H "$Id: nickserv.h,v 1.16 2002-04-02 02:14:52 jeekay Exp $"
 
 
 #include	<string>
 #include	<vector>
 #include	<map>
-#include        <iomanip>
+#include	<iomanip>
+#include	<set>
 
 #include	<cstdio>
 
