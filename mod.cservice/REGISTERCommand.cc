@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: REGISTERCommand.cc,v 1.1 2002-01-14 23:14:20 morpheus Exp $
+ * $Id: REGISTERCommand.cc,v 1.2 2002-02-01 00:01:42 jeekay Exp $
  */
 
 #include	<string>
@@ -21,7 +21,7 @@
 #include	"Network.h"
 #include	"responses.h"
 
-const char REGISTERCommand_cc_rcsId[] = "$Id: REGISTERCommand.cc,v 1.1 2002-01-14 23:14:20 morpheus Exp $" ;
+const char REGISTERCommand_cc_rcsId[] = "$Id: REGISTERCommand.cc,v 1.2 2002-02-01 00:01:42 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -46,6 +46,29 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 
 	sqlUser* theUser = bot->isAuthed(theClient, true);
 	if (!theUser) return false;
+	
+	// Check the channel is not currently in the database either
+	strstream chanQuery;
+	chanQuery << "SELECT id FROM channels WHERE lower(name) = '"
+						<< escapeSQLChars(st[1]) << "'" << ends;
+#ifdef LOG_SQL
+	elog << "REGISTER::sqlQuery> " << chanQuery.str() << endl;
+#endif
+	ExecStatusType status = bot->SQLDb->Exec(chanQuery.str());
+	delete[] chanQuery.str();
+	
+	if( PGRES_TUPLES_OK != status )
+		{
+		elog << "REGISTER::sql> SQL Error: "
+				 << bot->SQLDb->ErrorMessage() << endl;
+		return false;
+		}
+	
+	if(bot->SQLDb->Tuples() > 0)
+		{
+		bot->Notice(theClient, "%s is already in the database", st[1].c_str());
+		return false;
+		}
 
  	/*
 	 *  First, check the channel isn't already registered.
@@ -126,7 +149,6 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 	 */
 
 	strstream checkQuery;
-	ExecStatusType status;
 
 	checkQuery 	<< "SELECT id FROM channels WHERE "
 				<< "registered_ts = 0 AND lower(name) = '"
@@ -151,7 +173,6 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 		 */
 
 		strstream reclaimQuery;
-		ExecStatusType status;
 
 		reclaimQuery<< "UPDATE channels SET registered_ts = now()::abstime::int4,"
 					<< " last_updated = now()::abstime::int4, "
