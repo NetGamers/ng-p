@@ -1,3 +1,11 @@
+2003-01-15 18:36  jeekay
+
+	* CVSROOT/loginfo (1.11): Hmm
+
+2003-01-15 18:27  jeekay
+
+	* mod.cservice/Test (1.1): Test
+
 2003-01-15 18:23  jeekay
 
 	* CVSROOT/loginfo (1.10): Final commit hopefully.. testing coming
@@ -2064,7 +2072,7 @@
 
 	* mod.cservice/: .cvsignore (1.1), FORCECommand.cc (1.2),
 	Makefile.in (1.2): Backed out NOFORCE mod to FORCECommand as it
-	didnt even compile :) Added .cvsignore Changed $Id: ChangeLog,v 1.6 2003-01-15 18:24:35 jeekay Exp $ take in
+	didnt even compile :) Added .cvsignore Changed $Id: ChangeLog,v 1.7 2003-01-15 18:36:51 jeekay Exp $ take in
 	Makefile.in to *be* .in and not .am
 
 2002-01-15 18:37  jeekay
