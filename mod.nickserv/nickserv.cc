@@ -22,7 +22,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.7 2002-01-28 22:20:05 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.8 2002-01-29 23:41:18 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -118,8 +118,8 @@ authLen = atoi(conf.Require("authLen")->second.c_str());
 
 // Be sure to use all capital letters for the command name
 
-RegisterCommand(new LOGINCommand( this, "LOGIN", "<password>")) ;
-RegisterCommand(new RECOVERCommand( this, "RECOVER", "<username> <password>"));
+//RegisterCommand(new LOGINCommand( this, "LOGIN", "<password>")) ;
+//RegisterCommand(new RECOVERCommand( this, "RECOVER", "<username> <password>"));
 RegisterCommand(new STATSCommand( this, "STATS", "<stat>"));
 
 // Load all the admin names and levels
