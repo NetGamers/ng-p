@@ -8,6 +8,8 @@
 #include	<time.h>
 #include	<stdarg.h>
 
+#include	"libpq++.h"
+
 #include	"client.h"
 #include	"iClient.h"
 #include	"EConfig.h"
@@ -16,14 +18,13 @@
 #include	"misc.h"
 #include	"Network.h"
 #include	"ELog.h"
-#include	"libpq++.h"
+#include	"server.h"
+
 #include	"nickserv.h"
 #include	"nickservCommands.h"
 #include	"nsUser.h"
-#include	"server.h"
 
-const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.39 2003-10-11 14:16:22 jeekay Exp $" ;
+#include	"../mod.cservice/sqlUser.h"
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -43,7 +44,6 @@ namespace gnuworld
 
 using std::cout ;
 using std::endl ; 
-using std::ends ;
 using std::string ;
 using std::vector ;
 
@@ -484,9 +484,10 @@ void nickserv::refreshAutoKillList( void )
 {
 ExecStatusType statusQuery;
 stringstream autokillQuery;
-autokillQuery << "SELECT lower(user_name) FROM users WHERE (flags & "
-	<< sqlUser::F_AUTOKILL << " <> 0)"
-	<< ends;
+autokillQuery	<< "SELECT lower(user_name) FROM users WHERE (flags & "
+		<< sqlUser::F_AUTOKILL
+		<< " <> 0)"
+		;
 statusQuery = SQLDb->Exec(autokillQuery.str().c_str());
 
 autoKillList.clear();
@@ -571,15 +572,17 @@ bool nickserv::jupeNick( string theNick, string hostMask, string theReason, time
 			outNick << charYY << " N " << theNick
 				<< " 1 31337 juped " << theNick << ".nick.name +idk B]AAAB "
 				<< charYY << pos->first
-				<< " :" << theReason << ends;
+				<< " :" << theReason
+				;
 			Write(outNick);
 			
 			Channel* theChan = Network->findChannel(debugChan);
 			if(theChan)
 				{
 				stringstream outJoin;
-				outJoin << charYY << pos->first << " J "
-								<< debugChan << ends;
+				outJoin	<< charYY << pos->first << " J "
+					<< debugChan
+					;
 				Write(outJoin);
 				} // Debugchan exists
 			return true;
@@ -597,7 +600,7 @@ bool nickserv::removeJupeNick( string theNick, string theReason )
 		if(theUser && (string_lower(theUser->getNickName()) == string_lower(theNick)))
 			{ // This is our nick
 			stringstream outQuit;
-			outQuit << charYY << pos->first << " Q :" << theReason << ends;
+			outQuit << charYY << pos->first << " Q :" << theReason;
 			Write(outQuit);
 			
 			delete theUser;
@@ -628,7 +631,7 @@ void nickserv::checkJupeExpire( void )
 		if(theUser && (timeNow > *(theUser->getExpires())))
 			{
 			stringstream outQuit;
-			outQuit << charYY << pos->first << " Q :Jupe Expired" << ends;
+			outQuit << charYY << pos->first << " Q :Jupe Expired";
 			Write(outQuit);
 			
 			delete theUser;
@@ -685,8 +688,10 @@ int nickserv::getAdminAccessLevel( iClient* theClient )
 sqlChannel* csChan = myCService->getChannelRecord(debugChan);
 if(!csChan)
 	{ // NS debug chan isnt registered
-	elog << "nickserv> " << debugChan.c_str()
-		<< " isnt registered with CService." << endl;
+	elog	<< "nickserv> "
+		<< debugChan.c_str()
+		<< " isn't registered with CService."
+		<< endl;
 	return false;
 	}
 
@@ -770,7 +775,7 @@ for(killIterator pos = KillingQueue.begin(); pos != KillingQueue.end(); )
 				s << getCharYY()
 					<< " D "
 					<< tmpClient->getCharYYXXX()
-					<< " :" << getNickName() << " [NickServ] AutoKill" << ends;
+					<< " :" << getNickName() << " [NickServ] AutoKill";
 			Write(s);
 					
 			// Remove GNUworld data about user
