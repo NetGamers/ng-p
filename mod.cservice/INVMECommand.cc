@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char INVMECommand_cc_rcsId[] = "$Id: INVMECommand.cc,v 1.1 2002-01-14 23:14:17 morpheus Exp $" ;
+const char INVMECommand_cc_rcsId[] = "$Id: INVMECommand.cc,v 1.2 2002-05-28 18:54:33 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -18,29 +18,19 @@ using namespace gnuworld;
 bool INVMECommand::Exec( iClient* theClient, const string& Message )
 { 
 	bot->incStat("COMMANDS.INVME");
-        sqlUser* theUser = bot->isAuthed(theClient, true);
-        if (!theUser) return false;
+	
+	sqlUser* theUser = bot->isAuthed(theClient, true);
+	if (!theUser) return false;
 
-        sqlChannel* admChan = bot->getChannelRecord("*");
-
-        int admLevel = bot->getAccessLevel(theUser, admChan);
-        if (admLevel < level::invme)
-	        {
-	        bot->Notice(theClient,
-	                bot->getResponse(theUser,
-	                        language::insuf_access,
-	                	string("Sorry, you have insufficient access to perform that command.")));
+	int admLevel = bot->getAdminAccessLevel(theUser);
+	if (admLevel < level::invme)
+		{
+		bot->Notice(theClient, "Sorry, you have insufficient access to perform that command.");
 		return false;
 		}
 
-        strstream s;
+	bot->Invite(theClient, bot->relayChan);
 
-	s << bot->getCharYYXXX() << " I " << theClient->getNickName() << " "
-	  << bot->relayChan << ends;
-
-	bot->Write( s ) ;
-	delete[] s.str() ;
-		  
 	return true ;
 } 
 
