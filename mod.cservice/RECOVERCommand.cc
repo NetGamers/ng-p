@@ -12,7 +12,7 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 
-const char RECOVERCommand_cc_rcsId[] = "$Id: RECOVERCommand.cc,v 1.3 2002-01-28 22:14:55 jeekay Exp $" ;
+const char RECOVERCommand_cc_rcsId[] = "$Id: RECOVERCommand.cc,v 1.4 2002-01-29 23:53:35 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -42,7 +42,8 @@ if(!strcasecmp(theClient->getNickName(),st[1]))
 sqlUser* tmpUser = bot->isAuthed(theClient, false);
 if (tmpUser) 
 	{
-	if(strcasecmp(st[1],tmpUser->getUserName()))
+	iClient* target = Network->findNick(st[1]);
+	if(strcasecmp(st[1],tmpUser->getUserName()) && !(target->getMode(iClient::MODE_SERVICES)))
 		{
 		bot->Notice(theClient,
 			bot->getResponse(tmpUser, language::already_authed).c_str(),
@@ -166,7 +167,7 @@ if (theUser->getFlag(sqlUser::F_GLOBAL_SUSPEND))
  *  person.
  */
 iClient* tmpClient=Network->findNick(st[1]);
-if(tmpClient != NULL)
+if(tmpClient && !(tmpClient->getMode(iClient::MODE_SERVICES)))
 	{
 	strstream s; 
 	s       << bot->getCharYY()
