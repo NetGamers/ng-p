@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: PURGECommand.cc,v 1.12 2002-10-20 02:12:08 jeekay Exp $
+ * $Id: PURGECommand.cc,v 1.13 2004-01-17 17:43:31 jeekay Exp $
  */
 
 #include	<string>
@@ -22,7 +22,7 @@
 #include	"cservice_config.h"
 #include	"responses.h"
 
-const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.12 2002-10-20 02:12:08 jeekay Exp $" ;
+const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.13 2004-01-17 17:43:31 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -187,7 +187,23 @@ if(theChan->getFlag(sqlChannel::F_NOPURGE))
 { 
 	bot->Notice(theClient, "%s has NOPURGE set, so I'm not purging it.", theChan->getName().c_str()); 
 	return false; 
-} 
+}
+
+/* Don't purge LOCKED channels */
+if(theChan->getFlag(sqlChannel::F_LOCKED)) {
+	bot->Notice(theClient, "%s has LOCKED set, so I'm not purging it.",
+		theChan->getName().c_str()
+		);
+	return false;
+}
+
+/* Don't purge commented channels. */
+if(!theChan->getComment().empty()) {
+	bot->Notice(theClient, "%s is commented, so I'm not purging it.",
+		theChan->getName().c_str()
+		);
+	return false;
+}
 
 /*
  * Fetch some information about the owner of this channel, so we can
