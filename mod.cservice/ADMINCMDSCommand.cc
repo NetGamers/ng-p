@@ -4,7 +4,7 @@
  * (c) Copyright 2002 Rasmus Hansen (GK@panet)
  * Distributed under the GNU Public License
  *
- * $Id: ADMINCMDSCommand.cc,v 1.10 2002-05-29 04:16:41 jeekay Exp $
+ * $Id: ADMINCMDSCommand.cc,v 1.11 2002-05-29 19:33:01 jeekay Exp $
  */
 
 #include	<string>
@@ -14,7 +14,7 @@
 #include	"cservice.h"
 #include  "levels.h"
 
-const char ADMINCMDSCommand_cc_rcsId[] = "$Id: ADMINCMDSCommand.cc,v 1.10 2002-05-29 04:16:41 jeekay Exp $" ;
+const char ADMINCMDSCommand_cc_rcsId[] = "$Id: ADMINCMDSCommand.cc,v 1.11 2002-05-29 19:33:01 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -132,7 +132,6 @@ if(aLevel >= 1)
 	bot->Notice(theClient, "FORCE (chan)");
 	bot->Notice(theClient, "UNFORCE (chan)");
 	bot->Notice(theClient, "INFO (nick)");
-	bot->Notice(theClient, "NOTE SEND FORCE (nick) (text)");
 	bot->Notice(theClient, "STATS *");
 	bot->Notice(theClient, "STATUS *");
 	}
