@@ -10,7 +10,7 @@
 #include	"Network.h"
 #include	"cservice_config.h"
 
-const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.2 2002-01-16 19:05:22 morpheus Exp $" ;
+const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.3 2002-02-06 20:22:51 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -230,6 +230,7 @@ if (theChan->getFlag(sqlChannel::F_AUTOTOPIC)) flagsSet += "AUTOTOPIC ";
 if (theChan->getFlag(sqlChannel::F_AUTOJOIN)) flagsSet += "AUTOJOIN ";
 if (theChan->getFlag(sqlChannel::F_LOCKED)) flagsSet += "LOCKED ";
 if (theChan->getFlag(sqlChannel::F_NOFORCE)) flagsSet += "NOFORCE ";
+if (theChan->getFlag(sqlChannel::F_STRICTVOICE)) flagsSet += "STRICTVOICE ";
 if (theChan->getFlag(sqlChannel::F_FLOATLIM)) 
            { 
            strstream floatLim; 
