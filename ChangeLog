@@ -1,24 +1,800 @@
+2003-01-15 12:54  jeekay
+
+	* mod.cservice/: OFFICIALCommand.cc (1.2), SETCommand.cc (1.26),
+	cservice.cc (1.67): Added OFFICIAL LIST and added logging of SET
+	AUTOJOIN ON
+
+2003-01-14 21:52  jeekay
+
+	* mod.cservice/: ADMINCMDSCommand.cc (1.16), REHASHCommand.cc
+	(1.3), cservice.cc (1.66), cserviceClass.h (1.16): Minor cleanups
+	for OFFICIAL support
+
+2003-01-14 17:08  jeekay
+
+	* mod.cservice/: Makefile.am (1.16), Makefile.in (1.13),
+	OFFICIALCommand.cc (1.1), Updates (1.1), VERIFYCommand.cc (1.17),
+	constants.h (1.10), cservice.cc (1.65), cserviceClass.h (1.15),
+	cserviceCommands.h (1.17), levels.h (1.39), sqlUser.cc (1.15),
+	sqlUser.h (1.12): Altering of the custom verifies to be based on
+	OFFICIAL rather than #official.
+
+2003-01-09 23:04  jeekay
+
+	* mod.cservice/: STATUSCommand.cc (1.20), cservice.cc (1.64): Fixed
+	STATUS output for channels, removed some CTCP replies
+
+2002-12-10 16:52  jeekay
+
+	* mod.cservice/STATUSCommand.cc (1.19): Small patch to prevent
+	non-admins seeing the COMMENT flag on channels
+
+2002-11-25 00:14  jeekay
+
+	* mod.cservice/: cservice.cc (1.63), STATUSCommand.cc (1.18): Made
+	FLOATGRACE be functional again
+
+2002-11-23 07:27  jeekay
+
+	* mod.cservice/: SETCommand.cc (1.25), levels.h (1.38): Fixed SET
+	#CHAN INVISIBLE access bug
+
+2002-11-14 13:57  jeekay
+
+	* mod.cservice/Makefile.in (1.12), mod.nickserv/Makefile.in (1.11):
+	Makefile updates
+
+2002-11-09 20:39  jeekay
+
+	* mod.cservice/cservice.cc (1.62): Incremented version, maintained
+	ChangeLog
+
+2002-11-09 20:38  jeekay
+
+	* mod.cservice/UPDATEDBCommand.cc (1.6): Added logging for use of
+	UPDATEDB
+
+2002-11-05 00:24  jeekay
+
+	* mod.cservice/: ACCESSCommand.cc (1.8), ADDUSERCommand.cc (1.10),
+	SETCommand.cc (1.24), STATUSCommand.cc (1.17), cservice.cc (1.61),
+	sqlChannel.cc (1.8), sqlChannel.h (1.8): Bumped patchlevel to
+	1.2.00 - read ChangeLog for details. Added USERFLAGS '3', channel
+	flag INVISIBLE and COMMENTS to output of status for commented
+	channels.
+
+2002-11-01 21:30  jeekay
+
+	* mod.cservice/CHANINFOCommand.cc (1.22): Remove accidental paste
+	that broke CHANINFO
+
+2002-11-01 13:58  jeekay
+
+	* mod.cservice/TOPICCommand.cc (1.5): Small patch to tell people
+	how long the attempted topic string was
+
+2002-10-30 23:58  jeekay
+
+	* mod.cservice/sqlChannel.cc (1.7): Fix end-of-string bug that was
+	breaking sqlChannel commits
+
+2002-10-29 18:08  jeekay
+
+	* mod.cservice/STATUSCommand.cc (1.16): Remove silly spaces
+
+2002-10-29 18:01  jeekay
+
+	* mod.cservice/ACCESSCommand.cc (1.7): Lets try this again, this
+	time without broken logic
+
+2002-10-29 17:45  jeekay
+
+	* mod.cservice/CHANINFOCommand.cc (1.21): Added displaying of any
+	pertinent user flags in INFO user
+
+2002-10-29 16:16  jeekay
+
+	* mod.cservice/CHANINFOCommand.cc (1.20): Lets make comments
+	actually be comments mmmkay\!
+
+2002-10-29 16:13  jeekay
+
+	* mod.cservice/CHANINFOCommand.cc (1.19): Reformatting to be nont
+	utter shite
+
+2002-10-29 15:31  jeekay
+
+	* mod.cservice/ACCESSCommand.cc (1.6): Allow opers to see arbitrary
+	access lists
+
+2002-10-25 23:41  jeekay
+
+	* include/Channel.h (1.5), include/client.h (1.4), include/server.h
+	(1.5), src/Channel.cc (1.7), src/client.cc (1.4), src/msg_B.cc
+	(1.4), src/msg_M.cc (1.5), src/server.cc (1.5): Addition of code to
+	handle new channel mode +r
+
+2002-10-24 01:05  jeekay
+
+	* mod.cservice/: RECOVERCommand.cc (1.8), cservice.cc (1.60):
+	Updates to RECOVER to cater for multiple logins
+
+2002-10-23 20:49  jeekay
+
+	* mod.cservice/: CHANINFOCommand.cc (1.18), SETCommand.cc (1.23),
+	constants.h (1.9), sqlUser.cc (1.14), sqlUser.h (1.11): Removal of
+	Planetarion bits from info
+
+2002-10-20 18:05  jeekay
+
+	* bin/server_command_map (1.3): Allow us to handle /opmode tokens
+
+2002-10-20 17:49  jeekay
+
+	* mod.cservice/cservice.cc (1.59): Add 'COMMANDS' optoin to rehash
+	help
+
+2002-10-20 03:12  jeekay
+
+	* mod.cservice/: ACCESSCommand.cc (1.5), ADDUSERCommand.cc (1.9),
+	CHANINFOCommand.cc (1.17), COMMENTCommand.cc (1.8), DEBUGCommand.cc
+	(1.5), FORCECommand.cc (1.11), GETLEVELCommand.cc (1.1),
+	GLOBNOTICECommand.cc (1.4), GSUSPENDCommand.cc (1.6),
+	GUNSUSPENDCommand.cc (1.4), INVMECommand.cc (1.4),
+	MODINFOCommand.cc (1.7), Makefile.am (1.15), Makefile.in (1.11),
+	PURGECommand.cc (1.12), QUOTECommand.cc (1.2), REGISTERCommand.cc
+	(1.6), REHASHCommand.cc (1.2), REMIGNORECommand.cc (1.5),
+	REMOVEALLCommand.cc (1.7), REMUSERCommand.cc (1.7),
+	REMUSERIDCommand.cc (1.14), SAYCommand.cc (1.2), SCANCommand.cc
+	(1.6), SERVNOTICECommand.cc (1.2), SETCommand.cc (1.22),
+	SHUTDOWNCommand.cc (1.3), SUSPENDCommand.cc (1.6),
+	UNFORCECommand.cc (1.3), UNSUSPENDCommand.cc (1.6),
+	UPDATEDBCommand.cc (1.5), commands.sql (1.1), constants.h (1.8),
+	cservice.cc (1.58), cservice.h (1.9), cserviceClass.h (1.14),
+	cserviceCommands.h (1.16), levels.h (1.37), levels.h.save (1.2),
+	sql.h (1.1), sqlCommandLevel.cc (1.1), sqlCommandLevel.h (1.1):
+	Changed access control system to use dynamic tables instead of
+	statically coded levels.  Various cleanups here and there.  Changed
+	ACCESS to required access 1 to allow listing people in a channel. 
+	Added COMMANDS option to REHASH to allow re-reading of commands
+	from DB.  Added commands.sql with the table definition and contents
+	of the commands list.
+
+2002-10-19 21:57  jeekay
+
+	* mod.cservice/ADMINCMDSCommand.cc (1.15): Change ADMINCMDS to
+	reflect the changes in levels.h
+
+2002-10-19 21:53  jeekay
+
+	* mod.cservice/levels.h (1.36): Change level of commenting to *1
+
+2002-10-19 21:53  jeekay
+
+	* mod.cservice/levels.h (1.35): Change level of invme to *1
+
+2002-10-19 21:49  jeekay
+
+	* mod.cservice/: constants.h (1.7), cservice.cc (1.57),
+	cserviceClass.h (1.13): Implement a precache system so the burst
+	will stop being so stupidly slow
+
+2002-10-19 21:49  jeekay
+
+	* src/Channel.cc (1.6): More +x sanity in bans
+
+2002-10-19 21:07  jeekay
+
+	* mod.cservice/: BANCommand.cc (1.7), KICKCommand.cc (1.4),
+	SHUTDOWNCommand.cc (1.2): Various sanity changes, to deal with +x
+
+2002-10-19 21:06  jeekay
+
+	* src/Channel.cc (1.5): Minor changes to createBan() to work sanely
+	on +x users
+
+2002-10-19 20:25  jeekay
+
+	* include/iClient.h (1.4): Added a function to get the real
+	nickuserhost of a +x user
+
+2002-10-11 15:07  jeekay
+
+	* mod.nickserv/nickserv.cc (1.37): Added check for people that are
+	umode +r
+
+2002-10-11 15:07  jeekay
+
+	* mod.cservice/cservice.cc (1.56): Remove PostEvent as it was
+	causing cores
+
+2002-10-11 14:13  jeekay
+
+	* mod.cservice/: CHINFOCommand.cc (1.6), REMUSERIDCommand.cc
+	(1.13): Disabled ability to perform nick changes on logged in
+	users.
+
+2002-10-11 14:02  jeekay
+
+	* mod.cservice/: VERIFYCommand.cc (1.16), cservice.cc (1.55):
+	Removed a couple of lingering references to Planetarion
+
+2002-09-24 23:06  jeekay
+
+	* include/config.h (1.4): Change hidden host to netgamers instead
+	of undernet
+
+2002-09-24 21:06  jeekay
+
+	* mod.cservice/: ADDUSERCommand.cc (1.8), BANCommand.cc (1.6),
+	CHANINFOCommand.cc (1.16), CHINFOCommand.cc (1.5), JOINCommand.cc
+	(1.3), LOGINCommand.cc (1.16), NOTECommand.cc (1.12),
+	REMUSERIDCommand.cc (1.12), SETCommand.cc (1.21), STATUSCommand.cc
+	(1.15), UNBANCommand.cc (1.5), constants.h (1.6), cservice.cc
+	(1.54), cserviceClass.h (1.12), sqlBan.cc (1.4), sqlLevel.cc (1.4),
+	sqlUser.cc (1.13), sqlUser.h (1.10): Huge update to allow multiple
+	logins for one user name. A database update is required for this.
+
+2002-09-14 16:36  jeekay
+
+	* mod.cservice/: STATUSCommand.cc (1.14), cservice.cc (1.53),
+	cserviceClass.h (1.11) (utags: pre-multi-logins): Some new stats
+	stuff, removal of unneeded bits in STATUS
+
+2002-09-14 16:04  jeekay
+
+	* mod.cservice/COMMENTCommand.cc (1.7, pre-multi-logins): Added
+	logging of channel comment addition/removal
+
+2002-09-14 15:56  jeekay
+
+	* mod.cservice/REMOVEALLCommand.cc (1.6, pre-multi-logins): Changed
+	REMOVEALL to not remove owner+supporters
+
+2002-09-14 15:48  jeekay
+
+	* mod.cservice/VERIFYCommand.cc (1.15, pre-multi-logins): Fix for
+	verifies of people with <100 access in #cc
+
+2002-09-14 15:45  jeekay
+
+	* mod.cservice/HELPCommand.cc (1.3, pre-multi-logins): Changing of
+	the default help text
+
+2002-09-13 23:06  jeekay
+
+	* mod.cservice/MODINFOCommand.cc (1.6, pre-multi-logins): Fix to
+	prevent channel owners from downgrading a 499
+
+2002-09-13 22:30  jeekay
+
+	* mod.cservice/: ACCESSCommand.cc (1.4, pre-multi-logins),
+	ADDUSERCommand.cc (1.7, pre-multi-logins), BANCommand.cc (1.5,
+	pre-multi-logins), CHANINFOCommand.cc (1.15, pre-multi-logins),
+	CLEARMODECommand.cc (1.4, pre-multi-logins), DEVOICECommand.cc
+	(1.4, pre-multi-logins), FORCECommand.cc (1.10, pre-multi-logins),
+	HELPCommand.cc (1.2), INVITECommand.cc (1.3, pre-multi-logins),
+	INVMECommand.cc (1.3, pre-multi-logins), KICKCommand.cc (1.3,
+	pre-multi-logins), LOGINCommand.cc (1.15, pre-multi-logins),
+	MODECommand.cc (1.6, pre-multi-logins), Makefile.in (1.10,
+	pre-multi-logins), NEWPASSCommand.cc (1.4, pre-multi-logins),
+	NOTECommand.cc (1.11, pre-multi-logins), OPERJOINCommand.cc (1.3,
+	pre-multi-logins), OPERPARTCommand.cc (1.3, pre-multi-logins),
+	PURGECommand.cc (1.11, pre-multi-logins), RECOVERCommand.cc (1.7,
+	pre-multi-logins), REGISTERCommand.cc (1.5, pre-multi-logins),
+	REMIGNORECommand.cc (1.4, pre-multi-logins), REMOVEALLCommand.cc
+	(1.5), REMUSERCommand.cc (1.6, pre-multi-logins),
+	REMUSERIDCommand.cc (1.11, pre-multi-logins), SCANCommand.cc (1.5,
+	pre-multi-logins), SEARCHCommand.cc (1.3, pre-multi-logins),
+	SETTIMECommand.cc (1.3, pre-multi-logins), STATUSCommand.cc (1.13),
+	SUPPORTCommand.cc (1.3, pre-multi-logins), TOPICCommand.cc (1.4,
+	pre-multi-logins), UNBANCommand.cc (1.4, pre-multi-logins),
+	cservice.cc (1.52), cservice.h (1.8, pre-multi-logins),
+	cserviceClass.h (1.10), sqlBan.cc (1.3, pre-multi-logins),
+	sqlChannel.h (1.7, pre-multi-logins), sqlLevel.cc (1.3,
+	pre-multi-logins), sqlPendingChannel.cc (1.3, pre-multi-logins),
+	sqlPendingTraffic.cc (1.3, pre-multi-logins), sqlUser.cc (1.12,
+	pre-multi-logins): Lots of code cleanups to make it C++ compliant
+	and to let it compile under GCC32
+
+2002-09-13 22:27  jeekay
+
+	* mod.nickserv/: JUPECommand.cc (1.7), Makefile.in (1.10),
+	STATSCommand.cc (1.7), juUser.h (1.4), nickserv.cc (1.36),
+	nickservCommands.cc (1.2), nsUser.h (1.4) (utags:
+	pre-multi-logins): Lots of code cleanups to make it C++ compliant
+	and to let it compile under GCC32
+
+2002-09-11 23:13  jeekay
+
+	* mod.cservice/cservice.cc (1.51, pre-gcc32): Ooops.. a little
+	overenthusiastic with the delete button there
+
+2002-09-11 23:11  jeekay
+
+	* mod.cservice/cservice.cc (1.50): Removed pending notices/checks
+
+2002-09-11 23:10  jeekay
+
+	* mod.cservice/UPDATEDBCommand.cc (1.4, pre-multi-logins,
+	pre-gcc32): Added comments
+
+2002-09-07 23:40  jeekay
+
+	* mod.cservice/COMMENTCommand.cc (1.6, pre-gcc32): Added logging on
+	COMMENT removal also
+
+2002-09-07 23:29  jeekay
+
+	* mod.cservice/COMMENTCommand.cc (1.5): Added logging to COMMENT
+
+2002-09-07 23:19  jeekay
+
+	* mod.cservice/sqlUser.cc (1.11, pre-gcc32): Fix some strings that
+	arent being escaped before being commited
+
+2002-08-15 23:26  jeekay
+
+	* mod.cservice/MODINFOCommand.cc (1.5, pre-gcc32): Changes to
+	actually make the level change code work
+
+2002-08-14 23:00  jeekay
+
+	* mod.cservice/: ADDUSERCommand.cc (1.6, pre-gcc32),
+	MODINFOCommand.cc (1.4), REMUSERCommand.cc (1.5, pre-gcc32),
+	levels.h (1.34, pre-multi-logins, pre-gcc32): Changes to reflect
+	the updated CService policy on registered channels
+
+2002-08-13 10:03  jeekay
+
+	* mod.cservice/ADMINCMDSCommand.cc (1.14, pre-multi-logins,
+	pre-gcc32): Moved UN/FORCE from 1* to 400*
+
+2002-08-05 23:25  jeekay
+
+	* mod.cservice/levels.h (1.33): Changed the level of channel
+	comments to 400
+
+2002-08-01 22:48  jeekay
+
+	* mod.cservice/VERIFYCommand.cc (1.14, pre-gcc32): Pullup from old
+	live branch
+
+2002-08-01 22:16  jeekay
+
+	* mod.cservice/: NEWPASSCommand.cc (1.3, pre-gcc32), cservice.cc
+	(1.49), networkData.cc (1.2, pre-multi-logins, pre-gcc32),
+	sqlBan.cc (1.2, pre-gcc32), sqlChannel.cc (1.6, pre-multi-logins,
+	pre-gcc32), sqlLevel.cc (1.2, pre-gcc32), sqlPendingChannel.cc
+	(1.2, pre-gcc32), sqlPendingTraffic.cc (1.2, pre-gcc32), sqlUser.cc
+	(1.10): Moved the last of the strstream to stringstream, removed an
+	ends bug in NEWPASS
+
+2002-07-31 21:35  jeekay
+
+	* mod.cservice/UPDATEDBCommand.cc (1.3): Slight change to also
+	catch channels with a zero timestamp from registration
+
+2002-07-30 18:18  jeekay
+
+	* mod.cservice/cservice.cc (1.48): Removed the wrong help from
+	RECOVERCommand.cc
+
+2002-07-28 00:01  jeekay
+
+	* mod.cservice/MODECommand.cc (1.5, pre-gcc32),
+	mod.cservice/Makefile.in (1.9, pre-gcc32), mod.nickserv/Makefile.in
+	(1.9, pre-gcc32), src/Channel.cc (1.4, pre-multi-logins),
+	src/msg_M.cc (1.4, pre-multi-logins), src/server.cc (1.4,
+	pre-multi-logins), include/Channel.h (1.4, pre-multi-logins),
+	include/server.h (1.4, pre-multi-logins): Allow handling of cmode
+	+c/+S
+
+2002-07-28 00:01  jeekay
+
+	* configure (1.5, pre-multi-logins): Upgrade of configure again
+
+2002-07-27 21:19  jeekay
+
+	* Makefile.in (1.4, pre-multi-logins), aclocal.m4 (1.3,
+	pre-multi-logins), config.guess (1.2, pre-multi-logins), config.sub
+	(1.2, pre-multi-logins), configure (1.4), configure.in (1.2,
+	pre-multi-logins), depcomp (1.2, pre-multi-logins), install-sh
+	(1.2, pre-multi-logins), ltmain.sh (1.2, pre-multi-logins), missing
+	(1.2, pre-multi-logins), mkinstalldirs (1.2, pre-multi-logins):
+	Configure system update
+
+2002-07-27 21:02  jeekay
+
+	* include/: defs.h (1.3), stamp-h (1.2), stamp-h.in (1.2), stamp-h1
+	(1.2): Removal of unneeded files
+
+2002-07-27 16:43  jeekay
+
+	* db/.cvsignore (1.4, pre-multi-logins): .cvsignore updated
+
+2002-07-27 16:40  jeekay
+
+	* mod.nickserv/Makefile.in (1.8), mod.cservice/Makefile.in (1.8):
+	Makefile updates
+
+2002-07-27 16:39  jeekay
+
+	* src/.cvsignore (1.3, pre-multi-logins): .cvsignore updated
+
+2002-07-27 16:38  jeekay
+
+	* lib/: .cvsignore (1.4), ConnectionHandler.cc (1.1),
+	ConnectionHandler.h (1.1) (utags: pre-multi-logins): Connection
+	Handler
+
+2002-07-27 16:32  jeekay
+
+	* bin/server_command_map (1.2, pre-multi-logins): Spare parts
+	anyone?
+
+2002-07-27 16:13  jeekay
+
+	* bin/: cservice.conf (1.3), gnuworld.conf (1.4), nickserv.conf
+	(1.6) (utags: pre-multi-logins): Changes to make config match the
+	live system
+
+2002-07-27 15:54  jeekay
+
+	* configure (1.3), bin/cservice.conf (1.2), bin/gnuworld.conf
+	(1.3), bin/nickserv.conf (1.5), bin/server_command_map (1.1),
+	db/.cvsignore (1.3), db/Makefile.am (1.3, pre-multi-logins),
+	db/gnuworldDB.cc (1.3, pre-multi-logins), db/gnuworldDB.h (1.3,
+	pre-multi-logins), db/pgsqlDB.cc (1.2, pre-multi-logins),
+	db/pgsqlDB.h (1.2, pre-multi-logins), include/.cvsignore (1.1,
+	pre-multi-logins), include/Channel.h (1.3), include/ChannelUser.h
+	(1.3, pre-multi-logins), include/Gline.h (1.3, pre-multi-logins),
+	include/LoadClientTimerHandler.h (1.3, pre-multi-logins),
+	include/Network.h (1.3, pre-multi-logins), include/Numeric.h (1.3,
+	pre-multi-logins), include/ServerCommandHandler.h (1.1,
+	pre-multi-logins), include/ServerTimerHandlers.h (1.3,
+	pre-multi-logins), include/TimerHandler.h (1.3, pre-multi-logins),
+	include/UnloadClientTimerHandler.h (1.3, pre-multi-logins),
+	include/client.h (1.3, pre-multi-logins), include/config.h (1.3,
+	pre-multi-logins), include/defs.h (1.2), include/defs.h.in (1.3,
+	pre-multi-logins), include/events.h (1.5, pre-multi-logins),
+	include/iClient.h (1.3, pre-multi-logins), include/iServer.h (1.3,
+	pre-multi-logins), include/ip.h (1.3, pre-multi-logins),
+	include/moduleLoader.h (1.3, pre-multi-logins), include/server.h
+	(1.3), lib/.cvsignore (1.3), lib/Buffer.cc (1.3, pre-multi-logins),
+	lib/Buffer.h (1.3, pre-multi-logins), lib/ClientSocket.cc (1.3,
+	pre-multi-logins), lib/ClientSocket.h (1.3, pre-multi-logins),
+	lib/Connection.cc (1.2, pre-multi-logins), lib/Connection.h (1.2,
+	pre-multi-logins), lib/ConnectionManager.cc (1.2,
+	pre-multi-logins), lib/ConnectionManager.h (1.2, pre-multi-logins),
+	lib/EConfig.cc (1.3, pre-multi-logins), lib/EConfig.h (1.3,
+	pre-multi-logins), lib/ELog.cc (1.3, pre-multi-logins), lib/ELog.h
+	(1.3, pre-multi-logins), lib/FileSocket.cc (1.3, pre-multi-logins),
+	lib/FileSocket.h (1.3, pre-multi-logins), lib/Makefile.am (1.3,
+	pre-multi-logins), lib/Makefile.in (1.4, pre-multi-logins),
+	lib/Socket.cc (1.3, pre-multi-logins), lib/Socket.h (1.3,
+	pre-multi-logins), lib/StringTokenizer.cc (1.3, pre-multi-logins),
+	lib/StringTokenizer.h (1.3, pre-multi-logins), lib/ircd_chattr.h
+	(1.3, pre-multi-logins), lib/match.cc (1.3, pre-multi-logins),
+	lib/match.h (1.3, pre-multi-logins), lib/md5hash.h (1.3,
+	pre-multi-logins), lib/misc.cc (1.3, pre-multi-logins), lib/misc.h
+	(1.3, pre-multi-logins), lib/xparameters.h (1.3, pre-multi-logins),
+	mod.cservice/cservice.cc (1.47), mod.nickserv/nickserv.cc (1.35,
+	pre-gcc32), src/.cvsignore (1.2), src/Channel.cc (1.3),
+	src/ChannelUser.cc (1.3, pre-multi-logins),
+	src/LoadClientTimerHandler.cc (1.3, pre-multi-logins),
+	src/Makefile.am (1.3, pre-multi-logins), src/Makefile.in (1.4,
+	pre-multi-logins), src/Network.cc (1.3, pre-multi-logins),
+	src/ServerTimerHandlers.cc (1.3, pre-multi-logins),
+	src/UnloadClientTimerHandler.cc (1.3, pre-multi-logins),
+	src/client.cc (1.3, pre-multi-logins), src/iClient.cc (1.3,
+	pre-multi-logins), src/iServer.cc (1.3, pre-multi-logins),
+	src/ip.cc (1.3, pre-multi-logins), src/main.cc (1.3,
+	pre-multi-logins), src/msg_AC.cc (1.2, pre-multi-logins),
+	src/msg_AD.cc (1.3, pre-multi-logins), src/msg_B.cc (1.3,
+	pre-multi-logins), src/msg_C.cc (1.3, pre-multi-logins),
+	src/msg_CM.cc (1.3, pre-multi-logins), src/msg_D.cc (1.3,
+	pre-multi-logins), src/msg_DS.cc (1.3, pre-multi-logins),
+	src/msg_EA.cc (1.3, pre-multi-logins), src/msg_EB.cc (1.3,
+	pre-multi-logins), src/msg_Error.cc (1.3, pre-multi-logins),
+	src/msg_G.cc (1.3, pre-multi-logins), src/msg_GL.cc (1.3,
+	pre-multi-logins), src/msg_I.cc (1.3, pre-multi-logins),
+	src/msg_J.cc (1.3, pre-multi-logins), src/msg_JU.cc (1.3,
+	pre-multi-logins), src/msg_K.cc (1.3, pre-multi-logins),
+	src/msg_L.cc (1.3, pre-multi-logins), src/msg_M.cc (1.3),
+	src/msg_M351.cc (1.2, pre-multi-logins), src/msg_N.cc (1.3,
+	pre-multi-logins), src/msg_NOOP.cc (1.3, pre-multi-logins),
+	src/msg_P.cc (1.3, pre-multi-logins), src/msg_PART.cc (1.3,
+	pre-multi-logins), src/msg_PASS.cc (1.3, pre-multi-logins),
+	src/msg_Q.cc (1.3, pre-multi-logins), src/msg_R.cc (1.3,
+	pre-multi-logins), src/msg_S.cc (1.3, pre-multi-logins),
+	src/msg_SQ.cc (1.3, pre-multi-logins), src/msg_Server.cc (1.3,
+	pre-multi-logins), src/msg_T.cc (1.3, pre-multi-logins),
+	src/msg_W.cc (1.3, pre-multi-logins), src/msg_WA.cc (1.3,
+	pre-multi-logins), src/server.cc (1.3): Core Upgrade
+
+2002-07-21 01:02  jeekay
+
+	* mod.cservice/VERIFYCommand.cc (pre-core-update-branch.[3]): Added
+	missing return
+
+2002-07-20 16:45  jeekay
+
+	* mod.cservice/: ADMINCMDSCommand.cc (1.13), GSUSPENDCommand.cc
+	(1.5, pre-multi-logins, pre-gcc32), VERIFYCommand.cc (1.13),
+	levels.h (1.32): Pullups from live branch
+
+2002-07-19 21:20  jeekay
+
+	* mod.cservice/ADMINCMDSCommand.cc (pre-core-update-branch.[3]):
+	Removal of more useless flags
+
+2002-07-19 21:14  jeekay
+
+	* mod.cservice/: ADMINCMDSCommand.cc, levels.h
+	(pre-core-update-branch.[2,3]): Level shuffles, useless flags
+	removing
+
+2002-07-19 20:56  jeekay
+
+	* mod.cservice/GSUSPENDCommand.cc (pre-core-update-branch.[2]):
+	Changed maximum suspend durations, as requested by Trinity
+
+2002-07-19 20:33  jeekay
+
+	* mod.cservice/: VERIFYCommand.cc, cservice.cc, levels.h
+	(pre-core-update-branch.[2,3,2]): Updated levels at request of
+	Trinity
+
+2002-07-19 15:50  jeekay
+
+	* mod.cservice/: UPDATEDBCommand.cc (1.2), cservice.cc (1.46):
+	Pullup from live branch
+
+2002-07-19 15:47  jeekay
+
+	* mod.cservice/UPDATEDBCommand.cc (pre-core-update-branch.[2]):
+	Minor fix to prevent update the DB at the wrong time
+
+2002-07-19 15:18  jeekay
+
+	* mod.cservice/cservice.cc (pre-core-update-branch.[2]): Dont leave
+	debug statements in live code mmmkay?
+
+2002-07-19 14:49  jeekay
+
+	* mod.cservice/: Makefile.am, Makefile.in, UPDATEDBCommand.cc,
+	cservice.cc, cserviceCommands.h
+	(pre-core-update-branch.[1,2,1,1,1]): Pullup from main branch
+
+2002-07-19 14:45  jeekay
+
+	* mod.cservice/: Makefile.am (1.14, pre-multi-logins, pre-gcc32),
+	Makefile.in (1.7), UPDATEDBCommand.cc (1.1), cservice.cc (1.45),
+	cserviceCommands.h (1.15, pre-multi-logins, pre-gcc32): Addition of
+	UPDATEDB to resynchronise DB TS with net TS
+
+2002-07-18 12:26  jeekay
+
+	* mod.cservice/: ADMINCMDSCommand.cc (1.12), GSUSPENDCommand.cc
+	(1.4), VERIFYCommand.cc (1.12), levels.h (1.31): Level mods -
+	pullup from current branch
+
+2002-07-17 20:09  jeekay
+
+	* mod.cservice/: sqlUser.h (pre-core-update-branch.[1]), sqlUser.h
+	(1.9, pre-multi-logins, pre-gcc32): Gah.. missed one
+
+2002-07-17 19:57  jeekay
+
+	* mod.cservice/: REMUSERIDCommand.cc, sqlUser.cc
+	(pre-core-update-branch.[1,1]): Pullups from main branch
+
+2002-07-16 19:45  jeekay
+
+	* mod.cservice/REMUSERIDCommand.cc (1.10, pre-gcc32): Moved the
+	purge message to end. Disable purging of commented nicks
+
+2002-07-16 15:54  jeekay
+
+	* mod.cservice/sqlUser.cc (1.9): Added F_BOT to sqlUser
+
+2002-07-02 16:54  jeekay
+
+	* mod.cservice/ADMINCMDSCommand.cc,
+	mod.cservice/GSUSPENDCommand.cc, mod.cservice/Makefile.in,
+	mod.cservice/VERIFYCommand.cc, mod.cservice/levels.h,
+	mod.nickserv/Makefile.in (pre-core-update-branch.[1,1,1,1,1,1]):
+	Level updates as requested by Trinity
+
+2002-07-01 01:58  jeekay
+
+	* libltdl/config-h.in (1.1, pre-multi-logins): Added
+
+2002-07-01 01:39  jeekay
+
+	* UPDATES (1.1, pre-multi-logins): Last updated times for future
+	diffs
+
+2002-07-01 01:33  jeekay
+
+	* mod.cservice/: ACCESSCommand.cc (1.3, pre-gcc32),
+	ADDUSERCommand.cc (1.5), BANCommand.cc (1.4, pre-gcc32),
+	CHANINFOCommand.cc (1.14, pre-gcc32), CLEARMODECommand.cc (1.3,
+	pre-gcc32), DEBUGCommand.cc (1.4, pre-multi-logins, pre-gcc32),
+	LOGINCommand.cc (1.14, pre-gcc32), MODECommand.cc (1.4),
+	Makefile.in (1.6), NEWPASSCommand.cc (1.2), NOTECommand.cc (1.10,
+	pre-gcc32), OPERJOINCommand.cc (1.2, pre-gcc32), OPERPARTCommand.cc
+	(1.2, pre-gcc32), PURGECommand.cc (1.10, pre-gcc32),
+	RECOVERCommand.cc (1.6, pre-gcc32), REGISTERCommand.cc (1.4,
+	pre-gcc32), REMIGNORECommand.cc (1.3, pre-gcc32),
+	REMOVEALLCommand.cc (1.4, pre-gcc32), REMUSERCommand.cc (1.4),
+	REMUSERIDCommand.cc (1.9), SCANCommand.cc (1.4, pre-gcc32),
+	SEARCHCommand.cc (1.2, pre-gcc32), SETCommand.cc (1.20,
+	pre-multi-logins, pre-gcc32), SETTIMECommand.cc (1.2, pre-gcc32),
+	STATUSCommand.cc (1.12, pre-gcc32), SUPPORTCommand.cc (1.2,
+	pre-gcc32), TOPICCommand.cc (1.3, pre-gcc32), UNBANCommand.cc (1.3,
+	pre-gcc32), cservice.cc (1.44), cserviceClass.h (1.9, pre-gcc32),
+	sqlChannel.h (1.6, pre-gcc32): Core upgrade, commiting of
+	mod.cservice/ directory
+
+2002-07-01 01:29  jeekay
+
+	* mod.nickserv/: Makefile.in (1.7), nickserv.cc (1.34): Core
+	upgrade, commiting of mod.nickserv/ directory
+
+2002-07-01 01:28  jeekay
+
+	* src/: Channel.cc (1.2), ChannelUser.cc (1.2),
+	LoadClientTimerHandler.cc (1.2), Makefile.am (1.2), Makefile.in
+	(1.3), Network.cc (1.2), ServerTimerHandlers.cc (1.2),
+	UnloadClientTimerHandler.cc (1.2), client.cc (1.2), iClient.cc
+	(1.2), iServer.cc (1.2), ip.cc (1.2), main.cc (1.2), msg_AC.cc
+	(1.1), msg_AD.cc (1.2), msg_B.cc (1.2), msg_C.cc (1.2), msg_CM.cc
+	(1.2), msg_D.cc (1.2), msg_DS.cc (1.2), msg_EA.cc (1.2), msg_EB.cc
+	(1.2), msg_Error.cc (1.2), msg_G.cc (1.2), msg_GL.cc (1.2),
+	msg_I.cc (1.2), msg_J.cc (1.2), msg_JU.cc (1.2), msg_K.cc (1.2),
+	msg_L.cc (1.2), msg_M.cc (1.2), msg_M351.cc (1.1), msg_N.cc (1.2),
+	msg_NOOP.cc (1.2), msg_P.cc (1.2), msg_PART.cc (1.2), msg_PASS.cc
+	(1.2), msg_PRIVMSG.cc (1.2, pre-multi-logins), msg_Q.cc (1.2),
+	msg_R.cc (1.2), msg_RemPing.cc (1.2, pre-multi-logins), msg_S.cc
+	(1.2), msg_SQ.cc (1.2), msg_Server.cc (1.2), msg_T.cc (1.2),
+	msg_W.cc (1.2), msg_WA.cc (1.2), server.cc (1.2): Core upgrade,
+	commiting of src/ directory
+
+2002-07-01 01:25  jeekay
+
+	* libltdl/: Makefile.am (1.2), Makefile.in (1.2), acinclude.m4
+	(1.2), aclocal.m4 (1.2), configure (1.2), configure.in (1.2),
+	ltdl.c (1.2) (utags: pre-multi-logins): Core upgrade, commiting of
+	libltdl/ directory
+
+2002-07-01 01:18  jeekay
+
+	* lib/: Buffer.cc (1.2), Buffer.h (1.2), ClientSocket.cc (1.2),
+	ClientSocket.h (1.2), Connection.cc (1.1), Connection.h (1.1),
+	ConnectionManager.cc (1.1), ConnectionManager.h (1.1), EConfig.cc
+	(1.2), EConfig.h (1.2), ELog.cc (1.2), ELog.h (1.2), FileSocket.cc
+	(1.2), FileSocket.h (1.2), Makefile.am (1.2), Makefile.in (1.3),
+	Socket.cc (1.2), Socket.h (1.2), StringTokenizer.cc (1.2),
+	StringTokenizer.h (1.2), ircd_chattr.h (1.2), match.cc (1.2),
+	match.h (1.2), md5hash.cc (1.2, pre-multi-logins), md5hash.h (1.2),
+	misc.cc (1.2), misc.h (1.2), xparameters.h (1.2): Core upgrade,
+	commiting of lib/ directory
+
+2002-07-01 01:16  jeekay
+
+	* include/: Channel.h (1.2), ChannelUser.h (1.2), Gline.h (1.2),
+	LoadClientTimerHandler.h (1.2), Network.h (1.2), Numeric.h (1.2),
+	ServerTimerHandlers.h (1.2), TimerHandler.h (1.2),
+	UnloadClientTimerHandler.h (1.2), client.h (1.2), config.h (1.2),
+	defs.h (1.1), defs.h.in (1.2), events.h (1.4), iClient.h (1.2),
+	iServer.h (1.2), ip.h (1.2), moduleLoader.h (1.2), server.h (1.2):
+	Core upgrade, commiting of include/ directory
+
+2002-07-01 01:14  jeekay
+
+	* db/: .cvsignore (1.2), Makefile.am (1.2), Makefile.in (1.3,
+	pre-multi-logins), gnuworldDB.cc (1.2), gnuworldDB.h (1.2),
+	pgsqlDB.cc (1.1), pgsqlDB.h (1.1): Core upgrade, commiting of db/
+	directory
+
+2002-06-30 17:19  jeekay
+
+	* mod.cservice/STATUSCommand.cc (1.11), mod.cservice/cservice.cc
+	(1.43), mod.cservice/cserviceClass.h (1.8),
+	mod.nickserv/STATSCommand.cc (1.6, pre-gcc32),
+	mod.nickserv/nickserv.cc (1.33), mod.nickserv/nickservClass.h (1.6,
+	pre-multi-logins, pre-gcc32) (utags: pre-core-update): Remove
+	reliance on postgres 7.1
+
+2002-06-27 03:11  jeekay
+
+	* mod.cservice/REMOVEALLCommand.cc (1.3, pre-core-update): Added
+	the requirement that a channel be FORCEd before a REMOVEALL can be
+	done
+
+2002-06-09 10:04  jeekay
+
+	* mod.cservice/: LOGINCommand.cc (1.13, pre-core-update),
+	MOTDCommand.cc (1.2, pre-multi-logins, pre-gcc32, pre-core-update),
+	cservice.cc (1.42), cserviceClass.h (1.7): Initial implementation
+	of dynamic MOTD: First stage
+
+2002-06-09 09:42  jeekay
+
+	* mod.cservice/STATUSCommand.cc (1.10): Convenience addition of
+	channel name to STATUS output for scripting et al
+
+2002-06-09 09:40  jeekay
+
+	* mod.cservice/SETCommand.cc (1.19, pre-core-update): Fixed core
+	bug when attempting to set AUTOINVITE on a forced channel where you
+	have no normal access
+
+2002-05-29 20:33  jeekay
+
+	* mod.cservice/: ADMINCMDSCommand.cc (1.11), NOTECommand.cc (1.9)
+	(utags: pre-core-update): Backout of NOTE SEND FORCE patch
+
+2002-05-29 05:16  jeekay
+
+	* mod.cservice/: ADMINCMDSCommand.cc (1.10), NOTECommand.cc (1.8):
+	Implementation of NOTE SEND FORCE for admins
+
+2002-05-28 19:54  jeekay
+
+	* mod.cservice/INVMECommand.cc (1.2, pre-gcc32, pre-core-update):
+	Fix to ensure that suspended people cant use INVME. And various
+	code cleanups
+
+2002-05-25 18:51  jeekay
+
+	* mod.cservice/LOGINCommand.cc (1.12): Ooops.. one bit of debug
+	code accidentally left in
+
+2002-05-25 18:00  jeekay
+
+	* mod.cservice/LOGINCommand.cc (1.11): Fix for the bugs involved
+	with newly registered channels and logins
+
+2002-05-13 21:27  jeekay
+
+	* mod.cservice/cservice.cc (1.41): Remove verify 5, Stats Bot
+	Administrator
+
+2002-05-03 19:22  jeekay
+
+	* mod.cservice/cservice.cc (1.40): Changes of #official verifies as
+	requested by Kheldar
+
+2002-05-03 19:21  jeekay
+
+	* mod.cservice/REMUSERIDCommand.cc (1.8, pre-core-update): Lets see
+	if we can fix these REMUSERID cores
+
 2002-04-21 13:28  jeekay
 
-	* mod.cservice/: VERIFYCommand.cc (1.11), cservice.cc (1.39),
-	cserviceClass.h (1.6): Rewrite of the #official verifies system to
-	be much more extensible (and more importantly, easy to port to a
-	dynamic system later).	Note to self: Dont write crap code in
-	future.
+	* mod.cservice/: VERIFYCommand.cc (1.11, pre-core-update),
+	cservice.cc (1.39), cserviceClass.h (1.6): Rewrite of the #official
+	verifies system to be much more extensible (and more importantly,
+	easy to port to a dynamic system later).  Note to self: Dont write
+	crap code in future.
 
 2002-04-20 20:51  jeekay
 
-	* mod.cservice/PURGECommand.cc (1.9): Get rid of forcelog purging
-	bit as its no longer needed
+	* mod.cservice/PURGECommand.cc (1.9, pre-core-update): Get rid of
+	forcelog purging bit as its no longer needed
 
 2002-04-15 22:24  ultimate
 
-	* mod.cservice/: cservice.cc (1.38), update.sql (1.2): ForceLog
-	patched! no more id's etc, no more trouble :)
+	* mod.cservice/: cservice.cc (1.38), update.sql (1.2,
+	pre-multi-logins, pre-gcc32, pre-core-update): ForceLog patched! no
+	more id's etc, no more trouble :)
 
 2002-04-14 14:16  morpheus
 
-	* ChangeLog (1.2), cvs2cl.pl (1.1): 
+	* cvs2cl.pl (1.1, pre-multi-logins, pre-core-update): 
 	Added cvs2cl.pl file.  Changed ChangeLog file aswell.
 
 2002-04-12 23:28  jeekay
@@ -29,20 +805,21 @@
 
 2002-04-07 22:41  jeekay
 
-	* mod.cservice/: GLOBNOTICECommand.cc (1.3), cservice.cc (1.37):
-	Added ability to global as Global instead of CService by using
-	GLOBALNOTICE instead of GLOBNOTICE
+	* mod.cservice/: GLOBNOTICECommand.cc (1.3, pre-multi-logins,
+	pre-gcc32, pre-core-update), cservice.cc (1.37): Added ability to
+	global as Global instead of CService by using GLOBALNOTICE instead
+	of GLOBNOTICE
 
 2002-04-04 20:16  jeekay
 
-	* mod.cservice/: COMMENTCommand.cc (1.4), SETCommand.cc (1.18):
-	Fixage of commentage in the houseage
+	* mod.cservice/: COMMENTCommand.cc (1.4, pre-core-update),
+	SETCommand.cc (1.18): Fixage of commentage in the houseage
 
 2002-04-03 21:41  jeekay
 
-	* mod.nickserv/: nickserv.h (1.17), nickservClass.h (1.5): Moved
-	#include <set> from nickserv.h to nickservClass.h to correct
-	dependency problem
+	* mod.nickserv/: nickserv.h (1.17, pre-multi-logins, pre-gcc32,
+	pre-core-update), nickservClass.h (1.5): Moved #include <set> from
+	nickserv.h to nickservClass.h to correct dependency problem
 
 2002-04-02 03:57  jeekay
 
@@ -76,7 +853,8 @@
 
 2002-03-31 23:11  jeekay
 
-	* mod.cservice/DEBUGCommand.cc (1.3): More compiler fixes
+	* mod.cservice/DEBUGCommand.cc (1.3, pre-core-update): More
+	compiler fixes
 
 2002-03-31 22:46  jeekay
 
@@ -113,8 +891,8 @@
 
 2002-03-28 21:59  jeekay
 
-	* mod.cservice/SCANCommand.cc (1.3): Today seems to be
-	fix-failure-to-lowercase-day. Sorry.
+	* mod.cservice/SCANCommand.cc (1.3, pre-core-update): Today seems
+	to be fix-failure-to-lowercase-day. Sorry.
 
 2002-03-28 18:36  jeekay
 
@@ -132,8 +910,8 @@
 
 2002-03-26 02:00  jeekay
 
-	* mod.cservice/CHANINFOCommand.cc (1.13): Oooops! Users could see
-	their own secret answers. Fixed.
+	* mod.cservice/CHANINFOCommand.cc (1.13, pre-core-update): Oooops!
+	Users could see their own secret answers. Fixed.
 
 2002-03-26 01:50  morpheus
 
@@ -147,19 +925,24 @@
 
 2002-03-25 03:35  jeekay
 
-	* mod.cservice/: DEBUGCommand.cc (1.1), Makefile.am (1.13),
-	STATUSCommand.cc (1.9), cservice.cc (1.33), cserviceClass.h (1.4),
-	cserviceCommands.h (1.14), levels.h (1.30): Implementation of DEBUG
+	* mod.cservice/: DEBUGCommand.cc (1.1), Makefile.am (1.13,
+	pre-core-update), STATUSCommand.cc (1.9), cservice.cc (1.33),
+	cserviceClass.h (1.4), cserviceCommands.h (1.14, pre-core-update),
+	levels.h (1.30, pre-core-update): Implementation of DEBUG
 
 2002-03-25 01:20  jeekay
 
-	* mod.cservice/: ADMINCMDSCommand.cc (1.9), CHINFOCommand.cc (1.4),
-	COMMENTCommand.cc (1.3), FORCECommand.cc (1.9), GSUSPENDCommand.cc
-	(1.3), GUNSUSPENDCommand.cc (1.3), PURGECommand.cc (1.4),
-	REGISTERCommand.cc (1.3), REMIGNORECommand.cc (1.2),
-	REMOVEALLCommand.cc (1.2), REMUSERIDCommand.cc (1.6),
-	SCANCommand.cc (1.2), SETCommand.cc (1.17), UNFORCECommand.cc
-	(1.2): debugChan output changes, update to ADMINCMDS list
+	* mod.cservice/: ADMINCMDSCommand.cc (1.9), CHINFOCommand.cc (1.4,
+	pre-multi-logins, pre-gcc32, pre-core-update), COMMENTCommand.cc
+	(1.3), FORCECommand.cc (1.9, pre-gcc32, pre-core-update),
+	GSUSPENDCommand.cc (1.3, pre-core-update), GUNSUSPENDCommand.cc
+	(1.3, pre-multi-logins, pre-gcc32, pre-core-update),
+	PURGECommand.cc (1.4), REGISTERCommand.cc (1.3, pre-core-update),
+	REMIGNORECommand.cc (1.2, pre-core-update), REMOVEALLCommand.cc
+	(1.2), REMUSERIDCommand.cc (1.6), SCANCommand.cc (1.2),
+	SETCommand.cc (1.17), UNFORCECommand.cc (1.2, pre-multi-logins,
+	pre-gcc32, pre-core-update): debugChan output changes, update to
+	ADMINCMDS list
 
 2002-03-24 23:37  jeekay
 
@@ -191,7 +974,8 @@
 
 	* mod.cservice/: CHINFOCommand.cc (1.1), Makefile.am (1.12),
 	cservice.cc (1.30), cserviceCommands.h (1.13), levels.h (1.28),
-	sqlUser.cc (1.8), sqlUser.h (1.8): Implementation of CHINFO
+	sqlUser.cc (1.8, pre-core-update), sqlUser.h (1.8,
+	pre-core-update): Implementation of CHINFO
 	(email|username|verificationdata)
 
 2002-03-23 20:05  morpheus
@@ -206,9 +990,10 @@
 
 2002-03-23 17:29  jeekay
 
-	* mod.cservice/: CHANINFOCommand.cc (1.8), constants.h (1.5),
-	sqlUser.cc (1.7), sqlUser.h (1.7): Added support for showing the
-	verification data question/answer in INFO on users for admins
+	* mod.cservice/: CHANINFOCommand.cc (1.8), constants.h (1.5,
+	pre-multi-logins, pre-gcc32, pre-core-update), sqlUser.cc (1.7),
+	sqlUser.h (1.7): Added support for showing the verification data
+	question/answer in INFO on users for admins
 
 2002-03-23 16:18  jeekay
 
@@ -254,9 +1039,9 @@
 2002-03-22 15:34  jeekay
 
 	* mod.cservice/: ADMINCMDSCommand.cc (1.1), Makefile.am (1.10),
-	SHOWCOMMANDSCommand.cc (1.18), cservice.cc (1.24),
-	cserviceCommands.h (1.10), levels.h (1.24): Moved * commands to
-	ADMINCMDS and rejigged levels
+	SHOWCOMMANDSCommand.cc (1.18, pre-multi-logins, pre-gcc32,
+	pre-core-update), cservice.cc (1.24), cserviceCommands.h (1.10),
+	levels.h (1.24): Moved * commands to ADMINCMDS and rejigged levels
 
 2002-03-21 00:10  jeekay
 
@@ -296,10 +1081,11 @@
 
 2002-03-19 19:49  jeekay
 
-	* mod.cservice/: Makefile.am (1.9), RELEASECommand.cc (1.1),
-	cservice.cc (1.22), cservice.h (1.7), cserviceClass.h (1.3),
-	cserviceCommands.h (1.9): Cservice implementation of NickServ
-	integration. RELEASE command now active in cservice.
+	* mod.cservice/: Makefile.am (1.9), RELEASECommand.cc (1.1,
+	pre-multi-logins, pre-gcc32, pre-core-update), cservice.cc (1.22),
+	cservice.h (1.7, pre-gcc32, pre-core-update), cserviceClass.h
+	(1.3), cserviceCommands.h (1.9): Cservice implementation of
+	NickServ integration. RELEASE command now active in cservice.
 
 2002-03-18 23:56  jeekay
 
@@ -308,14 +1094,15 @@
 
 2002-03-18 20:01  jeekay
 
-	* mod.nickserv/: JUPECommand.cc (1.6), Makefile.am (1.7),
-	SAYCommand.cc (1.3), STATSCommand.cc (1.4), nickserv.cc (1.24),
-	nickserv.h (1.14), sqlnsUser.cc (1.2), sqlnsUser.h (1.2): Big code
-	cleanup, deletions all round.  Moved all internal level maintenance
-	over to using CService instance Removed lots of unused, redundant
-	and plain crappy code Changed logging to use char* instead of
-	strings Removed strstream's for logging (why? WHY??) Pre-tag is
-	pre-cleanup-01
+	* mod.nickserv/: JUPECommand.cc (1.6, pre-gcc32, pre-core-update),
+	Makefile.am (1.7, pre-multi-logins, pre-gcc32, pre-core-update),
+	SAYCommand.cc (1.3, pre-multi-logins, pre-gcc32, pre-core-update),
+	STATSCommand.cc (1.4), nickserv.cc (1.24), nickserv.h (1.14),
+	sqlnsUser.cc (1.2), sqlnsUser.h (1.2): Big code cleanup, deletions
+	all round.  Moved all internal level maintenance over to using
+	CService instance Removed lots of unused, redundant and plain
+	crappy code Changed logging to use char* instead of strings Removed
+	strstream's for logging (why? WHY??) Pre-tag is pre-cleanup-01
 
 2002-03-09 22:06  morpheus
 
@@ -350,8 +1137,10 @@
 2002-03-05 20:50  jeekay
 
 	* mod.cservice/: SHOWCOMMANDSCommand.cc (1.13), SUSPENDCommand.cc
-	(1.5), UNSUSPENDCommand.cc (1.5), levels.h (1.21) (utags:
-	pre-remuserid): Moved suspending of * access to level 800.
+	(1.5, pre-multi-logins, pre-gcc32, pre-core-update),
+	UNSUSPENDCommand.cc (1.5, pre-multi-logins, pre-gcc32,
+	pre-core-update), levels.h (1.21) (utags: pre-remuserid): Moved
+	suspending of * access to level 800.
 
 2002-03-05 19:55  jeekay
 
@@ -376,9 +1165,10 @@
 
 2002-02-27 20:59  jeekay
 
-	* mod.cservice/: ACCESSCommand.cc (1.2, pre-remuserid), cservice.cc
-	(1.17), cserviceClass.h (1.2, pre-remuserid): Changed output of
-	MODIF for ACCESS to show what date it was modified on
+	* mod.cservice/: ACCESSCommand.cc (1.2, pre-core-update,
+	pre-remuserid), cservice.cc (1.17), cserviceClass.h (1.2,
+	pre-remuserid): Changed output of MODIF for ACCESS to show what
+	date it was modified on
 
 2002-02-26 15:11  morpheus
 
@@ -410,10 +1200,10 @@
 
 	* Makefile.in (1.3), bin/gnuworld.conf (1.2), bin/nickserv.conf
 	(1.4), db/Makefile.in (1.2), lib/Makefile.in (1.2),
-	mod.cservice/LBANLISTCommand.cc (1.3, pre-remuserid),
-	mod.cservice/Makefile.in (1.5, pre-remuserid),
+	mod.cservice/LBANLISTCommand.cc (1.3, pre-multi-logins, pre-gcc32,
+	pre-remuserid), mod.cservice/Makefile.in (1.5, pre-remuserid),
 	mod.nickserv/Makefile.in (1.6, pre-cleanup-01), src/Makefile.in
-	(1.2): 
+	(1.2) (utags: pre-core-update): 
 	Fixed alittle bug in lbanlist that cause a core when anone logged
 	in user used the command
 
@@ -430,12 +1220,12 @@
 
 2002-02-18 03:33  jeekay
 
-	* mod.cservice/: BANLISTCommand.cc (1.2, pre-remuserid),
-	LBANLISTCommand.cc (1.2), SHOWCOMMANDSCommand.cc (1.12), levels.h
-	(1.19): Moved BANLIST and LBANLIST to actually bother to use
-	level::, made them both depend on it instead of just checking for
-	any access. Removed level::map as it doesnt actually get used
-	anywhere.
+	* mod.cservice/: BANLISTCommand.cc (1.2, pre-multi-logins,
+	pre-gcc32, pre-core-update, pre-remuserid), LBANLISTCommand.cc
+	(1.2), SHOWCOMMANDSCommand.cc (1.12), levels.h (1.19): Moved
+	BANLIST and LBANLIST to actually bother to use level::, made them
+	both depend on it instead of just checking for any access. Removed
+	level::map as it doesnt actually get used anywhere.
 
 2002-02-18 02:59  jeekay
 
@@ -467,13 +1257,14 @@
 	SUSPENDCommand.cc (1.4), UNSUSPENDCommand.cc (1.4), constants.h
 	(1.4, pre-remuserid), cservice.cc (1.16), cservice.h (1.5),
 	cserviceCommands.h (1.7, pre-remuserid), levels.h (1.18),
-	sqlChannel.cc (1.5, pre-remuserid), sqlChannel.h (1.5,
-	pre-remuserid), sqlUser.cc (1.5, pre-remuserid), sqlUser.h (1.5,
-	pre-remuserid): Implementation of global suspend system using
-	GSUSPEND/GUNSUSPEND.  Suspends will now automatically expire after
-	their duration (hours resolution) **WARNING This patch requires a
-	DB update: ALTER TABLE channels ADD COLUMN suspend_expires_ts
-	INTEGER ALTER TABLE users ADD COLUMN suspended_expire_ts INTEGER
+	sqlChannel.cc (1.5, pre-core-update, pre-remuserid), sqlChannel.h
+	(1.5, pre-core-update, pre-remuserid), sqlUser.cc (1.5,
+	pre-remuserid), sqlUser.h (1.5, pre-remuserid): Implementation of
+	global suspend system using GSUSPEND/GUNSUSPEND.  Suspends will now
+	automatically expire after their duration (hours resolution)
+	**WARNING This patch requires a DB update: ALTER TABLE channels ADD
+	COLUMN suspend_expires_ts INTEGER ALTER TABLE users ADD COLUMN
+	suspended_expire_ts INTEGER
 	
 	All actions now require a reason, ie GSUSPEND #chan 6 Abusive
 	channel GUNSUSPEND #chan Case resolved
@@ -522,8 +1313,9 @@
 2002-02-08 23:22  jeekay
 
 	* mod.nickserv/: STATSCommand.cc (1.3, pre-cleanup-01), levels.h
-	(1.5, pre-cleanup-01), nickserv.h (1.11): Added STATS PID to get
-	current backend SQL pid
+	(1.5, pre-multi-logins, pre-gcc32, pre-core-update,
+	pre-cleanup-01), nickserv.h (1.11): Added STATS PID to get current
+	backend SQL pid
 
 2002-02-08 23:12  jeekay
 
@@ -532,20 +1324,22 @@
 
 2002-02-08 23:08  ultimate
 
-	* mod.cservice/: ADDUSERCommand.cc (1.4, pre-remuserid,
-	pre-gsuspend), MODINFOCommand.cc (1.3, pre-remuserid,
-	pre-gsuspend), REMUSERCommand.cc (1.3, pre-remuserid,
-	pre-gsuspend), SUSPENDCommand.cc (1.3, pre-gsuspend),
-	UNSUSPENDCommand.cc (1.3, pre-gsuspend), levels.h (1.16): Added
-	minimum access for adding users to * Tiny bugfix so unsuspend works
-	to for global access
+	* mod.cservice/: ADDUSERCommand.cc (1.4, pre-core-update,
+	pre-remuserid, pre-gsuspend), MODINFOCommand.cc (1.3,
+	pre-core-update, pre-remuserid, pre-gsuspend), REMUSERCommand.cc
+	(1.3, pre-core-update, pre-remuserid, pre-gsuspend),
+	SUSPENDCommand.cc (1.3, pre-gsuspend), UNSUSPENDCommand.cc (1.3,
+	pre-gsuspend), levels.h (1.16): Added minimum access for adding
+	users to * Tiny bugfix so unsuspend works to for global access
 
 2002-02-08 00:24  jeekay
 
 	* mod.nickserv/: Makefile.am (1.6, pre-cleanup-01), Makefile.in
-	(1.5), RELEASECommand.cc (1.1, pre-cleanup-01), nickserv.cc (1.20),
-	nickservCommands.h (1.7, pre-cleanup-01): Added RELEASE command to
-	allow people to manually unjupe a nick they are logged in as.
+	(1.5), RELEASECommand.cc (1.1, pre-multi-logins, pre-gcc32,
+	pre-core-update, pre-cleanup-01), nickserv.cc (1.20),
+	nickservCommands.h (1.7, pre-multi-logins, pre-gcc32,
+	pre-core-update, pre-cleanup-01): Added RELEASE command to allow
+	people to manually unjupe a nick they are logged in as.
 
 2002-02-07 03:19  jeekay
 
@@ -578,18 +1372,20 @@
 2002-02-06 19:34  jeekay
 
 	* mod.cservice/: SETCommand.cc (1.15, pre-gsuspend),
-	VOICECommand.cc (1.5, pre-remuserid, pre-gsuspend), cservice.cc
-	(1.14), cservice_config.h (1.5, pre-remuserid, pre-gsuspend),
-	levels.h (1.14), sqlChannel.cc (1.4, pre-gsuspend), sqlChannel.h
-	(1.4, pre-gsuspend): Added small channel comment mod requested by
-	Mirddryn. Implementation of STRICTVOICE
+	VOICECommand.cc (1.5, pre-multi-logins, pre-gcc32, pre-core-update,
+	pre-remuserid, pre-gsuspend), cservice.cc (1.14), cservice_config.h
+	(1.5, pre-multi-logins, pre-gcc32, pre-core-update, pre-remuserid,
+	pre-gsuspend), levels.h (1.14), sqlChannel.cc (1.4, pre-gsuspend),
+	sqlChannel.h (1.4, pre-gsuspend): Added small channel comment mod
+	requested by Mirddryn. Implementation of STRICTVOICE
 
 2002-02-06 01:06  jeekay
 
 	* mod.nickserv/: JUPECommand.cc (1.4), juUser.cc (1.3,
-	pre-cleanup-01), juUser.h (1.3, pre-cleanup-01), nickserv.cc
-	(1.18), nickserv.h (1.10): Added 'Last Known Hostmask' field to
-	JUPE info and the bits it required
+	pre-multi-logins, pre-gcc32, pre-core-update, pre-cleanup-01),
+	juUser.h (1.3, pre-gcc32, pre-core-update, pre-cleanup-01),
+	nickserv.cc (1.18), nickserv.h (1.10): Added 'Last Known Hostmask'
+	field to JUPE info and the bits it required
 
 2002-02-05 03:39  jeekay
 
@@ -637,8 +1433,8 @@
 
 2002-02-04 04:31  jeekay
 
-	* mod.nickserv/nsUser.h (1.3, pre-cleanup-01, pre-jupe): Fixed $ at
-	top of file
+	* mod.nickserv/nsUser.h (1.3, pre-gcc32, pre-core-update,
+	pre-cleanup-01, pre-jupe): Fixed $ at top of file
 
 2002-02-04 04:26  jeekay
 
@@ -659,8 +1455,9 @@
 
 2002-02-03 01:13  jeekay
 
-	* mod.cservice/MODECommand.cc (1.3, pre-remuserid, pre-gsuspend):
-	Fixed s/p problems and cleaned up l/k code to not overflow ircu
+	* mod.cservice/MODECommand.cc (1.3, pre-core-update, pre-remuserid,
+	pre-gsuspend): Fixed s/p problems and cleaned up l/k code to not
+	overflow ircu
 
 2002-02-02 05:22  jeekay
 
@@ -677,18 +1474,21 @@
 2002-02-02 00:32  morpheus
 
 	* mod.cservice/: Makefile.am (1.4), SHUTDOWNCommand.cc (1.1,
-	pre-remuserid, pre-gsuspend), cserviceCommands.h (1.4): 
+	pre-multi-logins, pre-gcc32, pre-core-update, pre-remuserid,
+	pre-gsuspend), cserviceCommands.h (1.4): 
 	Implemented shutdown command
 
 2002-02-01 18:30  jeekay
 
-	* mod.cservice/PARTCommand.cc (1.3, pre-remuserid, pre-gsuspend):
-	Prevent a LOCKED channel from having P parted by the channel admins
+	* mod.cservice/PARTCommand.cc (1.3, pre-multi-logins, pre-gcc32,
+	pre-core-update, pre-remuserid, pre-gsuspend): Prevent a LOCKED
+	channel from having P parted by the channel admins
 
 2002-02-01 04:31  jeekay
 
-	* mod.cservice/OPCommand.cc (1.4, pre-remuserid, pre-gsuspend): Bug
-	#5: You now cannot op yourself if you are banned in a channel
+	* mod.cservice/OPCommand.cc (1.4, pre-multi-logins, pre-gcc32,
+	pre-core-update, pre-remuserid, pre-gsuspend): Bug #5: You now
+	cannot op yourself if you are banned in a channel
 
 2002-02-01 03:31  jeekay
 
@@ -707,7 +1507,7 @@
 
 2002-02-01 00:23  morpheus
 
-	* lib/.cvsignore (1.2): Added *.lo
+	* lib/.cvsignore (1.2, pre-core-update): Added *.lo
 
 2002-02-01 00:01  jeekay
 
@@ -719,9 +1519,9 @@
 
 2002-01-31 22:41  jeekay
 
-	* mod.cservice/RECOVERCommand.cc (1.5, pre-remuserid,
-	pre-gsuspend): Bug #18: Redo - added check to not recover +k users
-	again, this time 'properly'
+	* mod.cservice/RECOVERCommand.cc (1.5, pre-core-update,
+	pre-remuserid, pre-gsuspend): Bug #18: Redo - added check to not
+	recover +k users again, this time 'properly'
 
 2002-01-31 16:08  jeekay
 
@@ -764,11 +1564,12 @@
 
 2002-01-29 23:27  jeekay
 
-	* mod.cservice/: DEOPCommand.cc (1.3, pre-remuserid, pre-gsuspend),
-	DEVOICECommand.cc (1.3, pre-remuserid, pre-gsuspend), OPCommand.cc
-	(1.3), VOICECommand.cc (1.4): Bug #15: Added channel name to the
-	notices for (de)op/voice so people know *where* they have been
-	(de)op/voiced
+	* mod.cservice/: DEOPCommand.cc (1.3, pre-multi-logins, pre-gcc32,
+	pre-core-update, pre-remuserid, pre-gsuspend), DEVOICECommand.cc
+	(1.3, pre-gcc32, pre-core-update, pre-remuserid, pre-gsuspend),
+	OPCommand.cc (1.3), VOICECommand.cc (1.4): Bug #15: Added channel
+	name to the notices for (de)op/voice so people know *where* they
+	have been (de)op/voiced
 
 2002-01-29 22:35  jeekay
 
@@ -777,7 +1578,8 @@
 
 2002-01-29 18:40  jeekay
 
-	* include/events.h (1.3): Added EVT_NSKILL and EVT_FORCEDEAUTH
+	* include/events.h (1.3, pre-core-update): Added EVT_NSKILL and
+	EVT_FORCEDEAUTH
 
 2002-01-28 22:20  jeekay
 
@@ -797,8 +1599,9 @@
 
 2002-01-26 16:48  jeekay
 
-	* mod.cservice/TODO (1.3, pre-remuserid, pre-gsuspend, pre-nskill):
-	Moved several bugs/feature requests to the web tracking database
+	* mod.cservice/TODO (1.3, pre-multi-logins, pre-gcc32,
+	pre-core-update, pre-remuserid, pre-gsuspend, pre-nskill): Moved
+	several bugs/feature requests to the web tracking database
 
 2002-01-25 19:06  jeekay
 
@@ -820,11 +1623,11 @@
 
 2002-01-24 00:53  jeekay
 
-	* mod.cservice/: BANCommand.cc (1.3, pre-remuserid, pre-gsuspend),
-	levels.h (1.11) (utags: pre-nskill): Added banmask level 200,
-	stopped anyone < banmask level using BAN to ban any sort of host
-	mask. (if that sounds bad - anyone < banmask can only ban
-	individuals now)
+	* mod.cservice/: BANCommand.cc (1.3, pre-core-update,
+	pre-remuserid, pre-gsuspend), levels.h (1.11) (utags: pre-nskill):
+	Added banmask level 200, stopped anyone < banmask level using BAN
+	to ban any sort of host mask. (if that sounds bad - anyone <
+	banmask can only ban individuals now)
 
 2002-01-24 00:52  jeekay
 
@@ -865,24 +1668,25 @@
 2002-01-23 17:17  ultimate
 
 	* mod.cservice/: ADDUSERCommand.cc (1.2, pre-nskill), BANCommand.cc
-	(1.2), CLEARMODECommand.cc (1.2, pre-remuserid, pre-gsuspend,
-	pre-nskill), COMMENTCommand.cc (1.2, pre-remuserid, pre-gsuspend,
-	pre-nskill), ChangeLog (1.3, pre-remuserid, pre-gsuspend,
-	pre-nskill), DEOPCommand.cc (1.2, pre-nskill), DEVOICECommand.cc
-	(1.2, pre-nskill), INVITECommand.cc (1.2, pre-remuserid,
-	pre-gsuspend, pre-nskill), JOINCommand.cc (1.2, pre-remuserid,
-	pre-gsuspend, pre-nskill), KICKCommand.cc (1.2, pre-remuserid,
+	(1.2), CLEARMODECommand.cc (1.2, pre-core-update, pre-remuserid,
+	pre-gsuspend, pre-nskill), COMMENTCommand.cc (1.2, pre-remuserid,
+	pre-gsuspend, pre-nskill), DEOPCommand.cc (1.2, pre-nskill),
+	DEVOICECommand.cc (1.2, pre-nskill), INVITECommand.cc (1.2,
+	pre-gcc32, pre-core-update, pre-remuserid, pre-gsuspend,
+	pre-nskill), JOINCommand.cc (1.2, pre-multi-logins, pre-gcc32,
+	pre-core-update, pre-remuserid, pre-gsuspend, pre-nskill),
+	KICKCommand.cc (1.2, pre-gcc32, pre-core-update, pre-remuserid,
 	pre-gsuspend, pre-nskill), MODINFOCommand.cc (1.2, pre-nskill),
 	OPCommand.cc (1.2, pre-nskill), PARTCommand.cc (1.2, pre-nskill),
 	REMUSERCommand.cc (1.2, pre-nskill), SETCommand.cc (1.13),
 	SHOWCOMMANDSCommand.cc (1.8, pre-nskill), SUSPENDCommand.cc (1.2,
-	pre-nskill), TOPICCommand.cc (1.2, pre-remuserid, pre-gsuspend,
-	pre-nskill), UNBANCommand.cc (1.2, pre-remuserid, pre-gsuspend,
-	pre-nskill), UNSUSPENDCommand.cc (1.2, pre-nskill), VOICECommand.cc
-	(1.2), cservice.cc (1.7), cservice.h (1.2, pre-nskill),
-	cservice_config.h (1.4, pre-nskill), levels.h (1.8), update.sql
-	(1.1, pre-remuserid, pre-gsuspend, pre-nskill): this is the
-	feature_forcelog read changelog before running plz!
+	pre-nskill), TOPICCommand.cc (1.2, pre-core-update, pre-remuserid,
+	pre-gsuspend, pre-nskill), UNBANCommand.cc (1.2, pre-core-update,
+	pre-remuserid, pre-gsuspend, pre-nskill), UNSUSPENDCommand.cc (1.2,
+	pre-nskill), VOICECommand.cc (1.2), cservice.cc (1.7), cservice.h
+	(1.2, pre-nskill), cservice_config.h (1.4, pre-nskill), levels.h
+	(1.8), update.sql (1.1, pre-remuserid, pre-gsuspend, pre-nskill):
+	this is the feature_forcelog read changelog before running plz!
 
 2002-01-23 10:46  ultimate
 
@@ -898,11 +1702,11 @@
 2002-01-23 01:12  ultimate
 
 	* mod.cservice/: CHANINFOCommand.cc (1.2), COMMENTCommand.cc (1.1),
-	ChangeLog (1.2), Makefile.am (1.3, pre-nskill), constants.h (1.3,
-	pre-gsuspend, pre-nskill), cservice.cc (1.6), cserviceCommands.h
-	(1.3, pre-nskill), sqlUser.cc (1.4, pre-gsuspend, pre-nskill),
-	sqlUser.h (1.4, pre-gsuspend, pre-nskill): Added new COMMENT system
-	and removed old ADDCOMMENT read ChangeLog before running!!
+	Makefile.am (1.3, pre-nskill), constants.h (1.3, pre-gsuspend,
+	pre-nskill), cservice.cc (1.6), cserviceCommands.h (1.3,
+	pre-nskill), sqlUser.cc (1.4, pre-gsuspend, pre-nskill), sqlUser.h
+	(1.4, pre-gsuspend, pre-nskill): Added new COMMENT system and
+	removed old ADDCOMMENT read ChangeLog before running!!
 
 2002-01-23 01:05  jeekay
 
@@ -913,8 +1717,9 @@
 
 2002-01-23 00:58  jeekay
 
-	* mod.nickserv/: TODO (1.12), TODO (1.13, pre-cleanup-01, pre-jupe,
-	pre-nskill): testing
+	* mod.nickserv/: TODO (1.12), TODO (1.13, pre-multi-logins,
+	pre-gcc32, pre-core-update, pre-cleanup-01, pre-jupe, pre-nskill):
+	testing
 
 2002-01-23 00:53  jeekay
 
@@ -930,8 +1735,8 @@
 
 2002-01-22 23:14  ultimate
 
-	* mod.cservice/: ChangeLog (1.1), levels.h (1.6): Added a changelog
-	The levels.h change is currently unused but it update this to :(
+	* mod.cservice/levels.h (1.6): Added a changelog The levels.h
+	change is currently unused but it update this to :(
 
 2002-01-22 22:37  ultimate
 
@@ -942,7 +1747,8 @@
 
 2002-01-21 23:05  jeekay
 
-	* CVSROOT/loginfo (1.9, pre-nskill): Removed old emailing mechanism
+	* CVSROOT/loginfo (1.9, pre-multi-logins, pre-core-update,
+	pre-nskill): Removed old emailing mechanism
 
 2002-01-21 22:59  jeekay
 
@@ -1013,8 +1819,9 @@
 
 2002-01-17 23:31  jeekay
 
-	* mod.nickserv/.cvsignore (1.2, pre-cleanup-01, pre-jupe,
-	pre-nskill, alpha-0-2): Added .lo and .la
+	* mod.nickserv/.cvsignore (1.2, pre-multi-logins, pre-gcc32,
+	pre-core-update, pre-cleanup-01, pre-jupe, pre-nskill, alpha-0-2):
+	Added .lo and .la
 
 2002-01-17 23:29  jeekay
 
@@ -1035,7 +1842,7 @@
 
 2002-01-17 21:16  morpheus
 
-	* TODO (1.4, pre-nskill): 
+	* TODO (1.4, pre-multi-logins, pre-core-update, pre-nskill): 
 	Updated TODO list
 
 2002-01-17 21:13  mrbean
@@ -1049,6 +1856,10 @@
 	First step for implementing set nick nopurge on. Not fully
 	developed yet though.  Also set #chan welcome was located under
 	user section. How it got there, I don't know
+
+2002-01-17 20:57  morpheus
+
+	* TODO (1.3): [no log message]
 
 2002-01-17 20:56  morpheus
 
@@ -1087,8 +1898,9 @@
 
 2002-01-17 01:02  jeekay
 
-	* mod.cservice/.cvsignore (1.2, pre-remuserid, pre-gsuspend,
-	pre-nskill, verified-ns-01): Added .lo
+	* mod.cservice/.cvsignore (1.2, pre-multi-logins, pre-gcc32,
+	pre-core-update, pre-remuserid, pre-gsuspend, pre-nskill,
+	verified-ns-01): Added .lo
 
 2002-01-17 00:49  morpheus
 
@@ -1139,7 +1951,8 @@
 
 2002-01-16 22:17  morpheus
 
-	* TODO (1.1), doc/cservice.sql (1.2, pre-nskill): 
+	* TODO (1.1), doc/cservice.sql (1.2, pre-multi-logins,
+	pre-core-update, pre-nskill): 
 	Changed the sql file abit..weee
 	
 	TODO list !! We might wan't to use that one
@@ -1156,9 +1969,9 @@
 
 2002-01-16 18:42  jeekay
 
-	* bin/: .cvsignore (1.2, pre-nskill), GNUWorld.conf (1.2): Sanified
-	.cvsignore Removed GNUWorld.conf to stop name-case conflicts on
-	checkout (Windows)
+	* bin/: .cvsignore (1.2, pre-multi-logins, pre-core-update,
+	pre-nskill), GNUWorld.conf (1.2): Sanified .cvsignore Removed
+	GNUWorld.conf to stop name-case conflicts on checkout (Windows)
 
 2002-01-16 18:33  jeekay
 
@@ -1191,19 +2004,19 @@
 
 2002-01-16 00:00  morpheus
 
-	* Makefile.in (1.2, pre-nskill), aclocal.m4 (1.2, pre-nskill),
-	configure (1.2, pre-nskill), mod.cservice/FORCECommand.cc (1.3),
-	mod.cservice/SETCommand.cc (1.2), mod.cservice/cservice_config.h
-	(1.2), mod.cservice/levels.h (1.2), mod.cservice/sqlChannel.cc
-	(1.2, verified-ns-01), mod.cservice/sqlChannel.h (1.2,
-	verified-ns-01): 
+	* Makefile.in (1.2, pre-nskill), aclocal.m4 (1.2, pre-core-update,
+	pre-nskill), configure (1.2, pre-core-update, pre-nskill),
+	mod.cservice/FORCECommand.cc (1.3), mod.cservice/SETCommand.cc
+	(1.2), mod.cservice/cservice_config.h (1.2), mod.cservice/levels.h
+	(1.2), mod.cservice/sqlChannel.cc (1.2, verified-ns-01),
+	mod.cservice/sqlChannel.h (1.2, verified-ns-01): 
 	Added a NOFORCE flag. It can be enabled/disabled in
 	cservice_config.h The flag is still in use tho.
 
 2002-01-15 23:59  jeekay
 
-	* .cvsignore (1.1), db/.cvsignore (1.1) (utags: pre-nskill):
-	cvsignore
+	* .cvsignore (1.1, pre-multi-logins), db/.cvsignore (1.1) (utags:
+	pre-core-update, pre-nskill): cvsignore
 
 2002-01-15 22:51  jeekay
 
@@ -1216,9 +2029,9 @@
 
 2002-01-15 19:09  jeekay
 
-	* INSTALL (1.1), NEWS (1.1), AUTHORS (1.1), COPYING (1.1),
-	ChangeLog (1.1) (utags: pre-nskill): These nice files are
-	'required' for compilation
+	* INSTALL (1.1), NEWS (1.1), AUTHORS (1.1), COPYING (1.1) (utags:
+	pre-core-update, pre-multi-logins, pre-nskill): These nice files
+	are 'required' for compilation
 
 2002-01-15 18:58  jeekay
 
@@ -1226,19 +2039,19 @@
 
 2002-01-15 18:47  jeekay
 
-	* lib/.cvsignore (1.1), libltdl/.cvsignore (1.1) (utags:
-	pre-nskill): cvsignore
+	* lib/.cvsignore (1.1), libltdl/.cvsignore (1.1, pre-multi-logins,
+	pre-core-update) (utags: pre-nskill): cvsignore
 
 2002-01-15 18:45  jeekay
 
 	* mod.cservice/: .cvsignore (1.1), FORCECommand.cc (1.2),
 	Makefile.in (1.2): Backed out NOFORCE mod to FORCECommand as it
-	didnt even compile :) Added .cvsignore Changed $Id: ChangeLog,v 1.3 2002-04-21 12:32:37 jeekay Exp $ take in
+	didnt even compile :) Added .cvsignore Changed $Id: ChangeLog,v 1.4 2003-01-15 17:30:03 jeekay Exp $ take in
 	Makefile.in to *be* .in and not .am
 
 2002-01-15 18:37  jeekay
 
-	* src/.cvsignore (1.1, pre-nskill): cvsignore
+	* src/.cvsignore (1.1, pre-core-update, pre-nskill): cvsignore
 
 2002-01-15 18:36  jeekay
 
@@ -1252,7 +2065,8 @@
 
 2002-01-15 14:47  morpheus
 
-	* CVSROOT/loginfo (1.4), README (1.3, pre-nskill): readme file
+	* CVSROOT/loginfo (1.4), README (1.3, pre-multi-logins,
+	pre-core-update, pre-nskill): readme file
 
 2002-01-15 14:43  morpheus
 
@@ -1277,7 +2091,7 @@
 
 2002-01-15 00:00  morpheus
 
-	* ltconfig (1.1, pre-nskill): 
+	* ltconfig (1.1, pre-multi-logins, pre-core-update, pre-nskill): 
 	Missed a file
 
 2002-01-14 23:43  jeekay
@@ -1288,110 +2102,165 @@
 
 	* mod.nickserv/: LOGINCommand.cc (1.1, pre-jupe, pre-nskill,
 	alpha-0-2), Makefile.am (1.1), Makefile.in (1.1), TODO (1.1),
-	constants.h (1.1, pre-cleanup-01, pre-jupe, pre-nskill, alpha-0-2),
-	nickserv.cc (1.1), nickserv.h (1.1), nickservCommands.cc (1.1,
-	pre-cleanup-01, pre-jupe, pre-nskill, alpha-0-2),
-	nickservCommands.h (1.1), nsUser.cc (1.1, pre-cleanup-01, pre-jupe,
-	pre-nskill, alpha-0-2), nsUser.h (1.1, pre-nskill, alpha-0-2),
-	sqlnsUser.cc (1.1, pre-cleanup-01, pre-jupe, pre-nskill,
-	alpha-0-2), sqlnsUser.h (1.1, pre-cleanup-01, pre-jupe, pre-nskill,
-	alpha-0-2) (utags: alpha-0-1): Initial import
+	constants.h (1.1, pre-multi-logins, pre-gcc32, pre-core-update,
+	pre-cleanup-01, pre-jupe, pre-nskill, alpha-0-2), nickserv.cc
+	(1.1), nickserv.h (1.1), nickservCommands.cc (1.1, pre-gcc32,
+	pre-core-update, pre-cleanup-01, pre-jupe, pre-nskill, alpha-0-2),
+	nickservCommands.h (1.1), nsUser.cc (1.1, pre-multi-logins,
+	pre-gcc32, pre-core-update, pre-cleanup-01, pre-jupe, pre-nskill,
+	alpha-0-2), nsUser.h (1.1, pre-nskill, alpha-0-2), sqlnsUser.cc
+	(1.1, pre-cleanup-01, pre-jupe, pre-nskill, alpha-0-2), sqlnsUser.h
+	(1.1, pre-cleanup-01, pre-jupe, pre-nskill, alpha-0-2) (utags:
+	alpha-0-1): Initial import
 
 2002-01-14 23:28  morpheus
 
-	* bin/: GNUWorld.conf (1.1), ccontrol.conf (1.1, pre-nskill),
-	clientExample.conf (1.1, pre-nskill), cloner.conf (1.1,
-	pre-nskill), cservice.conf (1.1, pre-nskill), gnutest.conf (1.1,
-	pre-nskill), gnuw.conf (1.1, pre-nskill), gnuworld.conf (1.1,
-	pre-nskill), gnuworld3.conf (1.1, pre-nskill), localhost.conf (1.1,
-	pre-nskill), localns.conf (1.1, pre-nskill), nickserv.conf (1.1,
-	pre-nskill), stats.conf (1.1, pre-nskill): 
+	* bin/: GNUWorld.conf (1.1), ccontrol.conf (1.1, pre-multi-logins,
+	pre-core-update, pre-nskill), clientExample.conf (1.1,
+	pre-multi-logins, pre-core-update, pre-nskill), cloner.conf (1.1,
+	pre-multi-logins, pre-core-update, pre-nskill), cservice.conf (1.1,
+	pre-core-update, pre-nskill), gnutest.conf (1.1, pre-multi-logins,
+	pre-core-update, pre-nskill), gnuw.conf (1.1, pre-multi-logins,
+	pre-core-update, pre-nskill), gnuworld.conf (1.1, pre-nskill),
+	gnuworld3.conf (1.1, pre-multi-logins, pre-core-update,
+	pre-nskill), localhost.conf (1.1, pre-multi-logins,
+	pre-core-update, pre-nskill), localns.conf (1.1, pre-multi-logins,
+	pre-core-update, pre-nskill), nickserv.conf (1.1, pre-nskill),
+	stats.conf (1.1, pre-multi-logins, pre-core-update, pre-nskill): 
 	Inital Import
 
 2002-01-14 23:19  morpheus
 
-	* Makefile.am (1.1, pre-nskill), Makefile.in (1.1), aclocal.m4
-	(1.1), config.guess (1.1, pre-nskill), config.sub (1.1,
-	pre-nskill), configure (1.1), configure.in (1.1, pre-nskill),
-	depcomp (1.1, pre-nskill), install-sh (1.1, pre-nskill), ltmain.sh
-	(1.1, pre-nskill), missing (1.1, pre-nskill), mkinstalldirs (1.1,
-	pre-nskill), db/Makefile.am (1.1, pre-nskill), db/Makefile.in (1.1,
-	pre-nskill), db/gnuworldDB.cc (1.1, pre-nskill), db/gnuworldDB.h
-	(1.1, pre-nskill), doc/README.ccontrol (1.1, pre-nskill),
-	doc/README.cservice (1.1, pre-nskill), doc/autokill.sql (1.1,
-	pre-nskill), doc/ccontrol.addme.sql (1.1, pre-nskill),
-	doc/ccontrol.commands.sql (1.1, pre-nskill), doc/ccontrol.help.sql
-	(1.1, pre-nskill), doc/ccontrol.sql (1.1, pre-nskill),
-	doc/ccontrol.update.sql (1.1, pre-nskill), doc/checkvarargs.py
-	(1.1, pre-nskill), doc/chktrans.py (1.1, pre-nskill), doc/cparse.py
-	(1.1, pre-nskill), doc/cservice.addme.sql (1.1, pre-nskill),
-	doc/cservice.sql (1.1), doc/cservice.web.sql (1.1, pre-nskill),
-	doc/english_easter.sql (1.1, pre-nskill), doc/grant.sql (1.1,
-	pre-nskill), doc/ipcheck.sql (1.1, pre-nskill),
-	doc/language_table.sql (1.1, pre-nskill), doc/languages.sql (1.1,
-	pre-nskill), doc/motd.sql (1.1, pre-nskill), doc/update.delete.sql
-	(1.1, pre-nskill), include/Channel.h (1.1, pre-nskill),
-	include/ChannelUser.h (1.1, pre-nskill), include/Gline.h (1.1,
-	pre-nskill), include/LoadClientTimerHandler.h (1.1, pre-nskill),
-	include/Network.h (1.1, pre-nskill), include/Numeric.h (1.1,
-	pre-nskill), include/ServerTimerHandlers.h (1.1, pre-nskill),
-	include/TimerHandler.h (1.1, pre-nskill),
-	include/UnloadClientTimerHandler.h (1.1, pre-nskill),
-	include/client.h (1.1, pre-nskill), include/config.h (1.1,
-	pre-nskill), include/defs.h.in (1.1, pre-nskill), include/events.h
-	(1.1), include/iClient.h (1.1, pre-nskill), include/iServer.h (1.1,
-	pre-nskill), include/ip.h (1.1, pre-nskill), include/moduleLoader.h
-	(1.1, pre-nskill), include/server.h (1.1, pre-nskill),
-	include/stamp-h (1.1, pre-nskill), include/stamp-h.in (1.1,
-	pre-nskill), include/stamp-h1 (1.1, pre-nskill), lib/Buffer.cc
-	(1.1, pre-nskill), lib/Buffer.h (1.1, pre-nskill),
-	lib/ClientSocket.cc (1.1, pre-nskill), lib/ClientSocket.h (1.1,
-	pre-nskill), lib/EConfig.cc (1.1, pre-nskill), lib/EConfig.h (1.1,
-	pre-nskill), lib/ELog.cc (1.1, pre-nskill), lib/ELog.h (1.1,
-	pre-nskill), lib/FileSocket.cc (1.1, pre-nskill), lib/FileSocket.h
-	(1.1, pre-nskill), lib/Makefile.am (1.1, pre-nskill),
-	lib/Makefile.in (1.1, pre-nskill), lib/Socket.cc (1.1, pre-nskill),
-	lib/Socket.h (1.1, pre-nskill), lib/StringTokenizer.cc (1.1,
-	pre-nskill), lib/StringTokenizer.h (1.1, pre-nskill),
-	lib/ircd_chattr.h (1.1, pre-nskill), lib/match.cc (1.1,
-	pre-nskill), lib/match.h (1.1, pre-nskill), lib/match_table.h (1.1,
-	pre-nskill), lib/md5hash.cc (1.1, pre-nskill), lib/md5hash.h (1.1,
-	pre-nskill), lib/misc.cc (1.1, pre-nskill), lib/misc.h (1.1,
-	pre-nskill), lib/so_locations (1.1, pre-nskill), lib/xparameters.h
-	(1.1, pre-nskill), libltdl/COPYING.LIB (1.1, pre-nskill),
-	libltdl/Makefile.am (1.1, pre-nskill), libltdl/Makefile.in (1.1,
-	pre-nskill), libltdl/README (1.1, pre-nskill), libltdl/acconfig.h
-	(1.1, pre-nskill), libltdl/acinclude.m4 (1.1, pre-nskill),
-	libltdl/aclocal.m4 (1.1, pre-nskill), libltdl/config.h.in (1.1,
-	pre-nskill), libltdl/configure (1.1, pre-nskill),
-	libltdl/configure.in (1.1, pre-nskill), libltdl/ltdl.c (1.1,
-	pre-nskill), libltdl/ltdl.h (1.1, pre-nskill), src/Channel.cc (1.1,
-	pre-nskill), src/ChannelUser.cc (1.1, pre-nskill),
-	src/LoadClientTimerHandler.cc (1.1, pre-nskill), src/Makefile.am
-	(1.1, pre-nskill), src/Makefile.in (1.1, pre-nskill),
-	src/Network.cc (1.1, pre-nskill), src/ServerTimerHandlers.cc (1.1,
-	pre-nskill), src/UnloadClientTimerHandler.cc (1.1, pre-nskill),
-	src/client.cc (1.1, pre-nskill), src/iClient.cc (1.1, pre-nskill),
-	src/iServer.cc (1.1, pre-nskill), src/ip.cc (1.1, pre-nskill),
-	src/main.cc (1.1, pre-nskill), src/msg_AD.cc (1.1, pre-nskill),
-	src/msg_B.cc (1.1, pre-nskill), src/msg_C.cc (1.1, pre-nskill),
-	src/msg_CM.cc (1.1, pre-nskill), src/msg_D.cc (1.1, pre-nskill),
-	src/msg_DS.cc (1.1, pre-nskill), src/msg_EA.cc (1.1, pre-nskill),
-	src/msg_EB.cc (1.1, pre-nskill), src/msg_Error.cc (1.1,
-	pre-nskill), src/msg_G.cc (1.1, pre-nskill), src/msg_GL.cc (1.1,
-	pre-nskill), src/msg_I.cc (1.1, pre-nskill), src/msg_J.cc (1.1,
-	pre-nskill), src/msg_JU.cc (1.1, pre-nskill), src/msg_K.cc (1.1,
-	pre-nskill), src/msg_L.cc (1.1, pre-nskill), src/msg_M.cc (1.1,
-	pre-nskill), src/msg_N.cc (1.1, pre-nskill), src/msg_NOOP.cc (1.1,
-	pre-nskill), src/msg_P.cc (1.1, pre-nskill), src/msg_PART.cc (1.1,
-	pre-nskill), src/msg_PASS.cc (1.1, pre-nskill), src/msg_PRIVMSG.cc
-	(1.1, pre-nskill), src/msg_Q.cc (1.1, pre-nskill), src/msg_R.cc
-	(1.1, pre-nskill), src/msg_RemPing.cc (1.1, pre-nskill),
-	src/msg_S.cc (1.1, pre-nskill), src/msg_SQ.cc (1.1, pre-nskill),
-	src/msg_Server.cc (1.1, pre-nskill), src/msg_T.cc (1.1,
-	pre-nskill), src/msg_W.cc (1.1, pre-nskill), src/msg_WA.cc (1.1,
-	pre-nskill), src/server.cc (1.1, pre-nskill), src/sig.inc (1.1,
-	pre-nskill): 
+	* Makefile.am (1.1, pre-multi-logins, pre-core-update, pre-nskill),
+	Makefile.in (1.1), aclocal.m4 (1.1), config.guess (1.1,
+	pre-core-update, pre-nskill), config.sub (1.1, pre-core-update,
+	pre-nskill), configure (1.1), configure.in (1.1, pre-core-update,
+	pre-nskill), depcomp (1.1, pre-core-update, pre-nskill), install-sh
+	(1.1, pre-core-update, pre-nskill), ltmain.sh (1.1,
+	pre-core-update, pre-nskill), missing (1.1, pre-core-update,
+	pre-nskill), mkinstalldirs (1.1, pre-core-update, pre-nskill),
+	db/Makefile.am (1.1, pre-core-update, pre-nskill), db/Makefile.in
+	(1.1, pre-nskill), db/gnuworldDB.cc (1.1, pre-core-update,
+	pre-nskill), db/gnuworldDB.h (1.1, pre-core-update, pre-nskill),
+	doc/README.ccontrol (1.1, pre-multi-logins, pre-core-update,
+	pre-nskill), doc/README.cservice (1.1, pre-multi-logins,
+	pre-core-update, pre-nskill), doc/autokill.sql (1.1,
+	pre-multi-logins, pre-core-update, pre-nskill),
+	doc/ccontrol.addme.sql (1.1, pre-multi-logins, pre-core-update,
+	pre-nskill), doc/ccontrol.commands.sql (1.1, pre-multi-logins,
+	pre-core-update, pre-nskill), doc/ccontrol.help.sql (1.1,
+	pre-multi-logins, pre-core-update, pre-nskill), doc/ccontrol.sql
+	(1.1, pre-multi-logins, pre-core-update, pre-nskill),
+	doc/ccontrol.update.sql (1.1, pre-multi-logins, pre-core-update,
+	pre-nskill), doc/checkvarargs.py (1.1, pre-multi-logins,
+	pre-core-update, pre-nskill), doc/chktrans.py (1.1,
+	pre-multi-logins, pre-core-update, pre-nskill), doc/cparse.py (1.1,
+	pre-multi-logins, pre-core-update, pre-nskill),
+	doc/cservice.addme.sql (1.1, pre-multi-logins, pre-core-update,
+	pre-nskill), doc/cservice.sql (1.1), doc/cservice.web.sql (1.1,
+	pre-multi-logins, pre-core-update, pre-nskill),
+	doc/english_easter.sql (1.1, pre-multi-logins, pre-core-update,
+	pre-nskill), doc/grant.sql (1.1, pre-multi-logins, pre-core-update,
+	pre-nskill), doc/ipcheck.sql (1.1, pre-multi-logins,
+	pre-core-update, pre-nskill), doc/language_table.sql (1.1,
+	pre-multi-logins, pre-core-update, pre-nskill), doc/languages.sql
+	(1.1, pre-multi-logins, pre-core-update, pre-nskill), doc/motd.sql
+	(1.1, pre-multi-logins, pre-core-update, pre-nskill),
+	doc/update.delete.sql (1.1, pre-multi-logins, pre-core-update,
+	pre-nskill), include/Channel.h (1.1, pre-core-update, pre-nskill),
+	include/ChannelUser.h (1.1, pre-core-update, pre-nskill),
+	include/Gline.h (1.1, pre-core-update, pre-nskill),
+	include/LoadClientTimerHandler.h (1.1, pre-core-update,
+	pre-nskill), include/Network.h (1.1, pre-core-update, pre-nskill),
+	include/Numeric.h (1.1, pre-core-update, pre-nskill),
+	include/ServerTimerHandlers.h (1.1, pre-core-update, pre-nskill),
+	include/TimerHandler.h (1.1, pre-core-update, pre-nskill),
+	include/UnloadClientTimerHandler.h (1.1, pre-core-update,
+	pre-nskill), include/client.h (1.1, pre-core-update, pre-nskill),
+	include/config.h (1.1, pre-core-update, pre-nskill),
+	include/defs.h.in (1.1, pre-core-update, pre-nskill),
+	include/events.h (1.1), include/iClient.h (1.1, pre-core-update,
+	pre-nskill), include/iServer.h (1.1, pre-core-update, pre-nskill),
+	include/ip.h (1.1, pre-core-update, pre-nskill),
+	include/moduleLoader.h (1.1, pre-core-update, pre-nskill),
+	include/server.h (1.1, pre-core-update, pre-nskill),
+	include/stamp-h (1.1, pre-core-update, pre-nskill),
+	include/stamp-h.in (1.1, pre-core-update, pre-nskill),
+	include/stamp-h1 (1.1, pre-core-update, pre-nskill), lib/Buffer.cc
+	(1.1, pre-core-update, pre-nskill), lib/Buffer.h (1.1,
+	pre-core-update, pre-nskill), lib/ClientSocket.cc (1.1,
+	pre-core-update, pre-nskill), lib/ClientSocket.h (1.1,
+	pre-core-update, pre-nskill), lib/EConfig.cc (1.1, pre-core-update,
+	pre-nskill), lib/EConfig.h (1.1, pre-core-update, pre-nskill),
+	lib/ELog.cc (1.1, pre-core-update, pre-nskill), lib/ELog.h (1.1,
+	pre-core-update, pre-nskill), lib/FileSocket.cc (1.1,
+	pre-core-update, pre-nskill), lib/FileSocket.h (1.1,
+	pre-core-update, pre-nskill), lib/Makefile.am (1.1,
+	pre-core-update, pre-nskill), lib/Makefile.in (1.1, pre-nskill),
+	lib/Socket.cc (1.1, pre-core-update, pre-nskill), lib/Socket.h
+	(1.1, pre-core-update, pre-nskill), lib/StringTokenizer.cc (1.1,
+	pre-core-update, pre-nskill), lib/StringTokenizer.h (1.1,
+	pre-core-update, pre-nskill), lib/ircd_chattr.h (1.1,
+	pre-core-update, pre-nskill), lib/match.cc (1.1, pre-core-update,
+	pre-nskill), lib/match.h (1.1, pre-core-update, pre-nskill),
+	lib/match_table.h (1.1, pre-multi-logins, pre-core-update,
+	pre-nskill), lib/md5hash.cc (1.1, pre-core-update, pre-nskill),
+	lib/md5hash.h (1.1, pre-core-update, pre-nskill), lib/misc.cc (1.1,
+	pre-core-update, pre-nskill), lib/misc.h (1.1, pre-core-update,
+	pre-nskill), lib/so_locations (1.1, pre-multi-logins,
+	pre-core-update, pre-nskill), lib/xparameters.h (1.1,
+	pre-core-update, pre-nskill), libltdl/COPYING.LIB (1.1,
+	pre-multi-logins, pre-core-update, pre-nskill), libltdl/Makefile.am
+	(1.1, pre-core-update, pre-nskill), libltdl/Makefile.in (1.1,
+	pre-core-update, pre-nskill), libltdl/README (1.1,
+	pre-multi-logins, pre-core-update, pre-nskill), libltdl/acconfig.h
+	(1.1, pre-multi-logins, pre-core-update, pre-nskill),
+	libltdl/acinclude.m4 (1.1, pre-core-update, pre-nskill),
+	libltdl/aclocal.m4 (1.1, pre-core-update, pre-nskill),
+	libltdl/config.h.in (1.1, pre-multi-logins, pre-core-update,
+	pre-nskill), libltdl/configure (1.1, pre-core-update, pre-nskill),
+	libltdl/configure.in (1.1, pre-core-update, pre-nskill),
+	libltdl/ltdl.c (1.1, pre-core-update, pre-nskill), libltdl/ltdl.h
+	(1.1, pre-multi-logins, pre-core-update, pre-nskill),
+	src/Channel.cc (1.1, pre-core-update, pre-nskill),
+	src/ChannelUser.cc (1.1, pre-core-update, pre-nskill),
+	src/LoadClientTimerHandler.cc (1.1, pre-core-update, pre-nskill),
+	src/Makefile.am (1.1, pre-core-update, pre-nskill), src/Makefile.in
+	(1.1, pre-nskill), src/Network.cc (1.1, pre-core-update,
+	pre-nskill), src/ServerTimerHandlers.cc (1.1, pre-core-update,
+	pre-nskill), src/UnloadClientTimerHandler.cc (1.1, pre-core-update,
+	pre-nskill), src/client.cc (1.1, pre-core-update, pre-nskill),
+	src/iClient.cc (1.1, pre-core-update, pre-nskill), src/iServer.cc
+	(1.1, pre-core-update, pre-nskill), src/ip.cc (1.1,
+	pre-core-update, pre-nskill), src/main.cc (1.1, pre-core-update,
+	pre-nskill), src/msg_AD.cc (1.1, pre-core-update, pre-nskill),
+	src/msg_B.cc (1.1, pre-core-update, pre-nskill), src/msg_C.cc (1.1,
+	pre-core-update, pre-nskill), src/msg_CM.cc (1.1, pre-core-update,
+	pre-nskill), src/msg_D.cc (1.1, pre-core-update, pre-nskill),
+	src/msg_DS.cc (1.1, pre-core-update, pre-nskill), src/msg_EA.cc
+	(1.1, pre-core-update, pre-nskill), src/msg_EB.cc (1.1,
+	pre-core-update, pre-nskill), src/msg_Error.cc (1.1,
+	pre-core-update, pre-nskill), src/msg_G.cc (1.1, pre-core-update,
+	pre-nskill), src/msg_GL.cc (1.1, pre-core-update, pre-nskill),
+	src/msg_I.cc (1.1, pre-core-update, pre-nskill), src/msg_J.cc (1.1,
+	pre-core-update, pre-nskill), src/msg_JU.cc (1.1, pre-core-update,
+	pre-nskill), src/msg_K.cc (1.1, pre-core-update, pre-nskill),
+	src/msg_L.cc (1.1, pre-core-update, pre-nskill), src/msg_M.cc (1.1,
+	pre-core-update, pre-nskill), src/msg_N.cc (1.1, pre-core-update,
+	pre-nskill), src/msg_NOOP.cc (1.1, pre-core-update, pre-nskill),
+	src/msg_P.cc (1.1, pre-core-update, pre-nskill), src/msg_PART.cc
+	(1.1, pre-core-update, pre-nskill), src/msg_PASS.cc (1.1,
+	pre-core-update, pre-nskill), src/msg_PRIVMSG.cc (1.1,
+	pre-core-update, pre-nskill), src/msg_Q.cc (1.1, pre-core-update,
+	pre-nskill), src/msg_R.cc (1.1, pre-core-update, pre-nskill),
+	src/msg_RemPing.cc (1.1, pre-core-update, pre-nskill), src/msg_S.cc
+	(1.1, pre-core-update, pre-nskill), src/msg_SQ.cc (1.1,
+	pre-core-update, pre-nskill), src/msg_Server.cc (1.1,
+	pre-core-update, pre-nskill), src/msg_T.cc (1.1, pre-core-update,
+	pre-nskill), src/msg_W.cc (1.1, pre-core-update, pre-nskill),
+	src/msg_WA.cc (1.1, pre-core-update, pre-nskill), src/server.cc
+	(1.1, pre-core-update, pre-nskill), src/sig.inc (1.1,
+	pre-multi-logins, pre-core-update, pre-nskill): 
 	Initial Import
 
 2002-01-14 23:14  morpheus
@@ -1402,83 +2271,108 @@
 	verified-ns-01), BANCommand.cc (1.1, verified-ns-01),
 	BANLISTCommand.cc (1.1, pre-gsuspend, pre-nskill, verified-ns-01),
 	CHANINFOCommand.cc (1.1, verified-ns-01), CLEARMODECommand.cc (1.1,
-	verified-ns-01), Credits (1.1, pre-remuserid, pre-gsuspend,
-	pre-nskill, verified-ns-01), DEOPCommand.cc (1.1, verified-ns-01),
+	verified-ns-01), Credits (1.1, pre-multi-logins, pre-gcc32,
+	pre-core-update, pre-remuserid, pre-gsuspend, pre-nskill,
+	verified-ns-01), DEOPCommand.cc (1.1, verified-ns-01),
 	DEVOICECommand.cc (1.1, verified-ns-01), FORCECommand.cc (1.1),
-	HELPCommand.cc (1.1, pre-remuserid, pre-gsuspend, pre-nskill,
-	verified-ns-01), INVITECommand.cc (1.1, verified-ns-01),
-	INVMECommand.cc (1.1, pre-remuserid, pre-gsuspend, pre-nskill,
-	verified-ns-01), ISREGCommand.cc (1.1, pre-remuserid, pre-gsuspend,
-	pre-nskill, verified-ns-01), JOINCommand.cc (1.1, verified-ns-01),
-	KICKCommand.cc (1.1, verified-ns-01), LBANLISTCommand.cc (1.1,
-	pre-gsuspend, pre-nskill, verified-ns-01), LOGINCommand.cc (1.1),
-	MODINFOCommand.cc (1.1, verified-ns-01), MOTDCommand.cc (1.1,
+	HELPCommand.cc (1.1, pre-gcc32, pre-core-update, pre-remuserid,
+	pre-gsuspend, pre-nskill, verified-ns-01), INVITECommand.cc (1.1,
+	verified-ns-01), INVMECommand.cc (1.1, pre-remuserid, pre-gsuspend,
+	pre-nskill, verified-ns-01), ISREGCommand.cc (1.1,
+	pre-multi-logins, pre-gcc32, pre-core-update, pre-remuserid,
+	pre-gsuspend, pre-nskill, verified-ns-01), JOINCommand.cc (1.1,
+	verified-ns-01), KICKCommand.cc (1.1, verified-ns-01),
+	LBANLISTCommand.cc (1.1, pre-gsuspend, pre-nskill, verified-ns-01),
+	LOGINCommand.cc (1.1), MODINFOCommand.cc (1.1, verified-ns-01),
+	MOTDCommand.cc (1.1, pre-remuserid, pre-gsuspend, pre-nskill,
+	verified-ns-01), Makefile.am (1.1), Makefile.in (1.1),
+	NEWPASSCommand.cc (1.1, pre-core-update, pre-remuserid,
+	pre-gsuspend, pre-nskill, verified-ns-01), OPCommand.cc (1.1,
+	verified-ns-01), OPERJOINCommand.cc (1.1, pre-core-update,
 	pre-remuserid, pre-gsuspend, pre-nskill, verified-ns-01),
-	Makefile.am (1.1), Makefile.in (1.1), NEWPASSCommand.cc (1.1,
-	pre-remuserid, pre-gsuspend, pre-nskill, verified-ns-01),
-	OPCommand.cc (1.1, verified-ns-01), OPERJOINCommand.cc (1.1,
-	pre-remuserid, pre-gsuspend, pre-nskill, verified-ns-01),
-	OPERPARTCommand.cc (1.1, pre-remuserid, pre-gsuspend, pre-nskill,
-	verified-ns-01), OPERSUSPENDCommand.cc (1.1, pre-remuserid,
+	OPERPARTCommand.cc (1.1, pre-core-update, pre-remuserid,
+	pre-gsuspend, pre-nskill, verified-ns-01), OPERSUSPENDCommand.cc
+	(1.1, pre-multi-logins, pre-gcc32, pre-core-update, pre-remuserid,
 	pre-gsuspend, pre-nskill, verified-ns-01), PARTCommand.cc (1.1,
 	verified-ns-01), PURGECommand.cc (1.1, pre-nskill, verified-ns-01),
-	QUOTECommand.cc (1.1, pre-remuserid, pre-gsuspend, pre-nskill,
-	verified-ns-01), RANDOMCommand.cc (1.1, pre-remuserid,
-	pre-gsuspend, pre-nskill, verified-ns-01), README (1.1,
+	QUOTECommand.cc (1.1, pre-multi-logins, pre-gcc32, pre-core-update,
 	pre-remuserid, pre-gsuspend, pre-nskill, verified-ns-01),
-	RECOVERCommand.cc (1.1), REGISTERCommand.cc (1.1, pre-nskill,
-	verified-ns-01), REHASHCommand.cc (1.1, pre-remuserid,
+	RANDOMCommand.cc (1.1, pre-multi-logins, pre-gcc32,
+	pre-core-update, pre-remuserid, pre-gsuspend, pre-nskill,
+	verified-ns-01), README (1.1, pre-multi-logins, pre-gcc32,
+	pre-core-update, pre-remuserid, pre-gsuspend, pre-nskill,
+	verified-ns-01), RECOVERCommand.cc (1.1), REGISTERCommand.cc (1.1,
+	pre-nskill, verified-ns-01), REHASHCommand.cc (1.1,
+	pre-multi-logins, pre-gcc32, pre-core-update, pre-remuserid,
 	pre-gsuspend, pre-nskill, verified-ns-01), RELEASE.NOTES (1.1,
-	pre-remuserid, pre-gsuspend, pre-nskill, verified-ns-01),
-	REMIGNORECommand.cc (1.1, pre-remuserid, pre-gsuspend, pre-nskill,
-	verified-ns-01), REMOVEALLCommand.cc (1.1, pre-remuserid,
-	pre-gsuspend, pre-nskill, verified-ns-01), REMUSERCommand.cc (1.1,
-	verified-ns-01), SAYCommand.cc (1.1, pre-remuserid, pre-gsuspend,
-	pre-nskill, verified-ns-01), SEARCHCommand.cc (1.1, pre-remuserid,
-	pre-gsuspend, pre-nskill, verified-ns-01), SERVNOTICECommand.cc
+	pre-multi-logins, pre-gcc32, pre-core-update, pre-remuserid,
+	pre-gsuspend, pre-nskill, verified-ns-01), REMIGNORECommand.cc
 	(1.1, pre-remuserid, pre-gsuspend, pre-nskill, verified-ns-01),
-	SETCommand.cc (1.1), SETTIMECommand.cc (1.1, pre-remuserid,
+	REMOVEALLCommand.cc (1.1, pre-remuserid, pre-gsuspend, pre-nskill,
+	verified-ns-01), REMUSERCommand.cc (1.1, verified-ns-01),
+	SAYCommand.cc (1.1, pre-multi-logins, pre-gcc32, pre-core-update,
+	pre-remuserid, pre-gsuspend, pre-nskill, verified-ns-01),
+	SEARCHCommand.cc (1.1, pre-core-update, pre-remuserid,
+	pre-gsuspend, pre-nskill, verified-ns-01), SERVNOTICECommand.cc
+	(1.1, pre-multi-logins, pre-gcc32, pre-core-update, pre-remuserid,
+	pre-gsuspend, pre-nskill, verified-ns-01), SETCommand.cc (1.1),
+	SETTIMECommand.cc (1.1, pre-core-update, pre-remuserid,
 	pre-gsuspend, pre-nskill, verified-ns-01), SHOWCOMMANDSCommand.cc
-	(1.1), SHOWIGNORECommand.cc (1.1, pre-remuserid, pre-gsuspend,
-	pre-nskill, verified-ns-01), STATSCommand.cc (1.1, pre-remuserid,
-	pre-gsuspend, pre-nskill, verified-ns-01), STATUSCommand.cc (1.1),
-	SUPPORTCommand.cc (1.1, pre-remuserid, pre-gsuspend, pre-nskill,
+	(1.1), SHOWIGNORECommand.cc (1.1, pre-multi-logins, pre-gcc32,
+	pre-core-update, pre-remuserid, pre-gsuspend, pre-nskill,
+	verified-ns-01), STATSCommand.cc (1.1, pre-multi-logins, pre-gcc32,
+	pre-core-update, pre-remuserid, pre-gsuspend, pre-nskill,
+	verified-ns-01), STATUSCommand.cc (1.1), SUPPORTCommand.cc (1.1,
+	pre-core-update, pre-remuserid, pre-gsuspend, pre-nskill,
 	verified-ns-01), SUSPENDCommand.cc (1.1, verified-ns-01),
 	TOPICCommand.cc (1.1, verified-ns-01), UNBANCommand.cc (1.1,
 	verified-ns-01), UNFORCECommand.cc (1.1, pre-remuserid,
 	pre-gsuspend, pre-nskill, verified-ns-01), UNSUSPENDCommand.cc
 	(1.1, verified-ns-01), VERIFYCommand.cc (1.1, verified-ns-01),
 	VOICECommand.cc (1.1, verified-ns-01), confdefs.h (1.1,
-	pre-remuserid, pre-gsuspend, pre-nskill, verified-ns-01), configure
-	(1.1, pre-remuserid, pre-gsuspend, pre-nskill, verified-ns-01),
-	constants.h (1.1, verified-ns-01), cservice.cc (1.1), cservice.h
-	(1.1, verified-ns-01), cserviceCommands.h (1.1), cservice_config.h
-	(1.1), levels.h (1.1), levels.h.save (1.1, pre-remuserid,
-	pre-gsuspend, pre-nskill, verified-ns-01), networkData.cc (1.1,
+	pre-multi-logins, pre-gcc32, pre-core-update, pre-remuserid,
+	pre-gsuspend, pre-nskill, verified-ns-01), configure (1.1,
+	pre-multi-logins, pre-gcc32, pre-core-update, pre-remuserid,
+	pre-gsuspend, pre-nskill, verified-ns-01), constants.h (1.1,
+	verified-ns-01), cservice.cc (1.1), cservice.h (1.1,
+	verified-ns-01), cserviceCommands.h (1.1), cservice_config.h (1.1),
+	levels.h (1.1), levels.h.save (1.1, pre-multi-logins, pre-gcc32,
+	pre-core-update, pre-remuserid, pre-gsuspend, pre-nskill,
+	verified-ns-01), networkData.cc (1.1, pre-core-update,
 	pre-remuserid, pre-gsuspend, pre-nskill, verified-ns-01),
-	networkData.h (1.1, pre-remuserid, pre-gsuspend, pre-nskill,
-	verified-ns-01), responses.h (1.1, pre-remuserid, pre-gsuspend,
-	pre-nskill, verified-ns-01), sqlBan.cc (1.1, pre-remuserid,
-	pre-gsuspend, pre-nskill, verified-ns-01), sqlBan.h (1.1,
+	networkData.h (1.1, pre-multi-logins, pre-gcc32, pre-core-update,
 	pre-remuserid, pre-gsuspend, pre-nskill, verified-ns-01),
-	sqlChannel.cc (1.1), sqlChannel.h (1.1), sqlLevel.cc (1.1,
-	pre-remuserid, pre-gsuspend, pre-nskill, verified-ns-01),
-	sqlLevel.h (1.1, pre-remuserid, pre-gsuspend, pre-nskill,
-	verified-ns-01), sqlPendingChannel.cc (1.1, pre-remuserid,
-	pre-gsuspend, pre-nskill, verified-ns-01), sqlPendingChannel.h
-	(1.1, pre-remuserid, pre-gsuspend, pre-nskill, verified-ns-01),
-	sqlPendingTraffic.cc (1.1, pre-remuserid, pre-gsuspend, pre-nskill,
-	verified-ns-01), sqlPendingTraffic.h (1.1, pre-remuserid,
-	pre-gsuspend, pre-nskill, verified-ns-01), sqlUser.cc (1.1),
-	sqlUser.h (1.1): 
+	responses.h (1.1, pre-multi-logins, pre-gcc32, pre-core-update,
+	pre-remuserid, pre-gsuspend, pre-nskill, verified-ns-01), sqlBan.cc
+	(1.1, pre-core-update, pre-remuserid, pre-gsuspend, pre-nskill,
+	verified-ns-01), sqlBan.h (1.1, pre-multi-logins, pre-gcc32,
+	pre-core-update, pre-remuserid, pre-gsuspend, pre-nskill,
+	verified-ns-01), sqlChannel.cc (1.1), sqlChannel.h (1.1),
+	sqlLevel.cc (1.1, pre-core-update, pre-remuserid, pre-gsuspend,
+	pre-nskill, verified-ns-01), sqlLevel.h (1.1, pre-multi-logins,
+	pre-gcc32, pre-core-update, pre-remuserid, pre-gsuspend,
+	pre-nskill, verified-ns-01), sqlPendingChannel.cc (1.1,
+	pre-core-update, pre-remuserid, pre-gsuspend, pre-nskill,
+	verified-ns-01), sqlPendingChannel.h (1.1, pre-multi-logins,
+	pre-gcc32, pre-core-update, pre-remuserid, pre-gsuspend,
+	pre-nskill, verified-ns-01), sqlPendingTraffic.cc (1.1,
+	pre-core-update, pre-remuserid, pre-gsuspend, pre-nskill,
+	verified-ns-01), sqlPendingTraffic.h (1.1, pre-multi-logins,
+	pre-gcc32, pre-core-update, pre-remuserid, pre-gsuspend,
+	pre-nskill, verified-ns-01), sqlUser.cc (1.1), sqlUser.h (1.1): 
 	Initial Import of cservice module
 
 2002-01-14 23:03  jkr
 
-	* CVSROOT/: checkoutlist (1.1, pre-nskill), commitinfo (1.1,
-	pre-nskill), config (1.1, pre-nskill), cvswrappers (1.1,
-	pre-nskill), editinfo (1.1, pre-nskill), loginfo (1.1), modules
-	(1.1, pre-nskill), notify (1.1, pre-nskill), rcsinfo (1.1,
-	pre-nskill), taginfo (1.1, pre-nskill), verifymsg (1.1,
-	pre-nskill): initial checkin
+	* CVSROOT/: checkoutlist (1.1, pre-multi-logins, pre-core-update,
+	pre-nskill), commitinfo (1.1, pre-multi-logins, pre-core-update,
+	pre-nskill), config (1.1, pre-multi-logins, pre-core-update,
+	pre-nskill), cvswrappers (1.1, pre-multi-logins, pre-core-update,
+	pre-nskill), editinfo (1.1, pre-multi-logins, pre-core-update,
+	pre-nskill), loginfo (1.1), modules (1.1, pre-multi-logins,
+	pre-core-update, pre-nskill), notify (1.1, pre-multi-logins,
+	pre-core-update, pre-nskill), rcsinfo (1.1, pre-multi-logins,
+	pre-core-update, pre-nskill), taginfo (1.1, pre-multi-logins,
+	pre-core-update, pre-nskill), verifymsg (1.1, pre-multi-logins,
+	pre-core-update, pre-nskill): initial checkin
 
