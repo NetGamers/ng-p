@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.4 2002-01-21 14:13:39 morpheus Exp $" ;
+const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.5 2002-01-21 14:22:43 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -89,6 +89,49 @@ if (!theChan)
 	return false;
 	} 
 
+if(string_upper(st[1]) == "SET") {
+ 	
+ 	if( st.size() < 3)
+         {
+ 	        bot->Notice(theClient, lvl_0_set_cmds);
+ 		return true;
+ 	}
+ 
+ 	/*
+ 	 *  Check the channel is actually registered.
+ 	 */
+         sqlUser* theUser = bot->isAuthed(theClient, false);
+ 	if (!theUser)
+ 	{
+ 		bot->Notice(theClient, lvl_0_set_cmds);
+                 return true;
+ 	}
+ 
+ 	sqlChannel* theChan = bot->getChannelRecord(st[2]);
+ 	if (!theChan)
+         	{
+ 	        bot->Notice(theClient,
+         	        bot->getResponse(theUser, language::chan_not_reg).c_str(),
+                 	st[1].c_str());
+ 	        return false;
+         	}
+ 
+         int level = bot->getEffectiveAccessLevel(theUser, theChan, true);
+ 
+ 	/* levels 0,1,450,500,501,600,750,900 */
+ 	if (level >= 900) bot->Notice(theClient, lvl_900_set_cmds);
+ 	if (level >= 750) bot->Notice(theClient, lvl_750_set_cmds);
+ 	if (level >= 600) bot->Notice(theClient, lvl_600_set_cmds);
+ 	if (level >= 501) bot->Notice(theClient, lvl_501_set_cmds);
+ 	if (level >= 500) bot->Notice(theClient, lvl_500_set_cmds);
+ 	if (level >= 450) bot->Notice(theClient, lvl_450_set_cmds);
+ 	if (level >= 1) bot->Notice(theClient,   lvl_1_set_cmds);
+	
+	bot->Notice(theClient, lvl_0_set_cmds);
+	return true;
+}
+
+
 /*
  *  Fetch the users access level.
  */
@@ -131,48 +174,6 @@ if (theClient->isOper())
 	bot->Notice(theClient, lvl_oper_cmds);
 	}
 //	bot->Notice(theClient, cmdFooter);
-
-if(string_upper(st[1]) == "SET") {
- 	
- 	if( st.size() < 3)
-         {
- 	        bot->Notice(theClient, lvl_0_set_cmds);
- 		return true;
- 	}
- 
- 	/*
- 	 *  Check the channel is actually registered.
- 	 */
-         sqlUser* theUser = bot->isAuthed(theClient, false);
- 	if (!theUser)
- 	{
- 		bot->Notice(theClient, lvl_0_set_cmds);
-                 return true;
- 	}
- 
- 	sqlChannel* theChan = bot->getChannelRecord(st[2]);
- 	if (!theChan)
-         	{
- 	        bot->Notice(theClient,
-         	        bot->getResponse(theUser, language::chan_not_reg).c_str(),
-                 	st[1].c_str());
- 	        return false;
-         	}
- 
-         int level = bot->getEffectiveAccessLevel(theUser, theChan, true);
- 
- 	/* levels 0,1,450,500,501,600,750,900 */
- 	if (level >= 900) bot->Notice(theClient, lvl_900_set_cmds);
- 	if (level >= 750) bot->Notice(theClient, lvl_750_set_cmds);
- 	if (level >= 600) bot->Notice(theClient, lvl_600_set_cmds);
- 	if (level >= 501) bot->Notice(theClient, lvl_501_set_cmds);
- 	if (level >= 500) bot->Notice(theClient, lvl_500_set_cmds);
- 	if (level >= 450) bot->Notice(theClient, lvl_450_set_cmds);
- 	if (level >= 1) bot->Notice(theClient,   lvl_1_set_cmds);
-	
-	bot->Notice(theClient, lvl_0_set_cmds);
-	return true;
-}
 
 return true ;
 } 
