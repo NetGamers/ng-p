@@ -3,7 +3,7 @@
  *
  * 20020201 - Jeekay - Initial Version
  *
- * $Id: MODECommand.cc,v 1.1 2002-02-02 04:44:56 jeekay Exp $
+ * $Id: MODECommand.cc,v 1.2 2002-02-02 05:22:05 jeekay Exp $
  */
 
 #include <string>
@@ -21,8 +21,9 @@
 #define CF_T 0x10
 #define CF_L 0x20
 #define CF_K 0x40
+#define CF_P 0x80
 
-const char MODECommand_cc_rcsId[] = "$Id: MODECommand.cc,v 1.1 2002-02-02 04:44:56 jeekay Exp $";
+const char MODECommand_cc_rcsId[] = "$Id: MODECommand.cc,v 1.2 2002-02-02 05:22:05 jeekay Exp $";
 
 namespace gnuworld
 {
@@ -137,6 +138,23 @@ for(string::iterator ptr = modeString.begin(); ptr != modeString.end(); ++ptr)
 			curFlags |= CF_N;
 			break;
 			} // case n
+		case 'p':
+			{
+			if(curFlags & CF_P) { break; }
+			chanSet = theChan->getMode(Channel::MODE_P);
+			if(chanSet && !polarity)
+				{
+				negative += "p";
+				theChan->removeMode(Channel::MODE_P);
+				} // chanSet && !polarity
+			if(!chanSet && polarity)
+				{
+				positive += "p";
+				theChan->setMode(Channel::MODE_P);
+				} // !chanSet && polarity
+			curFlags |= CF_P;
+			break;
+			} // case p
 		case 's':
 			{
 			if(curFlags & CF_S) { break; }
