@@ -1,4 +1,5 @@
 2003-02-21 1.2.06 Jeekay
+* Fixed silly STRICTVOICE bug that'd deop on <=voice instead of <voice
 * Bumped version to 1.2.06
 
 2003-02-05 1.2.05 Jeekay

@@ -2525,7 +2525,7 @@ for( xServer::voiceVectorType::const_iterator ptr = theTargets.begin();
 #ifdef FEATURE_STRICTVOICE
 		// Is this channel set F_STRICTVOICE?
 		if(reggedChan->getFlag(sqlChannel::F_STRICTVOICE)) {
-			if((!authUser || getEffectiveAccessLevel(authUser, reggedChan, false) <= level::voice) &&
+			if((!authUser || getEffectiveAccessLevel(authUser, reggedChan, false) < level::voice) &&
 				!tmpUser->getClient()->getMode(iClient::MODE_SERVICES)) {
 				if(theChanUser) {
 					Notice(theChanUser->getClient(), "%s is not allowed to be voiced in %s due to STRICTVOICE",
