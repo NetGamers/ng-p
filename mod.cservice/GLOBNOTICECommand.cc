@@ -4,7 +4,7 @@
  *
  * Sends a notice to all users as 'CService'
  *
- * $Id: GLOBNOTICECommand.cc,v 1.1 2002-02-09 02:30:28 jeekay Exp $
+ * $Id: GLOBNOTICECommand.cc,v 1.2 2002-02-23 00:57:24 jeekay Exp $
  */
 
 #include <string>
@@ -13,13 +13,31 @@
 #include "cservice.h"
 #include "levels.h"
 
-const char GLOBNOTICECommand_cc_rcsId[] = "$Id: GLOBNOTICECommand.cc,v 1.1 2002-02-09 02:30:28 jeekay Exp $";
+const char GLOBNOTICECommand_cc_rcsId[] = "$Id: GLOBNOTICECommand.cc,v 1.2 2002-02-23 00:57:24 jeekay Exp $";
 
 namespace gnuworld
 {
 
 bool GLOBNOTICECommand::Exec( iClient* theClient, const string& Message )
 {
+
+/*
+ * To use this command, the user must either have level::globnotice * access
+ * or be an IRCop. If the user is neither, just return. No point in telling
+ * everyone about the admin commands.
+ */
+
+sqlUser* theUser = bot->isAuthed(theClient, false);
+
+if(!theUser && !theClient->isOper()) { return false; }
+
+int admLevel;
+if(theUser) admLevel = bot->getAdminAccessLevel(theUser);
+else admLevel = 0;
+
+if((admLevel < level::globnotice) && !(theClient->isOper())) { return false; }
+
+// Lets actually get on with the command now ;)
 
 bot->incStat("COMMANDS.GLOBNOTICE");
 
@@ -29,23 +47,6 @@ if(st.size() < 3)
 	Usage(theClient);
 	return true;
 	}
-
-sqlUser* theUser = bot->isAuthed(theClient, false);
-
-if(!theUser && !theClient->isOper()) { return false; }
-
-int admLevel;
-
-if(theUser) admLevel = bot->getAdminAccessLevel(theUser);
-else admLevel = 0;
-
-/*
- * To use this command, the user must either have level::globnotice * access
- * or be an IRCop. If the user is neither, just return. No point in telling
- * everyone about the admin commands.
- */
-
-if((admLevel < level::globnotice) && !(theClient->isOper())) { return false; }
 
 if(st[1][0] != '$')
 	{
