@@ -4,7 +4,7 @@
  * (c) Copyright 2002 Rasmus Hansen (GK@panet)
  * Distributed under the GNU Public License
  *
- * $Id: ADMINCMDSCommand.cc,v 1.4 2002-03-22 23:20:43 jeekay Exp $
+ * $Id: ADMINCMDSCommand.cc,v 1.5 2002-03-23 15:05:46 jeekay Exp $
  */
 
 #include	<string>
@@ -14,7 +14,7 @@
 #include	"cservice.h"
 #include  "levels.h"
 
-const char ADMINCMDSCommand_cc_rcsId[] = "$Id: ADMINCMDSCommand.cc,v 1.4 2002-03-22 23:20:43 jeekay Exp $" ;
+const char ADMINCMDSCommand_cc_rcsId[] = "$Id: ADMINCMDSCommand.cc,v 1.5 2002-03-23 15:05:46 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -66,7 +66,7 @@ if(aLevel >= 850)
 	bot->Notice(theClient, "GLOBNOTICE (message)");
 	bot->Notice(theClient, "ADDUSER * (nick) (level)");
 	bot->Notice(theClient, "REMUSER * (nick)");
-	bot->Notice(theClient, "MODINFO * access (nick) (level)");
+	bot->Notice(theClient, "MODINFO * ACCESS (nick) (level)");
 	bot->Notice(theClient, "\002");
 	}
 
@@ -74,7 +74,7 @@ if(aLevel >= 800)
 	{
 	bot->Notice(theClient, "\002Level  800 - CSC Supervisor");
 	bot->Notice(theClient, "SUSPEND * (nick) (duration) (reason)");
-	bot->Notice(theClient, "UNSUSPEND * (nick) (duration) (reason)");
+	bot->Notice(theClient, "UNSUSPEND * (nick) (reason)");
 	bot->Notice(theClient, "SET (chan) CAUTION (on/off)");
 	bot->Notice(theClient, "SET (chan) NEVERREG (on/off)");
 	bot->Notice(theClient, "SET (chan) NOPURGE (on/off)");
@@ -90,7 +90,7 @@ if(aLevel >= 750)
 	bot->Notice(theClient, "\002Level  750 - CSC Senior Administrator");
 	bot->Notice(theClient, "COMMENT (nick) (comment)");
 	bot->Notice(theClient, "GSUSPEND (nick) (duration) (reason)");
-	bot->Notice(theClient, "GUNSUSPEND (nick) (duration) (reason)");
+	bot->Notice(theClient, "GUNSUSPEND (nick) (reason)");
 	bot->Notice(theClient, "REMUSERID (nick) (reason)");
 	bot->Notice(theClient, "\002");
 	}
@@ -98,8 +98,8 @@ if(aLevel >= 750)
 if(aLevel >= 700)
 	{
 	bot->Notice(theClient, "\002Level  700 - CSC Senior Administrator");
-	bot->Notice(theClient, "GSUSPEND (chan) (dur) (reason)");
-	bot->Notice(theClient, "GUNSUSPEND (chan) (dur) (reason)");
+	bot->Notice(theClient, "GSUSPEND (chan) (duration) (reason)");
+	bot->Notice(theClient, "GUNSUSPEND (chan) (reason)");
 	bot->Notice(theClient, "PURGE (chan) (reason)");
 	bot->Notice(theClient, "\002");
 	}
@@ -109,7 +109,6 @@ if(aLevel >= 650)
 	bot->Notice(theClient, "\002Level  650 - CSC Junior Administrator");
 	bot->Notice(theClient, "COMMENT (chan) (comment)");
 	bot->Notice(theClient, "REGISTER (chan) (nick)");
-	bot->Notice(theClient, "SCAN [email|hostmask|nick] (string)");
 	bot->Notice(theClient, "SET (chan) LOCKED (on/off)");
 	bot->Notice(theClient, "\002");
 	}
@@ -120,6 +119,7 @@ if(aLevel >= 600)
 	bot->Notice(theClient, "INVME");
 	bot->Notice(theClient, "REMIGNORE (hostmask)");
 	bot->Notice(theClient, "REMOVEALL (chan)");
+	bot->Notice(theClient, "SCAN [email|hostmask|nick] (string)");
 	bot->Notice(theClient, "\002");
 	}
 
