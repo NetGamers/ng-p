@@ -11,7 +11,7 @@
 #include	"Network.h"
 #include	"events.h"
 
-const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.16 2002-09-24 20:06:18 jeekay Exp $" ;
+const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.17 2003-03-29 23:41:41 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -84,6 +84,9 @@ if( !theUser )
 	return false;
 	}
 
+/* Is this an admin user? */
+bool isAdmin = bot->getAdminAccessLevel(theUser);
+
 /*
  * Check password
  */
@@ -92,19 +95,44 @@ if(!bot->isPasswordRight(theUser, st.assemble(2)))
 	{
 	bot->Notice(theClient, "AUTHENTICATION FAILED as %s.",
 		theUser->getUserName().c_str());
+	
+	/* Notify other admins */
+	if(isAdmin) {
+		bot->logAdminMessage("LOGIN - FAILURE - BAD PASS - %s (%s)",
+			theClient->getNickName().c_str(),
+			theUser->getUserName().c_str());
+	}
+	
 	return false;
 	}
 
 /* Dont exceed MAXLOGINS */
 if(theUser->networkClientList.size() >= theUser->getMaxLogins()) {
-  bot->Notice(theClient, "AUTHENTICATION FAILED AS %s.",
-    theUser->getUserName().c_str());
-  return false;
+	bot->Notice(theClient, "AUTHENTICATION FAILED AS %s.",
+  		theUser->getUserName().c_str());
+	
+	/* Notify other admins */
+	if(isAdmin) {
+		bot->logAdminMessage("LOGIN - FAILURE - MAX LOGINS - %s (%s)",
+			theClient->getNickName().c_str(),
+			theUser->getUserName().c_str());
+	}
+	
+	return false;
 }
 
 if(theUser->isAuthed()) {
-  bot->noticeAllAuthedClients(theUser, "%s has just authenticated as you (%s).",
-    theClient->getNickUserHost().c_str(), theUser->getUserName().c_str());
+	bot->noticeAllAuthedClients(theUser, "%s has just authenticated as you"
+		" (%s).",
+		theClient->getNickUserHost().c_str(),
+		theUser->getUserName().c_str());
+}
+
+/* Notify other admins */
+if(isAdmin) {
+	bot->logAdminMessage("LOGIN - SUCCESS - ADMIN - %s (%s)",
+		theClient->getNickName().c_str(),
+		theUser->getUserName().c_str());
 }
 
 string uname = theUser->getUserName();
@@ -146,8 +174,7 @@ stringstream ac;
 ac << bot->getCharYY()
   << " AC "
   << theClient->getCharYYXXX()
-  << " " << theUser->getUserName()
-  << ends;
+  << " " << theUser->getUserName();
 bot->Write(ac);
 theClient->setAccount(theUser->getUserName());
 
@@ -171,9 +198,8 @@ if (theUser->getFlag(sqlUser::F_GLOBAL_SUSPEND))
 
 stringstream theQuery;
 theQuery	<< "SELECT channels.name,levels.flags,levels.suspend_expires FROM "
-			<< "levels,channels WHERE channels.id=levels.channel_id AND levels.user_id = "
-			<< theUser->getID()
-			<< ends;
+		<< "levels,channels WHERE channels.id=levels.channel_id AND levels.user_id = "
+		<< theUser->getID();
 
 #ifdef LOG_SQL
 	elog	<< "LOGIN::sqlQuery> "
@@ -328,7 +354,7 @@ for (autoOpVectorType::const_iterator resultPtr = autoOpVector.begin();
 	
 	stringstream notesQuery;
 	notesQuery	<< "SELECT COUNT(id) FROM memo WHERE to_id = "
-							<< theUser->getID() << ends;
+			<< theUser->getID();
 #ifdef LOG_SQL
 	elog	<< "LOGIN::sqlQuery> "
 		<< notesQuery.str().c_str()
@@ -365,8 +391,7 @@ supporterQuery	<< "SELECT channels.name FROM"
 			<< " AND supporters.support = '?'"
 			<< " AND pending.status = 0"
 			<< " AND user_id = "
-			<< theUser->getID()
-			<< ends;
+			<< theUser->getID();
 
 #ifdef LOG_SQL
 	elog	<< "LOGIN::sqlQuery> "

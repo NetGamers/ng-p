@@ -804,7 +804,7 @@ else if(Command == "VERSION")
 	xClient::DoCTCP(theClient, CTCP,
 		"NetGamers P10 Channel Services II ["
 		__DATE__ " " __TIME__
-		"] Release 1.2.06");
+		"] Release 1.2.07");
 	}
 else if(Command == "DCC")
 	{
@@ -2762,6 +2762,10 @@ switch( theEvent )
 		sqlUser* tmpSqlUser = isAuthed(tmpUser, false);
 		if (tmpSqlUser)
 			{
+			logAdminMessage("LOGOUT - SUCCESS - ADMIN - %s (%s)",
+				tmpUser->getNickName().c_str(),
+				tmpSqlUser->getUserName().c_str());
+			
 			tmpSqlUser->removeAuthedClient(tmpUser);
 			tmpSqlUser->removeFlag(sqlUser::F_LOGGEDIN);
 			elog	<< "cservice::OnEvent> Deauthenticated "

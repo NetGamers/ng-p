@@ -1,3 +1,7 @@
+2003-03-29 1.2.07 Jeekay
+* Added logging of admin login/logouts and login failures
+* Bumped version to 1.2.07
+
 2003-02-21 1.2.06 Jeekay
 * Fixed silly STRICTVOICE bug that'd deop on <=voice instead of <voice
 * Bumped version to 1.2.06
