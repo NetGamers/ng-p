@@ -11,7 +11,7 @@
 #include	"cservice_config.h"
 #include  "libpq-int.h"
 
-const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.5 2002-02-26 13:12:10 morpheus Exp $" ;
+const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.6 2002-02-26 15:11:34 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -215,7 +215,7 @@ if (tmpChan)
 	}
 
 
-bot->Notice(theClient, "MassDeopPro: %",
+bot->Notice(theClient, "MassDeopPro: %i",
 	    theChan->getMassDeopPro());
 
 string flagsSet;
