@@ -13,7 +13,7 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.12 2002-03-26 01:50:13 morpheus Exp $
+ * $Id: CHANINFOCommand.cc,v 1.13 2002-03-26 02:00:51 jeekay Exp $
  */
 
 #include	<string>
@@ -26,7 +26,7 @@
 #include	"libpq++.h"
 #include	"cservice_config.h"
 
-const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.12 2002-03-26 01:50:13 morpheus Exp $" ;
+const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.13 2002-03-26 02:00:51 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -222,7 +222,7 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 		bot->Notice(theClient, "Last Hostmask: %s", 
 			theUser->getLastHostMask().c_str()); 
 
-		if(!targetAdmin || (adminAccess >= level::chgadmin))
+		if(adminAccess && (!targetAdmin || (adminAccess >= level::chgadmin)))
 			{
 			int myQuestion = theUser->getQuestionID();
 			if(myQuestion >= 1 && myQuestion <= 4)
