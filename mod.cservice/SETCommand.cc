@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.28 2003-10-02 18:17:39 jeekay Exp $
+ * $Id: SETCommand.cc,v 1.29 2003-10-11 15:24:55 jeekay Exp $
  */
 
 #include  <string>
@@ -30,7 +30,7 @@
 #include  "responses.h"
 #include  "cservice_config.h"
 
-const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.28 2003-10-02 18:17:39 jeekay Exp $" ;
+const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.29 2003-10-11 15:24:55 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -740,6 +740,7 @@ else
     
     if(value == "ON") {
       theChan->setFlag(sqlChannel::F_AUTOJOIN);
+      theChan->removeFlag(sqlChannel::F_IDLE);
       theChan->setInChan(true);
       bot->writeChannelLog(theChan, theClient, sqlChannel::EV_JOIN, "");
       bot->getUplink()->RegisterChannelEvent( theChan->getName(), bot ) ;

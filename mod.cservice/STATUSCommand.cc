@@ -10,7 +10,7 @@
 #include	"Network.h"
 #include	"cservice_config.h"
 
-const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.20 2003-01-09 23:04:57 jeekay Exp $" ;
+const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.21 2003-10-11 15:24:55 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -196,6 +196,7 @@ if (theChan->getFlag(sqlChannel::F_LOCKED))      flagsSet += "LOCKED ";
 if (theChan->getFlag(sqlChannel::F_NOFORCE))     flagsSet += "NOFORCE ";
 if (theChan->getFlag(sqlChannel::F_STRICTVOICE)) flagsSet += "STRICTVOICE ";
 if (theChan->getFlag(sqlChannel::F_INVISIBLE))   flagsSet += "INVISIBLE ";
+if (theChan->getFlag(sqlChannel::F_IDLE))        flagsSet += "IDLE ";
 if (!theChan->getComment().empty() && admLevel)  flagsSet += "COMMENT ";
 if (theChan->getFlag(sqlChannel::F_FLOATLIM)) 
            { 

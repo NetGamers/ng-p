@@ -1904,6 +1904,7 @@ void cservice::cacheExpireLevels()
 			theChan->setInChan(false);
 			MyUplink->UnRegisterChannelEvent(theChan->getName(), this);
 			theChan->removeFlag(sqlChannel::F_AUTOJOIN);
+			theChan->setFlag(sqlChannel::F_IDLE);
 			theChan->commit();
 			joinCount--;
 			writeChannelLog(theChan, me, sqlChannel::EV_IDLE, "");

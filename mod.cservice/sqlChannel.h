@@ -1,7 +1,7 @@
 /* sqlChannel.h */
 
 #ifndef __SQLCHANNEL_H
-#define __SQLCHANNEL_H "$Id: sqlChannel.h,v 1.8 2002-11-05 00:24:27 jeekay Exp $"
+#define __SQLCHANNEL_H "$Id: sqlChannel.h,v 1.9 2003-10-11 15:24:55 jeekay Exp $"
 
 #include	<vector>
 #include	<string>
@@ -31,6 +31,7 @@ public:
 
 	static const flagType F_NOPURGE;
 	static const flagType F_SPECIAL;
+	static const flagType F_IDLE;
 	static const flagType F_SUSPEND;
 	static const flagType F_TEMP;
 	static const flagType F_CAUTION;
@@ -45,7 +46,7 @@ public:
 	static const flagType F_AUTOJOIN;
 	static const flagType F_FLOATLIM;
 	static const flagType F_NOFORCE;
-  static const flagType F_INVISIBLE;
+	static const flagType F_INVISIBLE;
 	/*
 	 *   Channel 'Event' Flags, used in the channelog table.
 	 *   These flags are used to filter channel log records.

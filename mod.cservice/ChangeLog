@@ -1,6 +1,8 @@
 2003-10-10 1.2.12 Jeekay
 * Removed LISTEN events
 * Respect sql_pass if given
+* Added INVISIBLE to list of flags shown for users
+* Added IDLE flag for channels that have been autoparted
 * Bumped version to 1.2.12
 
 2003-10-02 1.2.11 Jeekay

@@ -13,7 +13,7 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.24 2003-02-21 17:06:19 jeekay Exp $
+ * $Id: CHANINFOCommand.cc,v 1.25 2003-10-11 15:24:55 jeekay Exp $
  */
 
 #include  <string>
@@ -27,7 +27,7 @@
 #include  "levels.h"
 #include  "responses.h"
 
-const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.24 2003-02-21 17:06:19 jeekay Exp $" ;
+const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.25 2003-10-11 15:24:55 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -206,10 +206,11 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) ) {
     } // if(adminAccess && (!targetAdmin || (adminAccess >= theCommandLevel->getLevel())))
     
     string flags;
-    if(targetUser->getFlag(sqlUser::F_AUTOKILL)) flags += "AUTOKILL ";
-    if(targetUser->getFlag(sqlUser::F_NOTE)) flags += "NOTE ";
-    if(targetUser->getFlag(sqlUser::F_NOPURGE)) flags += "NOPURGE ";
-    if(targetUser->getFlag(sqlUser::F_BOT)) flags += "BOT ";
+    if(targetUser->getFlag(sqlUser::F_AUTOKILL))  flags += "AUTOKILL ";
+    if(targetUser->getFlag(sqlUser::F_NOTE))      flags += "NOTE ";
+    if(targetUser->getFlag(sqlUser::F_NOPURGE))   flags += "NOPURGE ";
+    if(targetUser->getFlag(sqlUser::F_BOT))       flags += "BOT ";
+    if(targetUser->getFlag(sqlUser::F_INVIS))     flags += "INVISIBLE ";
     bot->Notice(theClient, "Flags: %s", flags.c_str());
 
     stringstream channelsQuery;

@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: JOINCommand.cc,v 1.3 2002-09-24 20:06:18 jeekay Exp $
+ * $Id: JOINCommand.cc,v 1.4 2003-10-11 15:24:55 jeekay Exp $
  */
 
 
@@ -21,7 +21,7 @@
 #include	"responses.h"
 #include	"Network.h"
 
-const char JOINCommand_cc_rcsId[] = "$Id: JOINCommand.cc,v 1.3 2002-09-24 20:06:18 jeekay Exp $" ;
+const char JOINCommand_cc_rcsId[] = "$Id: JOINCommand.cc,v 1.4 2003-10-11 15:24:55 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -94,6 +94,7 @@ if (theChan->getInChan())
 bot->writeChannelLog(theChan, theClient, sqlChannel::EV_JOIN, "");
 
 theChan->setInChan(true);
+theChan->removeFlag(sqlChannel::F_IDLE);
 bot->getUplink()->RegisterChannelEvent( theChan->getName(), bot);
 bot->Join(theChan->getName(),
 	"",
