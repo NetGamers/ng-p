@@ -11,7 +11,7 @@
 #include	"Network.h"
 #include	"events.h"
 
-const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.17 2003-03-29 23:41:41 jeekay Exp $" ;
+const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.18 2003-09-02 23:25:30 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -108,7 +108,7 @@ if(!bot->isPasswordRight(theUser, st.assemble(2)))
 
 /* Dont exceed MAXLOGINS */
 if(theUser->networkClientList.size() >= theUser->getMaxLogins()) {
-	bot->Notice(theClient, "AUTHENTICATION FAILED AS %s.",
+	bot->Notice(theClient, "AUTHENTICATION FAILED AS %s. (Maximum concurrent logins exceeded)",
   		theUser->getUserName().c_str());
 	
 	/* Notify other admins */
