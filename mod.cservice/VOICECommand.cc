@@ -20,7 +20,7 @@
  *
  * Caveats: None
  *
- * $Id: VOICECommand.cc,v 1.2 2002-01-23 17:17:25 ultimate Exp $
+ * $Id: VOICECommand.cc,v 1.3 2002-01-23 23:13:55 jeekay Exp $
  */
 
 #include	<string>
@@ -37,7 +37,7 @@
 using std::map ;
 using std::vector ;
 
-const char VOICECommand_cc_rcsId[] = "$Id: VOICECommand.cc,v 1.2 2002-01-23 17:17:25 ultimate Exp $" ;
+const char VOICECommand_cc_rcsId[] = "$Id: VOICECommand.cc,v 1.3 2002-01-23 23:13:55 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -200,6 +200,16 @@ while (counter < st2.size())
 		counter++;
 		continue ;
 		}
+
+	sqlBan* tmpBan = bot->isBannedOnChan(theChan, tmpChanUser->getClient());
+	if( tmpBan && (tmpBan->getLevel() >= 25) )
+	{
+		bot->Notice(theClient, "%s isn't allowed to be voice in %s",
+								tmpChanUser->getClient()->getNickName().c_str(),
+								theChan->getName().c_str());
+		counter++;
+		continue;
+	}
 
 	// Check for duplicates.
 	duplicateMapType::iterator ptr = duplicateMap.find(target);
