@@ -4172,5 +4172,25 @@ delete[] theLog.str();
 }
 #endif
 
+const string cservice::getVerify(const int officialLevel)
+{
+	typedef map<int, string> verifyTableType;
+	verifyTableType verifyTable;
+	verifyTable[1] = "an Official Planetarion Bot";
+	verifyTable[2] = "an Official Planetarion VirusFix Member";
+	verifyTable[3] = "an Official Planetarion PATeam Member";
+	verifyTable[4] = "an Official Planetarion PACrew Member";
+	verifyTable[5] = "a Senior Stats Admin";
+	verifyTable[50] = "an Official CSC Helper";
+	verifyTable[99] = "a Planetarion Creator";
+	
+	verifyTableType::const_iterator ptr = verifyTable.find(officialLevel);
+	if(ptr != verifyTable.end())
+		{
+		return ptr->second;
+		}
+
+	return "Somehow Official";
+}
 
 } // namespace gnuworld

@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.10 2002-02-26 13:42:05 morpheus Exp $" ;
+const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.11 2002-04-21 12:28:37 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -63,10 +63,7 @@ if (!theUser)
 	{
 	if(target->isOper())
 		{ 
-		bot->Notice(theClient, 
-			bot->getResponse(tmpUser,
-				language::is_an_ircop,
-				string("%s is an IRC operator")).c_str(), 
+		bot->Notice(theClient, "%s is an IRC operator and is NOT logged in.",
 			target->getNickUserHost().c_str());
 		}
 	else
@@ -210,50 +207,14 @@ if (cLevel > level::coder::devel)
 	return true;
 	}
 
-// #official replies
-//  1 = Official Planetarion Bot
-//  2 = Official Planetarion Virusfix Member
-//  3 = Official Planetarion PATeam Member
-//  4 = Official Planetarion PACrew Member
-// 50 = Official CSC Helper
-// 99 = Planetarion Creator
-
-if(1 == oLevel)
+if(oLevel)
 	{
-	bot->Notice(theClient, "%s is an Official Planetarion Bot%s and logged in as %s", target->getNickUserHost().c_str(), extra.c_str(), theUser->getUserName().c_str());
+	bot->Notice(theClient, "%s is %s%s and logged in as %s",
+		target->getNickUserHost().c_str(), bot->getVerify(oLevel).c_str(),
+		extra.c_str(), theUser->getUserName().c_str());
 	return true;
 	}
 
-if(2 == oLevel)
-	{
-	bot->Notice(theClient, "%s is an Official Planetarion Virusfix Member%s and logged in as %s", target->getNickUserHost().c_str(), extra.c_str(), theUser->getUserName().c_str());
-	return true;
-	}
-
-if(3 == oLevel)
-	{
-	bot->Notice(theClient, "%s is an Official Planetarion PATeam Member%s and logged in as %s", target->getNickUserHost().c_str(), extra.c_str(), theUser->getUserName().c_str());
-	return true;
-	}
-
-if(4 == oLevel)
-	{
-	bot->Notice(theClient, "%s is an Official Planetarion PACrew Member%s and logged in as %s", target->getNickUserHost().c_str(), extra.c_str(), theUser->getUserName().c_str());
-	return true;
-	}
-
-if(50 == oLevel)
-	{
-	bot->Notice(theClient, "%s is an Official CSC Helper%s and logged in as %s", target->getNickUserHost().c_str(), extra.c_str(), theUser->getUserName().c_str());
-	return true;
-	}
-
-if(99 == oLevel)
-	{
-	bot->Notice(theClient, "%s is an Official Planetarion Game Creator%s and logged in as %s", target->getNickUserHost().c_str(), extra.c_str(), theUser->getUserName().c_str());
-	return true;
-	}
-	
 return true ;
 }
 

@@ -1,5 +1,5 @@
 #ifndef __CSERVICECLASS_H
-#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.5 2002-03-31 20:51:42 morpheus Exp $"
+#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.6 2002-04-21 12:28:37 jeekay Exp $"
 
 #include	"EConfig.h"
 #include	"sqlChannel.h"
@@ -160,6 +160,9 @@ public:
 
 	/* Formats a timestamp into a "X Days, XX:XX:XX" from 'Now'. */
 	const string prettyDuration( int, const string& dFormat = "all" ) const ;
+	
+	/* Retrieve a users verify based on a level */
+	const string getVerify(const int officialLevel);
 
 	/* Returns the current "Flood Points" this iClient has. */
  	unsigned short getFloodPoints(iClient*);
