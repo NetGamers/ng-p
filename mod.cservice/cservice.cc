@@ -276,6 +276,7 @@ connectRetry = atoi((cserviceConfig->Require( "connection_retry_total" )->second
 limitCheckPeriod = atoi((cserviceConfig->Require( "limit_check" )->second).c_str());
 nickNickServ = cserviceConfig->Require("nickservNick")->second;
 loginDelay = atoi((cserviceConfig->Require( "login_delay" )->second).c_str());
+preloadUserDays = atoi((cserviceConfig->Require( "preload_user_days" )->second).c_str());
 
 userHits = 0;
 userCacheHits = 0;
@@ -303,6 +304,9 @@ preloadBanCache();
 
 /* Preload the Level cache */
 preloadLevelsCache();
+
+/* Preload any user accounts we want to */
+preloadUserCache();
 
 }
 
@@ -3946,7 +3950,7 @@ theQuery	<< "SELECT " << sql::ban_fields
 			<< " FROM bans;"
 			<< ends;
 
-elog		<< "*** [CMaster::preloadBanCache]: Precaching Level table: "
+elog		<< "*** [CMaster::preloadBanCache]: Precaching Ban table: "
 			<< endl;
 
 ExecStatusType status = SQLDb->Exec(theQuery.str().c_str()) ;
@@ -4031,6 +4035,53 @@ if( PGRES_TUPLES_OK == status )
 elog	<< "*** [CMaster::preloadLevelCache]: Done. Loaded "
 		<< goodCount << " level records out of " << SQLDb->Tuples()
 		<< "."
+		<< endl;
+}
+
+/**
+ * Preload all the users within the last 'x' days, to save
+ * doing loads of lookups when we receive a net full of +r users
+ * during net.merge.
+ */
+void cservice::preloadUserCache()
+{
+	stringstream theQuery;
+	theQuery	<< "SELECT " << sql::user_fields
+			<< " FROM users,users_lastseen WHERE"
+			<< " users_lastseen.user_id = users.id AND"
+			<< " users_lastseen.last_seen >= "
+			<< currentTime() - (preloadUserDays * 86400)
+			<< ends;
+
+	elog	<< "*** [CMaster::preloadUserCache] Loading users accounts logged in within "
+		<< preloadUserDays
+		<< " days."
+		<< endl;
+
+#ifdef LOG_SQL
+	elog	<< "*** [CMaster::preloadUserCache] SQL: "
+		<< theQuery
+		<< endl;
+#endif
+
+	ExecStatusType status = SQLDb->Exec(theQuery.str().c_str());
+
+	if( PGRES_TUPLES_OK == status )
+	{
+		for (int i = 0; i < SQLDb->Tuples(); i++)
+		{
+			sqlUser* newUser = new (std::nothrow) sqlUser(SQLDb);
+			assert(newUser != 0);
+			newUser->setAllMembers(i);
+			newUser->setLastUsed(currentTime());
+
+			sqlUserCache.insert(sqlUserHashType::value_type(newUser->getUserName(), newUser));
+		}
+	}
+
+	elog	<< "*** [CMaster::preloadUserCache] Done. Loaded "
+		<< SQLDb->Tuples()
+		<< " user accounts."
 		<< endl;
 }
 

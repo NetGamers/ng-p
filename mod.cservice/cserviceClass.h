@@ -1,5 +1,5 @@
 #ifndef __CSERVICECLASS_H
-#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.12 2002-09-24 20:06:18 jeekay Exp $"
+#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.13 2002-10-19 20:49:52 jeekay Exp $"
 
 #include <map>
 
@@ -421,9 +421,12 @@ public:
 	 *  Misc uncategorisable functions.
 	 */
 
+	unsigned int preloadUserDays;
+
 	void preloadBanCache();
 	void preloadChannelCache();
 	void preloadLevelsCache();
+	void preloadUserCache();
 
 	void updateChannels();
 	void updateUsers();
