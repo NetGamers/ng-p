@@ -4,7 +4,7 @@
  *
  * Distributed under the GNU Public Licence
  *
- * $Id: CHINFOCommand.cc,v 1.5 2002-09-24 20:06:17 jeekay Exp $
+ * $Id: CHINFOCommand.cc,v 1.6 2002-10-11 13:13:06 jeekay Exp $
  */
 
 #include	<string>
@@ -14,7 +14,7 @@
 #include "cservice.h"
 #include "levels.h"
 
-const char CHINFOCommand_cc_rcsId[] = "$Id: CHINFOCommand.cc,v 1.5 2002-09-24 20:06:17 jeekay Exp $" ;
+const char CHINFOCommand_cc_rcsId[] = "$Id: CHINFOCommand.cc,v 1.6 2002-10-11 13:13:06 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -111,6 +111,12 @@ if((aLevel >= level::chinfo::nick) && ("NICK" == option))
 			newdata.c_str());
 		return false;
 		}
+
+  if(targetUser->isAuthed()) {
+    bot->Notice(theClient, "%s is currently logged in. Cannot CHINFO NICK this user.",
+      targetUser->getUserName().c_str());
+    return true;
+  }
 	
 	/* Save copy of current name */
 	string userName = targetUser->getUserName();
@@ -118,14 +124,6 @@ if((aLevel >= level::chinfo::nick) && ("NICK" == option))
 	/* First, we change the database */
 	targetUser->setUserName(newdata);
 	targetUser->commit();
-	
-	/* Then we check if the user is logged on */
-	if(targetUser->isAuthed())
-		{
-		bot->noticeAllAuthedClients(targetUser, "Your registered nick has been changed from %s to %s by %s (%s)",
-			userName.c_str(), newdata.c_str(), theClient->getNickName().c_str(),
-			theUser->getUserName().c_str());
-		}
 	
 	/* Then we update the cache */
 	cservice::sqlUserHashType::iterator ptr = bot->sqlUserCache.find(target);

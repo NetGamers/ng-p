@@ -3,7 +3,7 @@
  *
  * 20020308 GK@PAnet - Initial Writing
  *
- * $Id: REMUSERIDCommand.cc,v 1.12 2002-09-24 20:06:18 jeekay Exp $
+ * $Id: REMUSERIDCommand.cc,v 1.13 2002-10-11 13:13:06 jeekay Exp $
  */
 
 #include	<string>
@@ -14,7 +14,7 @@
 #include "levels.h"
 #include "networkData.h"
 
-const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.12 2002-09-24 20:06:18 jeekay Exp $" ;
+const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.13 2002-10-11 13:13:06 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -79,14 +79,9 @@ if(targetUser->getFlag(sqlUser::F_NOPURGE))
 
 /* Very first things first - is the user currently logged in? */
 if(targetUser->isAuthed()) {
-  for(sqlUser::networkClientListType::iterator ptr = targetUser->networkClientList.begin();
-    ptr != targetUser->networkClientList.end(); ++ptr) {
-    
-    iClient* authTestUser = (*ptr);
-
-    targetUser->removeAuthedClient(authTestUser);    
-    server->PostEvent(gnuworld::EVT_FORCEDEAUTH, static_cast< void* >( authTestUser));
-  }
+  bot->Notice(theClient, "%s is currently logged in. Cannot REMUSERID this nick.",
+    targetUser->getUserName().c_str());
+  return true;
 }
 
 /* First things first -
