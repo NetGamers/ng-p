@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.6 2002-01-21 14:57:59 morpheus Exp $" ;
+const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.7 2002-01-23 09:29:57 ultimate Exp $" ;
 
 namespace gnuworld
 {
@@ -35,13 +35,19 @@ static const char* lvl_adm_cmds = "\002Level    *\002: force unforce";
 static const char* lvl_0_cmds = "\002Level    0\002: access banlist chaninfo info help lbanlist login motd newpass showcommands showignore verify recover note";
 static const char* lvl_oper_cmds = "\002Level Oper\002: operjoin operpart settime opersuspend";
 
-static const char* lvl_0_set_cmds = "\002Level   0\002: invisible lang";
-static const char* lvl_1_set_cmds = "\002Level   1\002: autoinvite";
-static const char* lvl_450_set_cmds = "\002Level 450\002: userflag autotopic url keywords desc mode";
-static const char* lvl_500_set_cmds = "\002Level 500\002: massdeoppro noop strictop lang autojoin";
-static const char* lvl_501_set_cmds = "\002Level 501\002: nopurge suspend tempman caution vacation";
-static const char* lvl_600_set_cmds = "\002Level 600\002: comment locked";
-static const char* lvl_750_set_cmds = "\002Level 750\002: special noreg neverreg";
+/*
+ * [15:18] <Kheldar> 06:15 -P- Level 900: noforce
+ * [15:18] <Kheldar> 06:15 -P- Level 800: nopurge special vacation caution neverreg
+ * [15:18] <Kheldar> 06:15 -P- Level 600: suspend
+ * [15:18] <Kheldar> 06:15 -P- Level 501: comment locked
+ */
+static const char* lvl_0_set_cmds = "\002Level   0\002: invisible lang coords alliance note";
+static const char* lvl_25_set_cmds = "\002Level  25\002: autoinvite";
+static const char* lvl_450_set_cmds = "\002Level 450\002: userflag autotopic url keywords desc mode welcome";
+static const char* lvl_500_set_cmds = "\002Level 500\002: massdeoppro noop strictop lang autojoin floatlim";
+static const char* lvl_501_set_cmds = "\002Level 501\002: comment locked";
+static const char* lvl_600_set_cmds = "\002Level 600\002: suspend";
+static const char* lvl_800_set_cmds = "\002Level 800\002: nopurge special vacation caution neverreg";
 static const char* lvl_900_set_cmds = "\002Level 900\002: noforce";
 
 bool SHOWCOMMANDSCommand::Exec( iClient* theClient, const string& Message )
@@ -88,14 +94,14 @@ if(string_upper(st[1]) == "SET") {
  
          int level = bot->getEffectiveAccessLevel(theUser, theChan, true);
  
- 	/* levels 0,1,450,500,501,600,750,900 */
+ 	/* levels 0,25,450,500,501,600,800,900 */
  	if (level >= 900) bot->Notice(theClient, lvl_900_set_cmds);
- 	if (level >= 750) bot->Notice(theClient, lvl_750_set_cmds);
+ 	if (level >= 800) bot->Notice(theClient, lvl_800_set_cmds);
  	if (level >= 600) bot->Notice(theClient, lvl_600_set_cmds);
  	if (level >= 501) bot->Notice(theClient, lvl_501_set_cmds);
  	if (level >= 500) bot->Notice(theClient, lvl_500_set_cmds);
  	if (level >= 450) bot->Notice(theClient, lvl_450_set_cmds);
- 	if (level >= 1) bot->Notice(theClient,   lvl_1_set_cmds);
+ 	if (level >= 25) bot->Notice(theClient,   lvl_25_set_cmds);
 	
 	bot->Notice(theClient, lvl_0_set_cmds);
 	return true;

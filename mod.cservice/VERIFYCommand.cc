@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.1 2002-01-14 23:14:23 morpheus Exp $" ;
+const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.2 2002-01-23 09:29:58 ultimate Exp $" ;
 
 namespace gnuworld
 {
@@ -87,6 +87,14 @@ if (!theChan)
 	return true;
 	}
 
+sqlChannel* virusChan = bot->getChannelRecord("#virusfix");
+if (!virusChan)
+        {
+        elog << "Cannot find the #virusfix channel!" << endl;
+        return true;
+        }
+
+
 // TODO: Move all the levels to constants in levels.h
 
 int level = bot->getAdminAccessLevel(theUser); 
@@ -96,7 +104,14 @@ if (!theChan)
 else
 	cLevel = bot->getEffectiveAccessLevel(theUser, theChan, false);
 
-if ( (0 == level) && (0 == cLevel) ) 
+int vLevel;
+if (!virusChan)
+        vLevel = 0;
+else
+        vLevel = bot->getEffectiveAccessLevel(theUser, virusChan, false);
+
+
+if ( (0 == level) && (0 == cLevel) && (0 == vLevel) ) 
 	{
 	bot->Notice(theClient, 
 		bot->getResponse(tmpUser,
@@ -275,7 +290,25 @@ if (cLevel > level::coder::devel)
 	return true;
 	}
 
+
+/*
+ * #virusfix verify replies
+ *
+ * [02:02] <Kheldar> have it verify like:
+ * [02:04] <Kheldar> 17:03 -P- Icewatcher!Icewatcher@89dyn165.com21.casema.net is an Official Virusfix
+ * Member and logged in as Icewatcher
+ */
+
+if(vLevel > 100) //TODO: add to levels.h
+	{
+	bot->Notice(theClient, "%s is an Official Virusfix Member%s and logged in as %s",
+		target->getNickUserHost().c_str(), extra.c_str(), theUser->getUserName().c_str());
+	return true;
+	}
+
+
 return true ;
-} 
+}
+
 
 } // namespace gnuworld.
