@@ -1,4 +1,6 @@
 Makefile
 .deps
 .libs
-libcservice.la
+*.la
+*.lo
+
