@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: PURGECommand.cc,v 1.6 2002-03-28 18:36:06 jeekay Exp $
+ * $Id: PURGECommand.cc,v 1.7 2002-03-31 20:30:05 morpheus Exp $
  */
 
 #include	<string>
@@ -22,7 +22,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.6 2002-03-28 18:36:06 jeekay Exp $" ;
+const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.7 2002-03-31 20:30:05 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -265,6 +265,28 @@ if( status != PGRES_COMMAND_OK )
 		<< endl ;
 	return false ;
 	}
+
+strstream theQuery ;
+theQuery        << "DELETE FROM forcelog WHERE channel_id = "
+                << theChan->getID()
+                << ends;
+
+#ifdef LOG_SQL
+        elog    << "sqlQuery> "
+                << theQuery.str()
+                << endl;
+#endif
+        
+status = bot->SQLDb->Exec(theQuery.str()) ;
+delete[] theQuery.str() ;
+        
+if( status != PGRES_COMMAND_OK )
+        {
+        elog    << "PURGE> SQL Error: "
+                << bot->SQLDb->ErrorMessage()
+                << endl ;
+        return false ;
+        }
 
 /* 
  * Bin 'em all. 
