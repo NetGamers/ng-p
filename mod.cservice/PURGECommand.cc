@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: PURGECommand.cc,v 1.5 2002-03-28 18:23:12 jeekay Exp $
+ * $Id: PURGECommand.cc,v 1.6 2002-03-28 18:36:06 jeekay Exp $
  */
 
 #include	<string>
@@ -22,7 +22,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.5 2002-03-28 18:23:12 jeekay Exp $" ;
+const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.6 2002-03-28 18:36:06 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -154,7 +154,7 @@ if("FORCE" == string_upper(st[1]))
 	bot->logAdminMessage("%s (%s) - PURGE FORCE - %s - %s",
 		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
 		st[2].c_str(), st.assemble(3).c_str());
-	bot->Notice(theClient, "Sucessfully purged %s", st[2].c_str());
+	bot->Notice(theClient, "Successfully purged %s", st[2].c_str());
 	return true;
 	}
 
