@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: REGISTERCommand.cc,v 1.4 2002-07-01 00:33:06 jeekay Exp $
+ * $Id: REGISTERCommand.cc,v 1.5 2002-09-13 21:30:39 jeekay Exp $
  */
 
 #include	<string>
@@ -21,12 +21,12 @@
 #include	"Network.h"
 #include	"responses.h"
 
-const char REGISTERCommand_cc_rcsId[] = "$Id: REGISTERCommand.cc,v 1.4 2002-07-01 00:33:06 jeekay Exp $" ;
+const char REGISTERCommand_cc_rcsId[] = "$Id: REGISTERCommand.cc,v 1.5 2002-09-13 21:30:39 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
-using namespace gnuworld;
+using std::ends;
 
 bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 {

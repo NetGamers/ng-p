@@ -13,7 +13,7 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.14 2002-07-01 00:33:05 jeekay Exp $
+ * $Id: CHANINFOCommand.cc,v 1.15 2002-09-13 21:30:38 jeekay Exp $
  */
 
 #include	<string>
@@ -26,10 +26,12 @@
 #include	"libpq++.h"
 #include	"cservice_config.h"
 
-const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.14 2002-07-01 00:33:05 jeekay Exp $" ;
+const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.15 2002-09-13 21:30:38 jeekay Exp $" ;
 
 namespace gnuworld
 {
+
+using std::ends;
 using std::string ;
 
 static const char* queryHeader = "SELECT channels.name,users.user_name,levels.access,users_lastseen.last_seen FROM levels,channels,users,users_lastseen ";

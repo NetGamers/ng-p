@@ -4,7 +4,7 @@
  * Storage class for accessing user information either from the backend
  * or internal storage.
  *
- * $Id: sqlUser.cc,v 1.11 2002-09-07 22:19:36 jeekay Exp $
+ * $Id: sqlUser.cc,v 1.12 2002-09-13 21:30:41 jeekay Exp $
  */
 
 #include	<string.h>
@@ -21,8 +21,8 @@
 namespace gnuworld
 {
 
-using std::string ;
 using std::endl ;
+using std::ends ;
 
 const sqlUser::flagType sqlUser::F_GLOBAL_SUSPEND =	0x01 ;
 const sqlUser::flagType sqlUser::F_LOGGEDIN =		0x02 ;

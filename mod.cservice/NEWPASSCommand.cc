@@ -1,7 +1,7 @@
 /* NEWPASSCommand.cc */
 
+#include  <iomanip>
 #include	<string>
-#include	<iomanip.h>
 
 #include	"md5hash.h"
 #include	"StringTokenizer.h"
@@ -10,10 +10,15 @@
 #include	"responses.h"
 #include	"networkData.h"
 
-const char NEWPASSCommand_cc_rcsId[] = "$Id: NEWPASSCommand.cc,v 1.3 2002-08-01 21:16:01 jeekay Exp $" ;
+const char NEWPASSCommand_cc_rcsId[] = "$Id: NEWPASSCommand.cc,v 1.4 2002-09-13 21:30:39 jeekay Exp $" ;
 
 namespace gnuworld
 {
+
+using std::ends;
+using std::hex;
+using std::setw;
+
 const char validChars[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.$*_";
 
 bool NEWPASSCommand::Exec( iClient* theClient, const string& Message )

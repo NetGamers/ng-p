@@ -10,10 +10,12 @@
 #include	"Network.h"
 #include	"cservice_config.h"
 
-const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.12 2002-07-01 00:33:07 jeekay Exp $" ;
+const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.13 2002-09-13 21:30:40 jeekay Exp $" ;
 
 namespace gnuworld
 {
+
+using std::ends ;
 using std::string ;
 
 bool STATUSCommand::Exec( iClient* theClient, const string& Message )
@@ -57,8 +59,6 @@ if (st[1] == "*")
 		return false;
 		}
 	
-	const cmDatabase* SQLDb = bot->getSQLDb();
-
 	/*
 	 *  Show some fancy stats.
 	 */

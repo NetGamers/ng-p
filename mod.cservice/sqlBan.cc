@@ -4,7 +4,7 @@
  * Storage class for accessing Ban information either from the backend
  * or internal storage.
  * 
- * $Id: sqlBan.cc,v 1.2 2002-08-01 21:16:01 jeekay Exp $
+ * $Id: sqlBan.cc,v 1.3 2002-09-13 21:30:41 jeekay Exp $
  */
  
 #include	<string> 
@@ -19,13 +19,14 @@
 #include	"cservice_config.h"
  
 const char sqlBan_h_rcsId[] = __SQLBAN_H ;
-const char sqlBan_cc_rcsId[] = "$Id: sqlBan.cc,v 1.2 2002-08-01 21:16:01 jeekay Exp $" ;
+const char sqlBan_cc_rcsId[] = "$Id: sqlBan.cc,v 1.3 2002-09-13 21:30:41 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
 using std::string ; 
-using std::endl ; 
+using std::endl ;
+using std::ends ;
 
 sqlBan::sqlBan(PgDatabase* _SQLDb)
   : id(0),

@@ -3,7 +3,6 @@
 
 #include	<string>
 #include	<cstdlib>
-#include        <iomanip.h>
 
 #include	"nickserv.h"
 #include	"nickservCommands.h"

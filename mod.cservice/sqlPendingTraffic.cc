@@ -1,7 +1,7 @@
 /* 
  * sqlPendingTraffic.cc
  * 
- * $Id: sqlPendingTraffic.cc,v 1.2 2002-08-01 21:16:02 jeekay Exp $
+ * $Id: sqlPendingTraffic.cc,v 1.3 2002-09-13 21:30:41 jeekay Exp $
  */
  
 #include	<string> 
@@ -19,12 +19,13 @@
 #include	"sqlPendingTraffic.h"
  
 const char sqlPendingTraffic_h_rcsId[] = __SQLPENDINGTRAFFIC_H ;
-const char sqlPendingTraffic_cc_rcsId[] = "$Id: sqlPendingTraffic.cc,v 1.2 2002-08-01 21:16:02 jeekay Exp $" ;
+const char sqlPendingTraffic_cc_rcsId[] = "$Id: sqlPendingTraffic.cc,v 1.3 2002-09-13 21:30:41 jeekay Exp $" ;
 
 namespace gnuworld
 {
-using std::string ; 
-using std::endl ; 
+using std::string ;
+using std::endl ;
+using std::ends ;
 
 sqlPendingTraffic::sqlPendingTraffic(PgDatabase* _SQLDb)
 :channel_id(0),

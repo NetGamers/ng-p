@@ -1,7 +1,7 @@
 #ifndef __CSERVICECLASS_H
-#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.9 2002-07-01 00:33:08 jeekay Exp $"
+#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.10 2002-09-13 21:30:41 jeekay Exp $"
 
-#include <hash_map>
+#include <map>
 
 #include	"EConfig.h"
 #include	"sqlChannel.h"
@@ -16,6 +16,9 @@ namespace gnuworld
 {
 
 class Command;
+
+using std::map;
+using std::string;
 
 /**
  *  Subclass the postgres API to create our own accessor
@@ -157,7 +160,7 @@ public:
 	string userStatusFlags( const string& );
 
 	/* Formats a timestamp into a "X Days, XX:XX:XX" from 'Now'. */
-	const string prettyDuration( int, const string& dFormat = "all" ) const ;
+	const string prettyDuration( int, const string& = "all" ) const ;
 	
 	/* Retrieve a users verify based on a level */
 	const string getVerify(const int officialLevel);
@@ -187,10 +190,10 @@ public:
 
 	// Typedef's for user/channel Hashmaps.
 	// User hash, Key is Username.
-	typedef hash_map< string, sqlUser*, eHash, eqstr > sqlUserHashType ;
+	typedef map< string, sqlUser*, noCaseCompare > sqlUserHashType ;
 
 	// Channel hash, Key is channelname.
-	typedef hash_map< string, sqlChannel*, eHash, eqstr > sqlChannelHashType ;
+	typedef map< string, sqlChannel*, noCaseCompare > sqlChannelHashType ;
 	typedef map< int, sqlChannel* > sqlChannelIDHashType ;
 
 	// Accesslevel cache, key is pair(chanid, userid).
@@ -346,7 +349,7 @@ public:
 	reopQType reopQ;
 
 	/* List of channels in 'pending' registration state. */
-	typedef hash_map < string, sqlPendingChannel*, eHash, eqstr > pendingChannelListType;
+	typedef map < string, sqlPendingChannel*, noCaseCompare > pendingChannelListType;
 	pendingChannelListType pendingChannelList;
 
 	/* Check for a correct user password */

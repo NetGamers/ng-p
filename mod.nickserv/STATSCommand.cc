@@ -1,7 +1,6 @@
 /* STATSCommand.cc */
 
 #include <string>
-#include <iomanip.h>
 
 #include "StringTokenizer.h"
 #include "ELog.h"
@@ -9,7 +8,7 @@
 #include "nickserv.h"
 #include "levels.h"
 
-const char STATSCommand_cc_rcsId[] = "$Id: STATSCommand.cc,v 1.6 2002-06-30 16:19:57 jeekay Exp $";
+const char STATSCommand_cc_rcsId[] = "$Id: STATSCommand.cc,v 1.7 2002-09-13 21:27:34 jeekay Exp $";
 
 namespace gnuworld
 {

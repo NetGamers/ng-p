@@ -1,7 +1,6 @@
-/* LOGINCommand.cc */
+/* RECOVERCommand.cc */
 
 #include	<string>
-#include	<iomanip.h>
 
 #include	"md5hash.h"
 #include	"StringTokenizer.h"
@@ -12,12 +11,12 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 
-const char RECOVERCommand_cc_rcsId[] = "$Id: RECOVERCommand.cc,v 1.6 2002-07-01 00:33:06 jeekay Exp $" ;
+const char RECOVERCommand_cc_rcsId[] = "$Id: RECOVERCommand.cc,v 1.7 2002-09-13 21:30:39 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
-using namespace gnuworld;
+using std::ends;
 
 bool RECOVERCommand::Exec( iClient* theClient, const string& Message )
 {

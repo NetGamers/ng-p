@@ -5,8 +5,8 @@
 namespace gnuworld
 {
 
+using std::ends;
 using std::string;
-using namespace gnuworld;
  
 bool SETTIMECommand::Exec( iClient* theClient, const string& Message )
 { 

@@ -1,9 +1,8 @@
 #ifndef __CSERVICE_H
-#define __CSERVICE_H "$Id: cservice.h,v 1.7 2002-03-19 19:49:36 jeekay Exp $"
+#define __CSERVICE_H "$Id: cservice.h,v 1.8 2002-09-13 21:30:40 jeekay Exp $"
 
 #include	<string>
 #include	<vector>
-#include	<hash_map.h>
 #include	<map>
 #include	<ctime>
 
@@ -16,9 +15,6 @@
 #include  "cserviceClass.h"
 
 using std::string ;
-using std::vector ;
-using std::hash_map ;
-using std::map ;
 
 namespace gnuworld
 {

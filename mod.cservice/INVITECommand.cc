@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: INVITECommand.cc,v 1.2 2002-01-23 17:17:24 ultimate Exp $
+ * $Id: INVITECommand.cc,v 1.3 2002-09-13 21:30:38 jeekay Exp $
  */
 
 
@@ -21,12 +21,10 @@
 #include	"responses.h"
 #include	"Network.h"
 
-const char INVITECommand_cc_rcsId[] = "$Id: INVITECommand.cc,v 1.2 2002-01-23 17:17:24 ultimate Exp $" ;
+const char INVITECommand_cc_rcsId[] = "$Id: INVITECommand.cc,v 1.3 2002-09-13 21:30:38 jeekay Exp $" ;
 
 namespace gnuworld
 {
-
-using namespace gnuworld;
 
 bool INVITECommand::Exec( iClient* theClient, const string& Message )
 {

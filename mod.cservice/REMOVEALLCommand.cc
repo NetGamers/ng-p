@@ -13,10 +13,12 @@
 #include	"levels.h"
 #include	"cservice_config.h"
 
-const char REMOVEALLCommand_cc_rcsId[] = "$Id: REMOVEALLCommand.cc,v 1.4 2002-07-01 00:33:06 jeekay Exp $" ;
+const char REMOVEALLCommand_cc_rcsId[] = "$Id: REMOVEALLCommand.cc,v 1.5 2002-09-13 21:30:40 jeekay Exp $" ;
 
 namespace gnuworld
 {
+
+using std::ends ;
 using std::string ;
 
 bool REMOVEALLCommand::Exec( iClient* theClient, const string& Message )

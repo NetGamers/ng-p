@@ -22,7 +22,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.35 2002-07-27 14:54:11 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.36 2002-09-13 21:27:35 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -40,11 +40,11 @@ const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.35 2002-07-27 14:54:11 je
 namespace gnuworld
 {
 
-using std::string ;
-using std::vector ;
 using std::cout ;
 using std::endl ; 
-using std::count ;
+using std::ends ;
+using std::string ;
+using std::vector ;
 
 namespace nserv
 {
@@ -295,7 +295,7 @@ return xClient::OnPrivateMessage( theClient, Message ) ;
 }
 
 int nickserv::OnCTCP( iClient* theClient, const string& CTCP
-		, const string& Message ,bool Secure = false ) 
+		, const string& Message ,bool Secure ) 
 {
 
 StringTokenizer st( CTCP );
@@ -587,7 +587,7 @@ bool nickserv::jupeNick( string theNick, string hostMask, string theReason, time
 	return false;
 }
 
-bool nickserv::removeJupeNick( string theNick, string theReason = "End Of Jupe" )
+bool nickserv::removeJupeNick( string theNick, string theReason )
 {
 	elog << "nickserv::removeJupeNick> Removing jupe for " << theNick << endl;
 	for(jupeIteratorType pos = jupedNickList.begin(); pos != jupedNickList.end(); ++pos)

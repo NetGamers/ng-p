@@ -4,7 +4,7 @@
  * Class which contains details about channels which are 'pending'
  * registration.
  * 
- * $Id: sqlPendingChannel.cc,v 1.2 2002-08-01 21:16:02 jeekay Exp $
+ * $Id: sqlPendingChannel.cc,v 1.3 2002-09-13 21:30:41 jeekay Exp $
  */
  
 #include	<string> 
@@ -23,12 +23,13 @@
 #include	"sqlPendingTraffic.h"
  
 const char sqlPendingChannel_h_rcsId[] = __SQLPENDINGCHANNEL_H ;
-const char sqlPendingChannel_cc_rcsId[] = "$Id: sqlPendingChannel.cc,v 1.2 2002-08-01 21:16:02 jeekay Exp $" ;
+const char sqlPendingChannel_cc_rcsId[] = "$Id: sqlPendingChannel.cc,v 1.3 2002-09-13 21:30:41 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::string ; 
-using std::endl ; 
+using std::endl ;
+using std::ends ;
 
 sqlPendingChannel::sqlPendingChannel(PgDatabase* _SQLDb)
 :channel_id(0), 

@@ -9,10 +9,12 @@
 
 #define LOG_SQL
 
-const char NOTECommand_cc_rcsId[] = "$Id: NOTECommand.cc,v 1.10 2002-07-01 00:33:06 jeekay Exp $" ;
+const char NOTECommand_cc_rcsId[] = "$Id: NOTECommand.cc,v 1.11 2002-09-13 21:30:39 jeekay Exp $" ;
 
 namespace gnuworld
 {
+
+using std::ends ;
 using std::string ;
 
 bool NOTECommand::Exec(iClient* theClient, const string& Message)

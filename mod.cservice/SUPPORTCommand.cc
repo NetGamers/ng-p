@@ -6,10 +6,12 @@
 #include	"ELog.h"
 #include	"cservice.h"
 
-const char SUPPORTCommand_cc_rcsId[] = "$Id: SUPPORTCommand.cc,v 1.2 2002-07-01 00:33:07 jeekay Exp $" ;
+const char SUPPORTCommand_cc_rcsId[] = "$Id: SUPPORTCommand.cc,v 1.3 2002-09-13 21:30:40 jeekay Exp $" ;
 
 namespace gnuworld
 {
+
+using std::ends ;
 using std::string ;
 
 bool SUPPORTCommand::Exec( iClient* theClient, const string& Message )

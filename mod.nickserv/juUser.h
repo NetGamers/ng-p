@@ -10,6 +10,8 @@ namespace gnuworld
 namespace nserv
 {
 
+using std::string ;
+
 class juUser
 {
 

@@ -11,7 +11,7 @@
 *
 * Suggestion: Support several nicks by seperating them with a comma.
 *             IE: /msg E kick #coder-com nick1,nick2,nick3 get outta here!
-* $Id: KICKCommand.cc,v 1.2 2002-01-23 17:17:24 ultimate Exp $
+* $Id: KICKCommand.cc,v 1.3 2002-09-13 21:30:38 jeekay Exp $
 */
 
 #include        <string>
@@ -24,11 +24,11 @@
 #include        "responses.h"
 #include		"match.h"
 
-const char KICKCommand_cc_rcsId[] = "$Id: KICKCommand.cc,v 1.2 2002-01-23 17:17:24 ultimate Exp $" ;
+const char KICKCommand_cc_rcsId[] = "$Id: KICKCommand.cc,v 1.3 2002-09-13 21:30:38 jeekay Exp $" ;
 
 namespace gnuworld
 {
-using namespace gnuworld;
+
 using namespace level;
 
 bool KICKCommand::Exec( iClient* theClient, const string& Message )

@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: DEVOICECommand.cc,v 1.3 2002-01-29 23:27:44 jeekay Exp $
+ * $Id: DEVOICECommand.cc,v 1.4 2002-09-13 21:30:38 jeekay Exp $
  */
 
 #include	<string>
@@ -21,14 +21,10 @@
 #include	"levels.h"
 #include	"responses.h"
 
-using std::map ;
-
-const char DEVOICECommand_cc_rcsId[] = "$Id: DEVOICECommand.cc,v 1.3 2002-01-29 23:27:44 jeekay Exp $" ;
+const char DEVOICECommand_cc_rcsId[] = "$Id: DEVOICECommand.cc,v 1.4 2002-09-13 21:30:38 jeekay Exp $" ;
 
 namespace gnuworld
 {
-
-using namespace gnuworld;
 
 bool DEVOICECommand::Exec( iClient* theClient, const string& Message )
 {

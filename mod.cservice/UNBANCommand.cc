@@ -8,7 +8,7 @@
  *
  * Caveats: None.
  *
- * $Id: UNBANCommand.cc,v 1.3 2002-07-01 00:33:07 jeekay Exp $
+ * $Id: UNBANCommand.cc,v 1.4 2002-09-13 21:30:40 jeekay Exp $
  */
 
 #include	<string>
@@ -21,10 +21,12 @@
 #include	"responses.h"
 #include	"match.h"
 
-const char UNBANCommand_cc_rcsId[] = "$Id: UNBANCommand.cc,v 1.3 2002-07-01 00:33:07 jeekay Exp $" ;
+const char UNBANCommand_cc_rcsId[] = "$Id: UNBANCommand.cc,v 1.4 2002-09-13 21:30:40 jeekay Exp $" ;
 
 namespace gnuworld
 {
+
+using std::ends ;
 using std::string ;
 using namespace level;
 

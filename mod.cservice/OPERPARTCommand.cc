@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: OPERPARTCommand.cc,v 1.2 2002-07-01 00:33:06 jeekay Exp $
+ * $Id: OPERPARTCommand.cc,v 1.3 2002-09-13 21:30:39 jeekay Exp $
  */
 
 
@@ -21,11 +21,12 @@
 #include	"responses.h"
 #include	"Network.h"
 
-const char OPERPARTCommand_cc_rcsId[] = "$Id: OPERPARTCommand.cc,v 1.2 2002-07-01 00:33:06 jeekay Exp $" ;
+const char OPERPARTCommand_cc_rcsId[] = "$Id: OPERPARTCommand.cc,v 1.3 2002-09-13 21:30:39 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
+using std::ends ;
 using std::string ;
 
 bool OPERPARTCommand::Exec( iClient* theClient, const string& Message )

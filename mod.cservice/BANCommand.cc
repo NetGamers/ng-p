@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: BANCommand.cc,v 1.4 2002-07-01 00:33:05 jeekay Exp $
+ * $Id: BANCommand.cc,v 1.5 2002-09-13 21:30:38 jeekay Exp $
  */
 
 #include	<new>
@@ -33,10 +33,12 @@
 #include	"responses.h"
 #include	"match.h"
 
-const char BANCommand_cc_rcsId[] = "$Id: BANCommand.cc,v 1.4 2002-07-01 00:33:05 jeekay Exp $" ;
+const char BANCommand_cc_rcsId[] = "$Id: BANCommand.cc,v 1.5 2002-09-13 21:30:38 jeekay Exp $" ;
 
 namespace gnuworld
 {
+
+using std::ends;
 using std::string ;
 using namespace level;
 

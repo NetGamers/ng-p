@@ -1,6 +1,6 @@
 
 #ifndef __NSUSER_H_
-#define __NSUSER_H_ "$Id: nsUser.h,v 1.3 2002-02-04 04:31:10 jeekay Exp $"
+#define __NSUSER_H_ "$Id: nsUser.h,v 1.4 2002-09-13 21:27:35 jeekay Exp $"
 
 #include <string>
 #include <sys/time.h>
@@ -10,6 +10,8 @@ namespace gnuworld
 
 namespace nserv
 {
+
+using std::string ;
 
 class nsUser
 {

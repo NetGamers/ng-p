@@ -8,13 +8,11 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char INVMECommand_cc_rcsId[] = "$Id: INVMECommand.cc,v 1.2 2002-05-28 18:54:33 jeekay Exp $" ;
+const char INVMECommand_cc_rcsId[] = "$Id: INVMECommand.cc,v 1.3 2002-09-13 21:30:38 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
-using namespace gnuworld;
- 
 bool INVMECommand::Exec( iClient* theClient, const string& Message )
 { 
 	bot->incStat("COMMANDS.INVME");

@@ -1,7 +1,6 @@
 /* LOGINCommand.cc */
 
 #include	<string>
-#include	<iomanip.h>
 
 #include	"md5hash.h"
 #include	"StringTokenizer.h"
@@ -12,7 +11,8 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 #include	"events.h"
-const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.14 2002-07-01 00:33:05 jeekay Exp $" ;
+
+const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.15 2002-09-13 21:30:38 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -22,7 +22,7 @@ struct autoOpData {
 	unsigned int suspend_expires;
 } aOp;
 
-using namespace gnuworld;
+using std::ends;
 
 bool LOGINCommand::Exec( iClient* theClient, const string& Message )
 {

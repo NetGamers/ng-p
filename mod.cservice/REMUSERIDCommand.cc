@@ -3,7 +3,7 @@
  *
  * 20020308 GK@PAnet - Initial Writing
  *
- * $Id: REMUSERIDCommand.cc,v 1.10 2002-07-16 18:45:14 jeekay Exp $
+ * $Id: REMUSERIDCommand.cc,v 1.11 2002-09-13 21:30:40 jeekay Exp $
  */
 
 #include	<string>
@@ -14,10 +14,12 @@
 #include "levels.h"
 #include "networkData.h"
 
-const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.10 2002-07-16 18:45:14 jeekay Exp $" ;
+const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.11 2002-09-13 21:30:40 jeekay Exp $" ;
 
 namespace gnuworld
 {
+
+using std::ends ;
 using std::string ;
 
 bool REMUSERIDCommand::Exec( iClient* theClient, const string& Message )
@@ -156,7 +158,7 @@ for(int i = 0; i < bot->SQLDb->Tuples(); i++)
 	int userId = atoi(bot->SQLDb->GetValue(i, 0));
 	int channelId = atoi(bot->SQLDb->GetValue(i, 1));
 	pair<int, int> myLevelPair;
-	myLevelPair = make_pair(userId, channelId);
+	myLevelPair = std::make_pair(userId, channelId);
 	bot->sqlLevelCache.erase(myLevelPair);
 	}
 

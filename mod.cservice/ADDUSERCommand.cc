@@ -11,7 +11,7 @@
  *
  * Caveats: None
  *
- * $Id: ADDUSERCommand.cc,v 1.6 2002-08-14 22:00:47 jeekay Exp $
+ * $Id: ADDUSERCommand.cc,v 1.7 2002-09-13 21:30:38 jeekay Exp $
  */
 
 #include	<string>
@@ -24,11 +24,12 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char ADDUSERCommand_cc_rcsId[] = "$Id: ADDUSERCommand.cc,v 1.6 2002-08-14 22:00:47 jeekay Exp $" ;
+const char ADDUSERCommand_cc_rcsId[] = "$Id: ADDUSERCommand.cc,v 1.7 2002-09-13 21:30:38 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
+using std::ends ;
 using std::string ;
 
 static const char* queryHeader = "INSERT INTO levels (channel_id, user_id, access, flags, added, added_by, last_modif, last_modif_by, last_updated) ";

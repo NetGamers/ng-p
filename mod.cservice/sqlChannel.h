@@ -1,7 +1,7 @@
 /* sqlChannel.h */
 
 #ifndef __SQLCHANNEL_H
-#define __SQLCHANNEL_H "$Id: sqlChannel.h,v 1.6 2002-07-01 00:33:08 jeekay Exp $"
+#define __SQLCHANNEL_H "$Id: sqlChannel.h,v 1.7 2002-09-13 21:30:41 jeekay Exp $"
 
 #include	<vector>
 #include	<string>
@@ -14,6 +14,11 @@ using std::string ;
 
 namespace gnuworld
 {
+
+using std::map;
+using std::pair;
+using std::string;
+using std::vector;
 
 class sqlChannel
 {

@@ -8,7 +8,7 @@
  *
  * Caveats: Needs to be written :)
  *
- * $Id: HELPCommand.cc,v 1.1 2002-01-14 23:14:17 morpheus Exp $
+ * $Id: HELPCommand.cc,v 1.2 2002-09-13 21:30:38 jeekay Exp $
  */
 
 #include	<string>
@@ -18,12 +18,10 @@
 #include	"cservice.h" 
 #include 	"responses.h"
 
-const char HELPCommand_cc_rcsId[] = "$Id: HELPCommand.cc,v 1.1 2002-01-14 23:14:17 morpheus Exp $" ;
+const char HELPCommand_cc_rcsId[] = "$Id: HELPCommand.cc,v 1.2 2002-09-13 21:30:38 jeekay Exp $" ;
 
 namespace gnuworld
 {
-
-using namespace gnuworld;
 
 const char* helpHeader = "\026 Planetarion(TM) IRC's Channel Service                   Version 2 \026";
  

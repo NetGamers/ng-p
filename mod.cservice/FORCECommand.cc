@@ -8,11 +8,10 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char FORCECommand_cc_rcsId[] = "$Id: FORCECommand.cc,v 1.9 2002-03-25 01:20:16 jeekay Exp $" ;
+const char FORCECommand_cc_rcsId[] = "$Id: FORCECommand.cc,v 1.10 2002-09-13 21:30:38 jeekay Exp $" ;
 
 namespace gnuworld
 {
-using namespace gnuworld;
 
 bool FORCECommand::Exec( iClient* theClient, const string& Message )
 {

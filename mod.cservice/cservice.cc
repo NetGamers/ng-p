@@ -34,10 +34,12 @@
 namespace gnuworld
 {
 
-using std::vector ;
 using std::endl ;
 using std::ends ;
+using std::make_pair ;
+using std::map ;
 using std::string ;
+using std::vector ;
 
 /*
  *  Exported function used by moduleLoader to gain an
@@ -2408,7 +2410,7 @@ if(ptr != sqlUserCache.end())
 return flagString;
 }
 
-const string cservice::prettyDuration( int duration, const string& dFormat = "all" ) const
+const string cservice::prettyDuration( int duration, const string& dFormat ) const
 {
 
 // Pretty format a 'duration' in seconds to

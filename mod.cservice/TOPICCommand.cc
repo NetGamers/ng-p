@@ -11,7 +11,7 @@
  *
  * Caveats: None
  *
- * $Id: TOPICCommand.cc,v 1.3 2002-07-01 00:33:07 jeekay Exp $
+ * $Id: TOPICCommand.cc,v 1.4 2002-09-13 21:30:40 jeekay Exp $
  */
 
 #include	<string>
@@ -23,10 +23,12 @@
 #include	"responses.h"
 #include	"Network.h"
 
-const char TOPICCommand_cc_rcsId[] = "$Id: TOPICCommand.cc,v 1.3 2002-07-01 00:33:07 jeekay Exp $" ;
+const char TOPICCommand_cc_rcsId[] = "$Id: TOPICCommand.cc,v 1.4 2002-09-13 21:30:40 jeekay Exp $" ;
 
 namespace gnuworld
 {
+
+using std::ends ;
 
 bool TOPICCommand::Exec( iClient* theClient, const string& Message )
 {

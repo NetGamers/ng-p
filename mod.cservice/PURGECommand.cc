@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: PURGECommand.cc,v 1.10 2002-07-01 00:33:06 jeekay Exp $
+ * $Id: PURGECommand.cc,v 1.11 2002-09-13 21:30:39 jeekay Exp $
  */
 
 #include	<string>
@@ -22,10 +22,13 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.10 2002-07-01 00:33:06 jeekay Exp $" ;
+const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.11 2002-09-13 21:30:39 jeekay Exp $" ;
 
 namespace gnuworld
 {
+
+using std::ends;
+
 bool PURGECommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.PURGE");

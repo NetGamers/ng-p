@@ -12,7 +12,7 @@
  * Displays all "Level" records for a specified channel.
  * Can optionally narrow down selection using a number of switches.
  *
- * $Id: ACCESSCommand.cc,v 1.3 2002-07-01 00:33:05 jeekay Exp $
+ * $Id: ACCESSCommand.cc,v 1.4 2002-09-13 21:30:37 jeekay Exp $
  */
 
 #include	<string>
@@ -26,10 +26,12 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 
-const char ACCESSCommand_cc_rcsId[] = "$Id: ACCESSCommand.cc,v 1.3 2002-07-01 00:33:05 jeekay Exp $" ;
+const char ACCESSCommand_cc_rcsId[] = "$Id: ACCESSCommand.cc,v 1.4 2002-09-13 21:30:37 jeekay Exp $" ;
 
 namespace gnuworld
 {
+
+using std::ends;
 
 static const char* queryHeader =    "SELECT channels.name,users.user_name,levels.access,levels.flags,users_lastseen.last_seen,levels.suspend_expires,levels.last_modif,levels.last_modif_by,levels.suspend_level FROM levels,channels,users,users_lastseen ";
 static const char* queryCondition = "WHERE levels.channel_id=channels.id AND levels.user_id=users.id AND users.id=users_lastseen.user_id ";

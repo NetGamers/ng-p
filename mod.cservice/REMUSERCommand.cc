@@ -9,7 +9,7 @@
  * Caveats: None
  *
  *
- * $Id: REMUSERCommand.cc,v 1.5 2002-08-14 22:00:48 jeekay Exp $
+ * $Id: REMUSERCommand.cc,v 1.6 2002-09-13 21:30:40 jeekay Exp $
  */
 
 #include	<string>
@@ -21,11 +21,12 @@
 #include	"libpq++.h"
 #include	"responses.h"
 
-const char REMUSERCommand_cc_rcsId[] = "$Id: REMUSERCommand.cc,v 1.5 2002-08-14 22:00:48 jeekay Exp $" ;
+const char REMUSERCommand_cc_rcsId[] = "$Id: REMUSERCommand.cc,v 1.6 2002-09-13 21:30:40 jeekay Exp $" ;
 
 namespace gnuworld
 {
-using namespace gnuworld;
+
+using std::ends;
 
 bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 {
@@ -198,7 +199,7 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 	/* Remove tmpLevel from the cache. (It has to be there, we just got it even if it wasnt..) */
 
 	pair<int, int> thePair;
-	thePair = make_pair(tmpLevel->getUserId(), tmpLevel->getChannelId());
+	thePair = std::make_pair(tmpLevel->getUserId(), tmpLevel->getChannelId());
 	bot->sqlLevelCache.erase(thePair);
 	delete(tmpLevel);
 

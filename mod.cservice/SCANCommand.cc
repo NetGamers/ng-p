@@ -4,7 +4,7 @@
  *
  * Distributed under the GNU Public Licence
  *
- * $Id: SCANCommand.cc,v 1.4 2002-07-01 00:33:07 jeekay Exp $
+ * $Id: SCANCommand.cc,v 1.5 2002-09-13 21:30:40 jeekay Exp $
  */
 
 #include	<string>
@@ -18,6 +18,8 @@ const char SCANCommand_cc_rcsId[] = "$Id" ;
 
 namespace gnuworld
 {
+
+using std::ends ;
 using std::string ;
 
 bool SCANCommand::Exec( iClient* theClient, const string& Message )
