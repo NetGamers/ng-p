@@ -9,7 +9,7 @@
 
 #define LOG_SQL
 
-const char NOTECommand_cc_rcsId[] = "$Id: NOTECommand.cc,v 1.12 2002-09-24 20:06:18 jeekay Exp $" ;
+const char NOTECommand_cc_rcsId[] = "$Id: NOTECommand.cc,v 1.13 2003-11-19 22:39:06 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -219,7 +219,7 @@ if (cmd == "READ")
 			bot->Notice(theClient, "You have more than 12 notes. Please delete some of them and try again.");
 			break;
 			} // if( i > 12)
-		bot->Notice(theClient, "MEMO #%d", atoi(bot->SQLDb->GetValue(i, 0)));
+		bot->Notice(theClient, "NOTE #%d", atoi(bot->SQLDb->GetValue(i, 0)));
 		bot->Notice(theClient, "FROM: %s", bot->SQLDb->GetValue(i, 3));
 		bot->Notice(theClient, "SENT: %s ago", bot->prettyDuration(atoi(bot->SQLDb->GetValue(i, 1))).c_str());
 		bot->Notice(theClient, "TEXT: %s", bot->SQLDb->GetValue(i, 2));
@@ -262,7 +262,7 @@ if (cmd == "ERASE")
 		return false;
 		}
 		
-	bot->Notice(theClient, "Deleted %d memo(s).", bot->SQLDb->CmdTuples());
+	bot->Notice(theClient, "Deleted %d note(s).", bot->SQLDb->CmdTuples());
 	return true;
 	}
 
