@@ -3,7 +3,7 @@
  *
  * Allow global unsuspending of nicks/channels
  *
- * $Id: GUNSUSPENDCommand.cc,v 1.5 2004-05-16 13:08:16 jeekay Exp $
+ * $Id: GUNSUSPENDCommand.cc,v 1.6 2004-05-16 15:20:21 jeekay Exp $
  */
 
 #include <string>
@@ -12,7 +12,11 @@
 
 #include "cservice.h"
 
-const char GUNSUSPENDCommand_cc_rcsId[] = "$Id: GUNSUSPENDCommand.cc,v 1.5 2004-05-16 13:08:16 jeekay Exp $";
+#include	"sqlChannel.h"
+#include	"sqlCommandLevel.h"
+#include	"sqlUser.h"
+
+const char GUNSUSPENDCommand_cc_rcsId[] = "$Id: GUNSUSPENDCommand.cc,v 1.6 2004-05-16 15:20:21 jeekay Exp $";
 
 namespace gnuworld
 {

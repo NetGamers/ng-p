@@ -12,12 +12,16 @@
 #include	<string>
 
 #include	"ELog.h"
-#include  "Network.h"
+#include	"Network.h"
 #include	"StringTokenizer.h"
 
 #include	"cservice.h"
 
-const char UPDATEDBCommand_cc_rcsId[] = "$Id: UPDATEDBCommand.cc,v 1.7 2004-05-16 13:08:18 jeekay Exp $" ;
+#include	"sqlChannel.h"
+#include	"sqlCommandLevel.h"
+#include	"sqlUser.h"
+
+const char UPDATEDBCommand_cc_rcsId[] = "$Id: UPDATEDBCommand.cc,v 1.8 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {

@@ -8,7 +8,11 @@
 #include	"cservice.h"
 #include	"responses.h"
 
-const char FORCECommand_cc_rcsId[] = "$Id: FORCECommand.cc,v 1.12 2004-05-16 13:08:16 jeekay Exp $" ;
+#include	"sqlChannel.h"
+#include	"sqlCommandLevel.h"
+#include	"sqlUser.h"
+
+const char FORCECommand_cc_rcsId[] = "$Id: FORCECommand.cc,v 1.13 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {

@@ -7,9 +7,9 @@
 #include	"cservice.h"
 #include	"responses.h"
 
-#define LOG_SQL
+#include	"sqlUser.h"
 
-const char NOTECommand_cc_rcsId[] = "$Id: NOTECommand.cc,v 1.15 2004-05-16 13:08:16 jeekay Exp $" ;
+const char NOTECommand_cc_rcsId[] = "$Id: NOTECommand.cc,v 1.16 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {

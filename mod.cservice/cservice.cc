@@ -32,6 +32,13 @@
 #include	"levels.h"
 #include	"networkData.h"
 
+/* Data structures */
+#include	"sqlChannel.h"
+#include	"sqlCommandLevel.h"
+#include	"sqlLevel.h"
+#include	"sqlPendingChannel.h"
+#include	"sqlUser.h"
+
 namespace gnuworld
 {
 
@@ -153,7 +160,6 @@ cservice::cservice(const string& args)
 
 /* Generic commands */
 RegisterCommand(new HELPCommand(this, "HELP", "[command]", 4));
-RegisterCommand(new ISREGCommand(this, "ISREG", "<#channel>", 4));
 RegisterCommand(new LOGINCommand(this, "LOGIN", "<username> <password>", 10));
 RegisterCommand(new LOGINCommand(this, "AUTH", "<username> <password>", 10));
 RegisterCommand(new MOTDCommand(this, "MOTD", "", 4));

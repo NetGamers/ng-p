@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: JOINCommand.cc,v 1.6 2004-05-16 13:08:16 jeekay Exp $
+ * $Id: JOINCommand.cc,v 1.7 2004-05-16 15:20:21 jeekay Exp $
  */
 
 
@@ -21,7 +21,10 @@
 #include	"responses.h"
 #include	"Network.h"
 
-const char JOINCommand_cc_rcsId[] = "$Id: JOINCommand.cc,v 1.6 2004-05-16 13:08:16 jeekay Exp $" ;
+#include	"sqlChannel.h"
+#include	"sqlUser.h"
+
+const char JOINCommand_cc_rcsId[] = "$Id: JOINCommand.cc,v 1.7 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {

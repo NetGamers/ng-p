@@ -13,7 +13,12 @@
 #include 	"responses.h"
 #include	"cservice_config.h"
 
-const char REMOVEALLCommand_cc_rcsId[] = "$Id: REMOVEALLCommand.cc,v 1.8 2004-05-16 13:08:17 jeekay Exp $" ;
+#include	"sqlChannel.h"
+#include	"sqlCommandLevel.h"
+#include	"sqlLevel.h"
+#include	"sqlUser.h"
+
+const char REMOVEALLCommand_cc_rcsId[] = "$Id: REMOVEALLCommand.cc,v 1.9 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {

@@ -10,7 +10,9 @@
 #include	"responses.h"
 #include	"networkData.h"
 
-const char NEWPASSCommand_cc_rcsId[] = "$Id: NEWPASSCommand.cc,v 1.5 2004-05-16 13:08:16 jeekay Exp $" ;
+#include	"sqlUser.h"
+
+const char NEWPASSCommand_cc_rcsId[] = "$Id: NEWPASSCommand.cc,v 1.6 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {

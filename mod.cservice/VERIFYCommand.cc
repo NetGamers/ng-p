@@ -8,7 +8,9 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.19 2004-05-16 13:08:18 jeekay Exp $" ;
+#include	"sqlUser.h"
+
+const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.20 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {

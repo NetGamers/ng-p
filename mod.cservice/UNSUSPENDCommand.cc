@@ -8,7 +8,7 @@
  *
  * Caveats: None.
  *
- * $Id: UNSUSPENDCommand.cc,v 1.7 2004-05-16 13:08:18 jeekay Exp $
+ * $Id: UNSUSPENDCommand.cc,v 1.8 2004-05-16 15:20:22 jeekay Exp $
  */
 
 #include	<string>
@@ -21,7 +21,12 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char UNSUSPENDCommand_cc_rcsId[] = "$Id: UNSUSPENDCommand.cc,v 1.7 2004-05-16 13:08:18 jeekay Exp $" ;
+#include	"sqlChannel.h"
+#include	"sqlCommandLevel.h"
+#include	"sqlLevel.h"
+#include	"sqlUser.h"
+
+const char UNSUSPENDCommand_cc_rcsId[] = "$Id: UNSUSPENDCommand.cc,v 1.8 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {

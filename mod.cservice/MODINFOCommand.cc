@@ -13,7 +13,7 @@
  * Shouldn't really happen, as trying to MODINFO a forced access doesn't
  * make sense - adduser and then MODINFO that :)
  *
- * $Id: MODINFOCommand.cc,v 1.10 2004-05-16 13:08:16 jeekay Exp $
+ * $Id: MODINFOCommand.cc,v 1.11 2004-05-16 15:20:21 jeekay Exp $
  */
 
 #include	<string>
@@ -25,7 +25,12 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char MODINFOCommand_cc_rcsId[] = "$Id: MODINFOCommand.cc,v 1.10 2004-05-16 13:08:16 jeekay Exp $" ;
+#include	"sqlChannel.h"
+#include	"sqlCommandLevel.h"
+#include	"sqlLevel.h"
+#include	"sqlUser.h"
+
+const char MODINFOCommand_cc_rcsId[] = "$Id: MODINFOCommand.cc,v 1.11 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {

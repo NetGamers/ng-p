@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: OPERPARTCommand.cc,v 1.4 2004-05-16 13:08:17 jeekay Exp $
+ * $Id: OPERPARTCommand.cc,v 1.5 2004-05-16 15:20:21 jeekay Exp $
  */
 
 
@@ -21,7 +21,9 @@
 #include	"responses.h"
 #include	"Network.h"
 
-const char OPERPARTCommand_cc_rcsId[] = "$Id: OPERPARTCommand.cc,v 1.4 2004-05-16 13:08:17 jeekay Exp $" ;
+#include	"sqlChannel.h"
+
+const char OPERPARTCommand_cc_rcsId[] = "$Id: OPERPARTCommand.cc,v 1.5 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {

@@ -20,7 +20,7 @@
  *
  * Caveats: None
  *
- * $Id: OPCommand.cc,v 1.5 2004-05-16 13:08:17 jeekay Exp $
+ * $Id: OPCommand.cc,v 1.6 2004-05-16 15:20:21 jeekay Exp $
  */
 
 #include	<string>
@@ -33,9 +33,12 @@
 #include	"levels.h"
 #include	"responses.h"
 
+#include	"sqlChannel.h"
+#include	"sqlUser.h"
+
 using std::map ;
 
-const char OPCommand_cc_rcsId[] = "$Id: OPCommand.cc,v 1.5 2004-05-16 13:08:17 jeekay Exp $" ;
+const char OPCommand_cc_rcsId[] = "$Id: OPCommand.cc,v 1.6 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {

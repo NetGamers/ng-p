@@ -7,7 +7,7 @@
 #include	"cservice.h"
 #include 	"responses.h"
 
-const char MOTDCommand_cc_rcsId[] = "$Id: MOTDCommand.cc,v 1.3 2004-05-16 13:08:16 jeekay Exp $" ;
+const char MOTDCommand_cc_rcsId[] = "$Id: MOTDCommand.cc,v 1.4 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -24,14 +24,7 @@ if( st.size() != 1 )
 	return ;
 	}
 
-	sqlUser* theUser = bot->isAuthed(theClient, false);
-
-/*	bot->Notice(theClient,
-		bot->getResponse(theUser,
-			language::motd,
-			string("No MOTD set."))); */
-	
-	bot->sendMOTD(theClient);
+bot->sendMOTD(theClient);
 
 return ;
 }

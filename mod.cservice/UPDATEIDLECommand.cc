@@ -15,6 +15,10 @@
 
 #include	"cservice.h"
 
+#include	"sqlChannel.h"
+#include	"sqlCommandLevel.h"
+#include	"sqlUser.h"
+
 namespace gnuworld
 {
 using std::string ;

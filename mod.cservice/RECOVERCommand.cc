@@ -11,7 +11,9 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 
-const char RECOVERCommand_cc_rcsId[] = "$Id: RECOVERCommand.cc,v 1.10 2004-05-16 13:08:17 jeekay Exp $" ;
+#include	"sqlUser.h"
+
+const char RECOVERCommand_cc_rcsId[] = "$Id: RECOVERCommand.cc,v 1.11 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {

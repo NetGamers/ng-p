@@ -8,7 +8,10 @@
 #include	"cservice.h" 
 #include	"responses.h"
 
-const char INVMECommand_cc_rcsId[] = "$Id: INVMECommand.cc,v 1.5 2004-05-16 13:08:16 jeekay Exp $" ;
+#include	"sqlCommandLevel.h"
+#include	"sqlUser.h"
+
+const char INVMECommand_cc_rcsId[] = "$Id: INVMECommand.cc,v 1.6 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -21,7 +24,7 @@ void INVMECommand::Exec( iClient* theClient, const string& Message )
 	if (!theUser) return ;
 
 	int admLevel = bot->getAdminAccessLevel(theUser);
-  sqlCommandLevel* invMeLevel = bot->getLevelRequired("INVME", "ADMIN");
+	sqlCommandLevel* invMeLevel = bot->getLevelRequired("INVME", "ADMIN");
   
 	if (admLevel < invMeLevel->getLevel())
 		{

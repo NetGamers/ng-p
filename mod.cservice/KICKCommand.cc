@@ -11,20 +11,23 @@
 *
 * Suggestion: Support several nicks by seperating them with a comma.
 *             IE: /msg E kick #coder-com nick1,nick2,nick3 get outta here!
-* $Id: KICKCommand.cc,v 1.5 2004-05-16 13:08:16 jeekay Exp $
+* $Id: KICKCommand.cc,v 1.6 2004-05-16 15:20:21 jeekay Exp $
 */
 
-#include        <string>
+#include	<string>
 
-#include        "StringTokenizer.h"
-#include        "ELog.h"
-#include        "cservice.h"
-#include        "Network.h"
-#include        "levels.h"
-#include        "responses.h"
-#include		"match.h"
+#include	"StringTokenizer.h"
+#include	"ELog.h"
+#include	"cservice.h"
+#include	"Network.h"
+#include	"levels.h"
+#include	"responses.h"
+#include	"match.h"
 
-const char KICKCommand_cc_rcsId[] = "$Id: KICKCommand.cc,v 1.5 2004-05-16 13:08:16 jeekay Exp $" ;
+#include	"sqlChannel.h"
+#include	"sqlUser.h"
+
+const char KICKCommand_cc_rcsId[] = "$Id: KICKCommand.cc,v 1.6 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {

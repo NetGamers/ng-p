@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: PURGECommand.cc,v 1.14 2004-05-16 13:08:17 jeekay Exp $
+ * $Id: PURGECommand.cc,v 1.15 2004-05-16 15:20:22 jeekay Exp $
  */
 
 #include	<string>
@@ -22,7 +22,12 @@
 #include	"cservice_config.h"
 #include	"responses.h"
 
-const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.14 2004-05-16 13:08:17 jeekay Exp $" ;
+#include	"sqlChannel.h"
+#include	"sqlCommandLevel.h"
+#include	"sqlLevel.h"
+#include	"sqlUser.h"
+
+const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.15 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {

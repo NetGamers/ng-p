@@ -10,7 +10,7 @@
  *
  * Todo: Support ircu2.10.11's CLEARMODE feature.
  *
- * $Id: CLEARMODECommand.cc,v 1.6 2004-05-16 13:08:16 jeekay Exp $
+ * $Id: CLEARMODECommand.cc,v 1.7 2004-05-16 15:20:21 jeekay Exp $
  */
 
 #include	<string>
@@ -21,7 +21,11 @@
 #include	"responses.h"
 #include	"Network.h"
 
-const char CLEARMODECommand_cc_rcsId[] = "$Id: CLEARMODECommand.cc,v 1.6 2004-05-16 13:08:16 jeekay Exp $" ;
+#include	"sqlChannel.h"
+#include	"sqlCommandLevel.h"
+#include	"sqlUser.h"
+
+const char CLEARMODECommand_cc_rcsId[] = "$Id: CLEARMODECommand.cc,v 1.7 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {

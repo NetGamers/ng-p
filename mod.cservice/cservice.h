@@ -1,5 +1,5 @@
 #ifndef __CSERVICE_H
-#define __CSERVICE_H "$Id: cservice.h,v 1.9 2002-10-20 02:12:10 jeekay Exp $"
+#define __CSERVICE_H "$Id: cservice.h,v 1.10 2004-05-16 15:20:22 jeekay Exp $"
 
 #include	<string>
 #include	<vector>
@@ -10,9 +10,9 @@
 #include	"iClient.h"
 #include	"iServer.h"
 #include	"cserviceCommands.h"
-#include "libpq++.h"
-#include "../mod.nickserv/nickservClass.h"
-#include  "cserviceClass.h"
-#include "sql.h"
+#include	"libpq++.h"
+#include	"../mod.nickserv/nickservClass.h"
+#include	"cserviceClass.h"
+#include	"sql.h"
 
 #endif // __CSERVICE_H

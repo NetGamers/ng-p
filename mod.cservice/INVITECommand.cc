@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: INVITECommand.cc,v 1.4 2004-05-16 13:08:16 jeekay Exp $
+ * $Id: INVITECommand.cc,v 1.5 2004-05-16 15:20:21 jeekay Exp $
  */
 
 
@@ -21,7 +21,10 @@
 #include	"responses.h"
 #include	"Network.h"
 
-const char INVITECommand_cc_rcsId[] = "$Id: INVITECommand.cc,v 1.4 2004-05-16 13:08:16 jeekay Exp $" ;
+#include	"sqlChannel.h"
+#include	"sqlUser.h"
+
+const char INVITECommand_cc_rcsId[] = "$Id: INVITECommand.cc,v 1.5 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {

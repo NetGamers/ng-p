@@ -12,7 +12,11 @@
 #include	"cservice.h"
 #include	"responses.h"
 
-const char COMMENTCommand_cc_rcsId[] = "$Id: COMMENTCommand.cc,v 1.9 2004-05-16 13:08:16 jeekay Exp $" ;
+#include	"sqlChannel.h"
+#include	"sqlCommandLevel.h"
+#include	"sqlUser.h"
+
+const char COMMENTCommand_cc_rcsId[] = "$Id: COMMENTCommand.cc,v 1.10 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {

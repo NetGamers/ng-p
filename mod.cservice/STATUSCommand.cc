@@ -10,7 +10,10 @@
 #include	"Network.h"
 #include	"cservice_config.h"
 
-const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.22 2004-05-16 13:08:17 jeekay Exp $" ;
+#include	"sqlChannel.h"
+#include	"sqlUser.h"
+
+const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.23 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {

@@ -4,7 +4,7 @@
  *
  * Distributed under the GNU Public Licence
  *
- * $Id: SCANCommand.cc,v 1.7 2004-05-16 13:08:17 jeekay Exp $
+ * $Id: SCANCommand.cc,v 1.8 2004-05-16 15:20:22 jeekay Exp $
  */
 
 #include	<string>
@@ -13,6 +13,9 @@
 #include	"StringTokenizer.h"
 
 #include	"cservice.h"
+
+#include	"sqlCommandLevel.h"
+#include	"sqlUser.h"
 
 const char SCANCommand_cc_rcsId[] = "$Id" ;
 

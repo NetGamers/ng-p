@@ -8,7 +8,11 @@
 #include	"cservice.h"
 #include	"responses.h"
 
-const char QUOTECommand_cc_rcsId[] = "$Id: QUOTECommand.cc,v 1.3 2004-05-16 13:08:17 jeekay Exp $" ;
+#include	"sqlChannel.h"
+#include	"sqlCommandLevel.h"
+#include	"sqlUser.h"
+
+const char QUOTECommand_cc_rcsId[] = "$Id: QUOTECommand.cc,v 1.4 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {

@@ -11,7 +11,11 @@
 #include	"Network.h"
 #include	"events.h"
 
-const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.19 2004-05-16 13:08:16 jeekay Exp $" ;
+#include	"sqlChannel.h"
+#include	"sqlLevel.h"
+#include	"sqlUser.h"
+
+const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.20 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {

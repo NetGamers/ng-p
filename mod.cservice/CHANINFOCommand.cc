@@ -13,7 +13,7 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.28 2004-05-16 13:08:16 jeekay Exp $
+ * $Id: CHANINFOCommand.cc,v 1.29 2004-05-16 15:20:21 jeekay Exp $
  */
 
 #include  <string>
@@ -27,7 +27,11 @@
 #include  "levels.h"
 #include  "responses.h"
 
-const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.28 2004-05-16 13:08:16 jeekay Exp $" ;
+#include	"sqlChannel.h"
+#include	"sqlCommandLevel.h"
+#include	"sqlUser.h"
+
+const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.29 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {

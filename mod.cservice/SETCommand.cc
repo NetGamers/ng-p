@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.31 2004-05-16 13:08:17 jeekay Exp $
+ * $Id: SETCommand.cc,v 1.32 2004-05-16 15:20:22 jeekay Exp $
  */
 
 #include  <string>
@@ -30,7 +30,12 @@
 #include  "responses.h"
 #include  "cservice_config.h"
 
-const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.31 2004-05-16 13:08:17 jeekay Exp $" ;
+#include	"sqlChannel.h"
+#include	"sqlCommandLevel.h"
+#include	"sqlLevel.h"
+#include	"sqlUser.h"
+
+const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.32 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {

@@ -3,7 +3,7 @@
  *
  * 2003-04-29 GK@NG Initial creation
  *
- * $Id: CONFIGCommand.cc,v 1.2 2004-05-16 13:08:16 jeekay Exp $
+ * $Id: CONFIGCommand.cc,v 1.3 2004-05-16 15:20:21 jeekay Exp $
  */
 
 #include	<string>
@@ -11,6 +11,9 @@
 #include	"ELog.h"
 #include	"StringTokenizer.h"
 #include	"cservice.h"
+
+#include	"sqlCommandLevel.h"
+#include	"sqlUser.h"
 
 namespace gnuworld
 {

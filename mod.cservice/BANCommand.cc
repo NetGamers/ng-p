@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: BANCommand.cc,v 1.10 2004-05-16 13:08:16 jeekay Exp $
+ * $Id: BANCommand.cc,v 1.11 2004-05-16 15:20:21 jeekay Exp $
  */
 
 #include	<new>
@@ -33,7 +33,11 @@
 #include	"responses.h"
 #include	"match.h"
 
-const char BANCommand_cc_rcsId[] = "$Id: BANCommand.cc,v 1.10 2004-05-16 13:08:16 jeekay Exp $" ;
+#include	"sqlChannel.h"
+#include	"sqlCommandLevel.h"
+#include	"sqlUser.h"
+
+const char BANCommand_cc_rcsId[] = "$Id: BANCommand.cc,v 1.11 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {

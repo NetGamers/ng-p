@@ -4,14 +4,18 @@
  * 20021017 - gk@ng - Initial creation
  */
 
-#include <string>
+#include	<string>
 
-#include "StringTokenizer.h"
+#include	"StringTokenizer.h"
 
-#include "cservice.h"
-#include "responses.h"
+#include	"cservice.h"
+#include	"responses.h"
 
-const char GETLEVELCommand_cc_rcsId[] = "$Id: GETLEVELCommand.cc,v 1.2 2004-05-16 13:08:16 jeekay Exp $";
+#include	"sqlChannel.h"
+#include	"sqlCommandLevel.h"
+#include	"sqlUser.h"
+
+const char GETLEVELCommand_cc_rcsId[] = "$Id: GETLEVELCommand.cc,v 1.3 2004-05-16 15:20:21 jeekay Exp $";
 
 namespace gnuworld {
 

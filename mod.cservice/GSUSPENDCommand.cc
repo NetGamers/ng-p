@@ -3,16 +3,20 @@
  *
  * Allow global suspending of nicks/channels
  *
- * $Id: GSUSPENDCommand.cc,v 1.7 2004-05-16 13:08:16 jeekay Exp $
+ * $Id: GSUSPENDCommand.cc,v 1.8 2004-05-16 15:20:21 jeekay Exp $
  */
 
-#include <string>
+#include	<string>
 
-#include "StringTokenizer.h"
+#include	"StringTokenizer.h"
 
-#include "cservice.h"
+#include	"cservice.h"
 
-const char GSUSPENDCommand_cc_rcsId[] = "$Id: GSUSPENDCommand.cc,v 1.7 2004-05-16 13:08:16 jeekay Exp $";
+#include	"sqlChannel.h"
+#include	"sqlCommandLevel.h"
+#include	"sqlUser.h"
+
+const char GSUSPENDCommand_cc_rcsId[] = "$Id: GSUSPENDCommand.cc,v 1.8 2004-05-16 15:20:21 jeekay Exp $";
 
 namespace gnuworld
 {

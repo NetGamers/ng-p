@@ -8,7 +8,7 @@
  *
  * Caveats: None.
  *
- * $Id: LBANLISTCommand.cc,v 1.4 2004-05-16 13:08:16 jeekay Exp $
+ * $Id: LBANLISTCommand.cc,v 1.5 2004-05-16 15:20:21 jeekay Exp $
  */
 
 #include	<string>
@@ -23,7 +23,10 @@
 #include	"cservice_config.h"
 #include	"time.h"
 
-const char LBANLISTCommand_cc_rcsId[] = "$Id: LBANLISTCommand.cc,v 1.4 2004-05-16 13:08:16 jeekay Exp $" ;
+#include	"sqlChannel.h"
+#include	"sqlUser.h"
+
+const char LBANLISTCommand_cc_rcsId[] = "$Id: LBANLISTCommand.cc,v 1.5 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {

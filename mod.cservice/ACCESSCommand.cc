@@ -12,7 +12,7 @@
  * Displays all "Level" records for a specified channel.
  * Can optionally narrow down selection using a number of switches.
  *
- * $Id: ACCESSCommand.cc,v 1.9 2004-05-16 13:08:15 jeekay Exp $
+ * $Id: ACCESSCommand.cc,v 1.10 2004-05-16 15:20:21 jeekay Exp $
  */
 
 #include	<string>
@@ -26,7 +26,11 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 
-const char ACCESSCommand_cc_rcsId[] = "$Id: ACCESSCommand.cc,v 1.9 2004-05-16 13:08:15 jeekay Exp $" ;
+#include	"sqlChannel.h"
+#include	"sqlLevel.h"
+#include	"sqlUser.h"
+
+const char ACCESSCommand_cc_rcsId[] = "$Id: ACCESSCommand.cc,v 1.10 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {

@@ -1,27 +1,29 @@
 #ifndef __CSERVICECLASS_H
-#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.21 2004-05-16 12:45:42 jeekay Exp $"
+#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.22 2004-05-16 15:20:22 jeekay Exp $"
 
-#include <map>
+#include	<map>
 
-#include	"EConfig.h"
-#include	"sqlChannel.h"
-#include	"sqlCommandLevel.h"
-#include	"sqlLevel.h"
-#include	"sqlBan.h"
-#include	"sqlUser.h"
-#include	"sqlPendingChannel.h"
+#include	"cservice_config.h"
 
 class PgDatabase;
 
 namespace gnuworld
 {
 
-class Command;
-
 using std::map;
 using std::string;
 
+class EConfig;
+
 class Command;
+
+class sqlBan;
+class sqlChannel;
+class sqlCommandLevel;
+class sqlLevel;
+class sqlPendingChannel;
+class sqlUser;
+class sqlVerify;
 
 class cservice : public xClient
 {

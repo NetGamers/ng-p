@@ -20,7 +20,7 @@
  *
  * Caveats: None
  *
- * $Id: VOICECommand.cc,v 1.6 2004-05-16 13:08:18 jeekay Exp $
+ * $Id: VOICECommand.cc,v 1.7 2004-05-16 15:20:22 jeekay Exp $
  */
 
 #include	<string>
@@ -34,10 +34,13 @@
 #include	"levels.h"
 #include	"responses.h"
 
+#include	"sqlChannel.h"
+#include	"sqlUser.h"
+
 using std::map ;
 using std::vector ;
 
-const char VOICECommand_cc_rcsId[] = "$Id: VOICECommand.cc,v 1.6 2004-05-16 13:08:18 jeekay Exp $" ;
+const char VOICECommand_cc_rcsId[] = "$Id: VOICECommand.cc,v 1.7 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {

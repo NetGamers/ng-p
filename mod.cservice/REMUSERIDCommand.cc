@@ -3,7 +3,7 @@
  *
  * 20020308 GK@PAnet - Initial Writing
  *
- * $Id: REMUSERIDCommand.cc,v 1.17 2004-05-16 13:08:17 jeekay Exp $
+ * $Id: REMUSERIDCommand.cc,v 1.18 2004-05-16 15:20:22 jeekay Exp $
  */
 
 #include	<string>
@@ -14,7 +14,10 @@
 #include "cservice.h"
 #include "networkData.h"
 
-const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.17 2004-05-16 13:08:17 jeekay Exp $" ;
+#include	"sqlCommandLevel.h"
+#include	"sqlUser.h"
+
+const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.18 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {

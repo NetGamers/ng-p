@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# "$Id: Makefile.in,v 1.16 2003-11-04 20:47:38 jeekay Exp $"
+# "$Id: Makefile.in,v 1.17 2004-05-16 15:20:21 jeekay Exp $"
 SHELL = @SHELL@
 
 srcdir = @srcdir@
@@ -131,7 +131,6 @@ libcservice_la_SOURCES = cservice.cc \
 	HELPCommand.cc \
 	INVITECommand.cc \
 	INVMECommand.cc \
-	ISREGCommand.cc \
 	JOINCommand.cc \
 	KICKCommand.cc \
 	LBANLISTCommand.cc \
@@ -197,22 +196,22 @@ am_libcservice_la_OBJECTS = cservice.lo networkData.lo sqlChannel.lo \
 	DEBUGCommand.lo DEOPCommand.lo DEVOICECommand.lo \
 	FORCECommand.lo GETLEVELCommand.lo GLOBNOTICECommand.lo \
 	GSUSPENDCommand.lo GUNSUSPENDCommand.lo HELPCommand.lo \
-	INVITECommand.lo INVMECommand.lo ISREGCommand.lo JOINCommand.lo \
-	KICKCommand.lo LBANLISTCommand.lo LOGINCommand.lo \
-	MODECommand.lo MODINFOCommand.lo MOTDCommand.lo \
-	NEWPASSCommand.lo NOTECommand.lo OFFICIALCommand.lo \
-	OPCommand.lo OPERJOINCommand.lo OPERPARTCommand.lo \
-	OPERSUSPENDCommand.lo PARTCommand.lo PURGECommand.lo \
-	QUOTECommand.lo RECOVERCommand.lo REGISTERCommand.lo \
-	REHASHCommand.lo RELEASECommand.lo REMIGNORECommand.lo \
-	REMOVEALLCommand.lo REMUSERCommand.lo REMUSERIDCommand.lo \
-	SAYCommand.lo SCANCommand.lo SEARCHCommand.lo \
-	SERVNOTICECommand.lo SETCommand.lo SETTIMECommand.lo \
-	SHOWCOMMANDSCommand.lo SHOWIGNORECommand.lo SHUTDOWNCommand.lo \
-	STATSCommand.lo STATUSCommand.lo SUPPORTCommand.lo \
-	SUSPENDCommand.lo TOPICCommand.lo UNBANCommand.lo \
-	UNFORCECommand.lo UNSUSPENDCommand.lo UPDATEDBCommand.lo \
-	UPDATEIDLECommand.lo VERIFYCommand.lo VOICECommand.lo
+	INVITECommand.lo INVMECommand.lo JOINCommand.lo KICKCommand.lo \
+	LBANLISTCommand.lo LOGINCommand.lo MODECommand.lo \
+	MODINFOCommand.lo MOTDCommand.lo NEWPASSCommand.lo \
+	NOTECommand.lo OFFICIALCommand.lo OPCommand.lo \
+	OPERJOINCommand.lo OPERPARTCommand.lo OPERSUSPENDCommand.lo \
+	PARTCommand.lo PURGECommand.lo QUOTECommand.lo \
+	RECOVERCommand.lo REGISTERCommand.lo REHASHCommand.lo \
+	RELEASECommand.lo REMIGNORECommand.lo REMOVEALLCommand.lo \
+	REMUSERCommand.lo REMUSERIDCommand.lo SAYCommand.lo \
+	SCANCommand.lo SEARCHCommand.lo SERVNOTICECommand.lo \
+	SETCommand.lo SETTIMECommand.lo SHOWCOMMANDSCommand.lo \
+	SHOWIGNORECommand.lo SHUTDOWNCommand.lo STATSCommand.lo \
+	STATUSCommand.lo SUPPORTCommand.lo SUSPENDCommand.lo \
+	TOPICCommand.lo UNBANCommand.lo UNFORCECommand.lo \
+	UNSUSPENDCommand.lo UPDATEDBCommand.lo UPDATEIDLECommand.lo \
+	VERIFYCommand.lo VOICECommand.lo
 libcservice_la_OBJECTS = $(am_libcservice_la_OBJECTS)
 
 DEFS = @DEFS@
@@ -243,7 +242,6 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/HELPCommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/INVITECommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/INVMECommand.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/ISREGCommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/JOINCommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/KICKCommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/LBANLISTCommand.Plo \
@@ -377,7 +375,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/HELPCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/INVITECommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/INVMECommand.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ISREGCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/JOINCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/KICKCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/LBANLISTCommand.Plo@am__quote@

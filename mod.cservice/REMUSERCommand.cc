@@ -9,7 +9,7 @@
  * Caveats: None
  *
  *
- * $Id: REMUSERCommand.cc,v 1.10 2004-05-16 13:08:17 jeekay Exp $
+ * $Id: REMUSERCommand.cc,v 1.11 2004-05-16 15:20:22 jeekay Exp $
  */
 
 #include	<string>
@@ -23,7 +23,12 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char REMUSERCommand_cc_rcsId[] = "$Id: REMUSERCommand.cc,v 1.10 2004-05-16 13:08:17 jeekay Exp $" ;
+#include	"sqlChannel.h"
+#include	"sqlCommandLevel.h"
+#include	"sqlLevel.h"
+#include	"sqlUser.h"
+
+const char REMUSERCommand_cc_rcsId[] = "$Id: REMUSERCommand.cc,v 1.11 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {

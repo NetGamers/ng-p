@@ -4,7 +4,7 @@
  *
  * Sends a notice to all users as 'CService'
  *
- * $Id: GLOBNOTICECommand.cc,v 1.5 2004-05-16 13:08:16 jeekay Exp $
+ * $Id: GLOBNOTICECommand.cc,v 1.6 2004-05-16 15:20:21 jeekay Exp $
  */
 
 #include <string>
@@ -13,7 +13,10 @@
 
 #include "cservice.h"
 
-const char GLOBNOTICECommand_cc_rcsId[] = "$Id: GLOBNOTICECommand.cc,v 1.5 2004-05-16 13:08:16 jeekay Exp $";
+#include	"sqlCommandLevel.h"
+#include	"sqlUser.h"
+
+const char GLOBNOTICECommand_cc_rcsId[] = "$Id: GLOBNOTICECommand.cc,v 1.6 2004-05-16 15:20:21 jeekay Exp $";
 
 namespace gnuworld
 {
