@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.9 2002-02-07 03:19:45 jeekay Exp $" ;
+const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.10 2002-02-09 05:13:09 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -18,7 +18,7 @@ using std::string ;
 static const char* lvl_1000_cmds = "\002Level 1000\002: everything";
 static const char* lvl_950_cmds  = "\002Level  950\002: quote";
 static const char* lvl_900_cmds  = "\002Level  900\002: servnotice rehash say shutdown";
-static const char* lvl_850_cmds  = "\002Level  850\002: * adduser remuser modinfo force";
+static const char* lvl_850_cmds  = "\002Level  850\002: *(adduser remuser modinfo suspend unsuspend) globnotice";
 static const char* lvl_750_cmds  = "\002Level  750\002: suspend";
 static const char* lvl_600_cmds  = "\002Level  600\002: purge removeall register comment(user)";
 static const char* lvl_501_cmds  = "\002Level  501\002: remignore invme comment(chan)";
@@ -31,7 +31,7 @@ static const char* lvl_50_cmds   = "\002Level   50\002: kick%s topic";
 static const char* lvl_25_cmds   = "\002Level   25\002: voice devoice";
 static const char* lvl_24_cmds   = "\002Level   24\002: invite";
 static const char* lvl_1_cmds    = "\002Level    1\002: status%s";
-static const char* lvl_adm_cmds  = "\002Level    *\002: force unforce";
+static const char* lvl_adm_cmds  = "\002Level    *\002: force%s unforce%s";
 static const char* lvl_0_cmds    = "\002Level    0\002: access banlist chaninfo info help lbanlist login motd newpass showcommands showignore verify recover note";
 static const char* lvl_oper_cmds = "\002Level Oper\002: operjoin operpart";
 
@@ -168,7 +168,7 @@ if (level >= 1) bot->Notice(theClient,   lvl_1_cmds,
 
 if (admin >= level::force) 
 	{
-	bot->Notice(theClient, lvl_adm_cmds);
+	bot->Notice(theClient, lvl_adm_cmds, (level>=850?"+":""), (level>=850?"+":""));
 	}
 
 bot->Notice(theClient, lvl_0_cmds); 
