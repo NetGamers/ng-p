@@ -12,7 +12,7 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 #include	"events.h"
-const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.12 2002-05-25 17:51:06 jeekay Exp $" ;
+const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.13 2002-06-09 09:04:44 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -67,6 +67,7 @@ if (tmpUser)
 	bot->Notice(theClient,
 		bot->getResponse(tmpUser, language::already_authed).c_str(),
 		tmpUser->getUserName().c_str());
+	bot->sendMOTD(theClient);
 	return false;
 	}
 
@@ -204,6 +205,8 @@ newData->currentUser = theUser;
 bot->Notice(theClient,
 	bot->getResponse(theUser, language::auth_success).c_str(),
 	theUser->getUserName().c_str());
+
+bot->sendMOTD(theClient);
 
 /*if(strcasecmp(theClient->getNickName(),st[1]))
 	{

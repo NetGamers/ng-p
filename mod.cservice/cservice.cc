@@ -3714,6 +3714,13 @@ for( string::const_iterator ptr = theString.begin() ;
 return retMe ;
 }
 
+bool cservice::sendMOTD(const iClient* theClient)
+{
+	if(!theClient) { return false; }
+	Notice(theClient, "MOTD: If your nick is idle more than 30 days it will be purged due to inactivity and any channels owned will be removed.");
+	return true;
+}
+
 time_t cservice::currentTime() const
 {
 /* Returns the current time according to the postgres server. */

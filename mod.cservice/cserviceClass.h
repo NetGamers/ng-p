@@ -1,5 +1,5 @@
 #ifndef __CSERVICECLASS_H
-#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.6 2002-04-21 12:28:37 jeekay Exp $"
+#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.7 2002-06-09 09:04:44 jeekay Exp $"
 
 #include	"EConfig.h"
 #include	"sqlChannel.h"
@@ -183,6 +183,9 @@ public:
 	void setOutputTotal(const iClient* theClient, unsigned int count);
 	unsigned int getOutputTotal(const iClient* theClient);
 	bool hasOutputFlooded(iClient*);
+
+	/* Send the current MOTD to a user */
+	bool sendMOTD(const iClient* theClient);
 
 	// Typedef's for user/channel Hashmaps.
 	// User hash, Key is Username.
