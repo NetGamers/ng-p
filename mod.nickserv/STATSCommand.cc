@@ -9,7 +9,7 @@
 #include "nickserv.h"
 #include "levels.h"
 
-const char STATSCommand_cc_rcsId[] = "$Id: STATSCommand.cc,v 1.1 2002-01-23 01:05:47 jeekay Exp $";
+const char STATSCommand_cc_rcsId[] = "$Id: STATSCommand.cc,v 1.2 2002-01-30 21:57:54 jeekay Exp $";
 
 namespace gnuworld
 {
@@ -41,7 +41,7 @@ if(st.size() != 2)
 
 string option = string_upper(st[1]);
 
-if(option == "ALL" && bot->getAdminAccessLevel(theUser->getLoggedNick()))
+if(option == "ALL" && (bot->getAdminAccessLevel(theUser->getLoggedNick()) >= level::stats::all))
 {
 	bot->Message(chanName, "All stats:");
 	bot->Message(chanName, "My Numeric    : %s%s", bot->getCharYY(), bot->getCharXXX());
