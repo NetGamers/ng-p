@@ -1,3 +1,6 @@
+2004-04-22 1.2.16 Jeekay
+* Bumped version to 1.2.16
+
 2004-01-25 1.2.15 Jeekay
 * Removed OutputFlood code as it only ever affected bots
 * Bumped version to 1.2.15
