@@ -2362,15 +2362,19 @@ for( xServer::opVectorType::const_iterator ptr = theTargets.begin() ;
 				{
 				// Not authed, deop.
 				if ( !tmpUser->getClient()->getMode(iClient::MODE_SERVICES) )
-				deopList.push_back(tmpUser->getClient());
-				sourceHasBeenBad = true;
+					{
+					deopList.push_back(tmpUser->getClient());
+					sourceHasBeenBad = true;
+					}
 				// Authed but doesn't have access... deop.
 				}
 			else if (!(getEffectiveAccessLevel(authUser,reggedChan, false) >= level::op))
 				{
 				if ( !tmpUser->getClient()->getMode(iClient::MODE_SERVICES) )
-				deopList.push_back(tmpUser->getClient());
-				sourceHasBeenBad = true;
+					{
+					deopList.push_back(tmpUser->getClient());
+					sourceHasBeenBad = true;
+					}
 				}
 			}
 
