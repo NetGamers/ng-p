@@ -13,7 +13,7 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.1 2002-01-14 23:14:16 morpheus Exp $
+ * $Id: CHANINFOCommand.cc,v 1.2 2002-01-23 01:12:53 ultimate Exp $
  */
 
 #include	<string>
@@ -26,7 +26,7 @@
 #include	"libpq++.h"
 #include	"cservice_config.h"
 
-const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.1 2002-01-14 23:14:16 morpheus Exp $" ;
+const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.2 2002-01-23 01:12:53 ultimate Exp $" ;
 
 namespace gnuworld
 {
@@ -175,11 +175,13 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 	unsigned int theTime; 
         string userComments = theUser->getLastEvent(sqlUser::EV_COMMENT, theTime); 
     
-        if (!userComments.empty()) 
-		{ 
-			bot->Notice(theClient,"\002Admin Comment\002: %s ago (%s)", bot->prettyDuration(theTime).c_str(), 
-			userComments.c_str()); 
-		} 
+
+	if(!theUser->getComment().empty())
+		{
+			bot->Notice(theClient,"\002Admin Comment\002: %s",
+					theUser->getComment().c_str());
+		}
+
 	if (theUser->getFlag(sqlUser::F_GLOBAL_SUSPEND))
 		{
 		/*

@@ -210,7 +210,8 @@ RegisterCommand(new SAYCommand(this, "SAY", "<#channel> <text>", 5));
 RegisterCommand(new QUOTECommand(this, "QUOTE", "<text>", 5));
 RegisterCommand(new REHASHCommand(this, "REHASH", "[translations|help]", 5));
 RegisterCommand(new STATSCommand(this, "STATS", "", 8));
-RegisterCommand(new ADDCOMMENTCommand(this, "ADDCOMMENT", "<username> <comment>", 10));
+//RegisterCommand(new ADDCOMMENTCommand(this, "ADDCOMMENT", "<username> <comment>", 10));
+RegisterCommand(new COMMENTCommand(this, "COMMENT", "<username/channel> <comment/off>", 10));
 
 cserviceConfig = new (std::nothrow) EConfig( args ) ;
 assert( cserviceConfig != 0 ) ;

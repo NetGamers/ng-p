@@ -4,7 +4,7 @@
  * Storage class for accessing user information either from the backend
  * or internal storage.
  *
- * $Id: sqlUser.cc,v 1.3 2002-01-21 14:42:16 morpheus Exp $
+ * $Id: sqlUser.cc,v 1.4 2002-01-23 01:12:54 ultimate Exp $
  */
 
 #include	<strstream.h>
@@ -51,6 +51,7 @@ sqlUser::sqlUser(PgDatabase* _SQLDb)
    alliance(),
    email(),
    last_hostmask(),
+   comment(),
    SQLDb( _SQLDb )
 {
 }
@@ -177,6 +178,7 @@ coordX = atoi(SQLDb->GetValue(row, 9));
 coordY = atoi(SQLDb->GetValue(row, 10));
 coordZ = atoi(SQLDb->GetValue(row, 11));
 alliance = SQLDb->GetValue(row, 12);
+comment = SQLDb->GetValue(row, 13);
 
 /* Fetch the "Last Seen" time from the users_lastseen table. */
 
@@ -201,6 +203,7 @@ queryString	<< queryHeader
                 << "coordY = " << coordY << ", "
                 << "coordZ = " << coordZ << ", "
                 << "alliance = '" << alliance << "', "
+		<< "comment = '" << comment << "', "
 		<< "last_updated = now()::abstime::int4 "
 		<< queryCondition << id
 		<< ends;

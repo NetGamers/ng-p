@@ -1,7 +1,7 @@
 /* sqlUser.h */
 
 #ifndef __SQLUSER_H
-#define __SQLUSER_H "$Id: sqlUser.h,v 1.3 2002-01-21 14:42:16 morpheus Exp $"
+#define __SQLUSER_H "$Id: sqlUser.h,v 1.4 2002-01-23 01:12:54 ultimate Exp $"
 
 #include	<string>
 #include	<ctime>
@@ -89,6 +89,9 @@ public:
 	inline iClient* isAuthed()
 		{ return networkClient; }
 
+	inline const string&		getComment() const
+		{ return comment; }
+
 	/*
 	 *  Methods to set data atrributes.
 	 */
@@ -126,6 +129,9 @@ public:
         inline void setAlliance( const string& _alliance )
                 { alliance = _alliance; }
 
+	inline void setComment( const string& _comment )
+		{ comment = _comment; }
+
 	/*
 	 * Method to perform a SQL 'UPDATE' and commit changes to this
 	 * object back to the database.
@@ -161,6 +167,7 @@ protected:
         string          alliance ;
 	string		email ;
 	string          last_hostmask ;
+	string		comment ;
 
 	PgDatabase*	SQLDb;
 } ;

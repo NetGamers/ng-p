@@ -1,5 +1,5 @@
 #ifndef __CSERVICECOMMANDS_H
-#define __CSERVICECOMMANDS_H "$Id: cserviceCommands.h,v 1.2 2002-01-16 23:14:42 morpheus Exp $"
+#define __CSERVICECOMMANDS_H "$Id: cserviceCommands.h,v 1.3 2002-01-23 01:12:54 ultimate Exp $"
 
 #include	<string>
 #include	"iClient.h"
@@ -128,7 +128,8 @@ DECLARE_COMMAND( SAY )
 DECLARE_COMMAND( QUOTE )
 DECLARE_COMMAND( REHASH )
 DECLARE_COMMAND( STATS )
-DECLARE_COMMAND( ADDCOMMENT )
+//DECLARE_COMMAND( ADDCOMMENT )
+DECLARE_COMMAND( COMMENT )
 
 } // namespace gnuworld
 
