@@ -1,5 +1,5 @@
 #ifndef __CSERVICECOMMANDS_H
-#define __CSERVICECOMMANDS_H "$Id: cserviceCommands.h,v 1.8 2002-03-08 20:45:46 jeekay Exp $"
+#define __CSERVICECOMMANDS_H "$Id: cserviceCommands.h,v 1.9 2002-03-19 19:49:37 jeekay Exp $"
 
 #include	<string>
 #include	"iClient.h"
@@ -82,6 +82,7 @@ DECLARE_COMMAND( RANDOM )
 DECLARE_COMMAND( SUPPORT )
 DECLARE_COMMAND( NOTE )
 DECLARE_COMMAND( RECOVER )
+DECLARE_COMMAND( RELEASE )
 // Channel user level commands.
 
 DECLARE_COMMAND( OP )

@@ -1,5 +1,5 @@
 #ifndef __CSERVICECLASS_H
-#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.2 2002-02-27 20:59:49 jeekay Exp $"
+#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.3 2002-03-19 19:49:36 jeekay Exp $"
 
 #include	"EConfig.h"
 #include	"sqlChannel.h"
@@ -41,6 +41,9 @@ protected:
 	typedef map< string, Command*, noCaseCompare > commandMapType ;
 	typedef commandMapType::value_type pairType ;
 	commandMapType          commandMap;
+	
+	// What is our NS instance called?
+	string nickNickServ;
 
 public:
 
@@ -57,6 +60,9 @@ public:
 
 	void checkDbConnectionStatus();
 	string pendingPageURL;
+
+	/* Pointer to our NS instance */
+	gnuworld::nserv::nickserv* myNickServ;
 
 	cservice(const string& args);
 	virtual ~cservice();

@@ -163,6 +163,7 @@ RegisterCommand(new SHOWIGNORECommand(this, "SHOWIGNORE", "", 3));
 RegisterCommand(new SUPPORTCommand(this, "SUPPORT", "#channel <YES|NO>", 15));
 #ifdef FEATURE_MEMOSERV
 RegisterCommand(new NOTECommand(this, "NOTE", "[SEND <username> <text>] | READ | [ERASE <id>|ALL]", 4));
+RegisterCommand(new RELEASECommand(this, "RELEASE", "", 4));
 #endif
 
 RegisterCommand(new OPCommand(this, "OP", "<#channel> [nick] [nick] ..", 3));
@@ -267,6 +268,7 @@ pendingChanPeriod = atoi((cserviceConfig->Require( "pending_duration" )->second)
 connectCheckFreq = atoi((cserviceConfig->Require( "connection_check_frequency" )->second).c_str());
 connectRetry = atoi((cserviceConfig->Require( "connection_retry_total" )->second).c_str());
 limitCheckPeriod = atoi((cserviceConfig->Require( "limit_check" )->second).c_str());
+nickNickServ = cserviceConfig->Require("nickservNick")->second;
 
 userHits = 0;
 userCacheHits = 0;
@@ -346,7 +348,30 @@ int cservice::BurstChannels()
 
 int cservice::OnConnect()
 {
-	return 0;
+// Find our NS instance
+xNetwork::xClientVectorType::const_iterator myLocalClients;
+myLocalClients = Network->localClient_begin();
+while(myLocalClients != Network->localClient_end())
+	{
+	if(*myLocalClients && (*myLocalClients)->getNickName() == nickNickServ)
+		{
+		myNickServ = static_cast< gnuworld::nserv::nickserv* >(*myLocalClients);
+		}
+	++myLocalClients;
+	}
+
+if(!myNickServ)
+	{
+	elog << "cmaster::OnConnect> Unable to find an instance of NickServ running." << endl;
+	elog << "cmaster::OnConnect> Expecting nick " << nickNickServ << endl;
+	::exit(0);
+	}
+else
+	{
+	elog << "cmaster::OnConnect> Found NickServ at numeric: " << myNickServ->getCharYYXXX() << endl;
+	}
+
+return xClient::OnConnect();
 }
 
 unsigned short cservice::getFloodPoints(iClient* theClient)

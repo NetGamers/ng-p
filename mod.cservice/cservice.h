@@ -1,5 +1,5 @@
 #ifndef __CSERVICE_H
-#define __CSERVICE_H "$Id: cservice.h,v 1.6 2002-02-18 03:52:42 jeekay Exp $"
+#define __CSERVICE_H "$Id: cservice.h,v 1.7 2002-03-19 19:49:36 jeekay Exp $"
 
 #include	<string>
 #include	<vector>
@@ -11,6 +11,8 @@
 #include	"iClient.h"
 #include	"iServer.h"
 #include	"cserviceCommands.h"
+#include "libpq++.h"
+#include "../mod.nickserv/nickservClass.h"
 #include  "cserviceClass.h"
 
 using std::string ;
