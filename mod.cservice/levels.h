@@ -1,5 +1,5 @@
 #ifndef __LEVELS_H
-#define __LEVELS_H "$Id: levels.h,v 1.32 2002-07-20 15:45:06 jeekay Exp $"
+#define __LEVELS_H "$Id: levels.h,v 1.33 2002-08-05 22:25:33 jeekay Exp $"
 
 /* 
  * levels.h
@@ -9,7 +9,7 @@
  * 
  * Defines access level constants for use in command handlers. 
  *
- * $Id: levels.h,v 1.32 2002-07-20 15:45:06 jeekay Exp $
+ * $Id: levels.h,v 1.33 2002-08-05 22:25:33 jeekay Exp $
  */
 
 namespace gnuworld {
@@ -62,6 +62,7 @@ namespace gnuworld {
 
   const int force = 400; // And by definition, unforce.
   const int invme = 400;
+  const int chancomment = 400;
   const int usercomment = 400;
 
   const int logs = 501; // Level that logs are visible at 
@@ -71,7 +72,6 @@ namespace gnuworld {
   const int removeall = 600;
   const int scan = 600;
 
-  const int chancomment = 650;
   const int purge = 650; 
 
   const int nsuspend = 700; // Level required to suspend a nick
