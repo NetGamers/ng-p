@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: PURGECommand.cc,v 1.1 2002-01-14 23:14:20 morpheus Exp $
+ * $Id: PURGECommand.cc,v 1.2 2002-01-28 22:13:03 jeekay Exp $
  */
 
 #include	<string>
@@ -22,7 +22,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.1 2002-01-14 23:14:20 morpheus Exp $" ;
+const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.2 2002-01-28 22:13:03 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -222,6 +222,8 @@ bot->sqlChannelIDCache.erase(theChan->getID());
 bot->getUplink()->UnRegisterChannelEvent( theChan->getName(), bot ) ;
 bot->Part(theChan->getName());
 bot->joinCount--;
+
+assert(theChan);
 
 delete(theChan);
 
