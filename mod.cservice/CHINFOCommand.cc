@@ -4,7 +4,7 @@
  *
  * Distributed under the GNU Public Licence
  *
- * $Id: CHINFOCommand.cc,v 1.1 2002-03-24 01:06:50 jeekay Exp $
+ * $Id: CHINFOCommand.cc,v 1.2 2002-03-24 02:00:55 jeekay Exp $
  */
 
 #include	<string>
@@ -14,7 +14,7 @@
 #include "cservice.h"
 #include "levels.h"
 
-const char CHINFOCommand_cc_rcsId[] = "$Id: CHINFOCommand.cc,v 1.1 2002-03-24 01:06:50 jeekay Exp $" ;
+const char CHINFOCommand_cc_rcsId[] = "$Id: CHINFOCommand.cc,v 1.2 2002-03-24 02:00:55 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -125,6 +125,8 @@ if((aLevel >= level::chinfo::nick) && ("NICK" == option))
 		userName.c_str(), option.c_str(), newdata.c_str());
 	return true;
 	}
+
+Usage(theClient);
 
 return true;
 } // CHINFOCommand::Exec

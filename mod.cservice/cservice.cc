@@ -214,7 +214,7 @@ RegisterCommand(new SHUTDOWNCommand(this, "SHUTDOWN", "<message>", 5));
 RegisterCommand(new COMMENTCommand(this, "COMMENT", "<username/channel> <comment/off>", 10));
 RegisterCommand(new ADMINCMDSCommand(this, "ADMINCMDS", "", 2));
 RegisterCommand(new SCANCommand(this, "SCAN", "[email|hostmask|nick] string", 10));
-RegisterCommand(new CHINFOCommand(this, "CHINFO", "[email|user_name|verification] nick newvalue", 10));
+RegisterCommand(new CHINFOCommand(this, "CHINFO", "[email|nick|verification] nick newvalue", 10));
 
 cserviceConfig = new (std::nothrow) EConfig( args ) ;
 assert( cserviceConfig != 0 ) ;

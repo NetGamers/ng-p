@@ -11,7 +11,7 @@
 #include	"cservice_config.h"
 #include  "libpq-int.h"
 
-const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.7 2002-03-04 20:31:59 jeekay Exp $" ;
+const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.8 2002-03-24 02:00:56 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -230,6 +230,8 @@ if (tmpChan)
 		bot->Notice(theClient, "I'm \002not\002 in this channel.");
 	}
 
+if ((level >= level::status2) || (admLevel >= 1) || theClient->isOper())
+	bot->Notice(theClient, "Welcome: %s", theChan->getWelcome().c_str());
 
 bot->Notice(theClient, "MassDeopPro: %i",
 	    theChan->getMassDeopPro());
