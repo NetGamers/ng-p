@@ -12,12 +12,12 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 #include	"events.h"
-const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.10 2002-03-31 20:51:41 morpheus Exp $" ;
+const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.11 2002-05-25 17:00:26 jeekay Exp $" ;
 
 namespace gnuworld
 {
 struct autoOpData {
-	unsigned int channel_id;
+	string channel_name;
 	unsigned int flags;
 	unsigned int suspend_expires;
 } aOp;
@@ -229,8 +229,8 @@ if (theUser->getFlag(sqlUser::F_GLOBAL_SUSPEND))
  */
 
 strstream theQuery;
-theQuery	<< "SELECT channel_id,flags,suspend_expires FROM "
-			<< "levels WHERE user_id = "
+theQuery	<< "SELECT channels.name,levels.flags,levels.suspend_expires FROM "
+			<< "levels,channels WHERE channels.id=levels.channel_id AND levels.user_id = "
 			<< theUser->getID()
 			<< ends;
 
@@ -258,11 +258,12 @@ for(int i = 0; i < bot->SQLDb->Tuples(); i++)
 	{
 		autoOpData current;
 
-		current.channel_id = atoi(bot->SQLDb->GetValue(i, 0));
+		current.channel_name = bot->SQLDb->GetValue(i, 0);
 		current.flags = atoi(bot->SQLDb->GetValue(i, 1));
 		current.suspend_expires = atoi(bot->SQLDb->GetValue(i, 2));
 
 		autoOpVector.push_back( autoOpVectorType::value_type(current) );
+		
 	}
 
 for (autoOpVectorType::const_iterator resultPtr = autoOpVector.begin();
@@ -290,8 +291,8 @@ for (autoOpVectorType::const_iterator resultPtr = autoOpVector.begin();
 	/*
 	 * Is this channel registered?
 	 */
-	 
-	sqlChannel* theChan = bot->getChannelRecord(resultPtr->channel_id);
+	
+	sqlChannel* theChan = bot->getChannelRecord(resultPtr->channel_name);
 	if (!theChan) { continue; }
 
 	/* 
@@ -326,7 +327,7 @@ for (autoOpVectorType::const_iterator resultPtr = autoOpVector.begin();
 
 	if (!theChan->getInChan() || !tmpBotUser->getMode(ChannelUser::MODE_O))
 		{ continue; }
-
+	
 	/*
 	 * Attempt to find the user in the channel
 	 */
@@ -339,6 +340,7 @@ for (autoOpVectorType::const_iterator resultPtr = autoOpVector.begin();
 	 * AUTOINVITE flag set, invite them!
 	 */
 
+	bot->Notice(theClient, "Checking for autoinvite");
 	if(!tmpChanUser && (resultPtr->flags & sqlLevel::F_AUTOINVITE))
 		{ bot->Invite(theClient, netChan->getName()); }
 #endif
