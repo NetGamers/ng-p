@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char FORCECommand_cc_rcsId[] = "$Id: FORCECommand.cc,v 1.8 2002-01-17 22:24:48 jeekay Exp $" ;
+const char FORCECommand_cc_rcsId[] = "$Id: FORCECommand.cc,v 1.9 2002-03-25 01:20:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -86,7 +86,7 @@ bool FORCECommand::Exec( iClient* theClient, const string& Message )
 		make_pair(admLevel, theUser->getUserName())
 	));
 
-	bot->logAdminMessage("%s (%s) is getting access on %s",
+	bot->logAdminMessage("%s (%s) - FORCE - %s",
 		theClient->getNickName().c_str(), theUser->getUserName().c_str(), theChan->getName().c_str());
 	bot->Notice(theClient,
 		bot->getResponse(theUser,

@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.16 2002-02-16 21:40:01 jeekay Exp $
+ * $Id: SETCommand.cc,v 1.17 2002-03-25 01:20:17 jeekay Exp $
  */
 
 #include	<string>
@@ -30,7 +30,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.16 2002-02-16 21:40:01 jeekay Exp $" ;
+const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.17 2002-03-25 01:20:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -309,6 +309,9 @@ else
 		return true;
 	    }
 	    theChan->commit();
+			bot->logAdminMessage("%s (%s) - SET - LOCKED - %s %s",
+				theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+				theChan->getName().c_str(), value.c_str());
 	    bot->Notice(theClient,
 			bot->getResponse(theUser,
 				language::set_cmd_status,
@@ -359,6 +362,9 @@ else
 	}
 
 	theChan->commit();
+	bot->logAdminMessage("%s (%s) - SET - CAUTION - %s %s",
+		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+		theChan->getName().c_str(), value.c_str());
 	bot->Notice(theClient,
 		bot->getResponse(theUser,
 			language::set_cmd_status,
@@ -463,6 +469,9 @@ else
 		return true;
 	    }
 	    theChan->commit();
+			bot->logAdminMessage("%s (%s) - SET - SPECIAL - %s %s",
+				theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+				theChan->getName().c_str(), value.c_str());
 	    bot->Notice(theClient,
 			bot->getResponse(theUser,
 				language::set_cmd_status,
@@ -498,6 +507,9 @@ else
 		return true;
 	    }
 	    theChan->commit();
+			bot->logAdminMessage("%s (%s) - SET - NEVERREG - %s %s",
+				theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+				theChan->getName().c_str(), value.c_str());
 	    bot->Notice(theClient,
 			bot->getResponse(theUser,
 				language::set_cmd_status,
@@ -532,6 +544,9 @@ else
 		return true;
 	    }
 	    theChan->commit();
+			bot->logAdminMessage("%s (%s) - SET - NOPURGE - %s %s",
+				theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+				theChan->getName().c_str(), value.c_str());
 	    bot->Notice(theClient,
 			bot->getResponse(theUser,
 				language::set_cmd_status,
@@ -566,6 +581,9 @@ else
 		return true;
 	    }
 	    theChan->commit();
+			bot->logAdminMessage("%s (%s) - SET - TEMPMAN - %s %s",
+				theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+				theChan->getName().c_str(), value.c_str());
 	    bot->Notice(theClient,
 			bot->getResponse(theUser,
 				language::set_cmd_status,
@@ -599,6 +617,9 @@ else
 		return true;
 	    }
 	    theChan->commit();
+			bot->logAdminMessage("%s (%s) - SET - VACATION - %s %s",
+				theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+				theChan->getName().c_str(), value.c_str());
 	    bot->Notice(theClient,
 			bot->getResponse(theUser,
 				language::set_cmd_status,
@@ -777,6 +798,9 @@ else
                 	return true;
 		}
 		theChan->commit();
+		bot->logAdminMessage("%s (%s) - SET - NOFORCE - %s %s",
+			theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+			theChan->getName().c_str(), value.c_str());
 		bot->Notice(theClient,
                         bot->getResponse(theUser,
                                 language::set_cmd_status,

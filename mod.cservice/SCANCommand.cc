@@ -4,7 +4,7 @@
  *
  * Distributed under the GNU Public Licence
  *
- * $Id: SCANCommand.cc,v 1.1 2002-03-22 22:50:37 jeekay Exp $
+ * $Id: SCANCommand.cc,v 1.2 2002-03-25 01:20:16 jeekay Exp $
  */
 
 #include	<string>
@@ -75,6 +75,9 @@ if("EMAIL" == option)
 		}
 	
 	bot->Notice(theClient, "End of Scan");
+	bot->logAdminMessage("%s (%s) - SCAN - EMAIL - %s",
+		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+		search.c_str());
 
 	return true;
 	}
@@ -109,6 +112,9 @@ if("HOSTMASK" == option)
 		}
 	
 	bot->Notice(theClient, "End of Scan");
+	bot->logAdminMessage("%s (%s) - SCAN - HOSTMASK - %s",
+		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+		search.c_str());
 	
 	return true;
 	}
@@ -139,6 +145,9 @@ if("NICK" == option)
 		}
 	
 	bot->Notice(theClient, "End of Scan");
+	bot->logAdminMessage("%s (%s) - SCAN - NICK - %s",
+		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+		search.c_str());
 	
 	return true;
 	}

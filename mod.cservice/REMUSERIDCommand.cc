@@ -3,7 +3,7 @@
  *
  * 20020308 GK@PAnet - Initial Writing
  *
- * $Id: REMUSERIDCommand.cc,v 1.5 2002-03-23 00:42:27 jeekay Exp $
+ * $Id: REMUSERIDCommand.cc,v 1.6 2002-03-25 01:20:16 jeekay Exp $
  */
 
 #include	<string>
@@ -13,7 +13,7 @@
 #include "cservice.h"
 #include "levels.h"
 
-const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.5 2002-03-23 00:42:27 jeekay Exp $" ;
+const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.6 2002-03-25 01:20:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -288,11 +288,9 @@ if(ptr != bot->sqlUserCache.end())
 bot->Notice(theClient, "%s purged.", st[1].c_str());
 
 // Done! Now lets make sure everyone sees it was done
-bot->logAdminMessage("%s (%s) has purged user %s: %s",
-	theClient->getNickName().c_str(),
-	theUser->getUserName().c_str(),
-	st[1].c_str(),
-	st.assemble(2).c_str());
+bot->logAdminMessage("%s (%s) - REMUSERID - %s - %s",
+	theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+	st[1].c_str(), st.assemble(2).c_str());
 
 return true ;
 } // REMUSERIDCommand::Exec

@@ -3,7 +3,7 @@
  *
  * Allow global unsuspending of nicks/channels
  *
- * $Id: GUNSUSPENDCommand.cc,v 1.2 2002-03-06 19:21:37 jeekay Exp $
+ * $Id: GUNSUSPENDCommand.cc,v 1.3 2002-03-25 01:20:16 jeekay Exp $
  */
 
 #include <string>
@@ -12,7 +12,7 @@
 #include "cservice.h"
 #include "levels.h"
 
-const char GUNSUSPENDCommand_cc_rcsId[] = "$Id: GUNSUSPENDCommand.cc,v 1.2 2002-03-06 19:21:37 jeekay Exp $";
+const char GUNSUSPENDCommand_cc_rcsId[] = "$Id: GUNSUSPENDCommand.cc,v 1.3 2002-03-25 01:20:16 jeekay Exp $";
 
 namespace gnuworld
 {
@@ -66,8 +66,10 @@ if((target[0] == '#') && (admLevel >= level::csuspend))
 	
 	bot->writeChannelLog(theChan, theClient, sqlChannel::EV_UNSUSPEND, reason);
 	
-	bot->Notice(theClient, "%s has been unsuspended.", st[1].c_str());
-	bot->logAdminMessage("%s (%s) has unsuspended %s.", theClient->getNickName().c_str(), theUser->getUserName().c_str(), st[1].c_str());
+	bot->Notice(theClient, "%s has been unsuspended.", theChan->getName().c_str());
+	bot->logAdminMessage("%s (%s) - GUNSUSPEND - %s - %s",
+		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+		theChan->getName().c_str(),  reason.c_str());
 	
 	return true;
 	} // Unsuspending a channel
@@ -100,11 +102,13 @@ if(admLevel >= level::nsuspend)
 	targetUser->removeFlag(sqlUser::F_GLOBAL_SUSPEND);
 	targetUser->commit();
 	
-	bot->Notice(theClient, "%s has been globally unsuspended.", target.c_str());
+	bot->Notice(theClient, "%s has been globally unsuspended.", targetUser->getUserName().c_str());
 	
 	targetUser->writeEvent(sqlUser::EV_UNSUSPEND, theUser, reason);
 	
-	bot->logAdminMessage("%s (%s) has unsuspended %s's user account.", theClient->getNickName().c_str(), theUser->getUserName().c_str(), targetUser->getUserName().c_str());
+	bot->logAdminMessage("%s (%s) - GUNSUSPEND - %s - %s",
+		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+		targetUser->getUserName().c_str(),  reason.c_str());
 	
 	return true;
 	}

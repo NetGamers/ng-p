@@ -4,7 +4,7 @@
  *
  * Distributed under the GNU Public Licence
  *
- * $Id: CHINFOCommand.cc,v 1.3 2002-03-24 17:50:56 jeekay Exp $
+ * $Id: CHINFOCommand.cc,v 1.4 2002-03-25 01:20:15 jeekay Exp $
  */
 
 #include	<string>
@@ -14,7 +14,7 @@
 #include "cservice.h"
 #include "levels.h"
 
-const char CHINFOCommand_cc_rcsId[] = "$Id: CHINFOCommand.cc,v 1.3 2002-03-24 17:50:56 jeekay Exp $" ;
+const char CHINFOCommand_cc_rcsId[] = "$Id: CHINFOCommand.cc,v 1.4 2002-03-25 01:20:15 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -54,6 +54,10 @@ if(targetLevel && (aLevel < level::chinfo::admin))
 	return false;
 	}
 
+/****************
+ * CHINFO EMAIL *
+ ****************/
+
 if((aLevel >= level::chinfo::email) && ("EMAIL" == option))
 	{
 	targetUser->setEmail(newdata);
@@ -61,11 +65,15 @@ if((aLevel >= level::chinfo::email) && ("EMAIL" == option))
 	
 	bot->Notice(theClient, "Changed %s's %s to %s",
 		targetUser->getUserName().c_str(), option.c_str(), newdata.c_str());
-	bot->logAdminMessage("%s (%s) changed %s's %s to %s",
+	bot->logAdminMessage("%s (%s) - CHINFO - EMAIL - %s to %s",
 		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
-		targetUser->getUserName().c_str(), option.c_str(), newdata.c_str());
+		targetUser->getUserName().c_str(), newdata.c_str());
 	return true;
 	}
+
+/***********************
+ * CHINFO VERIFICATION *
+ ***********************/
 
 if((aLevel >= level::chinfo::verification) && ("VERIFICATION" == option))
 	{
@@ -74,11 +82,15 @@ if((aLevel >= level::chinfo::verification) && ("VERIFICATION" == option))
 	
 	bot->Notice(theClient, "Changed %s's %s to %s",
 		targetUser->getUserName().c_str(), option.c_str(), newdata.c_str());
-	bot->logAdminMessage("%s (%s) changed %s's %s to %s",
+	bot->logAdminMessage("%s (%s) - CHINFO - VERIFICATION - %s to %s",
 		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
-		targetUser->getUserName().c_str(), option.c_str(), newdata.c_str());
+		targetUser->getUserName().c_str(), newdata.c_str());
 	return true;
 	}
+
+/***************
+ * CHINFO NICK *
+ ***************/
 
 if((aLevel >= level::chinfo::nick) && ("NICK" == option))
 	{
@@ -127,9 +139,9 @@ if((aLevel >= level::chinfo::nick) && ("NICK" == option))
 	
 	bot->Notice(theClient, "Changed %s's %s to %s",
 		userName.c_str(), option.c_str(), newdata.c_str());
-	bot->logAdminMessage("%s (%s) changed %s's %s to %s",
+	bot->logAdminMessage("%s (%s) - CHINFO - NICK - %s to %s",
 		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
-		userName.c_str(), option.c_str(), newdata.c_str());
+		userName.c_str(), newdata.c_str());
 	return true;
 	}
 

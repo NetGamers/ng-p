@@ -3,7 +3,7 @@
  *
  * Allow global suspending of nicks/channels
  *
- * $Id: GSUSPENDCommand.cc,v 1.2 2002-02-17 08:13:18 jeekay Exp $
+ * $Id: GSUSPENDCommand.cc,v 1.3 2002-03-25 01:20:16 jeekay Exp $
  */
 
 #include <string>
@@ -12,7 +12,7 @@
 #include "cservice.h"
 #include "levels.h"
 
-const char GSUSPENDCommand_cc_rcsId[] = "$Id: GSUSPENDCommand.cc,v 1.2 2002-02-17 08:13:18 jeekay Exp $";
+const char GSUSPENDCommand_cc_rcsId[] = "$Id: GSUSPENDCommand.cc,v 1.3 2002-03-25 01:20:16 jeekay Exp $";
 
 namespace gnuworld
 {
@@ -94,7 +94,9 @@ if((target[0] == '#') && (admLevel >= level::csuspend))
 	
 	bot->Notice(theClient, "%s has been suspended for %d hours.", target.c_str(), duration);
 	
-	bot->logAdminMessage("%s (%s) has suspended %s for %d hours.", theClient->getNickName().c_str(), theUser->getUserName().c_str(), target.c_str(), duration);
+	bot->logAdminMessage("%s (%s) - GSUSPEND - %s for %d hours - %s",
+		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+		theChan->getName().c_str(), duration, reason.c_str());
 	
 	return true;
 	}
@@ -131,7 +133,9 @@ if(admLevel >= level::nsuspend)
 	
 	bot->Notice(theClient, "%s has been globally suspended for %d hours.", targetUser->getUserName().c_str(), duration);
 	
-	bot->logAdminMessage("%s (%s) has globally suspended %s's user account for %d hours.", theClient->getNickName().c_str(), theUser->getUserName().c_str(), targetUser->getUserName().c_str(), duration);
+	bot->logAdminMessage("%s (%s) - GSUSPEND - %s for %d hours - %s",
+		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+		targetUser->getUserName().c_str(), duration, reason.c_str());
 	
 	return true;
 	}

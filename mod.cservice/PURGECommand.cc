@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: PURGECommand.cc,v 1.3 2002-03-24 23:37:20 jeekay Exp $
+ * $Id: PURGECommand.cc,v 1.4 2002-03-25 01:20:16 jeekay Exp $
  */
 
 #include	<string>
@@ -22,7 +22,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.3 2002-03-24 23:37:20 jeekay Exp $" ;
+const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.4 2002-03-25 01:20:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -149,9 +149,9 @@ if("FORCE" == string_upper(st[1]))
 		return false;
 		}
 	
-	bot->logAdminMessage("PURGE FORCE - %s (%s) - %s - %s",
+	bot->logAdminMessage("%s (%s) - PURGE FORCE - %s - %s",
 		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
-		st[2].c_str(), st[3].c_str());
+		st[2].c_str(), st.assemble(3).c_str());
 	bot->Notice(theClient, "Sucessfully purged %s", st[2].c_str());
 	return true;
 	}
@@ -294,7 +294,7 @@ while(ptr != bot->sqlLevelCache.end())
 
 string reason = st.assemble(2);
 
-bot->logAdminMessage("%s (%s) has purged %s (%s)",
+bot->logAdminMessage("%s (%s) - PURGE - %s - %s",
 	theClient->getNickName().c_str(),
 	theUser->getUserName().c_str(),
 	theChan->getName().c_str(),

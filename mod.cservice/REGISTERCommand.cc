@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: REGISTERCommand.cc,v 1.2 2002-02-01 00:01:42 jeekay Exp $
+ * $Id: REGISTERCommand.cc,v 1.3 2002-03-25 01:20:16 jeekay Exp $
  */
 
 #include	<string>
@@ -21,7 +21,7 @@
 #include	"Network.h"
 #include	"responses.h"
 
-const char REGISTERCommand_cc_rcsId[] = "$Id: REGISTERCommand.cc,v 1.2 2002-02-01 00:01:42 jeekay Exp $" ;
+const char REGISTERCommand_cc_rcsId[] = "$Id: REGISTERCommand.cc,v 1.3 2002-03-25 01:20:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -206,7 +206,7 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 	{
 		newChan->insertRecord();
 
-		bot->logAdminMessage("%s (%s) has registered %s to %s", theClient->getNickName().c_str(),
+		bot->logAdminMessage("%s (%s) - REGISTER - %s - %s", theClient->getNickName().c_str(),
 			theUser->getUserName().c_str(), st[1].c_str(), tmpUser->getUserName().c_str());
 		bot->Notice(theClient,
 			bot->getResponse(theUser,

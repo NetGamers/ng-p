@@ -12,7 +12,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char COMMENTCommand_cc_rcsId[] = "$Id: COMMENTCommand.cc,v 1.2 2002-01-23 17:17:24 ultimate Exp $" ;
+const char COMMENTCommand_cc_rcsId[] = "$Id: COMMENTCommand.cc,v 1.3 2002-03-25 01:20:15 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -68,13 +68,19 @@ if(st[1][0] == '#') // we HAVE a channel!!
 		targetChan->setComment("");
 		targetChan->commit();
 		bot->Notice(theClient, "COMMENT for channel %s has been removed!", st[1].c_str());
+		bot->logAdminMessage("%s (%s) - COMMENT - %s - <cleared>",
+			theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+			targetChan->getName().c_str());
 		}
 	else
 		{
-                targetChan->setComment(st.assemble(2));
-                targetChan->commit();
+		targetChan->setComment(st.assemble(2));
+		targetChan->commit();
 		bot->Notice(theClient, "COMMENT for channel %s is now: %s", st[1].c_str(),
 			st.assemble(2).c_str()); 
+		bot->logAdminMessage("%s (%s) - COMMENT - %s - %s",
+			theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+			targetChan->getName().c_str(), st.assemble(2).c_str());
 		}
 return true;
 }
@@ -109,6 +115,9 @@ if (string_upper(st[2]) == "OFF")
 	targetUser->commit();
 	bot->Notice(theClient, "COMMENT for user %s has been removed!", 
 		targetUser->getUserName().c_str());
+	bot->logAdminMessage("%s (%s) - COMMENT - %s - <cleared>",
+		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+		targetUser->getUserName().c_str());
 } else
 {
 	string comment = st.assemble(2) + " (by " + theUser->getUserName() + ")";
@@ -116,6 +125,9 @@ if (string_upper(st[2]) == "OFF")
         targetUser->commit();
 	bot->Notice(theClient, "COMMENT for user %s set to: %s", targetUser->getUserName().c_str(),
 			st.assemble(2).c_str());
+	bot->logAdminMessage("%s (%s) - COMMENT - %s - %s",
+		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+		targetUser->getUserName().c_str(), st.assemble(2).c_str());
 }
 
 return true ;

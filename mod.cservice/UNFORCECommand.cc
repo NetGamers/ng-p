@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char UNFORCECommand_cc_rcsId[] = "$Id: UNFORCECommand.cc,v 1.1 2002-01-14 23:14:22 morpheus Exp $" ;
+const char UNFORCECommand_cc_rcsId[] = "$Id: UNFORCECommand.cc,v 1.2 2002-03-25 01:20:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -81,6 +81,9 @@ if(ptr != theChan->forceMap.end())
 				string("Removed your temporary access of %i from channel %s")).c_str(),
 			admLevel,
 			theChan->getName().c_str());
+	bot->logAdminMessage("%s (%s) - UNFORCE - %s",
+		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+		theChan->getName().c_str());
 	return true;
 	}
 
