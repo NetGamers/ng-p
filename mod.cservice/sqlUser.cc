@@ -4,7 +4,7 @@
  * Storage class for accessing user information either from the backend
  * or internal storage.
  *
- * $Id: sqlUser.cc,v 1.8 2002-03-24 01:06:51 jeekay Exp $
+ * $Id: sqlUser.cc,v 1.9 2002-07-16 14:54:11 jeekay Exp $
  */
 
 #include	<strstream.h>
@@ -30,7 +30,8 @@ const sqlUser::flagType sqlUser::F_LOGGEDIN =		0x02 ;
 const sqlUser::flagType sqlUser::F_INVIS =		0x04 ;
 const sqlUser::flagType sqlUser::F_AUTOKILL =		0x08 ;
 const sqlUser::flagType sqlUser::F_NOTE =		0x10 ;
-const sqlUser::flagType sqlUser::F_NOPURGE = 0x20 ;
+const sqlUser::flagType sqlUser::F_NOPURGE =		0x20 ;
+const sqlUser::flagType sqlUser::F_BOT =		0x40 ;
 
 
 const unsigned int sqlUser::EV_SUSPEND 		= 1;
