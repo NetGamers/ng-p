@@ -17,11 +17,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: iClient.h,v 1.5 2004-04-26 21:34:04 jeekay Exp $
+ * $Id: iClient.h,v 1.6 2005-03-20 12:39:21 jeekay Exp $
  */
 
 #ifndef __ICLIENT_H
-#define __ICLIENT_H "$Id: iClient.h,v 1.5 2004-04-26 21:34:04 jeekay Exp $"
+#define __ICLIENT_H "$Id: iClient.h,v 1.6 2005-03-20 12:39:21 jeekay Exp $"
 
 #include	<string>
 #include	<list>
@@ -68,25 +68,25 @@ public:
 	typedef unsigned int modeType ;
 
 	/// MODE_OPER is true if the iClient is an IRC operator.
-	const static modeType	MODE_OPER ;
+	static const modeType	MODE_OPER ;
 
 	/// MODE_WALLOPS is true if the iClient is receiving wallops.
-	const static modeType	MODE_WALLOPS ;
+	static const modeType	MODE_WALLOPS ;
 
 	/// MODE_INVISIBLE is true if the iClient is user mode invisible.
-	const static modeType	MODE_INVISIBLE ;
+	static const modeType	MODE_INVISIBLE ;
 
 	/// MODE_DEAF is true if the iClient is not receiving messages.
-	const static modeType	MODE_DEAF ;
+	static const modeType	MODE_DEAF ;
 
 	/// MODE_SERVICES is true if the iClient is a service agent.
-	const static modeType	MODE_SERVICES ;
+	static const modeType	MODE_SERVICES ;
 
 	/// MODE_REGISTERED is true if the iClient has an account set.
-	const static modeType	MODE_REGISTERED ;
+	static const modeType	MODE_REGISTERED ;
 
 	/// MODE_HIDDEN_HOST is true if the iClient has HIDDEN_HOST (+x) set.
-	const static modeType	MODE_HIDDEN_HOST ;
+	static const modeType	MODE_HIDDEN_HOST ;
 
 	/// Iterator for channels this user is on.
 	typedef channelListType::iterator channelIterator ;

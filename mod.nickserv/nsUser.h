@@ -1,6 +1,5 @@
-
 #ifndef __NSUSER_H_
-#define __NSUSER_H_ "$Id: nsUser.h,v 1.4 2002-09-13 21:27:35 jeekay Exp $"
+#define __NSUSER_H_ "$Id: nsUser.h,v 1.5 2005-03-20 12:39:22 jeekay Exp $"
 
 #include <string>
 #include <sys/time.h>
@@ -20,8 +19,8 @@ public:
 
 	typedef unsigned int FlagType;
 	
-	const static FlagType LOGGEDIN = 0x01;
-	const static FlagType INQUEUE = 0x02;
+	static const FlagType LOGGEDIN = 0x01;
+	static const FlagType INQUEUE = 0x02;
 
 	nsUser(string Num, time_t ConnT, string Nick);
 	

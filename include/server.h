@@ -18,11 +18,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: server.h,v 1.8 2004-08-31 21:20:50 jeekay Exp $
+ * $Id: server.h,v 1.9 2005-03-20 12:39:20 jeekay Exp $
  */
 
 #ifndef __SERVER_H
-#define __SERVER_H "$Id: server.h,v 1.8 2004-08-31 21:20:50 jeekay Exp $"
+#define __SERVER_H "$Id: server.h,v 1.9 2005-03-20 12:39:20 jeekay Exp $"
 
 #include	<string>
 #include	<vector>
@@ -569,7 +569,7 @@ public:
 	 * register for events of this channel, and each will receive
 	 * this event for every channel in existence on the network.
 	 */
-	const static string	CHANNEL_ALL ;
+	static const string	CHANNEL_ALL ;
 
 	/**
 	 * Post a signal to the server and all clients.
