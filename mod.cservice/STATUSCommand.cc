@@ -9,8 +9,9 @@
 #include	"responses.h"
 #include	"Network.h"
 #include	"cservice_config.h"
+#include  "libpq-int.h"
 
-const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.3 2002-02-06 20:22:51 jeekay Exp $" ;
+const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.4 2002-02-08 23:12:46 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -56,6 +57,8 @@ if (st[1] == "*")
 			st[1].c_str());
 		return false;
 		}
+	
+	const cmDatabase* SQLDb = bot->getSQLDb();
 
 	/*
 	 *  Show some fancy stats.
@@ -131,6 +134,8 @@ if (st[1] == "*")
 	float joinTotal = ((float)bot->joinCount / (float)Network->channelList_size()) * 100;
 	bot->Notice(theClient, "I am in %i channels out of %i on the network. (%.2f%%)",
 		bot->joinCount, Network->channelList_size(), joinTotal);
+	
+	bot->Notice(theClient, "Current Backend SQL PID: %d", SQLDb->getPID());
 
 	bot->Notice(theClient,
 		bot->getResponse(theUser,

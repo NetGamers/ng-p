@@ -1,5 +1,5 @@
 #ifndef __CSERVICE_H
-#define __CSERVICE_H "$Id: cservice.h,v 1.3 2002-01-30 19:00:34 jeekay Exp $"
+#define __CSERVICE_H "$Id: cservice.h,v 1.4 2002-02-08 23:12:46 jeekay Exp $"
 
 #include	<string>
 #include	<vector>
@@ -75,6 +75,10 @@ public:
 
 	cservice(const string& args);
 	virtual ~cservice();
+
+	// Return a cmDatabase* to the current SQLDb
+	inline const cmDatabase* getSQLDb( void ) const
+		{ return SQLDb; }
 
 	virtual int OnConnect();
 	virtual int BurstChannels();
