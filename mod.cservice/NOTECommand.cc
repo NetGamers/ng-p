@@ -9,7 +9,7 @@
 
 #define LOG_SQL
 
-const char NOTECommand_cc_rcsId[] = "$Id: NOTECommand.cc,v 1.5 2002-01-21 14:42:16 morpheus Exp $" ;
+const char NOTECommand_cc_rcsId[] = "$Id: NOTECommand.cc,v 1.6 2002-01-21 14:53:20 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -49,7 +49,7 @@ bool NOTECommand::Exec(iClient* theClient, const string& Message)
 		
 		if(targetUser->getFlag(sqlUser::F_NOTE))
         	{
-                	bot->Notice(theClient, "User disabled NOTE");
+                	bot->Notice(theClient, "%s disabled NOTE",targetUser->getUserName().c_str());
                 	return false;
         	}
 		strstream thecount;

@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.9 2002-01-21 14:42:17 morpheus Exp $
+ * $Id: SETCommand.cc,v 1.10 2002-01-21 14:53:20 morpheus Exp $
  */
 
 #include	<string>
@@ -30,7 +30,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.9 2002-01-21 14:42:17 morpheus Exp $" ;
+const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.10 2002-01-21 14:53:20 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -215,14 +215,14 @@ queryString     << "SELECT id"
 
 	if (option == "NOTE")
 	{
-		if (value == "ON")
+		if (value == "OFF")
 		{
 			theUser->setFlag(sqlUser::F_NOTE);
 			theUser->commit();
 			bot->Notice(theClient, "Your NOTE system is now ON.");
 			return true;
 		}
-		if (value == "OFF")
+		if (value == "ON")
                 {
                         theUser->removeFlag(sqlUser::F_NOTE);
                         theUser->commit();
