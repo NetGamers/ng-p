@@ -10,7 +10,7 @@
 # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
 
-# "$Id: Makefile.in,v 1.4 2002-02-07 02:46:49 jeekay Exp $"
+# "$Id: Makefile.in,v 1.5 2002-02-08 00:24:34 jeekay Exp $"
 
 
 SHELL = @SHELL@
@@ -88,7 +88,7 @@ bindir = @bindir@
 glibdir = @glibdir@
 
 lib_LTLIBRARIES = libnickserv.la
-libnickserv_la_SOURCES = nickserv.cc 			nsUser.cc 			sqlnsUser.cc 			juUser.cc 			nickservCommands.cc 			JUPECommand.cc 			SAYCommand.cc 			STATSCommand.cc
+libnickserv_la_SOURCES = nickserv.cc 			nsUser.cc 			sqlnsUser.cc 			juUser.cc 			nickservCommands.cc 			JUPECommand.cc 			RELEASECommand.cc 			SAYCommand.cc 			STATSCommand.cc
 
 
 libnickserv_la_LDFLAGS = -module -export-dynamic -L@PGSQL_LIB@ -lpq++
@@ -104,7 +104,8 @@ CPPFLAGS = @CPPFLAGS@
 LIBS = @LIBS@
 libnickserv_la_LIBADD = 
 libnickserv_la_OBJECTS =  nickserv.lo nsUser.lo sqlnsUser.lo juUser.lo \
-nickservCommands.lo JUPECommand.lo SAYCommand.lo STATSCommand.lo
+nickservCommands.lo JUPECommand.lo RELEASECommand.lo SAYCommand.lo \
+STATSCommand.lo
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 CXXLD = $(CXX)
@@ -116,9 +117,9 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-DEP_FILES =  .deps/JUPECommand.P .deps/SAYCommand.P .deps/STATSCommand.P \
-.deps/juUser.P .deps/nickserv.P .deps/nickservCommands.P .deps/nsUser.P \
-.deps/sqlnsUser.P
+DEP_FILES =  .deps/JUPECommand.P .deps/RELEASECommand.P \
+.deps/SAYCommand.P .deps/STATSCommand.P .deps/juUser.P .deps/nickserv.P \
+.deps/nickservCommands.P .deps/nsUser.P .deps/sqlnsUser.P
 SOURCES = $(libnickserv_la_SOURCES)
 OBJECTS = $(libnickserv_la_OBJECTS)
 

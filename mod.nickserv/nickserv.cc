@@ -23,7 +23,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.19 2002-02-07 02:39:56 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.20 2002-02-08 00:24:34 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -128,6 +128,7 @@ else
 // Be sure to use all capital letters for the command name
 
 RegisterCommand(new JUPECommand( this, "JUPE", "(ADD|DEL|FORCEADD|INFO) <nick> (duration) (reason)"));
+RegisterCommand(new RELEASECommand( this, "RELEASE", "<nick>"));
 RegisterCommand(new STATSCommand( this, "STATS", "<stat>"));
 RegisterCommand(new SAYCommand( this, "SAY", "<channel> <text>"));
 
