@@ -3,7 +3,7 @@
  *
  * 20020308 GK@PAnet - Initial Writing
  *
- * $Id: REMUSERIDCommand.cc,v 1.1 2002-03-08 20:45:46 jeekay Exp $
+ * $Id: REMUSERIDCommand.cc,v 1.2 2002-03-08 22:17:30 jeekay Exp $
  */
 
 #include	<string>
@@ -13,7 +13,7 @@
 #include "cservice.h"
 #include "levels.h"
 
-const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.1 2002-03-08 20:45:46 jeekay Exp $" ;
+const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.2 2002-03-08 22:17:30 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -47,6 +47,19 @@ if(!targetUser)
 	{
 	bot->Notice(theClient, "%s is not registered with me.", st[1].c_str());
 	return true;
+	}
+
+int targetALevel = bot->getAdminAccessLevel(targetUser);
+if(targetALevel && (aLevel < level::chgadmin))
+	{
+	bot->Notice(theClient, "Sorry, you cannot purge a user with admin access.");
+	return false;
+	}
+
+if(targetALevel >= aLevel)
+	{
+	bot->Notice(theClient, "You cannot purge someone with higher admin access than you.");
+	return false;
 	}
 
 if(targetUser->getFlag(sqlUser::F_NOPURGE))
