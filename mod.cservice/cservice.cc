@@ -2836,6 +2836,12 @@ switch( theEvent )
       if(theUser) {
         newData->currentUser = theUser;
         theUser->addAuthedClient(tmpUser);
+	theUser->setLastSeen(currentTime(), tmpUser->getNickUserHost());
+        theUser->setFlag(sqlUser::F_LOGGEDIN);
+/*	string username = tmpUser->getAccount();
+	getUplink()->PostEvent(gnuworld::EVT_LOGGEDIN,
+          static_cast< void * >( tmpUser),
+          static_cast< void * >( &username)); */
       }
     }
 
