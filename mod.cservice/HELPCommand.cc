@@ -8,7 +8,7 @@
  *
  * Caveats: Needs to be written :)
  *
- * $Id: HELPCommand.cc,v 1.6 2004-08-25 21:48:06 jeekay Exp $
+ * $Id: HELPCommand.cc,v 1.7 2005-03-20 17:16:23 jeekay Exp $
  */
 
 #include	<string>
@@ -61,7 +61,7 @@ void HELPCommand::Exec( iClient* theClient, const string& Message )
     bot->Notice(theClient, "For a command list of available commands, type \002/msg P showcommands\002 or");
     bot->Notice(theClient, "\002/msg P showcommands #Example\002 for a specific channel.");
     bot->Notice(theClient, "To get help about a certain command, type \002/msg P help <command>\002");
-    bot->Notice(theClient, "You can view a full command list at \002http://www.netgamers.org/\002");
+    bot->Notice(theClient, "You can view a full command list at \002http://www.netgamers.org/commands.php\002");
     return ;
   }
 		

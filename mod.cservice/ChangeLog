@@ -2,6 +2,7 @@
 * Added a space after INVISIBLE flag in STATUS
 * Add subjects to global notices to allow users to selectively filter them
 * Renamed GLOBNOTICE to GLOBALNOTICE and introduced CS subject
+* Fix P HELP to point to correct URL for commands
 * Bumped version to 1.2.20
 
 2004-11-20 1.2.19 Jeekay
