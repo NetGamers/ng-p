@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.15 2002-03-18 23:56:41 jeekay Exp $" ;
+const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.16 2002-03-19 20:06:49 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -33,7 +33,7 @@ static const char* lvl_25_cmds   = "\002Level   25\002: voice devoice";
 static const char* lvl_24_cmds   = "\002Level   24\002: invite";
 static const char* lvl_1_cmds    = "\002Level    1\002: banlist lbanlist status%s";
 static const char* lvl_adm_cmds  = "\002Level    *\002: force%s unforce%s";
-static const char* lvl_0_cmds    = "\002Level    0\002: access chaninfo info help login motd newpass showcommands showignore verify recover note";
+static const char* lvl_0_cmds    = "\002Level    0\002: access chaninfo info help login motd newpass note recover release showcommands showignore verify";
 static const char* lvl_oper_cmds = "\002Level Oper\002: operjoin operpart";
 
 /*
