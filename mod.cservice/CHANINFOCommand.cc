@@ -13,7 +13,7 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.23 2003-02-19 15:11:52 jeekay Exp $
+ * $Id: CHANINFOCommand.cc,v 1.24 2003-02-21 17:06:19 jeekay Exp $
  */
 
 #include  <string>
@@ -27,7 +27,7 @@
 #include  "levels.h"
 #include  "responses.h"
 
-const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.23 2003-02-19 15:11:52 jeekay Exp $" ;
+const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.24 2003-02-21 17:06:19 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -310,9 +310,16 @@ theQuery  << queryHeader
 
 const long int registeredTS = theChan->getRegisteredTS();
 
-bot->Notice(theClient, "%s was registered on %s",
+struct tm timeStruct;
+char timeStamp[50];
+
+gmtime_r(&registeredTS, &timeStruct);
+
+strftime(timeStamp, 49, "%d-%m-%Y at %H:%M", &timeStruct);
+
+bot->Notice(theClient, "%s was registered on %s. Currently owned by:",
 	theChan->getName().c_str(),
-	ctime(&registeredTS));
+	timeStamp);
 
 ExecStatusType status = bot->SQLDb->Exec(theQuery.str().c_str()) ;
 
