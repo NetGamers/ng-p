@@ -1,5 +1,5 @@
 #ifndef __CSERVICECLASS_H
-#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.23 2004-08-28 12:30:12 jeekay Exp $"
+#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.24 2005-03-20 16:12:08 jeekay Exp $"
 
 #include	<map>
 
@@ -190,6 +190,10 @@ public:
 	// Typedef's for command levels
 	typedef map< pair <string, string>, sqlCommandLevel* > sqlCommandLevelsType;
 	sqlCommandLevelsType sqlCommandLevels;
+
+	// Typedefs for globals
+	typedef map< string , string > globalsType;
+	globalsType globals;
 
 	// Typedef's for verifies
 	typedef map< unsigned int, string > verifiesType;
@@ -439,6 +443,7 @@ public:
 	void preloadChannelCache();
 	unsigned short int preloadCommandLevelsCache();
 	unsigned short int preloadConfigCache();
+	unsigned short int preloadGlobalsCache();
 	void preloadLevelsCache();
 	void preloadUserCache();
 	unsigned short int preloadVerifiesCache();

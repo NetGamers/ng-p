@@ -220,7 +220,7 @@ RegisterCommand(new STATSCommand(this, "STATS", "", 8));
 RegisterCommand(new UNFORCECommand(this, "UNFORCE", "<#channel>", 8));
 
 /* Oper commands */
-RegisterCommand(new GLOBNOTICECommand(this, "GLOBALNOTICE", "<$*.target> <text>", 5));
+RegisterCommand(new GLOBNOTICECommand(this, "GLOBALNOTICE", "<subject> <$*.target> <text>", 5));
 RegisterCommand(new OPERJOINCommand(this, "OPERJOIN", "<#channel>", 8));
 RegisterCommand(new OPERPARTCommand(this, "OPERPART", "<#channel>", 8));
 //RegisterCommand(new OPERSUSPENDCommand(this, "OPERSUSPEND", "<#channel>", 8));
@@ -328,6 +328,9 @@ preloadCommandLevelsCache();
 
 /* Preload config */
 preloadConfigCache();
+
+/* Preload global subjects */
+preloadGlobalsCache();
 
 /* Preload any user accounts we want to */
 preloadUserCache();
@@ -3934,6 +3937,50 @@ elog	<< "*** [CMaster::preloadConfigCache] Done. Loaded "
 return configList.size();
 
 }
+
+
+unsigned short int cservice::preloadGlobalsCache()
+{
+stringstream theQuery;
+
+theQuery	<< "SELECT "
+		<< sql::global_fields
+		<< " FROM global"
+		;
+
+elog	<< "*** [CMaster::preloadGlobalsCache] Precaching Global table..."
+	<< endl;
+
+ExecStatusType status = SQLDb->Exec(theQuery.str().c_str());
+
+if( PGRES_TUPLES_OK != status ) {
+	elog	<< "*** [CMaster::preloadGlobalsCache] Error precaching globals: "
+		<< SQLDb->ErrorMessage()
+		<< endl;
+	::exit(1);
+}
+
+globals.clear();
+
+for( int i = 0 ; i < SQLDb->Tuples() ; ++i ) {
+	/* There are currently a number of unused fields.
+	 * We are only using 'subject' and 'expanded'
+	 */
+	string subject = SQLDb->GetValue(i, 1);
+	string expanded = SQLDb->GetValue(i, 2);
+	
+	globals.insert( globalsType::value_type(subject, expanded) );
+}
+
+elog	<< "*** [CMaster::preloadGlobalsCache] Done. Loaded "
+	<< globals.size()
+	<< " global subjects."
+	<< endl;
+
+return globals.size();
+
+}
+
 
 unsigned short int cservice::preloadVerifiesCache()
 {

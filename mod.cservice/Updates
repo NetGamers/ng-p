@@ -1,3 +1,32 @@
+2004-12-02 1.2.20 Jeekay
+**
+-- Create new global subjects table
+CREATE TABLE global
+(
+  id SERIAL,
+  subject varchar(10) NOT NULL,
+  expanded varchar(255) NOT NULL,
+  flags int4 NOT NULL DEFAULT 0,
+  created int4 NOT NULL DEFAULT NOW()::abstime::int4,
+  created_by text NOT NULL,
+  last_updated int4 NOT NULL DEFAULT NOW()::abstime::int4,
+  last_updated_by text NOT NULL,
+  PRIMARY KEY (id)
+) ;
+
+-- Add CService subject
+INSERT INTO global (subject,expanded,created_by,last_updated_by)
+VALUES ('cs', 'CService', 'Jeekay', 'Jeekay');
+
+-- Add NetGamers subject
+INSERT INTO global (subject,expanded,created_by,last_updated_by)
+VALUES ('ng', 'NetGamers', 'Jeekay', 'Jeekay');
+
+-- Add Planetarion subject
+INSERT INTO global (subject,expanded,created_by,last_updated_by)
+VALUES ('pa', 'Planetarion', 'Jeekay', 'Jeekay');
+**
+
 2004-11-24 1.2.19 Jeekay
 **
 -- Add new invisible column to store invisible level

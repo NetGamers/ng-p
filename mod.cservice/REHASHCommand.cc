@@ -44,33 +44,37 @@ if (level < rehashCommandLevel->getLevel())
 
 string option = string_upper(st[1]);
 
-if (option == "TRANSLATIONS")
-	{
-		bot->languageTable.clear();
-		bot->translationTable.clear();
-		bot->loadTranslationTable();
-		bot->Notice(theClient, "Done. %i entries in language table.",
-			bot->translationTable.size());
-	}
-
-if (option == "HELP")
-	{
-		bot->helpTable.clear();
-		bot->loadHelpTable();
-		bot->Notice(theClient, "Done. %i entries in help table.",
-			bot->helpTable.size());
-	}
-
 if ("COMMANDS" == option) {
-  int noLoaded = bot->preloadCommandLevelsCache();
-  bot->Notice(theClient, "Successfully rehashed %d command levels.",
-    noLoaded);
+	int noLoaded = bot->preloadCommandLevelsCache();
+	bot->Notice(theClient, "Successfully rehashed %d command levels.",
+		noLoaded);
+}
+
+if ("GLOBAL" == option) {
+	int noLoaded = bot->preloadGlobalsCache();
+	bot->Notice(theClient, "Successfully rehashed %d global subjects.",
+		noLoaded);
+}
+
+if ("HELP" == option) {
+	bot->helpTable.clear();
+	bot->loadHelpTable();
+	bot->Notice(theClient, "Done. %i entries in help table.",
+		bot->helpTable.size());
 }
 
 if ("OFFICIAL" == option) {
   unsigned int noLoaded = bot->preloadVerifiesCache();
   bot->Notice(theClient, "Successfully rehashed %u verifies.",
     noLoaded);
+}
+
+if ("TRANSLATIONS" == option) {
+	bot->languageTable.clear();
+	bot->translationTable.clear();
+	bot->loadTranslationTable();
+	bot->Notice(theClient, "Done. %i entries in language table.",
+		bot->translationTable.size());
 }
 
 return ;

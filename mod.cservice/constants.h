@@ -1,5 +1,5 @@
 #ifndef __CONSTANTS_H
-#define __CONSTANTS_H "$Id: constants.h,v 1.12 2004-11-26 22:39:52 jeekay Exp $"
+#define __CONSTANTS_H "$Id: constants.h,v 1.13 2005-03-20 16:12:08 jeekay Exp $"
 
 /*
  * constants.h
@@ -9,7 +9,7 @@
  *
  * Defines constants used throughout the application.
  *
- * $Id: constants.h,v 1.12 2004-11-26 22:39:52 jeekay Exp $
+ * $Id: constants.h,v 1.13 2005-03-20 16:12:08 jeekay Exp $
  */
 
 namespace gnuworld
@@ -24,6 +24,7 @@ namespace sql
 	const string channel_fields = "id,name,flags,mass_deop_pro,flood_pro,url,description,comment,keywords,registered_ts,channel_ts,channel_mode,userflags,last_updated,limit_offset,limit_period,limit_grace,limit_max,welcome,suspend_expires_ts,invisible";
 	const string command_fields = "command_name,domain,level,flags,comment,description,last_updated,last_updated_by";
 	const string config_fields = "name,contents";
+	const string global_fields = "id,subject,expanded,flags,created,created_by,last_updated,last_updated_by";
 	const string level_fields = "channel_id,user_id,access,flags,suspend_expires,suspend_level,suspend_by,added,added_by,last_Modif,last_Modif_By,last_Updated";
 	const string user_fields = "users.id,users.user_name,users.password,users.url,users.language_id,users.flags,users.last_updated_by,users.last_updated,users.email,users.comment,users.suspended_expire_ts,users.question_id,users.verificationdata,users.maxlogins,verify";
 	const string verify_fields = "id,title";

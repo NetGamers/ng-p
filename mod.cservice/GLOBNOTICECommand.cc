@@ -4,14 +4,14 @@
  *
  * Sends a notice to all users as 'CService'
  *
- * $Id: GLOBNOTICECommand.cc,v 1.7 2004-08-25 20:32:40 jeekay Exp $
+ * $Id: GLOBNOTICECommand.cc,v 1.8 2005-03-20 16:12:07 jeekay Exp $
  */
 
-#include <string>
+#include	<string>
 
-#include "StringTokenizer.h"
+#include	"StringTokenizer.h"
 
-#include "cservice.h"
+#include	"cservice.h"
 
 #include	"sqlCommandLevel.h"
 #include	"sqlUser.h"
@@ -45,35 +45,47 @@ if((admLevel < globalNoticeLevel->getLevel()) && !(theClient->isOper())) { retur
 
 bot->incStat("COMMANDS.GLOBNOTICE");
 
-// GLOB[AL]NOTICE $target.dom Message
+// GLOB[AL]NOTICE subject $target.dom Message
 StringTokenizer st( Message );
-if(st.size() < 3)
-	{
+if(st.size() < 4) {
 	Usage(theClient);
 	return ;
-	}
+}
 
-string sourceNick;
-if(string_upper(st[0]) == "GLOBALNOTICE")
-	{ sourceNick = "Global"; }
-else { sourceNick = "CService"; }
+string sourceNick, sourceUser;
 
-if(st[1][0] != '$')
+cservice::globalsType::const_iterator subject = bot->globals.find(string_lower(st[1]));
+if( subject == bot->globals.end() ) {
+	/* This subject does not exist */
+	bot->Notice(theClient, "The global subject %s does not exist.",
+		st[1].c_str()
+		);
+	return ;
+}
+
+sourceNick = subject->second;
+sourceUser = string_lower(subject->first);
+
+if(st[2][0] != '$')
 	{
 	bot->Notice(theClient, "Target should be of the form $*.org");
 	return ;
 	}
 
-string outString = st.assemble(2);
-string outTarget = st[1];
+string outString = st.assemble(3);
+string outTarget = st[2];
 
 // Lets introduce the nick
 
 const char* charYY = bot->getCharYY();
-bot->Write("%s N %s 1 31337 global notice.ng +iodk B]AAAB %sAAC :Global Notice",
-					 charYY, sourceNick.c_str(), charYY);
-bot->Write("%sAAC O %s :%s", charYY, outTarget.c_str(), outString.c_str());
-bot->Write("%sAAC Q :Done", charYY);
+bot->Write("%s N %s 1 31337 %s announce.netgamers.org +iodk B]AAAB %s]]] :Global Notice",
+	charYY,
+	sourceNick.c_str(),
+	sourceUser.c_str(),
+	charYY
+	);
+bot->Write("%s]]] O %s :%s", charYY, outTarget.c_str(), outString.c_str());
+bot->Write("%s]]] Q :Done", charYY);
 
 bot->Notice(theClient, "Successfully global noticed.");
 return ;
