@@ -4,7 +4,7 @@
  * Storage class for accessing user information either from the backend
  * or internal storage.
  *
- * $Id: sqlUser.cc,v 1.10 2002-08-01 21:16:02 jeekay Exp $
+ * $Id: sqlUser.cc,v 1.11 2002-09-07 22:19:36 jeekay Exp $
  */
 
 #include	<string.h>
@@ -206,8 +206,8 @@ queryString	<< queryHeader
 		<< "coordX = " << coordX << ", "
 		<< "coordY = " << coordY << ", "
 		<< "coordZ = " << coordZ << ", "
-		<< "alliance = '" << alliance << "', "
-		<< "comment = '" << comment << "', "
+		<< "alliance = '" << escapeSQLChars(alliance) << "', "
+		<< "comment = '" << escapeSQLChars(comment) << "', "
 		<< "last_updated = now()::abstime::int4, "
 		<< "suspended_expire_ts = " << suspendedExpire << ", "
 		<< "question_id = " << questionID << ", "
