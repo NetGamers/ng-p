@@ -13,7 +13,7 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.25 2003-10-11 15:24:55 jeekay Exp $
+ * $Id: CHANINFOCommand.cc,v 1.26 2004-04-24 10:02:12 jeekay Exp $
  */
 
 #include  <string>
@@ -27,7 +27,7 @@
 #include  "levels.h"
 #include  "responses.h"
 
-const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.25 2003-10-11 15:24:55 jeekay Exp $" ;
+const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.26 2004-04-24 10:02:12 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -113,8 +113,6 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) ) {
         string("URL: %s")).c_str(),
       targetUser->getUrl().c_str());
   }
-
-  bot->Notice(theClient,string("Language: English"));
 
   if (targetUser->getFlag(sqlUser::F_INVIS)) {
     bot->Notice(theClient, "INVISIBLE is On");
