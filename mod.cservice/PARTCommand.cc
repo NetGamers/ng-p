@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: PARTCommand.cc,v 1.2 2002-01-23 17:17:24 ultimate Exp $
+ * $Id: PARTCommand.cc,v 1.3 2002-02-01 18:30:07 jeekay Exp $
  */
 
 
@@ -20,7 +20,7 @@
 #include	"responses.h"
 #include	"Network.h"
 
-const char PARTCommand_cc_rcsId[] = "$Id: PARTCommand.cc,v 1.2 2002-01-23 17:17:24 ultimate Exp $" ;
+const char PARTCommand_cc_rcsId[] = "$Id: PARTCommand.cc,v 1.3 2002-02-01 18:30:07 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -69,6 +69,16 @@ if (forcedAccess <= 900  && forcedAccess > 0)
         }
 
 #endif
+
+if(theChan->getFlag(sqlChannel::F_LOCKED))
+	{
+	int admLevel = bot->getAdminAccessLevel(theUser);
+	if(admLevel < level::set::locked)
+		{
+		bot->Notice(theClient, "The channel %s has been locked by a CService Administrator and I cannot be parted from there.", theChan->getName().c_str());
+		return true;
+		} // if(admLevel < level::set::locked)
+	} // if(theChan->getFlag(sqlChannel::F_LOCKED))
 
 /* Check the bot is in the channel. */
 
