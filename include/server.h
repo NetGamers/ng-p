@@ -18,11 +18,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: server.h,v 1.5 2002-10-25 22:41:23 jeekay Exp $
+ * $Id: server.h,v 1.6 2003-03-30 02:52:53 jeekay Exp $
  */
 
 #ifndef __SERVER_H
-#define __SERVER_H "$Id: server.h,v 1.5 2002-10-25 22:41:23 jeekay Exp $"
+#define __SERVER_H "$Id: server.h,v 1.6 2003-03-30 02:52:53 jeekay Exp $"
 
 #include	<string>
 #include	<vector>
@@ -792,55 +792,7 @@ public:
 	void		mainLoop() ;
 
 	/**
-	 * This method is called when a channel mode 't' change is
-	 * Keep in mind that the source ChannelUser may be NULL
-	 * if the mode is being set/unset by a server.
-	 * detected.
-	 */
-	virtual void	OnChannelModeT( Channel*, bool, ChannelUser* ) ;
-
-	/**
-	 * This method is called when a channel mode 'n' change is
-	 * detected.
-	 * Keep in mind that the source ChannelUser may be NULL
-	 * if the mode is being set/unset by a server.
-	 */
-	virtual void	OnChannelModeN( Channel*, bool, ChannelUser* ) ;
-
-	/**
-	 * This method is called when a channel mode 's' change is
-	 * detected.
-	 * Keep in mind that the source ChannelUser may be NULL
-	 * if the mode is being set/unset by a server.
-	 */
-	virtual void	OnChannelModeS( Channel*, bool, ChannelUser* ) ;
-
-	/**
-	 * This method is called when a channel mode 'p' change is
-	 * detected.
-	 * Keep in mind that the source ChannelUser may be NULL
-	 * if the mode is being set/unset by a server.
-	 */
-	virtual void	OnChannelModeP( Channel*, bool, ChannelUser* ) ;
-
-	/**
-	 * This method is called when a channel mode 'm' change is
-	 * detected.
-	 * Keep in mind that the source ChannelUser may be NULL
-	 * if the mode is being set/unset by a server.
-	 */
-	virtual void	OnChannelModeM( Channel*, bool, ChannelUser* ) ;
-
-	/**
-	 * This method is called when a channel mode 'i' change is
-	 * detected.
-	 * Keep in mind that the source ChannelUser may be NULL
-	 * if the mode is being set/unset by a server.
-	 */
-	virtual void	OnChannelModeI( Channel*, bool, ChannelUser* ) ;
-
-	/**
-	 * This method is called when a channel mode 'c' change is
+	 * This method is called when a channel mode 'C' change is
 	 * detected.
 	 * Keep in mind that the source ChannelUser may be NULL
 	 * if the mode is being set/unset by a server.
@@ -853,15 +805,71 @@ public:
 	 * Keep in mind that the source ChannelUser may be NULL
 	 * if the mode is being set/unset by a server.
 	 */
-	virtual void	OnChannelModeStrip( Channel*, bool, ChannelUser* ) ;
+	virtual void	OnChannelModeS( Channel*, bool, ChannelUser* ) ;
   
+	/**
+	 * This method is called when a channel mode 'c' change is
+	 * detected.
+	 * Keep in mind that the source ChannelUser may be NULL
+	 * if the mode is being set/unset by a server.
+	 */
+	virtual void	OnChannelModec( Channel*, bool, ChannelUser* ) ;
+  
+	/**
+	 * This method is called when a channel mode 'i' change is
+	 * detected.
+	 * Keep in mind that the source ChannelUser may be NULL
+	 * if the mode is being set/unset by a server.
+	 */
+	virtual void	OnChannelModei( Channel*, bool, ChannelUser* ) ;
+
+	/**
+	 * This method is called when a channel mode 'm' change is
+	 * detected.
+	 * Keep in mind that the source ChannelUser may be NULL
+	 * if the mode is being set/unset by a server.
+	 */
+	virtual void	OnChannelModem( Channel*, bool, ChannelUser* ) ;
+
+	/**
+	 * This method is called when a channel mode 'n' change is
+	 * detected.
+	 * Keep in mind that the source ChannelUser may be NULL
+	 * if the mode is being set/unset by a server.
+	 */
+	virtual void	OnChannelModen( Channel*, bool, ChannelUser* ) ;
+
+	/**
+	 * This method is called when a channel mode 'p' change is
+	 * detected.
+	 * Keep in mind that the source ChannelUser may be NULL
+	 * if the mode is being set/unset by a server.
+	 */
+	virtual void	OnChannelModep( Channel*, bool, ChannelUser* ) ;
+
 	/**
 	 * This method is called when a channel mode 'r' change is
 	 * detected.
 	 * Keep in mind that the source ChannelUser may be NULL
 	 * if the mode is being set/unset by a server.
 	 */
-	virtual void	OnChannelModeR( Channel*, bool, ChannelUser* ) ;
+	virtual void	OnChannelModer( Channel*, bool, ChannelUser* ) ;
+
+	/**
+	 * This method is called when a channel mode 's' change is
+	 * detected.
+	 * Keep in mind that the source ChannelUser may be NULL
+	 * if the mode is being set/unset by a server.
+	 */
+	virtual void	OnChannelModes( Channel*, bool, ChannelUser* ) ;
+
+	/**
+	 * This method is called when a channel mode 't' change is
+	 * Keep in mind that the source ChannelUser may be NULL
+	 * if the mode is being set/unset by a server.
+	 * detected.
+	 */
+	virtual void	OnChannelModet( Channel*, bool, ChannelUser* ) ;
 
 	/**
 	 * This method is called when a channel mode 'l' change is
@@ -869,7 +877,7 @@ public:
 	 * Keep in mind that the source ChannelUser may be NULL
 	 * if the mode is being set/unset by a server.
 	 */
-	virtual void	OnChannelModeL( Channel*, bool,
+	virtual void	OnChannelModel( Channel*, bool,
 				ChannelUser*, unsigned int ) ;
 
 	/**
@@ -878,7 +886,7 @@ public:
 	 * Keep in mind that the source ChannelUser may be NULL
 	 * if the mode is being set/unset by a server.
 	 */
-	virtual void	OnChannelModeK( Channel*, bool,
+	virtual void	OnChannelModek( Channel*, bool,
 				ChannelUser*, const string& ) ;
 
 	/**

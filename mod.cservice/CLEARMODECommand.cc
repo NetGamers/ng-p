@@ -10,7 +10,7 @@
  *
  * Todo: Support ircu2.10.11's CLEARMODE feature.
  *
- * $Id: CLEARMODECommand.cc,v 1.4 2002-09-13 21:30:38 jeekay Exp $
+ * $Id: CLEARMODECommand.cc,v 1.5 2003-03-30 02:54:08 jeekay Exp $
  */
 
 #include	<string>
@@ -21,7 +21,7 @@
 #include	"responses.h"
 #include	"Network.h"
 
-const char CLEARMODECommand_cc_rcsId[] = "$Id: CLEARMODECommand.cc,v 1.4 2002-09-13 21:30:38 jeekay Exp $" ;
+const char CLEARMODECommand_cc_rcsId[] = "$Id: CLEARMODECommand.cc,v 1.5 2003-03-30 02:54:08 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -96,27 +96,28 @@ stringstream s;
 s	<< bot->getCharYYXXX()
 	<< " M "
 	<< st[1]
-	<< " -mnstipkl *"
+	<< " -CScimnprstkl *"
 	<< ends;
 
-tmpChan->removeMode( Channel::MODE_M );
-tmpChan->removeMode( Channel::MODE_N );
+tmpChan->removeMode( Channel::MODE_C );
 tmpChan->removeMode( Channel::MODE_S );
-tmpChan->removeMode( Channel::MODE_T );
-tmpChan->removeMode( Channel::MODE_P );
-tmpChan->removeMode( Channel::MODE_K );
-tmpChan->removeMode( Channel::MODE_L );
-tmpChan->removeMode( Channel::MODE_I );
+tmpChan->removeMode( Channel::MODE_c );
+tmpChan->removeMode( Channel::MODE_i );
+tmpChan->removeMode( Channel::MODE_m );
+tmpChan->removeMode( Channel::MODE_n );
+tmpChan->removeMode( Channel::MODE_p );
+tmpChan->removeMode( Channel::MODE_r );
+tmpChan->removeMode( Channel::MODE_s );
+tmpChan->removeMode( Channel::MODE_t );
+tmpChan->removeMode( Channel::MODE_k );
+tmpChan->removeMode( Channel::MODE_l );
 tmpChan->setLimit( 0 );
 tmpChan->setKey( "" );
 
 bot->Write( s );
 
-bot->Notice(theClient,
-    bot->getResponse(theUser,
-	    language::modeclear_done,
-	    string("%s: Cleared channel modes.")).c_str(),
-		theChan->getName().c_str());
+bot->Notice(theClient, "%s: Cleared channel modes.",
+	theChan->getName().c_str());
 
 return true ;
 }

@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: msg_B.cc,v 1.4 2002-10-25 22:42:07 jeekay Exp $
+ * $Id: msg_B.cc,v 1.5 2003-03-30 02:55:40 jeekay Exp $
  */
 
 #include	<sys/types.h>
@@ -50,7 +50,7 @@ const char Channel_h_rcsId[] = __CHANNEL_H ;
 const char ChannelUser_h_rcsId[] = __CHANNELUSER_H ;
 const char Network_h_rcsId[] = __NETWORK_H ;
 const char iClient_h_rcsId[] = __ICLIENT_H ;
-const char msg_B_cc_rcsId[] = "$Id: msg_B.cc,v 1.4 2002-10-25 22:42:07 jeekay Exp $" ;
+const char msg_B_cc_rcsId[] = "$Id: msg_B.cc,v 1.5 2003-03-30 02:55:40 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -171,50 +171,54 @@ if( '+' == Param[ whichToken ][ 0 ] )
 		{
 		switch( *currentPtr )
 			{
-			case 't':
-				theServer->OnChannelModeT( theChan, true, 
-					0 ) ;
-				break ;
-			case 'n':
-				theServer->OnChannelModeN( theChan, true, 
-					0 ) ;
-				break ;
-			case 'm':
-				theServer->OnChannelModeM( theChan, true, 
-					0 ) ;
-				break ;
-			case 'p':
-				theServer->OnChannelModeP( theChan, true, 
-					0 ) ;
-				break ;
-			case 's':
-				theServer->OnChannelModeS( theChan, true, 
-					0 ) ;
-				break ;
-			case 'i':
-				theServer->OnChannelModeI( theChan, true, 
-					0 ) ;
-				break ;
-			case 'c':
+			case 'C':
 				theServer->OnChannelModeC( theChan, true, 
 					0 ) ;
 				break ;
 			case 'S':
-				theServer->OnChannelModeStrip( theChan, true, 
+				theServer->OnChannelModeS( theChan, true, 
+					0 ) ;
+				break ;
+			case 'c':
+				theServer->OnChannelModec( theChan, true, 
+					0 ) ;
+				break ;
+			case 'i':
+				theServer->OnChannelModei( theChan, true, 
+					0 ) ;
+				break ;
+			case 'm':
+				theServer->OnChannelModem( theChan, true, 
+					0 ) ;
+				break ;
+			case 'n':
+				theServer->OnChannelModen( theChan, true, 
+					0 ) ;
+				break ;
+			case 'p':
+				theServer->OnChannelModep( theChan, true, 
 					0 ) ;
 				break ;
 			case 'r':
-				theServer->OnChannelModeR( theChan, true, 
+				theServer->OnChannelModer( theChan, true, 
+					0 ) ;
+				break ;
+			case 's':
+				theServer->OnChannelModes( theChan, true, 
+					0 ) ;
+				break ;
+			case 't':
+				theServer->OnChannelModet( theChan, true, 
 					0 ) ;
 				break ;
  			case 'l':
-				theServer->OnChannelModeL( theChan, true, 
+				theServer->OnChannelModel( theChan, true, 
 					0,
 					::atoi( Param[ whichToken + 1 ] ) ) ;
 				whichToken++ ;
 				break ;
 			case 'k':
-				theServer->OnChannelModeK( theChan, true, 
+				theServer->OnChannelModek( theChan, true, 
 					0,
 					Param[ whichToken + 1 ] ) ;
 				whichToken++ ;

@@ -18,11 +18,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: Channel.h,v 1.5 2002-10-25 22:41:23 jeekay Exp $
+ * $Id: Channel.h,v 1.6 2003-03-30 02:52:53 jeekay Exp $
  */
 
 #ifndef __CHANNEL_H
-#define __CHANNEL_H "$Id: Channel.h,v 1.5 2002-10-25 22:41:23 jeekay Exp $"
+#define __CHANNEL_H "$Id: Channel.h,v 1.6 2003-03-30 02:52:53 jeekay Exp $"
 
 #include	<string>
 #include	<map>
@@ -80,38 +80,41 @@ public:
 	 */
 	typedef unsigned int modeType ;
 
-	/// Bit representing channel mode +t
-	static const modeType	MODE_T ;
+	/// Bit representing channel mode +C
+	static const modeType	MODE_C ;
 
-	/// Bit representing channel mode +n
-	static const modeType	MODE_N ;
-
-	/// Bit representing channel mode +s
+	/// Bit representing channel mode +S
 	static const modeType	MODE_S ;
-
-	/// Bit representing channel mode +p
-	static const modeType	MODE_P ;
-
-	/// Bit representing channel mode +k
-	static const modeType	MODE_K ;
-
-	/// Bit representing channel mode +l
-	static const modeType	MODE_L ;
+  
+	/// Bit representing channel mode +c
+	static const modeType	MODE_c ;
+  
+	/// Bit representing channel mode +i
+	static const modeType	MODE_i ;
 
 	/// Bit representing channel mode +m
-	static const modeType	MODE_M ;
+	static const modeType	MODE_m ;
 
-	/// Bit representing channel mode +i
-	static const modeType	MODE_I ;
+	/// Bit representing channel mode +n
+	static const modeType	MODE_n ;
 
-  /// Bit representing channel mode +c
-  static const modeType MODE_C ;
-  
-  /// Bit representing channel mode +S
-  static const modeType MODE_STRIP;
-  
-  /// Bit representing channel mode +r
-  static const modeType MODE_R;
+	/// Bit representing channel mode +p
+	static const modeType	MODE_p ;
+
+	/// Bit representing channel mode +r
+	static const modeType	MODE_r;
+
+	/// Bit representing channel mode +s
+	static const modeType	MODE_s ;
+
+	/// Bit representing channel mode +t
+	static const modeType	MODE_t ;
+
+	/// Bit representing channel mode +k
+	static const modeType	MODE_k ;
+
+	/// Bit representing channel mode +l
+	static const modeType	MODE_l ;
 
 	/// Type used to store number of clients in channel
 	typedef userListType::size_type size_type ;
@@ -441,55 +444,7 @@ public:
 protected:
 
 	/**
-	 * This method is called when channel mode 't' is set
-	 * or unset.
-	 */
-	virtual void	onModeT( bool ) ;
-
-	/**
-	 * This method is called when channel mode 'n' is set
-	 * or unset.
-	 */
-	virtual void	onModeN( bool ) ;
-
-	/**
-	 * This method is called when channel mode 's' is set
-	 * or unset.
-	 */
-	virtual void	onModeS( bool ) ;
-
-	/**
-	 * This method is called when channel mode 'p' is set
-	 * or unset.
-	 */
-	virtual void	onModeP( bool ) ;
-
-	/**
-	 * This method is called when channel mode 'm' is set
-	 * or unset.
-	 */
-	virtual void	onModeM( bool ) ;
-
-	/**
-	 * This method is called when channel mode 'i' is set
-	 * or unset.
-	 */
-	virtual void	onModeI( bool ) ;
-
-	/**
-	 * This method is called when channel mode 'l' is set
-	 * or unset.
-	 */
-	virtual void	onModeL( bool, const unsigned int& ) ;
-
-	/**
-	 * This method is called when channel mode 'k' is set
-	 * or unset.
-	 */
-	virtual void	onModeK( bool, const string& ) ;
-
-	/**
-	 * This method is called when channel mode 'c' is set
+	 * This method is called when channel mode 'C' is set
 	 * or unset.
 	 */
 	virtual void	onModeC( bool ) ;
@@ -498,13 +453,67 @@ protected:
 	 * This method is called when channel mode 'S' is set
 	 * or unset.
 	 */
-	virtual void	onModeStrip( bool ) ;
+	virtual void	onModeS( bool ) ;
 
-  /**
-   * This method is called when channel mode 'r' is set
-   * or unset.
-   */
-  virtual void onModeR( bool ) ;
+	/**
+	 * This method is called when channel mode 'c' is set
+	 * or unset.
+	 */
+	virtual void	onModec( bool ) ;
+
+	/**
+	 * This method is called when channel mode 'i' is set
+	 * or unset.
+	 */
+	virtual void	onModei( bool ) ;
+
+	/**
+	 * This method is called when channel mode 'm' is set
+	 * or unset.
+	 */
+	virtual void	onModem( bool ) ;
+
+	/**
+	 * This method is called when channel mode 'n' is set
+	 * or unset.
+	 */
+	virtual void	onModen( bool ) ;
+
+	/**
+	 * This method is called when channel mode 'p' is set
+	 * or unset.
+	 */
+	virtual void	onModep( bool ) ;
+
+	/**
+	 * This method is called when channel mode 'r' is set
+	 * or unset.
+	 */
+	virtual void	onModer( bool ) ;
+
+	/**
+	 * This method is called when channel mode 's' is set
+	 * or unset.
+	 */
+	virtual void	onModes( bool ) ;
+
+	/**
+	 * This method is called when channel mode 't' is set
+	 * or unset.
+	 */
+	virtual void	onModet( bool ) ;
+
+	/**
+	 * This method is called when channel mode 'l' is set
+	 * or unset.
+	 */
+	virtual void	onModel( bool, const unsigned int& ) ;
+
+	/**
+	 * This method is called when channel mode 'k' is set
+	 * or unset.
+	 */
+	virtual void	onModek( bool, const string& ) ;
 
 	/**
 	 * This method is called when one or more channel

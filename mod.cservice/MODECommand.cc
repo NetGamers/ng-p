@@ -3,7 +3,7 @@
  *
  * 20020201 - Jeekay - Initial Version
  *
- * $Id: MODECommand.cc,v 1.6 2002-09-13 21:30:39 jeekay Exp $
+ * $Id: MODECommand.cc,v 1.7 2003-03-30 02:54:08 jeekay Exp $
  */
 
 #include <string>
@@ -23,7 +23,7 @@
 #define CF_K  0x40
 #define CF_CStrip 0x80
 
-const char MODECommand_cc_rcsId[] = "$Id: MODECommand.cc,v 1.6 2002-09-13 21:30:39 jeekay Exp $";
+const char MODECommand_cc_rcsId[] = "$Id: MODECommand.cc,v 1.7 2003-03-30 02:54:08 jeekay Exp $";
 
 namespace gnuworld
 {
@@ -77,247 +77,117 @@ if(level < level::mode)
 	return false;
 	} // if(level < level::mode)
 
-unsigned int curFlags = 0;
-int numArgs = static_cast< int >(st.size()) - 1; // Do we have any +k/+l arguments?
-int curArg = 3;
-bool polarity = true, chanSet; // True == +, false == -
+/*************************************
+ * P A R S I N G   D O N E   H E R E *
+ *************************************/
+ 
+#define CF_C	0x0001
+#define CF_S	0x0002
+#define CF_c	0x0004
+#define CF_i	0x0008
+#define CF_m	0x0010
+#define CF_n	0x0020
+#define CF_p	0x0040
+#define CF_r	0x0080
+#define CF_s	0x0100
+#define CF_t	0x0200
+#define CF_l	0x1000
+#define CF_k	0x2000
+
 string modeString = st[2];
-string positive, negative, posarg, negarg;
-string outString;
+bool polarity = true;
+unsigned int positive = 0;
+unsigned int negative = 0;
+unsigned int curFlag;
 
-for(string::iterator ptr = modeString.begin(); ptr != modeString.end(); ++ptr)
-	{
-	switch( *ptr )
-		{
-		case 'c':
-			{
-			if(curFlags & CF_CStrip) { break; }
-			chanSet = theChan->getMode(Channel::MODE_C);
-			bool chanSetStrip = theChan->getMode(Channel::MODE_STRIP);
-			if(chanSet && !polarity)
-				{
-				negative += "c";
-				theChan->removeMode(Channel::MODE_C);
-				} // chanSet && !polarity
-			if(!chanSet && polarity)
-				{
-				positive += "c";
-				theChan->setMode(Channel::MODE_C);
-				if(chanSetStrip)
-					{ // S and c are mutually exclusive
-					negative += "S";
-					theChan->removeMode(Channel::MODE_STRIP);
-					}
-				} // !chanSet && polarity
-			curFlags |= CF_CStrip;
-			break;
-			} // case s
-		case 'i':
-			{
-			if(curFlags & CF_I) { break; }
-			chanSet = theChan->getMode(Channel::MODE_I);
-			if(chanSet && !polarity)
-				{
-				negative += "i";
-				theChan->removeMode(Channel::MODE_I);
-				} // chanSet && !polarity
-			if(!chanSet && polarity)
-				{
-				positive += "i";
-				theChan->setMode(Channel::MODE_I);
-				} // !chanSet && polarity
-			curFlags |= CF_I;
-			break;
-			} // case i
-		case 'm':
-			{
-			if(curFlags & CF_M) { break; }
-			chanSet = theChan->getMode(Channel::MODE_M);
-			if(chanSet && !polarity)
-				{
-				negative += "m";
-				theChan->removeMode(Channel::MODE_M);
-				} // chanSet && !polarity
-			if(!chanSet && polarity)
-				{
-				positive += "m";
-				theChan->setMode(Channel::MODE_M);
-				} // !chanSet && polarity
-			curFlags |= CF_M;
-			break;
-			} // case m
-		case 'n':
-			{
-			if(curFlags & CF_N) { break; }
-			chanSet = theChan->getMode(Channel::MODE_N);
-			if(chanSet && !polarity)
-				{
-				negative += "n";
-				theChan->removeMode(Channel::MODE_N);
-				} // chanSet && !polarity
-			if(!chanSet && polarity)
-				{
-				positive += "n";
-				theChan->setMode(Channel::MODE_N);
-				} // !chanSet && polarity
-			curFlags |= CF_N;
-			break;
-			} // case n
-		case 'p':
-			{
-			if(curFlags & CF_SP) { break; }
-			chanSet = theChan->getMode(Channel::MODE_P);
-			bool chanSetS = theChan->getMode(Channel::MODE_S);
-			if(chanSet && !polarity)
-				{
-				negative += "p";
-				theChan->removeMode(Channel::MODE_P);
-				} // chanSet && !polarity
-			if(!chanSet && polarity)
-				{
-				positive += "p";
-				theChan->setMode(Channel::MODE_P);
-				if(chanSetS)
-					{ // S and P are mutually exclusive
-					negative += "s";
-					theChan->removeMode(Channel::MODE_S);
-					}
-				} // !chanSet && polarity
-			curFlags |= CF_SP;
-			break;
-			} // case p
-		case 's':
-			{
-			if(curFlags & CF_SP) { break; }
-			chanSet = theChan->getMode(Channel::MODE_S);
-			bool chanSetP = theChan->getMode(Channel::MODE_P);
-			if(chanSet && !polarity)
-				{
-				negative += "s";
-				theChan->removeMode(Channel::MODE_S);
-				} // chanSet && !polarity
-			if(!chanSet && polarity)
-				{
-				positive += "s";
-				theChan->setMode(Channel::MODE_S);
-				if(chanSetP)
-					{ // S and P are mutually exclusive
-					negative += "p";
-					theChan->removeMode(Channel::MODE_P);
-					}
-				} // !chanSet && polarity
-			curFlags |= CF_SP;
-			break;
-			} // case s
-		case 'S':
-			{
-			if(curFlags & CF_CStrip) { break; }
-			chanSet = theChan->getMode(Channel::MODE_STRIP);
-			bool chanSetC = theChan->getMode(Channel::MODE_C);
-			if(chanSet && !polarity)
-				{
-				negative += "S";
-				theChan->removeMode(Channel::MODE_STRIP);
-				} // chanSet && !polarity
-			if(!chanSet && polarity)
-				{
-				positive += "S";
-				theChan->setMode(Channel::MODE_STRIP);
-				if(chanSetC)
-					{ // S and c are mutually exclusive
-					negative += "c";
-					theChan->removeMode(Channel::MODE_C);
-					}
-				} // !chanSet && polarity
-			curFlags |= CF_CStrip;
-			break;
-			} // case s
-		case 't':
-			{
-			if(curFlags & CF_T) { break; }
-			chanSet = theChan->getMode(Channel::MODE_T);
-			if(chanSet && !polarity)
-				{
-				negative += "t";
-				theChan->removeMode(Channel::MODE_T);
-				} // chanSet && !polarity
-			if(!chanSet && polarity)
-				{
-				positive += "t";
-				theChan->setMode(Channel::MODE_T);
-				} // !chanSet && polarity
-			curFlags |= CF_T;
-			break;
-			} // case t
-		case 'l':
-			{
-			if(curFlags & CF_L) { break; }
-			chanSet = theChan->getMode(Channel::MODE_L);
-			if(chanSet && !polarity)
-				{
-				negative += "l";
-				theChan->removeMode(Channel::MODE_L);
-				}
-			if(polarity && (numArgs >= curArg) && IsNumeric(st[curArg]) && (st[curArg].size() <= 9))
-				{
-				positive += "l";
-				posarg += st[curArg] + string(" ");
-				theChan->setMode(Channel::MODE_L);
-				theChan->setLimit(atoi(st[curArg].c_str()));
-				++curArg;
-				}
-			curFlags |= CF_L;
-			break;
-			} // case l
-		case 'k':
-			{
-			if(curFlags & CF_K) { break; }
-			chanSet = theChan->getMode(Channel::MODE_K);
-			if(chanSet && !polarity && (numArgs >= curArg) && (theChan->getKey() == st[curArg]))
-				{
-				negative += "k";
-				negarg = st[curArg];
-				theChan->removeMode(Channel::MODE_K);
-				++curArg;
-				} // Unset +k
-			if(!chanSet && polarity && (numArgs >= curArg) && (st[curArg].size() <= 20))
-				{
-				positive += "k";
-				posarg += st[curArg] + string(" ");
-				theChan->setMode(Channel::MODE_K);
-				theChan->setKey(st[curArg]);
-				++curArg;
-				}
-			curFlags |= CF_K;
-			break;
-			} // case k
-		case '+':
-			{
-			if(!polarity) {	polarity = true; }
-			break;
-			} // +
-		case '-':
-			{
-			if(polarity) { polarity = false; }
-			break;
-			}
-		} // switch(*ptr)
-	} // for(iterate over modestring)
 
-if(positive.size()) outString += string("+") + positive;
-if(negative.size()) outString += string("-") + negative;
-if(outString.size() && posarg.size()) outString += string(" ") + posarg;
-if(outString.size() && negarg.size()) outString += string(" ") + negarg;
 
-if(outString.size())
-	{
-	stringstream quoteStream;
-	quoteStream << bot->getCharYYXXX() << " M " << st[1] << " " << outString << ends;
-	bot->Write(quoteStream.str().c_str());
-	}
+for( string::const_iterator itr = modeString.begin() ;
+     itr != modeString.end() ; ++itr) {
+	curFlag = 0;
+	switch( *itr ) {
+		case '+' : polarity = true;	break;
+		case '-' : polarity = false;	break;
+		case 'C' : curFlag = CF_C;	break;
+		case 'S' : curFlag = CF_S;	break;
+		case 'c' : curFlag = CF_c;	break;
+		case 'i' : curFlag = CF_i;	break;
+		case 'm' : curFlag = CF_m;	break;
+		case 'n' : curFlag = CF_n;	break;
+		case 'p' : curFlag = CF_p;	break;
+		case 'r' : curFlag = CF_r;	break;
+		case 's' : curFlag = CF_s;	break;
+		case 't' : curFlag = CF_t;	break;
+	} // switch( *itr )
+	
+	if(polarity) positive |= curFlag;
+	else negative |= curFlag;
+} // iterate over modeString
+
+/* Check for overlap between positive and negative */
+if((positive & negative) != 0) {
+	bot->Notice(theClient, "You cannot both set and remove a mode.");
+	return true;
+}
+
+/* Check for no modes */
+if(!positive && !negative) {
+	bot->Notice(theClient, "Actually setting some modes would be a good idea.");
+	return true;
+}
+
+/* Check for mutually exclusive modes */
+if((positive & CF_p) && (positive & CF_s)) {
+	bot->Notice(theClient, "You cannot set +p and +s at the same time.");
+	return true;
+}
+
+if((positive & CF_S) && (positive & CF_c)) {
+	bot->Notice(theClient, "You cannot set +S and +c at the same time.");
+	return true;
+}
+
+if(positive & CF_S) negative |= CF_c;
+if(positive & CF_c) negative |= CF_S;
+
+if(positive & CF_p) negative |= CF_s;
+if(positive & CF_s) negative |= CF_p;
+
+string posString, negString;
+
+if(positive & CF_C) { posString += "C"; theChan->setMode(Channel::MODE_C); }
+if(positive & CF_S) { posString += "S"; theChan->setMode(Channel::MODE_S); }
+if(positive & CF_c) { posString += "c"; theChan->setMode(Channel::MODE_c); }
+if(positive & CF_i) { posString += "i"; theChan->setMode(Channel::MODE_i); }
+if(positive & CF_m) { posString += "m"; theChan->setMode(Channel::MODE_m); }
+if(positive & CF_n) { posString += "n"; theChan->setMode(Channel::MODE_n); }
+if(positive & CF_p) { posString += "p"; theChan->setMode(Channel::MODE_p); }
+if(positive & CF_r) { posString += "r"; theChan->setMode(Channel::MODE_r); }
+if(positive & CF_s) { posString += "s"; theChan->setMode(Channel::MODE_s); }
+if(positive & CF_t) { posString += "t"; theChan->setMode(Channel::MODE_t); }
+
+if(negative & CF_C) { negString += "C"; theChan->removeMode(Channel::MODE_C); }
+if(negative & CF_S) { negString += "S"; theChan->removeMode(Channel::MODE_S); }
+if(negative & CF_c) { negString += "c"; theChan->removeMode(Channel::MODE_c); }
+if(negative & CF_i) { negString += "i"; theChan->removeMode(Channel::MODE_i); }
+if(negative & CF_m) { negString += "m"; theChan->removeMode(Channel::MODE_m); }
+if(negative & CF_n) { negString += "n"; theChan->removeMode(Channel::MODE_n); }
+if(negative & CF_p) { negString += "p"; theChan->removeMode(Channel::MODE_p); }
+if(negative & CF_r) { negString += "r"; theChan->removeMode(Channel::MODE_r); }
+if(negative & CF_s) { negString += "s"; theChan->removeMode(Channel::MODE_s); }
+if(negative & CF_t) { negString += "t"; theChan->removeMode(Channel::MODE_t); }
+
+string outString = "+";
+outString += posString;
+outString += "-";
+outString += negString;
+
+bot->Write("%s M %s %s",
+	bot->getCharYYXXX().c_str(),
+	st[1].c_str(),
+	outString.c_str());
 
 return true;
-
-} //MODECommand::Exec
-
+} // MODECommand::Exec
+ 
 } // namespace gnuworld

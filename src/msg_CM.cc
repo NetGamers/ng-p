@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: msg_CM.cc,v 1.3 2002-07-27 14:54:13 jeekay Exp $
+ * $Id: msg_CM.cc,v 1.4 2003-03-30 02:55:40 jeekay Exp $
  */
 
 #include	<iostream>
@@ -31,7 +31,7 @@
 #include	"ELog.h"
 #include	"ServerCommandHandler.h"
 
-const char msg_CM_cc_rcsId[] = "$Id: msg_CM.cc,v 1.3 2002-07-27 14:54:13 jeekay Exp $" ;
+const char msg_CM_cc_rcsId[] = "$Id: msg_CM.cc,v 1.4 2003-03-30 02:55:40 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -81,57 +81,49 @@ for( string::size_type i = 0 ; i < Modes.size() ; i++ )
 	switch( Modes[ i ] )
 		{
 		case 'o':
-		case 'O':
 			clearOps = true ;
 			elog	<< tmpChan->getName()
 				<< "msg_CM> Doing CLEAR_CHANOPS"
 				<< endl;
 			break ;
 		case 'v':
-		case 'V':
 			clearVoice = true ;
 			elog	<< tmpChan->getName()
 				<< "msg_CM> Doing CLEAR_VOICED"
 				<< endl;
 			break ;
 		case 's':
-		case 'S':
-			theServer->OnChannelModeS( tmpChan, false, 0 ) ;
+			theServer->OnChannelModes( tmpChan, false, 0 ) ;
 			elog	<< tmpChan->getName()
 				<< "msg_CM> Doing CLEAR_SECRET"
 				<< endl;
 			break ;
 		case 'm':
-		case 'M':
-			theServer->OnChannelModeM( tmpChan, false, 0 ) ;
+			theServer->OnChannelModem( tmpChan, false, 0 ) ;
 			elog	<< tmpChan->getName()
 				<< "msg_CM> Doing CLEAR_MODERATED"
 				<< endl;
 			break ;
 		case 't':
-		case 'T':
-			theServer->OnChannelModeT( tmpChan, false, 0 ) ;
+			theServer->OnChannelModet( tmpChan, false, 0 ) ;
 			elog	<< tmpChan->getName()
 				<< "msg_CM> Doing CLEAR_TOPICLIMIT"
 				<< endl;
 			break ;
 		case 'i':
-		case 'I':
-			theServer->OnChannelModeI( tmpChan, false, 0 ) ;
+			theServer->OnChannelModei( tmpChan, false, 0 ) ;
 			elog	<< tmpChan->getName()
 				<< "msg_CM> Doing CLEAR_INVITEONLY"
 				<< endl;
 			break ;
 		case 'n':
-		case 'N':
-			theServer->OnChannelModeN( tmpChan, false, 0 ) ;
+			theServer->OnChannelModen( tmpChan, false, 0 ) ;
 			elog	<< tmpChan->getName()
 				<< "msg_CM> Doing CLEAR_NOPRIVMSGS"
 				<< endl;
 			break ;
 		case 'k':
-		case 'K':
-			theServer->OnChannelModeK( tmpChan, false, 0, 
+			theServer->OnChannelModek( tmpChan, false, 0, 
 				string() ) ;
 			tmpChan->setKey( string() );
 			elog	<< tmpChan->getName()
@@ -139,7 +131,6 @@ for( string::size_type i = 0 ; i < Modes.size() ; i++ )
 				<< endl;
 			break ;
 		case 'b':
-		case 'B':
 			clearBans = true ;
 			tmpChan->removeAllBans();
 			elog	<< tmpChan->getName()
@@ -147,8 +138,7 @@ for( string::size_type i = 0 ; i < Modes.size() ; i++ )
 				<< endl;
 			break ;
 		case 'l':
-		case 'L':
-			theServer->OnChannelModeL( tmpChan, false, 0, 0 ) ;
+			theServer->OnChannelModel( tmpChan, false, 0, 0 ) ;
 			elog	<< tmpChan->getName()
 				<< "msg_CM> Doing CLEAR_LIMIT"
 				<< endl;

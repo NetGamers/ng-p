@@ -23,7 +23,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: server.cc,v 1.5 2002-10-25 22:42:07 jeekay Exp $
+ * $Id: server.cc,v 1.6 2003-03-30 02:55:40 jeekay Exp $
  */
 
 #include	<sys/time.h>
@@ -72,28 +72,7 @@
 #include	"ConnectionHandler.h"
 #include	"Connection.h"
 
-const char server_h_rcsId[] = __SERVER_H ;
-const char server_cc_rcsId[] = "$Id: server.cc,v 1.5 2002-10-25 22:42:07 jeekay Exp $" ;
-const char config_h_rcsId[] = __CONFIG_H ;
-const char misc_h_rcsId[] = __MISC_H ;
-const char events_h_rcsId[] = __EVENTS_H ;
-const char ip_h_rcsId[] = __IP_H ;
-const char Network_h_rcsId[] = __NETWORK_H ;
-const char iServer_h_rcsId[] = __ISERVER_H ;
-const char iClient_h_rcsId[] = __ICLIENT_H ;
-const char EConfig_h_rcsId[] = __ECONFIG_H ;
-const char Gline_h_rcsId[] = __GLINE_H ;
-const char match_h_rcsId[] = __MATCH_H ;
-const char ELog_h_rcsId[] = __ELOG_H ;
-const char Socket_h_rcsId[] = __SOCKET_H ;
-const char StringTokenizer_h_rcsId[] = __STRINGTOKENIZER_H ;
-const char xParameters_h_rcsId[] = __XPARAMETERS_H ;
-const char moduleLoader_h_rcsId[] = __MODULELOADER_H ;
-const char ServerTimerHandler_h_rcsId[] = __SERVERTIMERHANDLERS_H ;
-const char LoadClientTimerHandler_h_rcsId[] = __LOADCLIENTTIMERHANDLER_H ;
-const char UnloadClientTimerHandler_h_rcsId[] = __UNLOADCLIENTTIMERHANDLER_H ;
-const char ConnectionManager_h_rcsId[] = __CONNECTIONMANAGER_H ;
-const char Connection_h_rcsId[] = __CONNECTION_H ;
+const char server_cc_rcsId[] = "$Id: server.cc,v 1.6 2003-03-30 02:55:40 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -2329,39 +2308,39 @@ if( !chanModes.empty() &&
 				break ;
 			case 't':
 				if( plus )
-					theChan->onModeT( true ) ;
+					theChan->onModet( true ) ;
 				else
-					theChan->onModeT( false ) ;
+					theChan->onModet( false ) ;
 				break ;
 			case 'n':
 				if( plus )
-					theChan->onModeN( true ) ;
+					theChan->onModen( true ) ;
 				else
-					theChan->onModeN( false ) ;
+					theChan->onModen( false ) ;
 				break ;
 			case 's':
 				if( plus )
-					theChan->onModeS( true ) ;
+					theChan->onModes( true ) ;
 				else
-					theChan->onModeS( false ) ;
+					theChan->onModes( false ) ;
 				break ;
 			case 'p':
 				if( plus )
-					theChan->onModeP( true ) ;
+					theChan->onModep( true ) ;
 				else
-					theChan->onModeP( false ) ;
+					theChan->onModep( false ) ;
 				break ;
 			case 'm':
 				if( plus )
-					theChan->onModeM( true ) ;
+					theChan->onModem( true ) ;
 				else
-					theChan->onModeM( false ) ;
+					theChan->onModem( false ) ;
 				break ;
 			case 'i':
 				if( plus )
-					theChan->onModeI( true ) ;
+					theChan->onModei( true ) ;
 				else
-					theChan->onModeI( false ) ;
+					theChan->onModei( false ) ;
 				break ;
 
 			// TODO: Finish with polarity
@@ -2376,7 +2355,7 @@ if( !chanModes.empty() &&
 						<< endl ;
 					break ;
 					}
-				theChan->onModeK( true, st[ argPos++ ] ) ;
+				theChan->onModek( true, st[ argPos++ ] ) ;
 				break ;
 				}
 			case 'l':
@@ -2389,7 +2368,7 @@ if( !chanModes.empty() &&
 						<< endl ;
 					break ;
 					}
-				theChan->onModeL( true,
+				theChan->onModel( true,
 					atoi( st[ argPos++ ].c_str() ) ) ;
 				break ;
 				}
@@ -2701,10 +2680,10 @@ mainLoop() ;
 // polarity is true if the mode is being set, false otherwise
 // sourceUser is the source of the mode change; this variable
 // may be NULL if a server is setting the mode
-void xServer::OnChannelModeT( Channel* theChan, bool polarity,
+void xServer::OnChannelModeC( Channel* theChan, bool polarity,
 	ChannelUser* sourceUser )
 {
-theChan->onModeT( polarity ) ;
+theChan->onModeC( polarity ) ;
 
 // First deliver this channel event to any listeners for all channel
 // events.
@@ -2715,7 +2694,7 @@ if( allChanPtr != channelEventMap.end() )
 	for( list< xClient* >::iterator ptr = allChanPtr->second->begin(),
 		endPtr = allChanPtr->second->end() ; ptr != endPtr ; ++ptr )
 		{
-		(*ptr)->OnChannelModeT( theChan, polarity, sourceUser ) ;
+		(*ptr)->OnChannelModeC( theChan, polarity, sourceUser ) ;
 		}
 	}
 
@@ -2734,49 +2713,7 @@ list< xClient* >* listPtr = chanPtr->second ;
 for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 	ptr != end ; ++ptr )
 	{
-	(*ptr)->OnChannelModeT( theChan, polarity, sourceUser ) ;
-	}
-}
-
-// Handle a channel mode change
-// theChan is the channel on which the mode change occured
-// polarity is true if the mode is being set, false otherwise
-// sourceUser is the source of the mode change; this variable
-// may be NULL if a server is setting the mode
-void xServer::OnChannelModeN( Channel* theChan, bool polarity,
-	ChannelUser* sourceUser )
-{
-theChan->onModeN( polarity ) ;
-
-// First deliver this channel event to any listeners for all channel
-// events.
-channelEventMapType::iterator allChanPtr =
-	channelEventMap.find( CHANNEL_ALL ) ;
-if( allChanPtr != channelEventMap.end() )
-	{
-	for( list< xClient* >::iterator ptr = allChanPtr->second->begin(),
-		endPtr = allChanPtr->second->end() ; ptr != endPtr ; ++ptr )
-		{
-		(*ptr)->OnChannelModeN( theChan, polarity, sourceUser ) ;
-		}
-	}
-
-// Find listeners for this specific channel
-channelEventMapType::iterator chanPtr =
-	channelEventMap.find( theChan->getName() ) ;
-if( chanPtr == channelEventMap.end() )
-	{
-	// No listeners for this channel's events
-	return ;
-	}
-
-// Iterate through the listeners for this channel's events
-// and notify each listener of the event
-list< xClient* >* listPtr = chanPtr->second ;
-for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
-	ptr != end ; ++ptr )
-	{
-	(*ptr)->OnChannelModeN( theChan, polarity, sourceUser ) ;
+	(*ptr)->OnChannelModeC( theChan, polarity, sourceUser ) ;
 	}
 }
 
@@ -2827,10 +2764,10 @@ for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 // polarity is true if the mode is being set, false otherwise
 // sourceUser is the source of the mode change; this variable
 // may be NULL if a server is setting the mode
-void xServer::OnChannelModeP( Channel* theChan, bool polarity,
+void xServer::OnChannelModec( Channel* theChan, bool polarity,
 	ChannelUser* sourceUser )
 {
-theChan->onModeP( polarity ) ;
+theChan->onModec( polarity ) ;
 
 // First deliver this channel event to any listeners for all channel
 // events.
@@ -2841,7 +2778,7 @@ if( allChanPtr != channelEventMap.end() )
 	for( list< xClient* >::iterator ptr = allChanPtr->second->begin(),
 		endPtr = allChanPtr->second->end() ; ptr != endPtr ; ++ptr )
 		{
-		(*ptr)->OnChannelModeP( theChan, polarity, sourceUser ) ;
+		(*ptr)->OnChannelModec( theChan, polarity, sourceUser ) ;
 		}
 	}
 
@@ -2860,7 +2797,7 @@ list< xClient* >* listPtr = chanPtr->second ;
 for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 	ptr != end ; ++ptr )
 	{
-	(*ptr)->OnChannelModeP( theChan, polarity, sourceUser ) ;
+	(*ptr)->OnChannelModec( theChan, polarity, sourceUser ) ;
 	}
 }
 
@@ -2869,10 +2806,10 @@ for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 // polarity is true if the mode is being set, false otherwise
 // sourceUser is the source of the mode change; this variable
 // may be NULL if a server is setting the mode
-void xServer::OnChannelModeM( Channel* theChan, bool polarity,
+void xServer::OnChannelModei( Channel* theChan, bool polarity,
 	ChannelUser* sourceUser )
 {
-theChan->onModeM( polarity ) ;
+theChan->onModei( polarity ) ;
 
 // First deliver this channel event to any listeners for all channel
 // events.
@@ -2883,7 +2820,7 @@ if( allChanPtr != channelEventMap.end() )
 	for( list< xClient* >::iterator ptr = allChanPtr->second->begin(),
 		endPtr = allChanPtr->second->end() ; ptr != endPtr ; ++ptr )
 		{
-		(*ptr)->OnChannelModeM( theChan, polarity, sourceUser ) ;
+		(*ptr)->OnChannelModei( theChan, polarity, sourceUser ) ;
 		}
 	}
 
@@ -2902,7 +2839,7 @@ list< xClient* >* listPtr = chanPtr->second ;
 for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 	ptr != end ; ++ptr )
 	{
-	(*ptr)->OnChannelModeM( theChan, polarity, sourceUser ) ;
+	(*ptr)->OnChannelModei( theChan, polarity, sourceUser ) ;
 	}
 }
 
@@ -2911,10 +2848,10 @@ for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 // polarity is true if the mode is being set, false otherwise
 // sourceUser is the source of the mode change; this variable
 // may be NULL if a server is setting the mode
-void xServer::OnChannelModeI( Channel* theChan, bool polarity,
+void xServer::OnChannelModem( Channel* theChan, bool polarity,
 	ChannelUser* sourceUser )
 {
-theChan->onModeI( polarity ) ;
+theChan->onModem( polarity ) ;
 
 // First deliver this channel event to any listeners for all channel
 // events.
@@ -2925,7 +2862,7 @@ if( allChanPtr != channelEventMap.end() )
 	for( list< xClient* >::iterator ptr = allChanPtr->second->begin(),
 		endPtr = allChanPtr->second->end() ; ptr != endPtr ; ++ptr )
 		{
-		(*ptr)->OnChannelModeI( theChan, polarity, sourceUser ) ;
+		(*ptr)->OnChannelModem( theChan, polarity, sourceUser ) ;
 		}
 	}
 
@@ -2944,7 +2881,7 @@ list< xClient* >* listPtr = chanPtr->second ;
 for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 	ptr != end ; ++ptr )
 	{
-	(*ptr)->OnChannelModeI( theChan, polarity, sourceUser ) ;
+	(*ptr)->OnChannelModem( theChan, polarity, sourceUser ) ;
 	}
 }
 
@@ -2953,10 +2890,10 @@ for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 // polarity is true if the mode is being set, false otherwise
 // sourceUser is the source of the mode change; this variable
 // may be NULL if a server is setting the mode
-void xServer::OnChannelModeC( Channel* theChan, bool polarity,
+void xServer::OnChannelModen( Channel* theChan, bool polarity,
 	ChannelUser* sourceUser )
 {
-theChan->onModeC( polarity ) ;
+theChan->onModen( polarity ) ;
 
 // First deliver this channel event to any listeners for all channel
 // events.
@@ -2967,7 +2904,7 @@ if( allChanPtr != channelEventMap.end() )
 	for( list< xClient* >::iterator ptr = allChanPtr->second->begin(),
 		endPtr = allChanPtr->second->end() ; ptr != endPtr ; ++ptr )
 		{
-		(*ptr)->OnChannelModeC( theChan, polarity, sourceUser ) ;
+		(*ptr)->OnChannelModen( theChan, polarity, sourceUser ) ;
 		}
 	}
 
@@ -2986,7 +2923,7 @@ list< xClient* >* listPtr = chanPtr->second ;
 for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 	ptr != end ; ++ptr )
 	{
-	(*ptr)->OnChannelModeC( theChan, polarity, sourceUser ) ;
+	(*ptr)->OnChannelModen( theChan, polarity, sourceUser ) ;
 	}
 }
 
@@ -2995,10 +2932,10 @@ for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 // polarity is true if the mode is being set, false otherwise
 // sourceUser is the source of the mode change; this variable
 // may be NULL if a server is setting the mode
-void xServer::OnChannelModeStrip( Channel* theChan, bool polarity,
+void xServer::OnChannelModep( Channel* theChan, bool polarity,
 	ChannelUser* sourceUser )
 {
-theChan->onModeStrip( polarity ) ;
+theChan->onModep( polarity ) ;
 
 // First deliver this channel event to any listeners for all channel
 // events.
@@ -3009,7 +2946,7 @@ if( allChanPtr != channelEventMap.end() )
 	for( list< xClient* >::iterator ptr = allChanPtr->second->begin(),
 		endPtr = allChanPtr->second->end() ; ptr != endPtr ; ++ptr )
 		{
-		(*ptr)->OnChannelModeStrip( theChan, polarity, sourceUser ) ;
+		(*ptr)->OnChannelModep( theChan, polarity, sourceUser ) ;
 		}
 	}
 
@@ -3028,7 +2965,7 @@ list< xClient* >* listPtr = chanPtr->second ;
 for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 	ptr != end ; ++ptr )
 	{
-	(*ptr)->OnChannelModeStrip( theChan, polarity, sourceUser ) ;
+	(*ptr)->OnChannelModep( theChan, polarity, sourceUser ) ;
 	}
 }
 
@@ -3037,10 +2974,10 @@ for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 // polarity is true if the mode is being set, false otherwise
 // sourceUser is the source of the mode change; this variable
 // may be NULL if a server is setting the mode
-void xServer::OnChannelModeR( Channel* theChan, bool polarity,
+void xServer::OnChannelModer( Channel* theChan, bool polarity,
 	ChannelUser* sourceUser )
 {
-theChan->onModeR( polarity ) ;
+theChan->onModer( polarity ) ;
 
 // First deliver this channel event to any listeners for all channel
 // events.
@@ -3051,7 +2988,7 @@ if( allChanPtr != channelEventMap.end() )
 	for( list< xClient* >::iterator ptr = allChanPtr->second->begin(),
 		endPtr = allChanPtr->second->end() ; ptr != endPtr ; ++ptr )
 		{
-		(*ptr)->OnChannelModeR( theChan, polarity, sourceUser ) ;
+		(*ptr)->OnChannelModer( theChan, polarity, sourceUser ) ;
 		}
 	}
 
@@ -3070,7 +3007,7 @@ list< xClient* >* listPtr = chanPtr->second ;
 for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 	ptr != end ; ++ptr )
 	{
-	(*ptr)->OnChannelModeR( theChan, polarity, sourceUser ) ;
+	(*ptr)->OnChannelModer( theChan, polarity, sourceUser ) ;
 	}
 }
 
@@ -3079,10 +3016,94 @@ for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 // polarity is true if the mode is being set, false otherwise
 // sourceUser is the source of the mode change; this variable
 // may be NULL if a server is setting the mode
-void xServer::OnChannelModeL( Channel* theChan, bool polarity,
+void xServer::OnChannelModes( Channel* theChan, bool polarity,
+	ChannelUser* sourceUser )
+{
+theChan->onModes( polarity ) ;
+
+// First deliver this channel event to any listeners for all channel
+// events.
+channelEventMapType::iterator allChanPtr =
+	channelEventMap.find( CHANNEL_ALL ) ;
+if( allChanPtr != channelEventMap.end() )
+	{
+	for( list< xClient* >::iterator ptr = allChanPtr->second->begin(),
+		endPtr = allChanPtr->second->end() ; ptr != endPtr ; ++ptr )
+		{
+		(*ptr)->OnChannelModes( theChan, polarity, sourceUser ) ;
+		}
+	}
+
+// Find listeners for this specific channel
+channelEventMapType::iterator chanPtr =
+	channelEventMap.find( theChan->getName() ) ;
+if( chanPtr == channelEventMap.end() )
+	{
+	// No listeners for this channel's events
+	return ;
+	}
+
+// Iterate through the listeners for this channel's events
+// and notify each listener of the event
+list< xClient* >* listPtr = chanPtr->second ;
+for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
+	ptr != end ; ++ptr )
+	{
+	(*ptr)->OnChannelModes( theChan, polarity, sourceUser ) ;
+	}
+}
+
+// Handle a channel mode change
+// theChan is the channel on which the mode change occured
+// polarity is true if the mode is being set, false otherwise
+// sourceUser is the source of the mode change; this variable
+// may be NULL if a server is setting the mode
+void xServer::OnChannelModet( Channel* theChan, bool polarity,
+	ChannelUser* sourceUser )
+{
+theChan->onModet( polarity ) ;
+
+// First deliver this channel event to any listeners for all channel
+// events.
+channelEventMapType::iterator allChanPtr =
+	channelEventMap.find( CHANNEL_ALL ) ;
+if( allChanPtr != channelEventMap.end() )
+	{
+	for( list< xClient* >::iterator ptr = allChanPtr->second->begin(),
+		endPtr = allChanPtr->second->end() ; ptr != endPtr ; ++ptr )
+		{
+		(*ptr)->OnChannelModet( theChan, polarity, sourceUser ) ;
+		}
+	}
+
+// Find listeners for this specific channel
+channelEventMapType::iterator chanPtr =
+	channelEventMap.find( theChan->getName() ) ;
+if( chanPtr == channelEventMap.end() )
+	{
+	// No listeners for this channel's events
+	return ;
+	}
+
+// Iterate through the listeners for this channel's events
+// and notify each listener of the event
+list< xClient* >* listPtr = chanPtr->second ;
+for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
+	ptr != end ; ++ptr )
+	{
+	(*ptr)->OnChannelModet( theChan, polarity, sourceUser ) ;
+	}
+}
+
+// Handle a channel mode change
+// theChan is the channel on which the mode change occured
+// polarity is true if the mode is being set, false otherwise
+// sourceUser is the source of the mode change; this variable
+// may be NULL if a server is setting the mode
+void xServer::OnChannelModel( Channel* theChan, bool polarity,
 	ChannelUser* sourceUser, unsigned int limit )
 {
-theChan->onModeL( polarity, limit ) ;
+theChan->onModel( polarity, limit ) ;
 
 // First deliver this channel event to any listeners for all channel
 // events.
@@ -3093,7 +3114,7 @@ if( allChanPtr != channelEventMap.end() )
 	for( list< xClient* >::iterator ptr = allChanPtr->second->begin(),
 		endPtr = allChanPtr->second->end() ; ptr != endPtr ; ++ptr )
 		{
-		(*ptr)->OnChannelModeL( theChan, polarity,
+		(*ptr)->OnChannelModel( theChan, polarity,
 			sourceUser, limit ) ;
 		}
 	}
@@ -3113,7 +3134,7 @@ list< xClient* >* listPtr = chanPtr->second ;
 for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 	ptr != end ; ++ptr )
 	{
-	(*ptr)->OnChannelModeL( theChan, polarity, sourceUser, limit ) ;
+	(*ptr)->OnChannelModel( theChan, polarity, sourceUser, limit ) ;
 	}
 }
 
@@ -3122,10 +3143,10 @@ for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 // polarity is true if the mode is being set, false otherwise
 // sourceUser is the source of the mode change; this variable
 // may be NULL if a server is setting the mode
-void xServer::OnChannelModeK( Channel* theChan, bool polarity,
+void xServer::OnChannelModek( Channel* theChan, bool polarity,
 	ChannelUser* sourceUser, const string& key )
 {
-theChan->onModeK( polarity, key ) ;
+theChan->onModek( polarity, key ) ;
 
 // First deliver this channel event to any listeners for all channel
 // events.
@@ -3136,7 +3157,7 @@ if( allChanPtr != channelEventMap.end() )
 	for( list< xClient* >::iterator ptr = allChanPtr->second->begin(),
 		endPtr = allChanPtr->second->end() ; ptr != endPtr ; ++ptr )
 		{
-		(*ptr)->OnChannelModeK( theChan, polarity,
+		(*ptr)->OnChannelModek( theChan, polarity,
 			sourceUser, key ) ;
 		}
 	}
@@ -3156,7 +3177,7 @@ list< xClient* >* listPtr = chanPtr->second ;
 for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 	ptr != end ; ++ptr )
 	{
-	(*ptr)->OnChannelModeK( theChan, polarity, sourceUser, key ) ;
+	(*ptr)->OnChannelModek( theChan, polarity, sourceUser, key ) ;
 	}
 }
 
@@ -3294,37 +3315,49 @@ for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 void xServer::removeAllChanModes( Channel* theChan )
 {
 // This is a protected method, theChan is non-NULL
-if( theChan->getMode( Channel::MODE_T ) )
+if( theChan->getMode( Channel::MODE_C ) )
 	{
-	OnChannelModeT( theChan, false, 0 ) ;
-	}
-if( theChan->getMode( Channel::MODE_N ) )
-	{
-	OnChannelModeN( theChan, false, 0 ) ;
+	OnChannelModeC( theChan, false, 0 ) ;
 	}
 if( theChan->getMode( Channel::MODE_S ) )
 	{
 	OnChannelModeS( theChan, false, 0 ) ;
 	}
-if( theChan->getMode( Channel::MODE_P ) )
+if( theChan->getMode( Channel::MODE_c ) )
 	{
-	OnChannelModeP( theChan, false, 0 ) ;
+	OnChannelModec( theChan, false, 0 ) ;
 	}
-if( theChan->getMode( Channel::MODE_M ) )
+if( theChan->getMode( Channel::MODE_i ) )
 	{
-	OnChannelModeM( theChan, false, 0 ) ;
+	OnChannelModei( theChan, false, 0 ) ;
 	}
-if( theChan->getMode( Channel::MODE_I ) )
+if( theChan->getMode( Channel::MODE_m ) )
 	{
-	OnChannelModeI( theChan, false, 0 ) ;
+	OnChannelModem( theChan, false, 0 ) ;
 	}
-if( theChan->getMode( Channel::MODE_L ) )
+if( theChan->getMode( Channel::MODE_n ) )
 	{
-	OnChannelModeL( theChan, false, 0, 0 ) ;
+	OnChannelModen( theChan, false, 0 ) ;
 	}
-if( theChan->getMode( Channel::MODE_K ) )
+if( theChan->getMode( Channel::MODE_p ) )
 	{
-	OnChannelModeK( theChan, false, 0, string() ) ;
+	OnChannelModep( theChan, false, 0 ) ;
+	}
+if( theChan->getMode( Channel::MODE_r ) )
+	{
+	OnChannelModer( theChan, false, 0 ) ;
+	}
+if( theChan->getMode( Channel::MODE_t ) )
+	{
+	OnChannelModet( theChan, false, 0 ) ;
+	}
+if( theChan->getMode( Channel::MODE_l ) )
+	{
+	OnChannelModel( theChan, false, 0, 0 ) ;
+	}
+if( theChan->getMode( Channel::MODE_k ) )
+	{
+	OnChannelModek( theChan, false, 0, string() ) ;
 	}
 
 opVectorType opVector ;
@@ -3504,29 +3537,35 @@ for( string::const_iterator modePtr = modes.begin() ;
 		case '-':
 			polarity = false ;
 			break ;
-		case 't':
-			OnChannelModeT( theChan, polarity,
-				theUser ) ;
+		case 'C':
+			OnChannelModeC( theChan, polarity, theUser ) ;
 			break ;
-		case 'n':
-			OnChannelModeN( theChan, polarity,
-				theUser ) ;
+		case 'S':
+			OnChannelModeS( theChan, polarity, theUser ) ;
 			break ;
-		case 's':
-			OnChannelModeS( theChan, polarity,
-				theUser ) ;
-			break ;
-		case 'p':
-			OnChannelModeP( theChan, polarity,
-				theUser ) ;
+		case 'c':
+			OnChannelModec( theChan, polarity, theUser ) ;
 			break ;
 		case 'i':
-			OnChannelModeI( theChan, polarity,
-				theUser ) ;
+			OnChannelModei( theChan, polarity, theUser ) ;
 			break ;
 		case 'm':
-			OnChannelModeM( theChan, polarity,
-				theUser ) ;
+			OnChannelModem( theChan, polarity, theUser ) ;
+			break ;
+		case 'n':
+			OnChannelModen( theChan, polarity, theUser ) ;
+			break ;
+		case 'p':
+			OnChannelModep( theChan, polarity, theUser ) ;
+			break ;
+		case 'r':
+			OnChannelModer( theChan, polarity, theUser ) ;
+			break ;
+		case 's':
+			OnChannelModes( theChan, polarity, theUser ) ;
+			break ;
+		case 't':
+			OnChannelModet( theChan, polarity, theUser ) ;
 			break ;
 		case 'b':
 			banVector.push_back( banVectorType::value_type(
@@ -3559,14 +3598,14 @@ for( string::const_iterator modePtr = modes.begin() ;
 			break ;
 		case 'k':
 			// Channel mode 'k' always has an argument
-			OnChannelModeK( theChan, polarity, theUser,
+			OnChannelModek( theChan, polarity, theUser,
 				*argPtr ) ;
 			++argPtr ;
 			break ;
 		case 'l':
 			// Channel mode 'l' only has an argument if
 			// it's being added, but not removed
-			OnChannelModeL( theChan, polarity, theUser,
+			OnChannelModel( theChan, polarity, theUser,
 				polarity ? atoi( (*argPtr).c_str() )
 				: 0 ) ;
 			if( polarity )

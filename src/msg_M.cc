@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: msg_M.cc,v 1.5 2002-10-25 22:42:07 jeekay Exp $
+ * $Id: msg_M.cc,v 1.6 2003-03-30 02:55:40 jeekay Exp $
  */
 
 #include	<new>
@@ -37,7 +37,7 @@
 #include	"StringTokenizer.h"
 #include	"ServerCommandHandler.h"
 
-const char msg_M_cc_rcsId[] = "$Id: msg_M.cc,v 1.5 2002-10-25 22:42:07 jeekay Exp $" ;
+const char msg_M_cc_rcsId[] = "$Id: msg_M.cc,v 1.6 2003-03-30 02:55:40 jeekay Exp $" ;
 const char misc_h_rcsId[] = __MISC_H ;
 const char events_h_rcsId[] = __EVENTS_H ;
 const char server_h_rcsId[] = __SERVER_H ;
@@ -171,39 +171,36 @@ for( const char* modePtr = Param[ 2 ] ; *modePtr ; ++modePtr )
 		case '-':
 			polarity = false ;
 			break ;
-		case 't':
-			theServer->OnChannelModeT( theChan,
-				polarity, theUser ) ;
-			break ;
-		case 'n':
-			theServer->OnChannelModeN( theChan,
-				polarity, theUser ) ;
-			break ;
-		case 's':
-			theServer->OnChannelModeS( theChan,
-				polarity, theUser ) ;
-			break ;
-		case 'p':
-			theServer->OnChannelModeP( theChan,
-				polarity, theUser ) ;
+		case 'C':
+			theServer->OnChannelModeC( theChan, polarity, theUser ) ;
+			break;
+		case 'S':
+			theServer->OnChannelModeS( theChan, polarity, theUser ) ;
+			break;
+		case 'c':
+			theServer->OnChannelModec( theChan, polarity, theUser ) ;
+			break;
+		case 'i':
+			theServer->OnChannelModei( theChan, polarity, theUser ) ;
 			break ;
 		case 'm':
-			theServer->OnChannelModeM( theChan,
-				polarity, theUser ) ;
+			theServer->OnChannelModem( theChan, polarity, theUser ) ;
 			break ;
-		case 'i':
-			theServer->OnChannelModeI( theChan,
-				polarity, theUser ) ;
+		case 'n':
+			theServer->OnChannelModen( theChan, polarity, theUser ) ;
 			break ;
-    case 'c':
-      theServer->OnChannelModeC( theChan, polarity, theUser ) ;
-      break;
-    case 'S':
-      theServer->OnChannelModeStrip( theChan, polarity, theUser ) ;
-      break;
-    case 'r':
-      theServer->OnChannelModeR( theChan, polarity, theUser );
-      break;
+		case 'p':
+			theServer->OnChannelModep( theChan, polarity, theUser ) ;
+			break ;
+		case 'r':
+			theServer->OnChannelModer( theChan, polarity, theUser );
+			break;
+		case 's':
+			theServer->OnChannelModes( theChan, polarity, theUser ) ;
+			break ;
+		case 't':
+			theServer->OnChannelModet( theChan, polarity, theUser ) ;
+			break ;
 
 		// Channel mode l only has an argument if
 		// it is being added, but not removed
@@ -217,7 +214,7 @@ for( const char* modePtr = Param[ 2 ] ; *modePtr ; ++modePtr )
 				continue ;
 				}
 
-			theServer->OnChannelModeL( theChan,
+			theServer->OnChannelModel( theChan,
 				polarity, theUser,
 				polarity ? atoi( Param[ argPos++ ] )
 					: 0 ) ;
@@ -234,7 +231,7 @@ for( const char* modePtr = Param[ 2 ] ; *modePtr ; ++modePtr )
 				continue ;
 				}
 
-			theServer->OnChannelModeK( theChan,
+			theServer->OnChannelModek( theChan,
 				polarity, theUser,
 				Param[ argPos++ ] ) ;
 			break ;

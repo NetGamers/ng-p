@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: Channel.cc,v 1.7 2002-10-25 22:42:07 jeekay Exp $
+ * $Id: Channel.cc,v 1.8 2003-03-30 02:55:40 jeekay Exp $
  */
 
 #include	<new>
@@ -37,16 +37,7 @@
 #include	"server.h"
 #include	"ConnectionManager.h"
 
-const char Channel_h_rcsId[] = __CHANNEL_H ;
-const char Channel_cc_rcsId[] = "$Id: Channel.cc,v 1.7 2002-10-25 22:42:07 jeekay Exp $" ;
-const char iClient_h_rcsId[] = __ICLIENT_H ;
-const char ChannelUser_h_rcsId[] = __CHANNELUSER_H ;
-const char Network_h_rcsId[] = __NETWORK_H ;
-const char xParameters_h_rcsId[] = __XPARAMETERS_H ;
-const char StringTokenizer_h_rcsId[] = __STRINGTOKENIZER_H ;
-const char ELog_h_rcsId[] = __ELOG_H ;
-const char match_h_rcsId[] = __MATCH_H ;
-const char server_h_rcsId[] = __SERVER_H ;
+const char Channel_cc_rcsId[]	= "$Id: Channel.cc,v 1.8 2003-03-30 02:55:40 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -56,17 +47,18 @@ using std::endl ;
 using std::stringstream ;
 using std::ends ;
 
-const Channel::modeType Channel::MODE_T     = 0x0001 ;
-const Channel::modeType Channel::MODE_N     = 0x0002 ;
-const Channel::modeType Channel::MODE_S     = 0x0004 ;
-const Channel::modeType Channel::MODE_P     = 0x0008 ;
-const Channel::modeType Channel::MODE_K     = 0x0010 ;
-const Channel::modeType Channel::MODE_L     = 0x0020 ;
-const Channel::modeType Channel::MODE_M     = 0x0040 ;
-const Channel::modeType Channel::MODE_I     = 0x0080 ;
-const Channel::modeType Channel::MODE_C     = 0x0100 ;
-const Channel::modeType Channel::MODE_STRIP = 0x0200 ;
-const Channel::modeType Channel::MODE_R     = 0x0400 ;
+const Channel::modeType Channel::MODE_C     = 0x0001 ;
+const Channel::modeType Channel::MODE_S     = 0x0002 ;
+const Channel::modeType Channel::MODE_c     = 0x0004 ;
+const Channel::modeType Channel::MODE_i     = 0x0008 ;
+const Channel::modeType Channel::MODE_m     = 0x0010 ;
+const Channel::modeType Channel::MODE_n     = 0x0020 ;
+const Channel::modeType Channel::MODE_p     = 0x0040 ;
+const Channel::modeType Channel::MODE_s     = 0x0080 ;
+const Channel::modeType Channel::MODE_r     = 0x0100 ;
+const Channel::modeType Channel::MODE_t     = 0x0200 ;
+const Channel::modeType Channel::MODE_k     = 0x1000 ;
+const Channel::modeType Channel::MODE_l     = 0x2000 ;
 
 Channel::Channel( const string& _name,
 	const time_t& _creationTime )
@@ -297,86 +289,92 @@ for( banListType::const_iterator ptr = banList.begin(),
 return false ;
 }
 
-void Channel::onModeT( bool polarity )
+void Channel::onModeC( bool polarity )
 {
-if( polarity )	setMode( MODE_T ) ;
-else		removeMode( MODE_T ) ;
-}
-
-void Channel::onModeN( bool polarity )
-{
-if( polarity )	setMode( MODE_N ) ;
-else		removeMode( MODE_N ) ;
+if(polarity)	setMode ( MODE_C );
+else		removeMode( MODE_C );
 }
 
 void Channel::onModeS( bool polarity )
 {
-if( polarity )	setMode( MODE_S ) ;
-else		removeMode( MODE_S ) ;
+if(polarity)	setMode ( MODE_S );
+else		removeMode( MODE_S );
 }
 
-void Channel::onModeP( bool polarity )
+void Channel::onModec( bool polarity )
 {
-if( polarity )	setMode( MODE_P ) ;
-else		removeMode( MODE_P ) ;
+if(polarity)	setMode ( MODE_c );
+else		removeMode( MODE_c );
 }
 
-void Channel::onModeM( bool polarity )
+void Channel::onModei( bool polarity )
 {
-if( polarity )	setMode( MODE_M ) ;
-else		removeMode( MODE_M ) ;
+if( polarity )	setMode( MODE_i ) ;
+else		removeMode( MODE_i ) ;
 }
 
-void Channel::onModeI( bool polarity )
+void Channel::onModem( bool polarity )
 {
-if( polarity )	setMode( MODE_I ) ;
-else		removeMode( MODE_I ) ;
+if( polarity )	setMode( MODE_m ) ;
+else		removeMode( MODE_m ) ;
 }
 
-void Channel::onModeL( bool polarity, const unsigned int& newLimit )
+void Channel::onModen( bool polarity )
+{
+if( polarity )	setMode( MODE_n ) ;
+else		removeMode( MODE_n ) ;
+}
+
+void Channel::onModep( bool polarity )
+{
+if( polarity )	setMode( MODE_p ) ;
+else		removeMode( MODE_p ) ;
+}
+
+void Channel::onModer( bool polarity )
+{
+if(polarity)	setMode ( MODE_r );
+else		removeMode( MODE_r );
+}
+
+void Channel::onModes( bool polarity )
+{
+if( polarity )	setMode( MODE_s ) ;
+else		removeMode( MODE_s ) ;
+}
+
+void Channel::onModet( bool polarity )
+{
+if( polarity )	setMode( MODE_t ) ;
+else		removeMode( MODE_t ) ;
+}
+
+void Channel::onModel( bool polarity, const unsigned int& newLimit )
 {
 if( polarity )
 	{
-	setMode( MODE_L ) ;
+	setMode( MODE_l ) ;
 	setLimit( newLimit ) ;
 	}
 else
 	{
-	removeMode( MODE_L ) ;
+	removeMode( MODE_l ) ;
 	setLimit( 0 ) ;
 	}
 }
 
-void Channel::onModeK( bool polarity, const string& newKey )
+void Channel::onModek( bool polarity, const string& newKey )
 {
 if( polarity )
 	{
-	setMode( MODE_K ) ;
+	setMode( MODE_k ) ;
 	setKey( newKey ) ;
 	}
 else
 	{
-	removeMode( MODE_K ) ;
+	removeMode( MODE_k ) ;
 	setKey( string() ) ;
 	}
-}
-
-void Channel::onModeC( bool polarity )
-{
-if(polarity) setMode ( MODE_C );
-else removeMode( MODE_C );
-}
-
-void Channel::onModeStrip( bool polarity )
-{
-if(polarity) setMode ( MODE_STRIP );
-else removeMode( MODE_STRIP );
-}
-
-void Channel::onModeR( bool polarity )
-{
-if(polarity) setMode ( MODE_R );
-else removeMode( MODE_R );
 }
 
 void Channel::onModeO( const vector< pair< bool, ChannelUser* > >&
@@ -491,23 +489,24 @@ const string Channel::getModeString() const
 string modeString( "+" ) ;
 string argString ;
 
-if( modes & MODE_T )	modeString += 't' ;
-if( modes & MODE_N )	modeString += 'n' ;
-if( modes & MODE_S )	modeString += 's' ;
-if( modes & MODE_P )	modeString += 'p' ;
-if( modes & MODE_M )	modeString += 'm' ;
-if( modes & MODE_I )	modeString += 'i' ;
-if( modes & MODE_C )  modeString += 'c' ;
-if( modes & MODE_STRIP ) modeString += 'S' ;
-if( modes & MODE_R )  modeString += 'r' ;
+if( modes & MODE_C )	modeString += 'C' ;
+if( modes & MODE_S )	modeString += 'S' ;
+if( modes & MODE_c )	modeString += 'c' ;
+if( modes & MODE_i )	modeString += 'i' ;
+if( modes & MODE_m )	modeString += 'm' ;
+if( modes & MODE_n )	modeString += 'n' ;
+if( modes & MODE_p )	modeString += 'p' ;
+if( modes & MODE_r )	modeString += 'r' ;
+if( modes & MODE_s )	modeString += 's' ;
+if( modes & MODE_t )	modeString += 't' ;
 
-if( modes & MODE_K )
+if( modes & MODE_k )
 	{
 	modeString += 'k' ;
 	argString += getKey() + ' ' ;
 	}
 
-if( modes & MODE_L )
+if( modes & MODE_l )
 	{
 	modeString += 'l' ;
 

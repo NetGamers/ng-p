@@ -3417,7 +3417,7 @@ void cservice::updateLimits()
            if (!tmpBotUser) return; 
            if (!tmpBotUser->getMode(ChannelUser::MODE_O)) return; 
     
-           theChan->setMode(Channel::MODE_L); 
+           theChan->setMode(Channel::MODE_l); 
            theChan->setLimit(newLimit); 
            reggedChan->setLastLimitCheck(currentTime()); 
     

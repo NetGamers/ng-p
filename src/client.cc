@@ -1,6 +1,6 @@
 /*
  * client.cc
- * $Id: client.cc,v 1.4 2002-10-25 22:42:07 jeekay Exp $
+ * $Id: client.cc,v 1.5 2003-03-30 02:55:40 jeekay Exp $
  */
 
 #include	<new>
@@ -29,18 +29,7 @@
 #include	"ELog.h"
 #include	"events.h"
 
-const char xClient_h_rcsId[] = __CLIENT_H ;
-const char xClient_cc_rcsId[] = "$Id: client.cc,v 1.4 2002-10-25 22:42:07 jeekay Exp $" ;
-const char config_h_rcsId[] = __CONFIG_H ;
-const char misc_h_rcsId[] = __MISC_H ;
-const char Numeric_h_rcsId[] = __NUMERIC_H ;
-const char iClient_h_rcsId[] = __ICLIENT_H ;
-const char iServer_h_rcsId[] = __ISERVER_H ;
-const char Network_h_rcsId[] = __NETWORK_H ;
-const char EConfig_h_rcsId[] = __ECONFIG_H ;
-const char StringTokenizer_h_rcsId[] = __STRINGTOKENIZER_H ;
-const char ELog_h_rcsId[] = __ELOG_H ;
-const char events_h_rcsId[] = __EVENTS_H ;
+const char xClient_cc_rcsId[] = "$Id: client.cc,v 1.5 2003-03-30 02:55:40 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -445,61 +434,6 @@ void xClient::OnNetworkKick( Channel*,
 	iClient*, // destClient
 	const string&, // kickMessage,
 	bool ) // authoritative
-{
-}
-
-void xClient::OnChannelModeM( Channel*,
-	bool, ChannelUser* )
-{
-}
-
-void xClient::OnChannelModeI( Channel*,
-	bool, ChannelUser* )
-{
-}
-
-void xClient::OnChannelModeP( Channel*,
-	bool, ChannelUser* )
-{
-}
-
-void xClient::OnChannelModeS( Channel*,
-	bool, ChannelUser* )
-{
-}
-
-void xClient::OnChannelModeN( Channel*,
-	bool, ChannelUser* )
-{
-}
-
-void xClient::OnChannelModeT( Channel*,
-	bool, ChannelUser* )
-{
-}
-
-void xClient::OnChannelModeC( Channel*,
-	bool, ChannelUser* )
-{
-}
-
-void xClient::OnChannelModeStrip( Channel*,
-	bool, ChannelUser* )
-{
-}
-
-void xClient::OnChannelModeR( Channel*,
-	bool, ChannelUser* )
-{
-}
-
-void xClient::OnChannelModeL( Channel*,
-	bool, ChannelUser*, const unsigned int& )
-{
-}
-
-void xClient::OnChannelModeK( Channel*,
-	bool, ChannelUser*, const string& )
 {
 }
 
