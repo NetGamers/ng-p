@@ -22,7 +22,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.36 2002-09-13 21:27:35 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.37 2002-10-11 14:07:48 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -732,7 +732,7 @@ for(killIterator pos = KillingQueue.begin(); pos != KillingQueue.end(); )
 
 	if(! (tmpNS->getInQueue()) )
 	{ // This user is not in the queue
-		if(checkUser(tmpNS))
+		if(checkUser(tmpNS) && !(strcasecmp(tmpNS->getNickName().c_str(), tmpClient->getAccount().c_str()) == 0) )
 		{ // Nick is registered
 			tmpNS->clearFlags();
 			tmpNS->setInQueue();
