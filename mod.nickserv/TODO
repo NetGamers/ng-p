@@ -3,5 +3,3 @@ When moving to a production network:
 
 /Done Change query in checkUser() to include autokill again
 /Done Readd return code in checkUser() to include autokill
-
-This line isnt here just to test the new loginfo bits. Honest.
