@@ -12,10 +12,10 @@
 #include	<ctime>
 #include	<cstdlib>
 #include	<cstring>
-#include        <stdarg.h>
+#include  <stdarg.h>
 
 #include	"client.h"
-#include  	"cservice.h"
+#include  "cservice.h"
 #include	"EConfig.h"
 #include	"events.h"
 #include	"ip.h"
@@ -749,7 +749,7 @@ else
 
 	setFloodPoints(theClient, getFloodPoints(theClient)
 		+ commHandler->second->getFloodPoints() );
-
+  totalCommands++;
 	commHandler->second->Exec( theClient, Message ) ;
 	}
 

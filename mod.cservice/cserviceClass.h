@@ -1,5 +1,5 @@
 #ifndef __CSERVICECLASS_H
-#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.10 2002-09-13 21:30:41 jeekay Exp $"
+#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.11 2002-09-14 15:36:53 jeekay Exp $"
 
 #include <map>
 
@@ -436,6 +436,9 @@ public:
 
 	void incStat(const string& name);
 	void incStat(const string& name, unsigned int amount);
+  
+  unsigned int totalCommands;
+  
 #ifdef FEATURE_FORCELOG
         void writeForceLog(sqlUser*, sqlChannel*, const string&);
 #endif
