@@ -12,7 +12,7 @@
  * Displays all "Level" records for a specified channel.
  * Can optionally narrow down selection using a number of switches.
  *
- * $Id: ACCESSCommand.cc,v 1.12 2004-11-26 22:39:52 jeekay Exp $
+ * $Id: ACCESSCommand.cc,v 1.13 2004-12-02 22:16:20 jeekay Exp $
  */
 
 #include	<string>
@@ -99,7 +99,7 @@ if (theChan->getName() == "*")
  */
 
 /* Prettyness variables */
-bool level = bot->getAccessLevel(theUser, theChan);
+unsigned int level = bot->getAccessLevel(theUser, theChan);
 bool isAdmin = bot->getAdminAccessLevel(theUser);
 unsigned int invisLevel = theChan->getInvisible();
 bool isOper = theClient->isOper();
