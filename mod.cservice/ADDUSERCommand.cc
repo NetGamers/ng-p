@@ -11,7 +11,7 @@
  *
  * Caveats: None
  *
- * $Id: ADDUSERCommand.cc,v 1.15 2004-08-25 20:32:29 jeekay Exp $
+ * $Id: ADDUSERCommand.cc,v 1.16 2004-11-20 20:44:46 jeekay Exp $
  */
 
 #include	<string>
@@ -94,7 +94,7 @@ int level = bot->getEffectiveAccessLevel(theUser, theChan, true);
  * cause adding admins requires high access ;)
  */
 
-sqlCommandLevel* theCommandLevel = bot->getLevelRequired("CHGADMIN", "ADMIN");
+sqlCommandLevel* theCommandLevel = bot->getLevelRequired("ADDUSER", "A2");
 
 if (theChan->getName() == "*")
 	{

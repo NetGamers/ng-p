@@ -13,7 +13,7 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.31 2004-10-11 17:35:53 jeekay Exp $
+ * $Id: CHANINFOCommand.cc,v 1.32 2004-11-20 20:44:46 jeekay Exp $
  */
 
 #include  <string>
@@ -193,7 +193,7 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) ) {
     bot->Notice(theClient, "Default memo action: %s",
     	targetUser->getFlag(sqlUser::F_MEMO_REJECT) ? "Reject" : "Accept");
 
-    sqlCommandLevel* theCommandLevel = bot->getLevelRequired("CHGADMIN", "ADMIN");
+    sqlCommandLevel* theCommandLevel = bot->getLevelRequired("SECRET", "A2");
 
     if(adminAccess && (!targetAdmin || (adminAccess >= theCommandLevel->getLevel()))) {
       int myQuestion = targetUser->getQuestionID();

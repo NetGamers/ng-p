@@ -9,7 +9,7 @@
  * Caveats: None
  *
  *
- * $Id: REMUSERCommand.cc,v 1.12 2004-08-25 20:33:02 jeekay Exp $
+ * $Id: REMUSERCommand.cc,v 1.13 2004-11-20 20:44:46 jeekay Exp $
  */
 
 #include	<string>
@@ -86,7 +86,7 @@ void REMUSERCommand::Exec( iClient* theClient, const string& Message )
 	sqlUser* targetUser = bot->getUserRecord(st[2]);
 
 	int level = bot->getEffectiveAccessLevel(theUser, theChan, true);
-	sqlCommandLevel* chgAdminLevel = bot->getLevelRequired("CHGADMIN", "ADMIN");
+	sqlCommandLevel* chgAdminLevel = bot->getLevelRequired("REMUSER", "A2");
 
 	/*
 	 * check if we are removing admins or normal users

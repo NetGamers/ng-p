@@ -13,7 +13,7 @@
  * Shouldn't really happen, as trying to MODINFO a forced access doesn't
  * make sense - adduser and then MODINFO that :)
  *
- * $Id: MODINFOCommand.cc,v 1.12 2004-08-25 20:32:51 jeekay Exp $
+ * $Id: MODINFOCommand.cc,v 1.13 2004-11-20 20:44:46 jeekay Exp $
  */
 
 #include	<string>
@@ -99,7 +99,7 @@ int level = bot->getEffectiveAccessLevel(theUser, theChan, true);
  * cause modifying admins requires high access ;)
  */
 
-sqlCommandLevel* chgAdminLevel = bot->getLevelRequired("CHGADMIN", "ADMIN");
+sqlCommandLevel* chgAdminLevel = bot->getLevelRequired("MODINFO", "A2");
 
 if (theChan->getName() == "*")
         {

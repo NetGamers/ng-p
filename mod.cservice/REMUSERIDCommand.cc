@@ -3,7 +3,7 @@
  *
  * 20020308 GK@PAnet - Initial Writing
  *
- * $Id: REMUSERIDCommand.cc,v 1.19 2004-08-25 20:33:02 jeekay Exp $
+ * $Id: REMUSERIDCommand.cc,v 1.20 2004-11-20 20:44:46 jeekay Exp $
  */
 
 #include	<string>
@@ -41,7 +41,7 @@ if(!theUser)
 
 int aLevel = bot->getAdminAccessLevel(theUser);
 sqlCommandLevel* remuseridLevel = bot->getLevelRequired("REMUSERID", "ADMIN");
-sqlCommandLevel* chgadminLevel = bot->getLevelRequired("CHGADMIN", "ADMIN");
+sqlCommandLevel* chgadminLevel = bot->getLevelRequired("REMUSERID", "A2");
 
 if(aLevel < remuseridLevel->getLevel())
 	{

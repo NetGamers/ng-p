@@ -1,7 +1,10 @@
 2004-09-28 1.2.18 Jeekay
 * Change INFO so only the user/csc/opers can see if a user is globally suspended
 * Added PARTNER channel flag
-* Lower SET (nopurge|special) to *800
+* Lower SET (nopurge|special) from 850 to *800
+* Added command domain for commands affecting admins - A2
+* Split out levels for (add|mod|rem)user(id)?
+* Lower ADDUSER and MODUSER * from *850 to *800
 * Bumped version to 1.2.18
 
 2004-08-19 1.2.17 Jeekay

@@ -1,3 +1,28 @@
+2004-11-20 1.2.18 Jeekay
+**
+ALTER TABLE commands DROP CONSTRAINT commands_pkey;
+ALTER TABLE commands ADD PRIMARY KEY (command_name,domain);
+
+INSERT INTO commands VALUES ('ADDUSER', 'A2', 800, 0, '',
+	'Level needed to add a new admin',
+	now()::abstime::int4, 'Jeekay');
+INSERT INTO commands VALUES ('MODINFO', 'A2', 800, 0, '',
+	'Level needed to change an admins * level',
+	now()::abstime::int4, 'Jeekay');
+INSERT INTO commands VALUES ('REMUSER', 'A2', 850, 0, '',
+	'Level needed to remove an admins * level',
+	now()::abstime::int4, 'Jeekay');
+INSERT INTO commands VALUES ('REMUSERID', 'A2', 850, 0, '',
+	'Level needed to remove an admins user',
+	now()::abstime::int4, 'Jeekay');
+INSERT INTO commands VALUES ('SECRET', 'A2', 850, 0, '',
+	'Level needed to see an admins secret answer',
+	now()::abstime::int4, 'Jeekay');
+
+DELETE FROM commands WHERE command_name='CHGADMIN';
+**
+
+
 2004-04-22 1.2.16 Jeekay
 **
 UPDATE users SET flags = flags | 128 WHERE id IN
@@ -6,11 +31,13 @@ UPDATE users SET flags = flags | 128 WHERE id IN
 SELECT (flags & 128) AS flag, COUNT(*) FROM users GROUP BY flag;
 **
 
+
 2003-11-04 1.2.12
 **
 INSERT INTO commands VALUES ('UPDATEIDLE', 'ADMIN', 950, 0, '', '',
 now()::abstime::int4, 'Jeekay');
 **
+
 
 2003-04-29 1.2.09
 **
@@ -28,6 +55,7 @@ INSERT INTO config(name,contents,hint,last_updated) VALUES
 INSERT INTO commands (command_name,domain,level,comment,description,last_updated_by) VALUES
 ('CONFIG','ADMIN',900,'Allow user to change runtime configuration','Allow user to change runtime configuration','Jeekay');
 **
+
 
 2002-01-09 1.2.02 Jeekay
 **
