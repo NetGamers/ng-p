@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.2 2002-01-23 09:29:58 ultimate Exp $" ;
+const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.3 2002-01-23 22:07:25 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -111,7 +111,7 @@ else
         vLevel = bot->getEffectiveAccessLevel(theUser, virusChan, false);
 
 
-if ( (0 == level) && (0 == cLevel) && (0 == vLevel) ) 
+if ( (0 == level) && (0 == cLevel) && (level::virusfix::base > vLevel) ) 
 	{
 	bot->Notice(theClient, 
 		bot->getResponse(tmpUser,
@@ -299,7 +299,7 @@ if (cLevel > level::coder::devel)
  * Member and logged in as Icewatcher
  */
 
-if(vLevel > 100) //TODO: add to levels.h
+if(vLevel => level::virusfix::base)
 	{
 	bot->Notice(theClient, "%s is an Official Virusfix Member%s and logged in as %s",
 		target->getNickUserHost().c_str(), extra.c_str(), theUser->getUserName().c_str());
