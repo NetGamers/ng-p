@@ -1,5 +1,5 @@
 #ifndef __CSERVICECLASS_H
-#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.15 2003-01-14 17:08:12 jeekay Exp $"
+#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.16 2003-01-14 21:52:15 jeekay Exp $"
 
 #include <map>
 
@@ -428,7 +428,7 @@ public:
   int preloadCommandLevelsCache();
 	void preloadLevelsCache();
 	void preloadUserCache();
-  void preloadVerifiesCache();
+  unsigned int preloadVerifiesCache();
 
 	void updateChannels();
 	void updateUsers();

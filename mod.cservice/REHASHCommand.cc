@@ -8,7 +8,7 @@
 #include	"cservice.h"
 #include	"responses.h"
 
-const char REHASHCommand_cc_rcsId[] = "$Id: REHASHCommand.cc,v 1.2 2002-10-20 02:12:08 jeekay Exp $" ;
+const char REHASHCommand_cc_rcsId[] = "$Id: REHASHCommand.cc,v 1.3 2003-01-14 21:52:15 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -62,6 +62,12 @@ if (option == "HELP")
 if ("COMMANDS" == option) {
   int noLoaded = bot->preloadCommandLevelsCache();
   bot->Notice(theClient, "Successfully rehashed %d command levels.",
+    noLoaded);
+}
+
+if ("OFFICIAL" == option) {
+  unsigned int noLoaded = bot->preloadVerifiesCache();
+  bot->Notice(theClient, "Successfully rehashed %u verifies.",
     noLoaded);
 }
 

@@ -4012,7 +4012,7 @@ elog << "*** [CMaster:preloadCommandLevelsCache] Done. Loaded "
 return sqlCommandLevels.size();
 }
 
-void cservice::preloadVerifiesCache()
+unsigned int cservice::preloadVerifiesCache()
 {
 stringstream theQuery;
 theQuery << "SELECT "
@@ -4042,6 +4042,8 @@ for(int i = 0; i < SQLDb->Tuples(); ++i) {
 elog << "*** [CMaster::preloadVerifiesCache] Done. Loaded "
      << verifies.size() << " verifies."
      << endl;
+
+return verifies.size();
 }
 
 void cservice::preloadLevelsCache()
