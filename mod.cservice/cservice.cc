@@ -904,27 +904,32 @@ if(findNick[0] == '-')
 	const char* theID = findNick.c_str();
 	++theID;
 	
-	if(!IsNumeric(theID)) { return false; }
-	
-	strstream findID;
-	findID << "SELECT user_name FROM users WHERE id = " << theID
-		<< ends;
-#ifdef LOG_SQL
-	elog << "gUR:SQL> " << findID.str() << endl;
-#endif
-	ExecStatusType statusFindID = SQLDb->Exec(findID.str());
-	delete[] findID.str();
-	
-	if(PGRES_TUPLES_OK != statusFindID)
+	/* Check if its numeric. If not, it could be a nick */
+	if(IsNumeric(theID))
 		{
-		elog << "gUR:SQLError> " << SQLDb->ErrorMessage() << endl;
-		return false;
-		}
 	
-	if(SQLDb->Tuples() != 1) { return false; }
+		strstream findID;
+		findID << "SELECT user_name FROM users WHERE id = " << theID
+			<< ends;
+#ifdef LOG_SQL
+		elog << "gUR:SQL> " << findID.str() << endl;
+#endif
+		ExecStatusType statusFindID = SQLDb->Exec(findID.str());
+		delete[] findID.str();
 	
-	string myFindNick = SQLDb->GetValue(0,0);
-	findNick = myFindNick;
+		if(PGRES_TUPLES_OK != statusFindID)
+			{
+			elog << "gUR:SQLError> " << SQLDb->ErrorMessage() << endl;
+			return false;
+			}
+	
+		/* If there are no such IDs, it could be a nick */
+		if(SQLDb->Tuples() == 1)
+			{
+			string myFindNick = SQLDb->GetValue(0,0);
+			findNick = myFindNick;
+			}
+		} // if(IsNumeric(theID)
 	}
 
 /*
