@@ -816,7 +816,7 @@ else if(Command == "VERSION")
 	xClient::DoCTCP(theClient, CTCP,
 		"NetGamers P10 Channel Services II ["
 		__DATE__ " " __TIME__
-		"] Release 1.2.12");
+		"] Release 1.2.13");
 	}
 else if(Command == "DCC")
 	{
@@ -1901,17 +1901,11 @@ void cservice::cacheExpireLevels()
 			/*
 			 * So long! and thanks for all the fish.
 			 */
+			
+			partIdleChannel(theChan);
 
-			theChan->setInChan(false);
-			MyUplink->UnRegisterChannelEvent(theChan->getName(), this);
-			theChan->removeFlag(sqlChannel::F_AUTOJOIN);
-			theChan->setFlag(sqlChannel::F_IDLE);
-			theChan->commit();
-			joinCount--;
-			writeChannelLog(theChan, me, sqlChannel::EV_IDLE, "");
 			logDebugMessage("I've just left %s because its too quiet.",
 					theChan->getName().c_str());
-			Part(theChan->getName(), "So long! (And thanks for all the fish)");
 		}
 
 		++ptr;
@@ -3002,6 +2996,24 @@ iClient* theClient = 0 ;
 
 switch( whichEvent )
 	{
+	case EVT_PART:
+		{
+#if 0
+/* This currently causes a core so lets not do this */
+		if(theChan->size() == 1) {
+			/* This channel is now idle */
+			sqlChannel *sqlChan = getChannelRecord(theChan->getName());
+			
+			if(!sqlChan) {
+				/* Errr.. */
+				break;
+			}
+			
+			partIdleChannel(sqlChan);
+		}
+#endif
+		break;
+		}
 	case EVT_CREATE:
 	case EVT_JOIN:
 		{
@@ -4358,6 +4370,24 @@ sqlCommandLevel* cservice::getLevelRequired(string command, string domain, bool 
     return 0;
   }
   return theLevel->second;
+}
+
+/** Part a channel that has become idle */
+bool cservice::partIdleChannel( sqlChannel* sqlChan )
+{
+	if(!sqlChan->getInChan()) return false;
+
+	sqlChan->setInChan(false);
+	MyUplink->UnRegisterChannelEvent(sqlChan->getName(), this);
+	sqlChan->removeFlag(sqlChannel::F_AUTOJOIN);
+	sqlChan->setFlag(sqlChannel::F_IDLE);
+	sqlChan->commit();
+	
+	--joinCount;
+	writeChannelLog(sqlChan, me, sqlChannel::EV_IDLE, "");
+	Part(sqlChan->getName(), "So long! And thanks for all the fish.");
+	
+	return true;
 }
 
 } // namespace gnuworld

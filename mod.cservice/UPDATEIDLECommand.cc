@@ -61,14 +61,7 @@ for(myChanItr = bot->sqlChannelIDCache.begin(); myChanItr != bot->sqlChannelIDCa
 		netChan->getName().c_str()
 		);
 	
-	sqlChan->setInChan(false);
-	bot->getUplink()->UnRegisterChannelEvent(sqlChan->getName(), bot);
-	sqlChan->removeFlag(sqlChannel::F_AUTOJOIN);
-	sqlChan->setFlag(sqlChannel::F_IDLE);
-	sqlChan->commit();
-	bot->joinCount--;
-	bot->writeChannelLog(sqlChan, bot->getInstance(), sqlChannel::EV_IDLE, "");
-	bot->Part(sqlChan->getName(), "So long! And thanks for all the fish.");
+	bot->partIdleChannel(sqlChan);
 	
 	mismatchCount++;
   }

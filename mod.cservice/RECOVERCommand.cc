@@ -11,7 +11,7 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 
-const char RECOVERCommand_cc_rcsId[] = "$Id: RECOVERCommand.cc,v 1.8 2002-10-24 00:05:48 jeekay Exp $" ;
+const char RECOVERCommand_cc_rcsId[] = "$Id: RECOVERCommand.cc,v 1.9 2003-11-08 19:06:02 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -48,7 +48,7 @@ if(st.size() == 1) {
       theUser->getUserName().c_str());
     return true;
   }
-} else if (st.size() == 4) {
+} else if (st.size() >= 4) {
   /* We need to check:
    *   i) Does the user exist?
    *  ii) Is the user/pass combo correct?
@@ -78,6 +78,9 @@ if(st.size() == 1) {
       targetClient->getNickName().c_str(), theUser->getUserName().c_str());
     return true;
   }
+} else {
+	Usage(theClient);
+	return false;
 }
  
 if(!targetClient || targetClient == theClient || targetClient->getMode(iClient::MODE_SERVICES)) {

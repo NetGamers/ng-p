@@ -1,5 +1,5 @@
 #ifndef __CSERVICECLASS_H
-#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.18 2003-09-02 22:31:51 jeekay Exp $"
+#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.19 2003-11-08 19:06:02 jeekay Exp $"
 
 #include <map>
 
@@ -149,6 +149,9 @@ public:
 	/* Fetch a channel record for a channel. */
 	sqlChannel* getChannelRecord( const string& );
 	sqlChannel* getChannelRecord( int );
+	
+	/* Part a channel that has become idle. */
+	bool partIdleChannel( sqlChannel* );
 
 	/* Fetch a access level record for a user/channel combo. */
 	sqlLevel* getLevelRecord(sqlUser*, sqlChannel*);
