@@ -11,7 +11,7 @@
  *
  * Caveats: None
  *
- * $Id: TOPICCommand.cc,v 1.4 2002-09-13 21:30:40 jeekay Exp $
+ * $Id: TOPICCommand.cc,v 1.5 2002-11-01 13:58:43 jeekay Exp $
  */
 
 #include	<string>
@@ -23,7 +23,7 @@
 #include	"responses.h"
 #include	"Network.h"
 
-const char TOPICCommand_cc_rcsId[] = "$Id: TOPICCommand.cc,v 1.4 2002-09-13 21:30:40 jeekay Exp $" ;
+const char TOPICCommand_cc_rcsId[] = "$Id: TOPICCommand.cc,v 1.5 2002-11-01 13:58:43 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -104,10 +104,8 @@ string topic = st.assemble(2);
 // TODO: Put into config somewhere
 if( topic.size() > 145 )
 	{
-	bot->Notice(theClient,
-		bot->getResponse(theUser,
-		language::topic_max_len,
-		string("ERROR: Topic cannot exceed 145 chars")));
+	bot->Notice(theClient, "ERROR: Topic cannot exceed 145 chars. You attempted to use %u characters.",
+		topic.size());
 	return false;
         }
 
