@@ -13,7 +13,7 @@
  * Shouldn't really happen, as trying to MODINFO a forced access doesn't
  * make sense - adduser and then MODINFO that :)
  *
- * $Id: MODINFOCommand.cc,v 1.2 2002-01-23 17:17:24 ultimate Exp $
+ * $Id: MODINFOCommand.cc,v 1.3 2002-02-08 23:08:45 ultimate Exp $
  */
 
 #include	<string>
@@ -23,7 +23,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char MODINFOCommand_cc_rcsId[] = "$Id: MODINFOCommand.cc,v 1.2 2002-01-23 17:17:24 ultimate Exp $" ;
+const char MODINFOCommand_cc_rcsId[] = "$Id: MODINFOCommand.cc,v 1.3 2002-02-08 23:08:45 ultimate Exp $" ;
 
 namespace gnuworld
 {
@@ -87,6 +87,22 @@ if (forcedAccess <= 900  && forcedAccess > 0)
  *  Check the user has sufficient access on this channel.
  */
 int level = bot->getEffectiveAccessLevel(theUser, theChan, true);
+
+/*
+ * check if we are modifying admins or normal users
+ * cause modifying admins requires high access ;)
+ */
+
+if (theChan->getName() == "*")
+        {
+        if (level < level::chgadmin)
+                {
+                bot->Notice(theClient, "Sorry, you have insufficient access to perform that command");
+                return false;
+                }
+        }
+
+
 if (level < level::modinfo)
 	{
 	bot->Notice(theClient,

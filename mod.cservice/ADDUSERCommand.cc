@@ -11,7 +11,7 @@
  *
  * Caveats: None
  *
- * $Id: ADDUSERCommand.cc,v 1.3 2002-02-01 02:47:36 jeekay Exp $
+ * $Id: ADDUSERCommand.cc,v 1.4 2002-02-08 23:08:45 ultimate Exp $
  */
 
 #include	<string>
@@ -24,7 +24,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char ADDUSERCommand_cc_rcsId[] = "$Id: ADDUSERCommand.cc,v 1.3 2002-02-01 02:47:36 jeekay Exp $" ;
+const char ADDUSERCommand_cc_rcsId[] = "$Id: ADDUSERCommand.cc,v 1.4 2002-02-08 23:08:45 ultimate Exp $" ;
 
 namespace gnuworld
 {
@@ -84,6 +84,21 @@ if (forcedAccess <= 900 && forcedAccess > 0)
  */
 
 int level = bot->getEffectiveAccessLevel(theUser, theChan, true);
+
+/* 
+ * check if we are adding admins or normal users
+ * cause adding admins requires high access ;)
+ */
+
+if (theChan->getName() == "*")
+	{
+	if (level < level::chgadmin)
+		{
+	        bot->Notice(theClient, "Sorry, you have insufficient access to perform that command");
+		return false;
+		}
+	}
+
 if (level < level::adduser)
 	{
 	bot->Notice(theClient,

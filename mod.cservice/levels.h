@@ -1,5 +1,5 @@
 #ifndef __LEVELS_H
-#define __LEVELS_H "$Id: levels.h,v 1.15 2002-02-07 01:01:36 jeekay Exp $"
+#define __LEVELS_H "$Id: levels.h,v 1.16 2002-02-08 23:08:45 ultimate Exp $"
 
 /* 
  * levels.h
@@ -9,7 +9,7 @@
  * 
  * Defines access level constants for use in command handlers. 
  *
- * $Id: levels.h,v 1.15 2002-02-07 01:01:36 jeekay Exp $
+ * $Id: levels.h,v 1.16 2002-02-08 23:08:45 ultimate Exp $
  */
 
 namespace gnuworld {
@@ -72,7 +72,8 @@ namespace gnuworld {
   const int globalsuspend = 750;
 
   const int force2 = 850; // Allow forcing of NOFORCE channels
-
+  const int chgadmin = 850; // changing ppl on * (add/del/mod/susp/unsusp)
+  
   const int rehash = 900;
   const int say = 900;
   const int servnotice = 900;
