@@ -1,0 +1,6 @@
+CHANGELOG for mod.cservice
+
+22/1/2001 ULtimaTe_
+Added WELCOME message onjoin
+db needs next field:
+	ALTER TABLE channels ADD COLUMN welcome VARCHAR(255);
