@@ -1027,6 +1027,9 @@ if (!theChan)
 sqlLevel* theLevel = getLevelRecord(theUser, theChan);
 if(theLevel)
 	{
+	// Check that the admin access has not been suspended
+	if (theLevel->getSuspendExpire() != 0)
+		{ return 0; }
 	return theLevel->getAccess();
 	}
 
@@ -1054,12 +1057,13 @@ if (!theChan)
 	}
 
 sqlLevel* theLevel = getLevelRecord(theUser, theChan);
+
 if(theLevel)
 	{
 	return theLevel->getAccess();
 	}
 
-// By default, users have level 0 admin access.
+// By default, users have level 0 coder access.
 return 0;
 }
 
