@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.18 2002-04-04 19:16:33 jeekay Exp $
+ * $Id: SETCommand.cc,v 1.19 2002-06-09 08:40:39 jeekay Exp $
  */
 
 #include	<string>
@@ -30,7 +30,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.18 2002-04-04 19:16:33 jeekay Exp $" ;
+const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.19 2002-06-09 08:40:39 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -824,6 +824,12 @@ else
 		return true;
 		}
 		sqlLevel* aLevel = bot->getLevelRecord(theUser, theChan);
+		
+		if(!aLevel) {
+			bot->Notice(theClient, "You are not added to channel %s",
+				theChan->getName().c_str());
+			return false;
+		}
 		
 		if(value == "ON") aLevel->setFlag(sqlLevel::F_AUTOINVITE);
 		else if(value == "OFF") aLevel->removeFlag(sqlLevel::F_AUTOINVITE);
