@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: PURGECommand.cc,v 1.2 2002-01-28 22:13:03 jeekay Exp $
+ * $Id: PURGECommand.cc,v 1.3 2002-03-24 23:37:20 jeekay Exp $
  */
 
 #include	<string>
@@ -22,7 +22,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.2 2002-01-28 22:13:03 jeekay Exp $" ;
+const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.3 2002-03-24 23:37:20 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -30,6 +30,8 @@ bool PURGECommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.PURGE");
 
+// PURGE #channel reason
+// PURGE FORCE #channel reason
 StringTokenizer st( Message ) ;
 if( st.size() < 3 )
 	{
@@ -49,21 +51,6 @@ if (!theUser)
 	}
 
 /*
- *  First, check the channel isn't already registered.
- */
-
-sqlChannel* theChan = bot->getChannelRecord(st[1]);
-if ((!theChan) || (st[1] == "*"))
-	{
-	bot->Notice(theClient,
-		bot->getResponse(theUser,
-			language::chan_not_reg,
-			string("%s isn't registered with me")).c_str(),
-		st[1].c_str());
-	return false;
-	}
-
-/*
  *  Check the user has sufficient access for this command..
  */
 
@@ -74,6 +61,114 @@ if (level < level::purge)
 		bot->getResponse(theUser,
 			language::insuf_access,
 			string("You have insufficient access to perform that command")));
+	return false;
+	}
+
+/*
+ * Are we trying to do a force delete?
+ */
+ 
+if("FORCE" == string_upper(st[1]))
+	{
+	/* Do we have enough parameters? */
+	if(st.size() < 4)
+		{
+		Usage(theClient);
+		return false;
+		}
+	
+	/* Is this chan registered? */
+	sqlChannel* theChan = bot->getChannelRecord(st[2]);
+	if(theChan)
+		{
+		bot->Notice(theClient, "Sorry, %s is currently registered with me. Please PURGE first.",
+			theChan->getName().c_str());
+		return false;
+		}
+	
+	/* This channel is not currently registered
+	 * Now grab the ID as we need to clear channellog too
+	 */
+	
+	strstream queryChan;
+	queryChan << "SELECT id FROM channels WHERE lower(name) = '"
+		<< escapeSQLChars(st[2]) << "'"
+		<< ends;
+#ifdef LOG_SQL
+	elog << "PURGEFORCE:SQL> " << queryChan.str() << endl;
+#endif
+	ExecStatusType statusQueryChan = bot->SQLDb->Exec(queryChan.str());
+	
+	if(PGRES_TUPLES_OK != statusQueryChan)
+		{
+		bot->Notice(theClient, "Internal database error.");
+		elog << "PURGEFORCE:SQLError> " << bot->SQLDb->ErrorMessage() << endl;
+		return false;
+		}
+	
+	/* Did we actually find any entries? */
+	
+	if(bot->SQLDb->Tuples() != 1)
+		{
+		bot->Notice(theClient, "That channel is not in the database.");
+		return false;
+		}
+	
+	int chanID = atoi(bot->SQLDb->GetValue(0,0));
+	
+	/* Now clear channellog */
+	strstream delChanLog;
+	delChanLog << "DELETE FROM channellog WHERE channelid = " << chanID
+		<< ends;
+#ifdef LOG_SQL
+	elog << "PURGEFORCE:SQL> " << delChanLog.str() << endl;
+#endif
+	ExecStatusType statusDelChanLog = bot->SQLDb->Exec(delChanLog.str());
+	
+	if(PGRES_COMMAND_OK != statusDelChanLog)
+		{
+		bot->Notice(theClient, "Internal database error.");
+		elog << "PURGEFORCE:SQLError> " << bot->SQLDb->ErrorMessage() << endl;
+		return false;
+		}
+
+	/* Now delete the channel proper */
+	
+	strstream delChan;
+	delChan << "DELETE FROM channels WHERE id = " << chanID
+		<< ends;
+#ifdef LOG_SQL
+	elog << "PURGEFORCE:SQL> " << delChan.str() << endl;
+#endif
+	ExecStatusType statusDelChan = bot->SQLDb->Exec(delChan.str());
+	
+	if(PGRES_COMMAND_OK != statusDelChan)
+		{
+		bot->Notice(theClient, "Internal database error.");
+		elog << "PURGEFORCE:SQLError> " << bot->SQLDb->ErrorMessage() << endl;
+		return false;
+		}
+	
+	bot->logAdminMessage("PURGE FORCE - %s (%s) - %s - %s",
+		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+		st[2].c_str(), st[3].c_str());
+	bot->Notice(theClient, "Sucessfully purged %s", st[2].c_str());
+	return true;
+	}
+
+/*
+ *  First, check the channel isn't already registered.
+ */
+
+sqlChannel* theChan = bot->getChannelRecord(st[1]);
+
+if ((!theChan) || (st[1] == "*"))
+	{
+	bot->Notice(theClient,
+		bot->getResponse(theUser,
+			language::chan_not_reg,
+			string("%s isn't registered with me")).c_str(),
+		st[1].c_str());
 	return false;
 	}
 
