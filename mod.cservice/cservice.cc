@@ -794,7 +794,7 @@ else if(Command == "GENDER")
 else if(Command == "VERSION")
 	{
 	xClient::DoCTCP(theClient, CTCP,
-		"Planetarion P10 Channel Services II ["
+		"NetGamers P10 Channel Services II ["
 		__DATE__ " " __TIME__
 		"] Release 1.1pl4");
 	}

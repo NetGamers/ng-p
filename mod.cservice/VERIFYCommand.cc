@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.15 2002-09-14 14:48:26 jeekay Exp $" ;
+const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.16 2002-10-11 13:02:36 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -42,7 +42,7 @@ if (target->getMode(iClient::MODE_SERVICES))
 	bot->Notice(theClient, 
 		bot->getResponse(tmpUser,
 			language::is_service_bot,
-			string("%s is an Official Planetarion Service Bot.")).c_str(), 
+			string("%s is a NetGamers Service Bot.")).c_str(), 
 		target->getNickName().c_str());
 	return false;
 	}
