@@ -4,7 +4,7 @@
  *
  * Distributed under the GNU Public Licence
  *
- * $Id: CHINFOCommand.cc,v 1.2 2002-03-24 02:00:55 jeekay Exp $
+ * $Id: CHINFOCommand.cc,v 1.3 2002-03-24 17:50:56 jeekay Exp $
  */
 
 #include	<string>
@@ -14,7 +14,7 @@
 #include "cservice.h"
 #include "levels.h"
 
-const char CHINFOCommand_cc_rcsId[] = "$Id: CHINFOCommand.cc,v 1.2 2002-03-24 02:00:55 jeekay Exp $" ;
+const char CHINFOCommand_cc_rcsId[] = "$Id: CHINFOCommand.cc,v 1.3 2002-03-24 17:50:56 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -44,6 +44,13 @@ sqlUser* targetUser = bot->getUserRecord(target);
 if(!targetUser)
 	{
 	bot->Notice(theClient, "%s is not registered with me.", target.c_str());
+	return false;
+	}
+
+int targetLevel = bot->getAdminAccessLevel(targetUser);
+if(targetLevel && (aLevel < level::chinfo::admin))
+	{
+	bot->Notice(theClient, "Sorry, you have insufficient access to perform that command.");
 	return false;
 	}
 
