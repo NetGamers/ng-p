@@ -12,7 +12,7 @@
  * Displays all "Level" records for a specified channel.
  * Can optionally narrow down selection using a number of switches.
  *
- * $Id: ACCESSCommand.cc,v 1.1 2002-01-14 23:14:15 morpheus Exp $
+ * $Id: ACCESSCommand.cc,v 1.2 2002-02-27 20:59:49 jeekay Exp $
  */
 
 #include	<string>
@@ -26,7 +26,7 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 
-const char ACCESSCommand_cc_rcsId[] = "$Id: ACCESSCommand.cc,v 1.1 2002-01-14 23:14:15 morpheus Exp $" ;
+const char ACCESSCommand_cc_rcsId[] = "$Id: ACCESSCommand.cc,v 1.2 2002-02-27 20:59:49 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -393,12 +393,15 @@ for (int i = 0 ; i < bot->SQLDb->Tuples(); i++)
 
 		if(modif)
 			{
-			bot->Notice(theClient,
-				bot->getResponse(theUser,
-					language::last_mod).c_str(),
+			time_t lastMod = static_cast< time_t >( atoi(bot->SQLDb->GetValue(i, 6)));
+			char myCtime[27];
+			ctime_r(&lastMod, myCtime);
+			myCtime[strlen(myCtime)-1] = 0;
+			bot->Notice(theClient, "LAST MODIFIED: %s (%s - %s ago)",
 				bot->SQLDb->GetValue(i, 7),
-				bot->prettyDuration(atoi(bot->SQLDb->GetValue(i,6))).c_str()
-			);
+				myCtime,
+				bot->prettyDuration(lastMod, string("d")).c_str()
+				);
 			}
 		}
 	if ((results >= MAX_ACCESS_RESULTS) && !showAll) break;

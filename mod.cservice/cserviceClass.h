@@ -1,5 +1,5 @@
 #ifndef __CSERVICECLASS_H
-#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.1 2002-02-18 03:52:42 jeekay Exp $"
+#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.2 2002-02-27 20:59:49 jeekay Exp $"
 
 #include	"EConfig.h"
 #include	"sqlChannel.h"
@@ -152,7 +152,7 @@ public:
 	string userStatusFlags( const string& );
 
 	/* Formats a timestamp into a "X Days, XX:XX:XX" from 'Now'. */
-	const string prettyDuration( int ) const ;
+	const string prettyDuration( int, const string& dFormat = "all" ) const ;
 
 	/* Returns the current "Flood Points" this iClient has. */
  	unsigned short getFloodPoints(iClient*);

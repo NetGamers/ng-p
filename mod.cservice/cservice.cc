@@ -2328,7 +2328,7 @@ if(ptr != sqlUserCache.end())
 return flagString;
 }
 
-const string cservice::prettyDuration( int duration ) const
+const string cservice::prettyDuration( int duration, const string& dFormat = "all" ) const
 {
 
 // Pretty format a 'duration' in seconds to
@@ -2341,6 +2341,14 @@ int	res = currentTime() - duration,
 	mins = (res / 60) % 60,
 	hours = (res / 3600) % 24,
 	days = (res / 86400) ;
+
+if(dFormat == "d")
+{
+	sprintf(tmpBuf, "%i day%s",
+		days,
+		(days == 1 ? "" : "s") );
+	return string( tmpBuf );
+}
 
 sprintf(tmpBuf, "%i day%s, %02d:%02d:%02d",
 	days,
