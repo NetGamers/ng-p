@@ -18,11 +18,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: server.h,v 1.3 2002-07-27 14:54:07 jeekay Exp $
+ * $Id: server.h,v 1.4 2002-07-27 23:04:25 jeekay Exp $
  */
 
 #ifndef __SERVER_H
-#define __SERVER_H "$Id: server.h,v 1.3 2002-07-27 14:54:07 jeekay Exp $"
+#define __SERVER_H "$Id: server.h,v 1.4 2002-07-27 23:04:25 jeekay Exp $"
 
 #include	<string>
 #include	<vector>
@@ -839,6 +839,20 @@ public:
 	 */
 	virtual void	OnChannelModeI( Channel*, bool, ChannelUser* ) ;
 
+	/**
+	 * This method is called when a channel mode 'c' change is
+	 * detected.
+	 * Keep in mind that the source ChannelUser may be NULL
+	 * if the mode is being set/unset by a server.
+	 */
+	virtual void	OnChannelModeC( Channel*, bool, ChannelUser* ) ;
+	/**
+	 * This method is called when a channel mode 'S' change is
+	 * detected.
+	 * Keep in mind that the source ChannelUser may be NULL
+	 * if the mode is being set/unset by a server.
+	 */
+	virtual void	OnChannelModeStrip( Channel*, bool, ChannelUser* ) ;
 	/**
 	 * This method is called when a channel mode 'l' change is
 	 * detected.

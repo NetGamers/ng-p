@@ -3,7 +3,7 @@
  *
  * 20020201 - Jeekay - Initial Version
  *
- * $Id: MODECommand.cc,v 1.4 2002-07-01 00:33:05 jeekay Exp $
+ * $Id: MODECommand.cc,v 1.5 2002-07-27 23:01:49 jeekay Exp $
  */
 
 #include <string>
@@ -14,15 +14,16 @@
 #include "levels.h"
 #include "ELog.h"
 
-#define CF_I 0x01
-#define CF_M 0x02
-#define CF_N 0x04
+#define CF_I  0x01
+#define CF_M  0x02
+#define CF_N  0x04
 #define CF_SP 0x08
-#define CF_T 0x10
-#define CF_L 0x20
-#define CF_K 0x40
+#define CF_T  0x10
+#define CF_L  0x20
+#define CF_K  0x40
+#define CF_CStrip 0x80
 
-const char MODECommand_cc_rcsId[] = "$Id: MODECommand.cc,v 1.4 2002-07-01 00:33:05 jeekay Exp $";
+const char MODECommand_cc_rcsId[] = "$Id: MODECommand.cc,v 1.5 2002-07-27 23:01:49 jeekay Exp $";
 
 namespace gnuworld
 {
@@ -86,6 +87,29 @@ for(string::iterator ptr = modeString.begin(); ptr != modeString.end(); ++ptr)
 	{
 	switch( *ptr )
 		{
+		case 'c':
+			{
+			if(curFlags & CF_CStrip) { break; }
+			chanSet = theChan->getMode(Channel::MODE_C);
+			bool chanSetStrip = theChan->getMode(Channel::MODE_STRIP);
+			if(chanSet && !polarity)
+				{
+				negative += "c";
+				theChan->removeMode(Channel::MODE_C);
+				} // chanSet && !polarity
+			if(!chanSet && polarity)
+				{
+				positive += "c";
+				theChan->setMode(Channel::MODE_C);
+				if(chanSetStrip)
+					{ // S and c are mutually exclusive
+					negative += "S";
+					theChan->removeMode(Channel::MODE_STRIP);
+					}
+				} // !chanSet && polarity
+			curFlags |= CF_CStrip;
+			break;
+			} // case s
 		case 'i':
 			{
 			if(curFlags & CF_I) { break; }
@@ -181,6 +205,29 @@ for(string::iterator ptr = modeString.begin(); ptr != modeString.end(); ++ptr)
 					}
 				} // !chanSet && polarity
 			curFlags |= CF_SP;
+			break;
+			} // case s
+		case 'S':
+			{
+			if(curFlags & CF_CStrip) { break; }
+			chanSet = theChan->getMode(Channel::MODE_STRIP);
+			bool chanSetC = theChan->getMode(Channel::MODE_C);
+			if(chanSet && !polarity)
+				{
+				negative += "S";
+				theChan->removeMode(Channel::MODE_STRIP);
+				} // chanSet && !polarity
+			if(!chanSet && polarity)
+				{
+				positive += "S";
+				theChan->setMode(Channel::MODE_STRIP);
+				if(chanSetC)
+					{ // S and c are mutually exclusive
+					negative += "c";
+					theChan->removeMode(Channel::MODE_C);
+					}
+				} // !chanSet && polarity
+			curFlags |= CF_CStrip;
 			break;
 			} // case s
 		case 't':

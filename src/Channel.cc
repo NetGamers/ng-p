@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: Channel.cc,v 1.3 2002-07-27 14:54:11 jeekay Exp $
+ * $Id: Channel.cc,v 1.4 2002-07-27 23:04:18 jeekay Exp $
  */
 
 #include	<new>
@@ -38,7 +38,7 @@
 #include	"ConnectionManager.h"
 
 const char Channel_h_rcsId[] = __CHANNEL_H ;
-const char Channel_cc_rcsId[] = "$Id: Channel.cc,v 1.3 2002-07-27 14:54:11 jeekay Exp $" ;
+const char Channel_cc_rcsId[] = "$Id: Channel.cc,v 1.4 2002-07-27 23:04:18 jeekay Exp $" ;
 const char iClient_h_rcsId[] = __ICLIENT_H ;
 const char ChannelUser_h_rcsId[] = __CHANNELUSER_H ;
 const char Network_h_rcsId[] = __NETWORK_H ;
@@ -56,14 +56,16 @@ using std::endl ;
 using std::stringstream ;
 using std::ends ;
 
-const Channel::modeType Channel::MODE_T = 0x01 ;
-const Channel::modeType Channel::MODE_N = 0x02 ;
-const Channel::modeType Channel::MODE_S = 0x04 ;
-const Channel::modeType Channel::MODE_P = 0x08 ;
-const Channel::modeType Channel::MODE_K = 0x10 ;
-const Channel::modeType Channel::MODE_L = 0x20 ;
-const Channel::modeType Channel::MODE_M = 0x40 ;
-const Channel::modeType Channel::MODE_I = 0x80 ;
+const Channel::modeType Channel::MODE_T = 0x0001 ;
+const Channel::modeType Channel::MODE_N = 0x0002 ;
+const Channel::modeType Channel::MODE_S = 0x0004 ;
+const Channel::modeType Channel::MODE_P = 0x0008 ;
+const Channel::modeType Channel::MODE_K = 0x0010 ;
+const Channel::modeType Channel::MODE_L = 0x0020 ;
+const Channel::modeType Channel::MODE_M = 0x0040 ;
+const Channel::modeType Channel::MODE_I = 0x0080 ;
+const Channel::modeType Channel::MODE_C = 0x0100 ;
+const Channel::modeType Channel::MODE_STRIP = 0x0200 ;
 
 Channel::Channel( const string& _name,
 	const time_t& _creationTime )
@@ -358,6 +360,18 @@ else
 	}
 }
 
+void Channel::onModeC( bool polarity )
+{
+if(polarity) setMode ( MODE_C );
+else removeMode( MODE_C );
+}
+
+void Channel::onModeStrip( bool polarity )
+{
+if(polarity) setMode ( MODE_STRIP );
+else removeMode( MODE_STRIP );
+}
+
 void Channel::onModeO( const vector< pair< bool, ChannelUser* > >&
 	opVector )
 {
@@ -476,6 +490,8 @@ if( modes & MODE_S )	modeString += 's' ;
 if( modes & MODE_P )	modeString += 'p' ;
 if( modes & MODE_M )	modeString += 'm' ;
 if( modes & MODE_I )	modeString += 'i' ;
+if( modes & MODE_C )  modeString += 'c' ;
+if( modes & MODE_STRIP ) modeString += 'S' ;
 
 if( modes & MODE_K )
 	{

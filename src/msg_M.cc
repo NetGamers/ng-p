@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: msg_M.cc,v 1.3 2002-07-27 14:54:14 jeekay Exp $
+ * $Id: msg_M.cc,v 1.4 2002-07-27 23:04:18 jeekay Exp $
  */
 
 #include	<new>
@@ -37,7 +37,7 @@
 #include	"StringTokenizer.h"
 #include	"ServerCommandHandler.h"
 
-const char msg_M_cc_rcsId[] = "$Id: msg_M.cc,v 1.3 2002-07-27 14:54:14 jeekay Exp $" ;
+const char msg_M_cc_rcsId[] = "$Id: msg_M.cc,v 1.4 2002-07-27 23:04:18 jeekay Exp $" ;
 const char misc_h_rcsId[] = __MISC_H ;
 const char events_h_rcsId[] = __EVENTS_H ;
 const char server_h_rcsId[] = __SERVER_H ;
@@ -195,6 +195,12 @@ for( const char* modePtr = Param[ 2 ] ; *modePtr ; ++modePtr )
 			theServer->OnChannelModeI( theChan,
 				polarity, theUser ) ;
 			break ;
+    case 'c':
+      theServer->OnChannelModeC( theChan, polarity, theUser ) ;
+      break;
+    case 'S':
+      theServer->OnChannelModeStrip( theChan, polarity, theUser ) ;
+      break;
 
 		// Channel mode l only has an argument if
 		// it is being added, but not removed

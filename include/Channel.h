@@ -18,11 +18,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: Channel.h,v 1.3 2002-07-27 14:54:06 jeekay Exp $
+ * $Id: Channel.h,v 1.4 2002-07-27 23:04:24 jeekay Exp $
  */
 
 #ifndef __CHANNEL_H
-#define __CHANNEL_H "$Id: Channel.h,v 1.3 2002-07-27 14:54:06 jeekay Exp $"
+#define __CHANNEL_H "$Id: Channel.h,v 1.4 2002-07-27 23:04:24 jeekay Exp $"
 
 #include	<string>
 #include	<map>
@@ -78,7 +78,7 @@ public:
 	 * The type used to store this channel's current channel
 	 * modes.
 	 */
-	typedef unsigned short int modeType ;
+	typedef unsigned int modeType ;
 
 	/// Bit representing channel mode +t
 	static const modeType	MODE_T ;
@@ -103,6 +103,12 @@ public:
 
 	/// Bit representing channel mode +i
 	static const modeType	MODE_I ;
+
+  /// Bit representing channel mode +c
+  static const modeType MODE_C ;
+  
+  /// Bit representing channel mode +S
+  static const modeType MODE_STRIP;
 
 	/// Type used to store number of clients in channel
 	typedef userListType::size_type size_type ;
@@ -478,6 +484,18 @@ protected:
 	 * or unset.
 	 */
 	virtual void	onModeK( bool, const string& ) ;
+
+	/**
+	 * This method is called when channel mode 'c' is set
+	 * or unset.
+	 */
+	virtual void	onModeC( bool ) ;
+
+	/**
+	 * This method is called when channel mode 'S' is set
+	 * or unset.
+	 */
+	virtual void	onModeStrip( bool ) ;
 
 	/**
 	 * This method is called when one or more channel

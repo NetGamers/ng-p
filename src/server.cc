@@ -23,7 +23,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: server.cc,v 1.3 2002-07-27 14:54:16 jeekay Exp $
+ * $Id: server.cc,v 1.4 2002-07-27 23:04:18 jeekay Exp $
  */
 
 #include	<sys/time.h>
@@ -73,7 +73,7 @@
 #include	"Connection.h"
 
 const char server_h_rcsId[] = __SERVER_H ;
-const char server_cc_rcsId[] = "$Id: server.cc,v 1.3 2002-07-27 14:54:16 jeekay Exp $" ;
+const char server_cc_rcsId[] = "$Id: server.cc,v 1.4 2002-07-27 23:04:18 jeekay Exp $" ;
 const char config_h_rcsId[] = __CONFIG_H ;
 const char misc_h_rcsId[] = __MISC_H ;
 const char events_h_rcsId[] = __EVENTS_H ;
@@ -2915,6 +2915,90 @@ void xServer::OnChannelModeI( Channel* theChan, bool polarity,
 	ChannelUser* sourceUser )
 {
 theChan->onModeI( polarity ) ;
+
+// First deliver this channel event to any listeners for all channel
+// events.
+channelEventMapType::iterator allChanPtr =
+	channelEventMap.find( CHANNEL_ALL ) ;
+if( allChanPtr != channelEventMap.end() )
+	{
+	for( list< xClient* >::iterator ptr = allChanPtr->second->begin(),
+		endPtr = allChanPtr->second->end() ; ptr != endPtr ; ++ptr )
+		{
+		(*ptr)->OnChannelModeI( theChan, polarity, sourceUser ) ;
+		}
+	}
+
+// Find listeners for this specific channel
+channelEventMapType::iterator chanPtr =
+	channelEventMap.find( theChan->getName() ) ;
+if( chanPtr == channelEventMap.end() )
+	{
+	// No listeners for this channel's events
+	return ;
+	}
+
+// Iterate through the listeners for this channel's events
+// and notify each listener of the event
+list< xClient* >* listPtr = chanPtr->second ;
+for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
+	ptr != end ; ++ptr )
+	{
+	(*ptr)->OnChannelModeI( theChan, polarity, sourceUser ) ;
+	}
+}
+
+// Handle a channel mode change
+// theChan is the channel on which the mode change occured
+// polarity is true if the mode is being set, false otherwise
+// sourceUser is the source of the mode change; this variable
+// may be NULL if a server is setting the mode
+void xServer::OnChannelModeC( Channel* theChan, bool polarity,
+	ChannelUser* sourceUser )
+{
+theChan->onModeC( polarity ) ;
+
+// First deliver this channel event to any listeners for all channel
+// events.
+channelEventMapType::iterator allChanPtr =
+	channelEventMap.find( CHANNEL_ALL ) ;
+if( allChanPtr != channelEventMap.end() )
+	{
+	for( list< xClient* >::iterator ptr = allChanPtr->second->begin(),
+		endPtr = allChanPtr->second->end() ; ptr != endPtr ; ++ptr )
+		{
+		(*ptr)->OnChannelModeI( theChan, polarity, sourceUser ) ;
+		}
+	}
+
+// Find listeners for this specific channel
+channelEventMapType::iterator chanPtr =
+	channelEventMap.find( theChan->getName() ) ;
+if( chanPtr == channelEventMap.end() )
+	{
+	// No listeners for this channel's events
+	return ;
+	}
+
+// Iterate through the listeners for this channel's events
+// and notify each listener of the event
+list< xClient* >* listPtr = chanPtr->second ;
+for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
+	ptr != end ; ++ptr )
+	{
+	(*ptr)->OnChannelModeI( theChan, polarity, sourceUser ) ;
+	}
+}
+
+// Handle a channel mode change
+// theChan is the channel on which the mode change occured
+// polarity is true if the mode is being set, false otherwise
+// sourceUser is the source of the mode change; this variable
+// may be NULL if a server is setting the mode
+void xServer::OnChannelModeStrip( Channel* theChan, bool polarity,
+	ChannelUser* sourceUser )
+{
+theChan->onModeStrip( polarity ) ;
 
 // First deliver this channel event to any listeners for all channel
 // events.
