@@ -1,7 +1,7 @@
 /* sqlUser.h */
 
 #ifndef __SQLUSER_H
-#define __SQLUSER_H "$Id: sqlUser.h,v 1.6 2002-03-08 20:45:47 jeekay Exp $"
+#define __SQLUSER_H "$Id: sqlUser.h,v 1.7 2002-03-23 17:29:21 jeekay Exp $"
 
 #include	<string>
 #include	<ctime>
@@ -95,6 +95,12 @@ public:
 	
 	inline const time_t& getSuspendedExpire() const
 		{ return suspendedExpire; }
+	
+	inline const unsigned int& getQuestionID() const
+		{ return questionID; }
+	
+	inline const string& getVerificationData() const
+		{ return verificationData; }
 
 	/*
 	 *  Methods to set data atrributes.
@@ -168,14 +174,16 @@ protected:
 	string		last_updated_by ;
 	time_t		last_updated ;
 	time_t		last_used;
-        unsigned int    coordX ;
-        unsigned int    coordY ;
-        unsigned int    coordZ ;
-        string          alliance ;
+	unsigned int    coordX ;
+	unsigned int    coordY ;
+	unsigned int    coordZ ;
+	string          alliance ;
 	string		email ;
 	string          last_hostmask ;
 	string		comment ;
 	time_t suspendedExpire;
+	unsigned int questionID;
+	string verificationData;
 
 	PgDatabase*	SQLDb;
 } ;

@@ -13,7 +13,7 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.7 2002-03-06 19:21:37 jeekay Exp $
+ * $Id: CHANINFOCommand.cc,v 1.8 2002-03-23 17:29:21 jeekay Exp $
  */
 
 #include	<string>
@@ -26,7 +26,7 @@
 #include	"libpq++.h"
 #include	"cservice_config.h"
 
-const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.7 2002-03-06 19:21:37 jeekay Exp $" ;
+const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.8 2002-03-23 17:29:21 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -221,7 +221,24 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 		bot->Notice(theClient, "Last Hostmask: %s", 
 			theUser->getLastHostMask().c_str()); 
 
-
+		int myQuestion = theUser->getQuestionID();
+		if(myQuestion >= 1 && myQuestion <= 4)
+			{
+			string myQuestions[5];
+			myQuestions[0] = ""; // Unused
+			myQuestions[1] = "What's your mother's maiden name?";
+			myQuestions[2] = "What's your dog's (or cat's) name?";
+			myQuestions[3] = "What's your father's birthdate?";
+			myQuestions[4] = "What's your spose's name?";
+		
+			bot->Notice(theClient, "Verification Question: %s", myQuestions[theUser->getQuestionID()].c_str());
+			bot->Notice(theClient, "Verification Answer  : %s", theUser->getVerificationData().c_str());
+			}
+		else
+			{
+			bot->Notice(theClient, "This user has a malformed verification question id.");
+			}
+		
 		strstream channelsQuery;
 		string channelList ;
 

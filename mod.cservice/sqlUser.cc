@@ -4,7 +4,7 @@
  * Storage class for accessing user information either from the backend
  * or internal storage.
  *
- * $Id: sqlUser.cc,v 1.6 2002-03-08 20:45:46 jeekay Exp $
+ * $Id: sqlUser.cc,v 1.7 2002-03-23 17:29:21 jeekay Exp $
  */
 
 #include	<strstream.h>
@@ -182,6 +182,8 @@ coordZ = atoi(SQLDb->GetValue(row, 11));
 alliance = SQLDb->GetValue(row, 12);
 comment = SQLDb->GetValue(row, 13);
 suspendedExpire = atoi(SQLDb->GetValue(row, 14));
+questionID = atoi(SQLDb->GetValue(row, 15));
+verificationData = SQLDb->GetValue(row, 16);
 
 /* Fetch the "Last Seen" time from the users_lastseen table. */
 
