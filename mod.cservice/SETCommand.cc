@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.24 2002-11-05 00:24:27 jeekay Exp $
+ * $Id: SETCommand.cc,v 1.25 2002-11-23 07:27:30 jeekay Exp $
  */
 
 #include  <string>
@@ -30,7 +30,7 @@
 #include  "responses.h"
 #include  "cservice_config.h"
 
-const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.24 2002-11-05 00:24:27 jeekay Exp $" ;
+const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.25 2002-11-23 07:27:30 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -1050,6 +1050,11 @@ else
   }
 
   if(option == "INVISIBLE") {
+    if(level < level::set::invisible) {
+      bot->Notice(theClient, "You do not have enough access!");
+      return true;
+    }
+    
     if("ON" == value) theChan->setFlag(sqlChannel::F_INVISIBLE);
     else if("OFF" == value) theChan->removeFlag(sqlChannel::F_INVISIBLE);
     else {
