@@ -1,4 +1,5 @@
 2003-11-28 1.2.14 Jeekay
+* Prevent channels with COMMENT or LOCKED from being purged
 * Bumped version to 1.2.14
 
 2003-11-08 1.2.13 Jeekay
