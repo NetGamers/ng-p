@@ -13,7 +13,7 @@
 
 @SET_MAKE@
 
-# "$Id: Makefile.in,v 1.3 2002-01-16 23:14:42 morpheus Exp $"
+# "$Id: Makefile.in,v 1.4 2002-01-23 10:46:06 ultimate Exp $"
 
 SHELL = @SHELL@
 
@@ -106,12 +106,12 @@ libcservice_la_SOURCES = cservice.cc \
 	sqlPendingChannel.cc \
 	sqlPendingTraffic.cc \
 	ACCESSCommand.cc \
-	ADDCOMMENTCommand.cc \
 	ADDUSERCommand.cc \
 	BANCommand.cc \
 	BANLISTCommand.cc \
 	CHANINFOCommand.cc \
 	CLEARMODECommand.cc \
+	COMMENTCommand.cc \
 	DEOPCommand.cc \
 	DEVOICECommand.cc \
 	FORCECommand.cc \
@@ -170,9 +170,9 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 libcservice_la_LIBADD =
 am_libcservice_la_OBJECTS = cservice.lo networkData.lo sqlChannel.lo \
 	sqlUser.lo sqlLevel.lo sqlBan.lo sqlPendingChannel.lo \
-	sqlPendingTraffic.lo ACCESSCommand.lo ADDCOMMENTCommand.lo \
+	sqlPendingTraffic.lo ACCESSCommand.lo \
 	ADDUSERCommand.lo BANCommand.lo BANLISTCommand.lo \
-	CHANINFOCommand.lo CLEARMODECommand.lo DEOPCommand.lo \
+	CHANINFOCommand.lo CLEARMODECommand.lo COMMENTCommand.lo DEOPCommand.lo \
 	DEVOICECommand.lo FORCECommand.lo HELPCommand.lo \
 	INVITECommand.lo INVMECommand.lo ISREGCommand.lo JOINCommand.lo \
 	KICKCommand.lo LBANLISTCommand.lo LOGINCommand.lo \
@@ -197,12 +197,12 @@ LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 @AMDEP_TRUE@DEP_FILES = $(DEPDIR)/ACCESSCommand.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/ADDCOMMENTCommand.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/ADDUSERCommand.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/BANCommand.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/BANLISTCommand.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/CHANINFOCommand.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/CLEARMODECommand.Plo \
+@AMDEP_TRUE@    $(DEPDIR)/COMMENTCommand.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/DEOPCommand.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/DEVOICECommand.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/FORCECommand.Plo \
@@ -313,12 +313,12 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/ACCESSCommand.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/ADDCOMMENTCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/ADDUSERCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/BANCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/BANLISTCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/CHANINFOCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/CLEARMODECommand.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/COMMENTCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/DEOPCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/DEVOICECommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/FORCECommand.Plo@am__quote@
