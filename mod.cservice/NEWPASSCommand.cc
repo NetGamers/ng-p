@@ -10,7 +10,7 @@
 #include	"responses.h"
 #include	"networkData.h"
 
-const char NEWPASSCommand_cc_rcsId[] = "$Id: NEWPASSCommand.cc,v 1.2 2002-07-01 00:33:06 jeekay Exp $" ;
+const char NEWPASSCommand_cc_rcsId[] = "$Id: NEWPASSCommand.cc,v 1.3 2002-08-01 21:16:01 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -107,7 +107,7 @@ for( size_t ii = 0; ii < MD5_DIGEST_LENGTH; ii++ )
 output << ends;
 
 // Prepend the md5 hash to the salt
-string finalPassword = salt + output.str();
+string finalPassword = salt + output.str().c_str();
 tmpUser->setPassword(finalPassword);
 
 if( tmpUser->commit() )

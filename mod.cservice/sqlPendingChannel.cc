@@ -4,10 +4,9 @@
  * Class which contains details about channels which are 'pending'
  * registration.
  * 
- * $Id: sqlPendingChannel.cc,v 1.1 2002-01-14 23:14:25 morpheus Exp $
+ * $Id: sqlPendingChannel.cc,v 1.2 2002-08-01 21:16:02 jeekay Exp $
  */
  
-#include	<strstream>
 #include	<string> 
 
 #include	<cstring> 
@@ -24,7 +23,7 @@
 #include	"sqlPendingTraffic.h"
  
 const char sqlPendingChannel_h_rcsId[] = __SQLPENDINGCHANNEL_H ;
-const char sqlPendingChannel_cc_rcsId[] = "$Id: sqlPendingChannel.cc,v 1.1 2002-01-14 23:14:25 morpheus Exp $" ;
+const char sqlPendingChannel_cc_rcsId[] = "$Id: sqlPendingChannel.cc,v 1.2 2002-08-01 21:16:02 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -60,7 +59,7 @@ void sqlPendingChannel::loadTrafficCache()
 	/*
 	 *  Load all associated Traffic records for this channel.
 	 */ 
-strstream theQuery;
+stringstream theQuery;
 theQuery 	<< "SELECT ip_number, join_count FROM pending_traffic"
 			<< " WHERE channel_id = " << channel_id
 			<< ends;
@@ -71,8 +70,7 @@ theQuery 	<< "SELECT ip_number, join_count FROM pending_traffic"
 		<< endl; 
 #endif
 
-ExecStatusType status = SQLDb->Exec(theQuery.str()) ;
-delete[] theQuery.str() ;
+ExecStatusType status = SQLDb->Exec(theQuery.str().c_str()) ;
 
 if( PGRES_TUPLES_OK == status )
 	{
@@ -115,7 +113,7 @@ bool sqlPendingChannel::commit()
 
 unique_join_count = trafficList.size();
  
-strstream queryString; 
+stringstream queryString; 
 queryString << "UPDATE pending SET "
 			<< "join_count = " << join_count << ", "
 			<< "unique_join_count = " << unique_join_count
@@ -129,8 +127,7 @@ queryString << "UPDATE pending SET "
 			<< endl;
 #endif
 
-ExecStatusType status = SQLDb->Exec(queryString.str()) ;
-delete[] queryString.str() ;
+ExecStatusType status = SQLDb->Exec(queryString.str().c_str()) ;
 
 if( PGRES_COMMAND_OK != status )
 	{
@@ -157,7 +154,7 @@ if( PGRES_COMMAND_OK != status )
 
 bool sqlPendingChannel::commitSupporter(unsigned int sup_id, unsigned int count)
 {
-	strstream queryString; 
+	stringstream queryString; 
 	queryString << "UPDATE supporters SET "
 				<< "join_count = " 
 				<< count 
@@ -173,8 +170,7 @@ bool sqlPendingChannel::commitSupporter(unsigned int sup_id, unsigned int count)
 				<< endl;
 	#endif
 	
-	ExecStatusType status = SQLDb->Exec(queryString.str()) ;
-	delete[] queryString.str() ;
+	ExecStatusType status = SQLDb->Exec(queryString.str().c_str()) ;
 	
 	if( PGRES_COMMAND_OK != status )
 		{

@@ -1,10 +1,9 @@
 /* 
  * sqlPendingTraffic.cc
  * 
- * $Id: sqlPendingTraffic.cc,v 1.1 2002-01-14 23:14:25 morpheus Exp $
+ * $Id: sqlPendingTraffic.cc,v 1.2 2002-08-01 21:16:02 jeekay Exp $
  */
  
-#include	<strstream>
 #include	<string> 
 
 #include	<cstring> 
@@ -20,7 +19,7 @@
 #include	"sqlPendingTraffic.h"
  
 const char sqlPendingTraffic_h_rcsId[] = __SQLPENDINGTRAFFIC_H ;
-const char sqlPendingTraffic_cc_rcsId[] = "$Id: sqlPendingTraffic.cc,v 1.1 2002-01-14 23:14:25 morpheus Exp $" ;
+const char sqlPendingTraffic_cc_rcsId[] = "$Id: sqlPendingTraffic.cc,v 1.2 2002-08-01 21:16:02 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -39,7 +38,7 @@ bool sqlPendingTraffic::insertRecord()
 { 
 int theip_number = ip_number;
  
-strstream queryString;
+stringstream queryString;
 queryString << "INSERT INTO pending_traffic (channel_id, ip_number, join_count) VALUES ("
 			<< channel_id << ", "
 			<< theip_number << ", "
@@ -52,8 +51,7 @@ queryString << "INSERT INTO pending_traffic (channel_id, ip_number, join_count) 
 		<< endl; 
 #endif
 
-ExecStatusType status = SQLDb->Exec(queryString.str()) ;
-delete[] queryString.str() ;
+ExecStatusType status = SQLDb->Exec(queryString.str().c_str()) ;
 
 if( PGRES_COMMAND_OK != status )
 	{ 
@@ -71,7 +69,7 @@ bool sqlPendingTraffic::commit()
 {
 	int theip_number = ip_number;
 	
-	strstream queryString; 
+	stringstream queryString; 
 	queryString << "UPDATE pending_traffic SET "
 				<< "join_count = " 
 				<< join_count
@@ -87,8 +85,7 @@ bool sqlPendingTraffic::commit()
 				<< endl;
 	#endif
 	
-	ExecStatusType status = SQLDb->Exec(queryString.str()) ;
-	delete[] queryString.str() ;
+	ExecStatusType status = SQLDb->Exec(queryString.str().c_str()) ;
 	
 	if( PGRES_COMMAND_OK != status )
 		{

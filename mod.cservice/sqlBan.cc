@@ -4,10 +4,9 @@
  * Storage class for accessing Ban information either from the backend
  * or internal storage.
  * 
- * $Id: sqlBan.cc,v 1.1 2002-01-14 23:14:24 morpheus Exp $
+ * $Id: sqlBan.cc,v 1.2 2002-08-01 21:16:01 jeekay Exp $
  */
  
-#include	<strstream>
 #include	<string> 
 
 #include	<cstring> 
@@ -20,7 +19,7 @@
 #include	"cservice_config.h"
  
 const char sqlBan_h_rcsId[] = __SQLBAN_H ;
-const char sqlBan_cc_rcsId[] = "$Id: sqlBan.cc,v 1.1 2002-01-14 23:14:24 morpheus Exp $" ;
+const char sqlBan_cc_rcsId[] = "$Id: sqlBan.cc,v 1.2 2002-08-01 21:16:01 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -69,7 +68,7 @@ bool sqlBan::commit()
 
 static const char* queryHeader =    "UPDATE bans ";
  
-strstream queryString;
+stringstream queryString;
 queryString	<< queryHeader 
 		<< "SET channel_id = " << channel_id << ", "
 		<< "set_by = '" << set_by << "', "
@@ -88,8 +87,7 @@ queryString	<< queryHeader
 		<< endl; 
 #endif
 
-ExecStatusType status = SQLDb->Exec(queryString.str()) ;
-delete[] queryString.str() ;
+ExecStatusType status = SQLDb->Exec(queryString.str().c_str()) ;
 
 if( PGRES_COMMAND_OK != status )
 	{
@@ -112,7 +110,7 @@ bool sqlBan::insertRecord()
 
 static const char* queryHeader = "INSERT INTO bans (channel_id,banmask,set_by,set_ts,level,expires,reason,last_updated) VALUES ("; 
 
-strstream queryString;
+stringstream queryString;
 queryString	<< queryHeader 
 		<< channel_id << ", '"
 		<< banmask << "', '"
@@ -130,8 +128,7 @@ queryString	<< queryHeader
 		<< endl; 
 #endif
 
-ExecStatusType status = SQLDb->Exec(queryString.str()) ;
-delete[] queryString.str() ;
+ExecStatusType status = SQLDb->Exec(queryString.str().c_str()) ;
 
 if( PGRES_TUPLES_OK != status ) 
 	{
@@ -155,7 +152,7 @@ bool sqlBan::deleteRecord()
 
 static const char* queryHeader = "DELETE FROM bans WHERE id = ";
  
-strstream queryString;
+stringstream queryString;
 queryString	<< queryHeader 
 		<< id
 		<< ends;
@@ -166,8 +163,7 @@ queryString	<< queryHeader
 		<< endl; 
 #endif
 
-ExecStatusType status = SQLDb->Exec(queryString.str()) ;
-delete[] queryString.str() ;
+ExecStatusType status = SQLDb->Exec(queryString.str().c_str()) ;
 
 if( PGRES_COMMAND_OK != status )
 	{

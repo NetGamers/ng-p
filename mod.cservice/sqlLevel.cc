@@ -4,10 +4,9 @@
  * Storage class for accessing channel user/level information either from the backend
  * or internal storage.
  *
- * $Id: sqlLevel.cc,v 1.1 2002-01-14 23:14:25 morpheus Exp $
+ * $Id: sqlLevel.cc,v 1.2 2002-08-01 21:16:01 jeekay Exp $
  */
 
-#include	<strstream>
 #include	<string>
 
 #include	<cstring>
@@ -23,7 +22,7 @@
 #include	"cservice_config.h"
 
 const char sqlLevel_h_rcsId[] = __SQLLEVEL_H ;
-const char sqlLevel_cc_rcsId[] = "$Id: sqlLevel.cc,v 1.1 2002-01-14 23:14:25 morpheus Exp $" ;
+const char sqlLevel_cc_rcsId[] = "$Id: sqlLevel.cc,v 1.2 2002-08-01 21:16:01 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -73,7 +72,7 @@ bool sqlLevel::loadData(unsigned int userID, unsigned int channelID)
 		<< endl;
 #endif
 
-strstream queryString;
+stringstream queryString;
 queryString	<< "SELECT "
 		<< sql::level_fields
 		<< " FROM levels WHERE channel_id = "
@@ -88,8 +87,7 @@ queryString	<< "SELECT "
 		<< endl;
 #endif
 
-ExecStatusType status = SQLDb->Exec(queryString.str()) ;
-delete[] queryString.str() ;
+ExecStatusType status = SQLDb->Exec(queryString.str().c_str()) ;
 
 if( PGRES_TUPLES_OK == status )
 	{
@@ -142,7 +140,7 @@ bool sqlLevel::commit()
 
 static const char* queryHeader =    "UPDATE levels ";
 
-strstream queryString;
+stringstream queryString;
 queryString	<< queryHeader
 		<< "SET flags = " << flags << ", "
 		<< "access = " << access << ", "
@@ -164,8 +162,7 @@ queryString	<< queryHeader
 		<< endl;
 #endif
 
-ExecStatusType status = SQLDb->Exec(queryString.str()) ;
-delete[] queryString.str() ;
+ExecStatusType status = SQLDb->Exec(queryString.str().c_str()) ;
 
 if( PGRES_COMMAND_OK != status )
 	{
@@ -184,7 +181,7 @@ bool sqlLevel::insertRecord()
 {
 static const char* queryHeader = "INSERT INTO levels (channel_id,user_id,access,flags,added,added_by,last_modif,last_modif_by,last_updated) VALUES (";
 
-strstream queryString;
+stringstream queryString;
 queryString	<< queryHeader
 			<< channel_id << ", "
 			<< user_id << ", "
@@ -203,8 +200,7 @@ queryString	<< queryHeader
 			<< endl;
 #endif
 
-ExecStatusType status = SQLDb->Exec(queryString.str()) ;
-delete[] queryString.str() ;
+ExecStatusType status = SQLDb->Exec(queryString.str().c_str()) ;
 
 if( PGRES_COMMAND_OK != status )
 	{

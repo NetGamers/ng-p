@@ -4,10 +4,9 @@
  * Storage class for accessing user information either from the backend
  * or internal storage.
  *
- * $Id: sqlUser.cc,v 1.9 2002-07-16 14:54:11 jeekay Exp $
+ * $Id: sqlUser.cc,v 1.10 2002-08-01 21:16:02 jeekay Exp $
  */
 
-#include	<strstream.h>
 #include	<string.h>
 
 #include	<cstring>
@@ -76,7 +75,7 @@ bool sqlUser::loadData(int userID)
 		<< endl;
 #endif
 
-strstream queryString;
+stringstream queryString;
 queryString	<< "SELECT "
 		<< sql::user_fields
 		<< " FROM users WHERE id = "
@@ -89,8 +88,7 @@ queryString	<< "SELECT "
 		<< endl;
 #endif
 
-ExecStatusType status = SQLDb->Exec(queryString.str()) ;
-delete[] queryString.str() ;
+ExecStatusType status = SQLDb->Exec(queryString.str().c_str()) ;
 
 if( PGRES_TUPLES_OK == status )
 	{
@@ -124,7 +122,7 @@ bool sqlUser::loadData(const string& userName)
 		<< endl;
 #endif
 
-strstream queryString;
+stringstream queryString;
 queryString	<< "SELECT "
 		<< sql::user_fields
 		<< " FROM users WHERE lower(user_name) = '"
@@ -138,8 +136,7 @@ queryString	<< "SELECT "
 		<< endl;
 #endif
 
-ExecStatusType status = SQLDb->Exec(queryString.str()) ;
-delete[] queryString.str() ;
+ExecStatusType status = SQLDb->Exec(queryString.str().c_str()) ;
 
 if( PGRES_TUPLES_OK == status )
 	{
@@ -200,7 +197,7 @@ bool sqlUser::commit()
 static const char* queryHeader =    "UPDATE users ";
 static const char* queryCondition = "WHERE id = ";
 
-strstream queryString;
+stringstream queryString;
 queryString	<< queryHeader
 		<< "SET flags = " << flags << ", "
 		<< "user_name = '" << escapeSQLChars(user_name) << "', "
@@ -220,13 +217,10 @@ queryString	<< queryHeader
 		<< ends;
 
 #ifdef LOG_SQL
-	elog	<< "sqlUser::commit> "
-		<< queryString.str()
-		<< endl;
+	elog	<< "sqlUser::commit> " << queryString.str().c_str() << endl;
 #endif
 
-ExecStatusType status = SQLDb->Exec(queryString.str()) ;
-delete[] queryString.str() ;
+ExecStatusType status = SQLDb->Exec(queryString.str().c_str()) ;
 
 if( PGRES_COMMAND_OK != status )
 	{
@@ -250,7 +244,7 @@ bool sqlUser::commitLastSeen()
 static const char* queryHeader =    "UPDATE users_lastseen ";
 static const char* queryCondition = "WHERE user_id = ";
 
-strstream queryString;
+stringstream queryString;
 queryString	<< queryHeader
 		<< "SET last_seen = "
 		<< last_seen
@@ -269,8 +263,7 @@ queryString	<< queryHeader
 		<< endl;
 #endif
 
-ExecStatusType status = SQLDb->Exec(queryString.str()) ;
-delete[] queryString.str() ;
+ExecStatusType status = SQLDb->Exec(queryString.str().c_str()) ;
 
 if( PGRES_COMMAND_OK != status )
 	{
@@ -287,7 +280,7 @@ return true;
 
 time_t sqlUser::getLastSeen()
 {
-strstream queryString;
+stringstream queryString;
 queryString	<< "SELECT last_seen"
 		<< " FROM users_lastseen WHERE user_id = "
 		<< id
@@ -299,8 +292,7 @@ queryString	<< "SELECT last_seen"
 		<< endl;
 #endif
 
-ExecStatusType status = SQLDb->Exec(queryString.str()) ;
-delete[] queryString.str() ;
+ExecStatusType status = SQLDb->Exec(queryString.str().c_str()) ;
 
 if( PGRES_TUPLES_OK == status )
 	{
@@ -324,7 +316,7 @@ return (false);
 
 const string sqlUser::getLastHostMask() 
    { 
-   strstream queryString; 
+   stringstream queryString; 
    queryString     << "SELECT last_hostmask" 
                    << " FROM users_lastseen WHERE user_id = " 
                    << id 
@@ -336,8 +328,7 @@ const string sqlUser::getLastHostMask()
                    << endl; 
    #endif 
     
-   ExecStatusType status = SQLDb->Exec(queryString.str()) ; 
-   delete[] queryString.str() ; 
+   ExecStatusType status = SQLDb->Exec(queryString.str().c_str()) ; 
     
    if( PGRES_TUPLES_OK == status ) 
            { 
@@ -361,7 +352,7 @@ void sqlUser::writeEvent(unsigned short eventType, sqlUser* theUser, const strin
 {
 string userExtra = theUser ? theUser->getUserName() : "Not Logged In";
 
-strstream theLog;
+stringstream theLog;
 theLog	<< "INSERT INTO userlog (ts, user_id, event, message, "
 	<< "last_updated) VALUES "
 	<< "("
@@ -383,15 +374,13 @@ theLog	<< "INSERT INTO userlog (ts, user_id, event, message, "
 		<< endl;
 #endif
 
-SQLDb->ExecCommandOk(theLog.str());
-
-delete[] theLog.str();
+SQLDb->ExecCommandOk(theLog.str().c_str());
 
 }
 
 const string sqlUser::getLastEvent(unsigned short eventType, unsigned int& eventTime)
 {
-strstream queryString;
+stringstream queryString;
 
 queryString	<< "SELECT message,ts"
 			<< " FROM userlog WHERE user_id = "
@@ -407,8 +396,7 @@ queryString	<< "SELECT message,ts"
 			<< endl;
 #endif
 
-ExecStatusType status = SQLDb->Exec(queryString.str()) ;
-delete[] queryString.str() ;
+ExecStatusType status = SQLDb->Exec(queryString.str().c_str()) ;
 
 if( PGRES_TUPLES_OK == status )
 	{
