@@ -3,6 +3,7 @@
 * Fixed inconsistancy for level 1 in ADMINCMDS
 * We now deop/devoice as appropriate if a user is MODINFO'd or REMUSER'd in a
   channel that has STRICTOP or STRICTVOICE set.
+* Added full support for the newer channel modes (+CcSr)
 * Bumped version to 1.2.07
 
 2003-02-21 1.2.06 Jeekay

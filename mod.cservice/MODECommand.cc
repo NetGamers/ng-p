@@ -3,7 +3,7 @@
  *
  * 20020201 - Jeekay - Initial Version
  *
- * $Id: MODECommand.cc,v 1.7 2003-03-30 02:54:08 jeekay Exp $
+ * $Id: MODECommand.cc,v 1.8 2003-03-30 12:07:00 jeekay Exp $
  */
 
 #include <string>
@@ -14,16 +14,7 @@
 #include "levels.h"
 #include "ELog.h"
 
-#define CF_I  0x01
-#define CF_M  0x02
-#define CF_N  0x04
-#define CF_SP 0x08
-#define CF_T  0x10
-#define CF_L  0x20
-#define CF_K  0x40
-#define CF_CStrip 0x80
-
-const char MODECommand_cc_rcsId[] = "$Id: MODECommand.cc,v 1.7 2003-03-30 02:54:08 jeekay Exp $";
+const char MODECommand_cc_rcsId[] = "$Id: MODECommand.cc,v 1.8 2003-03-30 12:07:00 jeekay Exp $";
 
 namespace gnuworld
 {
@@ -95,12 +86,14 @@ if(level < level::mode)
 #define CF_k	0x2000
 
 string modeString = st[2];
+unsigned short maxarg = st.size() - 1;
+unsigned short curarg = 3;
 bool polarity = true;
-unsigned int positive = 0;
-unsigned int negative = 0;
-unsigned int curFlag;
+unsigned short positive = 0;
+unsigned short negative = 0;
+unsigned short curFlag;
 
-
+string posargs, negargs;
 
 for( string::const_iterator itr = modeString.begin() ;
      itr != modeString.end() ; ++itr) {
@@ -118,6 +111,76 @@ for( string::const_iterator itr = modeString.begin() ;
 		case 'r' : curFlag = CF_r;	break;
 		case 's' : curFlag = CF_s;	break;
 		case 't' : curFlag = CF_t;	break;
+		case 'k' : { if((positive & CF_k) || (negative & CF_k)) break;
+			if(curarg <= maxarg) {
+				if(polarity) {
+					/* We are setting +k */
+					if(theChan->getMode(Channel::MODE_k)) {
+						/* The channel is +k */
+						bot->Notice(theClient, "You cannot set a new key without removing the old one.");
+						return true;
+					} else {
+						/* The channel is not +k */
+						if(!posargs.empty()) posargs += " ";
+						posargs += st[curarg];
+						theChan->setKey(st[curarg]);
+						++curarg;
+						curFlag = CF_k;
+					}
+				} else {
+					/* We are removing +k */
+					if(theChan->getMode(Channel::MODE_k)) {
+						if(theChan->getKey() != st[curarg]) {
+							bot->Notice(theClient, "To remove a key you must specify the current one.");
+							return true;
+						} else {
+							/* Keys match */
+							if(!negargs.empty()) negargs += " ";
+							negargs += st[curarg];
+							theChan->setKey("");
+							++curarg;
+							curFlag = CF_k;
+						}
+					} else {
+						bot->Notice(theClient, "You cannot dekey a channel that has no key.");
+						return true;
+					}
+				}
+			} else {
+				bot->Notice(theClient, "Setting +k requires a key to be specified.");
+				return true;
+			}
+			break;
+		}
+		case 'l' : { if((positive & CF_l) || (negative & CF_l)) break;
+			if(polarity) {
+				/* Setting the limit requires an argument */
+				if(curarg <= maxarg) {
+					unsigned int limit = atoi(st[curarg].c_str());
+					if(limit > 0) {
+						curFlag = CF_l;
+						posargs += st[curarg];
+						theChan->setLimit(limit);
+						++curarg;
+					} else {
+						bot->Notice(theClient, "Please specify a limit above zero.");
+						return true;
+					}
+				} else {
+					bot->Notice(theClient, "Setting +l requires a limit to be specified.");
+					return true;
+				}
+			} else {
+				/* Limit can be unset without an argument */
+				if(theChan->getMode(Channel::MODE_l)) {
+					curFlag = CF_l;
+				} else {
+					bot->Notice(theClient, "You cannot remove a nonexistant limit.");
+					return true;
+				}
+			}
+			break;
+		}
 	} // switch( *itr )
 	
 	if(polarity) positive |= curFlag;
@@ -165,6 +228,8 @@ if(positive & CF_p) { posString += "p"; theChan->setMode(Channel::MODE_p); }
 if(positive & CF_r) { posString += "r"; theChan->setMode(Channel::MODE_r); }
 if(positive & CF_s) { posString += "s"; theChan->setMode(Channel::MODE_s); }
 if(positive & CF_t) { posString += "t"; theChan->setMode(Channel::MODE_t); }
+if(positive & CF_k) { posString += "k"; theChan->setMode(Channel::MODE_k); }
+if(positive & CF_l) { posString += "l"; theChan->setMode(Channel::MODE_l); }
 
 if(negative & CF_C) { negString += "C"; theChan->removeMode(Channel::MODE_C); }
 if(negative & CF_S) { negString += "S"; theChan->removeMode(Channel::MODE_S); }
@@ -176,15 +241,24 @@ if(negative & CF_p) { negString += "p"; theChan->removeMode(Channel::MODE_p); }
 if(negative & CF_r) { negString += "r"; theChan->removeMode(Channel::MODE_r); }
 if(negative & CF_s) { negString += "s"; theChan->removeMode(Channel::MODE_s); }
 if(negative & CF_t) { negString += "t"; theChan->removeMode(Channel::MODE_t); }
+if(negative & CF_k) { negString += "k"; theChan->removeMode(Channel::MODE_k); }
+if(negative & CF_l) { negString += "l"; theChan->removeMode(Channel::MODE_l); }
 
-string outString = "+";
-outString += posString;
-outString += "-";
-outString += negString;
+
+string outString;
+if(!posString.empty()) outString += string("+") + posString;
+if(!negString.empty()) outString += string("-") + negString;
+
+if(!posargs.empty()) outString += string(" ") + posargs;
+if(!negargs.empty()) outString += string(" ") + negargs;
 
 bot->Write("%s M %s %s",
 	bot->getCharYYXXX().c_str(),
 	st[1].c_str(),
+	outString.c_str());
+
+bot->Notice(theClient, "Changing modes on %s to: %s.",
+	theChan->getName().c_str(),
 	outString.c_str());
 
 return true;
