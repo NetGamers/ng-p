@@ -814,7 +814,7 @@ else if(Command == "VERSION")
 	xClient::DoCTCP(theClient, CTCP,
 		"NetGamers P10 Channel Services II ["
 		__DATE__ " " __TIME__
-		"] Release 1.2.11");
+		"] Release 1.2.12");
 	}
 else if(Command == "DCC")
 	{
@@ -3895,7 +3895,6 @@ void cservice::checkDbConnectionStatus()
 
 		} else
 		{
-				SQLDb->ExecCommandOk("LISTEN channels_u; LISTEN users_u; LISTEN levels_u;");
 				logAdminMessage("Successfully reconnected to database server. Panic over ;)");
 		}
 	}
