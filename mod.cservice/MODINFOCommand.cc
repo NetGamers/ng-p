@@ -13,7 +13,7 @@
  * Shouldn't really happen, as trying to MODINFO a forced access doesn't
  * make sense - adduser and then MODINFO that :)
  *
- * $Id: MODINFOCommand.cc,v 1.5 2002-08-15 22:26:00 jeekay Exp $
+ * $Id: MODINFOCommand.cc,v 1.6 2002-09-13 22:06:30 jeekay Exp $
  */
 
 #include	<string>
@@ -23,7 +23,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char MODINFOCommand_cc_rcsId[] = "$Id: MODINFOCommand.cc,v 1.5 2002-08-15 22:26:00 jeekay Exp $" ;
+const char MODINFOCommand_cc_rcsId[] = "$Id: MODINFOCommand.cc,v 1.6 2002-09-13 22:06:30 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -204,6 +204,13 @@ if (command == "ACCESS")
 		}
 
 	sqlLevel* aLevel = bot->getLevelRecord(targetUser, theChan);
+
+  /* Check we arent trying to lower a 499 */
+  if((theChan->getName() != "*") && (aLevel->getAccess()==499) && (!bot->isForced(theChan, theUser))) {
+    bot->Notice(theClient, "You cannot modify a user that has access level 499.");
+    return false;
+  }
+
 	aLevel->setAccess(newAccess);
 	aLevel->setLastModif(bot->currentTime());
 	aLevel->setLastModifBy( string( "(" + theUser->getUserName() + ") " +theClient->getNickUserHost() ) );
