@@ -11,7 +11,7 @@
 #include        "nickserv.h"
 #include        "sqlnsUser.h"
 
-const char RECOVERCommand_cc_rcsId[] = "$Id: RECOVERCommand.cc,v 1.2 2002-01-18 19:29:03 jeekay Exp $" ;
+const char RECOVERCommand_cc_rcsId[] = "$Id: RECOVERCommand.cc,v 1.3 2002-01-28 22:20:06 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -113,6 +113,8 @@ if(tmpClient)
       << theClient->getNickName() << ends;
     bot->Write(s.str());
     delete[] s.str();
+		
+		server->PostEvent(gnuworld::EVT_NSKILL, static_cast<void*>(tmpClient));
     bot->Notice(theClient, "Recover successful for %s.", st[1].c_str());
     return true;
   }

@@ -22,18 +22,20 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.6 2002-01-23 01:05:47 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.7 2002-01-28 22:20:05 jeekay Exp $" ;
 
-// If DEBUG is defined, no output is ever sent to users
+// If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
 // to see how the module behaves in a production environment
 // without actually screwing anything up if it goes wrong.
-#undef DEBUG
+#undef __NS_DEBUG
 
-// EDEBUG sends a notice to the console for every action
+// __NS_DEBUGINFO sends a notice to the console for every action
 // taken (warning or kill). Disable this on non-test
 // networks to avoid flooding everyone
-#undef EDEBUG
+// 1 - Show actions
+// 2 - Show queue processing
+#define __NS_DEBUGINFO 1
 
 namespace gnuworld
 {
@@ -136,7 +138,6 @@ for( commandMapType::iterator ptr = commandMap.begin() ;
 	ptr->second = 0 ;
 	}
 commandMap.clear() ;
-// Deallocate each gline entry
 
 }
 
@@ -377,9 +378,19 @@ int nickserv::OnTimer(xServer::timerID timer_id, void* data)
 		unsigned int kills = 0;
 		for(killIterator pos = KillingQueue.begin(); pos != KillingQueue.end(); )
 		{ // Iterative loop
+			// Quick sanity checking
 		  nsUser* tmpNS = static_cast< nsUser* >( pos->second);
 			iClient* tmpClient = Network->findClient(tmpNS->getNumeric());
-#ifdef EDEBUG
+			
+			// Sanity checking
+			if(!tmpClient || !tmpNS)
+			{ // Somehow we have a non-existant numeric
+				logDebugMessage(string("Wierd error with numeric ") + tmpNS->getNumeric());
+				KillingQueue.erase(pos++);
+				continue;
+			}
+			
+#if __NS_DEBUGINFO >= 2
 			strstream debugString;
 			debugString << "Processing numeric " << tmpNS->getNumeric() << ends;
 			logDebugMessage(debugString.str());
@@ -392,12 +403,11 @@ int nickserv::OnTimer(xServer::timerID timer_id, void* data)
 					tmpNS->clearFlags();
 					tmpNS->setInQueue();
 					tmpNS->setCheckTime();
-#ifdef EDEBUG
+#if __NS_DEBUGINFO >= 1
 					logDebugMessage(tmpNS->getNumeric() + " - Warned");
-#else
-					++warnings;
 #endif
-#ifndef DEBUG
+					++warnings;
+#ifndef __NS_DEBUG
 					Notice(tmpClient, "Your nickname is registered. Please login or change your nick.");
 #endif
 				} // Nick is registered
@@ -414,13 +424,12 @@ int nickserv::OnTimer(xServer::timerID timer_id, void* data)
 				// Check time
 				if((::time(NULL) - (tmpNS->getCheckTime())) >= timeToLive)
 				{ // User has expired their time. Kill them.
-#ifdef EDEBUG
+#if __NS_DEBUGINFO >= 1
 					logDebugMessage(tmpClient->getCharYYXXX() + " - Killed");
-#else
-					++kills;
 #endif
+					++kills;
 
-#ifndef DEBUG
+#ifndef __NS_DEBUG
 					Notice(tmpClient, "You have not logged into NickServ. You will now be autokilled.");
 					strstream s;
 					s << getCharYY()
@@ -430,11 +439,12 @@ int nickserv::OnTimer(xServer::timerID timer_id, void* data)
 					Write(s.str());
 					delete[] s.str();
 					
+					MyUplink->PostEvent(gnuworld::EVT_NSKILL, static_cast<void*>(tmpClient));
+					
 					// Remove GNUworld data about user
-					/* nsUser *tmpData = static_cast< nsUser* >( tmpClient->getCustomData(this) );
+					nsUser *tmpData = static_cast< nsUser* >( tmpClient->getCustomData(this) );
 					delete tmpData;
 					tmpClient->removeCustomData(this);
-					delete(Network->removeClient(tmpClient->getCharYYXXX())); */
 #endif
 					
 					KillingQueue.erase(pos++);
@@ -444,12 +454,10 @@ int nickserv::OnTimer(xServer::timerID timer_id, void* data)
 			} // User has INQUEUE set
 		} // Iterative loop
 
-#ifndef EDEBUG
 		strstream summaryString;
 		summaryString << "Warnings: " << warnings << "; Kills: " << kills << ends;
 		logDebugMessage(summaryString.str());
 		delete[] summaryString.str();
-#endif
 		processQueueID = MyUplink->RegisterTimer(::time(NULL) + timeToLive, this, NULL);
 	} // processQueueID
 
