@@ -12,7 +12,7 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 #include	"events.h"
-const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.11 2002-05-25 17:00:26 jeekay Exp $" ;
+const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.12 2002-05-25 17:51:06 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -340,7 +340,6 @@ for (autoOpVectorType::const_iterator resultPtr = autoOpVector.begin();
 	 * AUTOINVITE flag set, invite them!
 	 */
 
-	bot->Notice(theClient, "Checking for autoinvite");
 	if(!tmpChanUser && (resultPtr->flags & sqlLevel::F_AUTOINVITE))
 		{ bot->Invite(theClient, netChan->getName()); }
 #endif
