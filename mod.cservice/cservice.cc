@@ -177,7 +177,6 @@ RegisterCommand(new MODINFOCommand(this, "MODINFO", "<#channel> [ACCESS <usernam
 RegisterCommand(new SETCommand(this, "SET", "[#channel] <variable> <value> or, SET <invisible> <ON|OFF>", 6));
 RegisterCommand(new INVITECommand(this, "INVITE", "<#channel>", 2));
 RegisterCommand(new TOPICCommand(this, "TOPIC", "<#channel> <topic>", 4));
-RegisterCommand(new CHANINFOCommand(this, "CHANINFO", "<#channel>", 3));
 RegisterCommand(new CHANINFOCommand(this, "INFO", "<username>", 3));
 RegisterCommand(new BANLISTCommand(this, "BANLIST", "<#channel>", 3));
 RegisterCommand(new KICKCommand(this, "KICK", "<#channel> <nick> <reason>", 4));
