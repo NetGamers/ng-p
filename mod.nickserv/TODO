@@ -1,0 +1,4 @@
+When moving to a production network:
+
+Change query in checkUser() to include autokill again
+Readd return code in checkUser() to include autokill
