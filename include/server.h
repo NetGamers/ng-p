@@ -18,11 +18,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: server.h,v 1.7 2003-11-02 16:47:02 jeekay Exp $
+ * $Id: server.h,v 1.8 2004-08-31 21:20:50 jeekay Exp $
  */
 
 #ifndef __SERVER_H
-#define __SERVER_H "$Id: server.h,v 1.7 2003-11-02 16:47:02 jeekay Exp $"
+#define __SERVER_H "$Id: server.h,v 1.8 2004-08-31 21:20:50 jeekay Exp $"
 
 #include	<string>
 #include	<vector>
@@ -1418,6 +1418,13 @@ protected:
 	 * This method maps all relevant signals to sigHandler().
 	 */
 	bool		setupSignals() ;
+	
+	/** Possible destinations. */
+	enum		logDest { COUT, FILE, BOTH };
+	/** Possible directions for logging. */
+	enum		logDir { IN, OUT };
+	/** Log a string to the socket log, with direction. */
+	void		logRxTx(const string& , const logDir);
 } ;
 
 } // namespace gnuworld

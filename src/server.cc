@@ -23,7 +23,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: server.cc,v 1.8 2003-11-02 16:47:11 jeekay Exp $
+ * $Id: server.cc,v 1.9 2004-08-31 21:20:50 jeekay Exp $
  */
 
 #include	<sys/time.h>
@@ -72,7 +72,7 @@
 #include	"ConnectionHandler.h"
 #include	"Connection.h"
 
-const char server_cc_rcsId[] = "$Id: server.cc,v 1.8 2003-11-02 16:47:11 jeekay Exp $" ;
+const char server_cc_rcsId[] = "$Id: server.cc,v 1.9 2004-08-31 21:20:50 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -591,15 +591,7 @@ while( ('\n' == line[ len ]) || ('\r' == line[ len ]) )
 memset( inputCharBuffer, 0, sizeof( inputCharBuffer ) ) ;
 strncpy( inputCharBuffer, line.c_str(), len + 1 ) ;
 
-if( verbose )
-	{
-	clog	<< "[IN]: "
-		<< line ;
-	}
-
-#ifdef LOG_SOCKET
-	socketFile	<< line ;
-#endif
+logRxTx( line , IN );
 
 Process( inputCharBuffer ) ;
 }
@@ -1597,19 +1589,7 @@ if( !isConnected() )
 	return false ;
 	}
 
-if( verbose )
-	{
-	// Output the debugging information
-	// to the console.
-	clog << "[OUT]: " << buf  ;
-
-	// Should we output a trailing newline
-	// character?
-	if( buf[ buf.size() - 1 ] != '\n' )
-		{
-		cout << endl ;
-		}
-	}
+logRxTx( buf , OUT );
 
 // Newline terminate the string if it's
 // not already done and append it to
@@ -1652,19 +1632,7 @@ if( !isConnected() )
 	return 0 ;
 	}
 
-if( verbose )
-	{
-	// Output the debugging information
-	// to the console.
-	clog << "[OUT]: " << buf  ;
-
-	// Should we output a trailing newline
-	// character?
-	if( buf[ buf.size() - 1 ] != '\n' )
-		{
-		cout << endl ;
-		}
-	}
+logRxTx( buf , OUT );
 
 // Newline terminate the string if it's
 // not already done and append it to
@@ -1718,16 +1686,7 @@ va_start( _list, format ) ;
 vsnprintf( buffer, 4096, format, _list ) ;
 va_end( _list ) ;
 
-#ifdef EDEBUG
-	// Output the string to the console.
-	cout << "[OUT]: " << buffer  ;
-
-	// Do we need to newline terminate it?
-	if( buffer[ strlen( buffer ) - 1 ] != '\n' )
-		{
-		cout << endl ;
-		}
-#endif
+logRxTx( buffer , OUT );
 
 if( buffer[ strlen( buffer ) - 1 ] != '\n' )
 	{
@@ -1777,16 +1736,7 @@ va_start( _list, format ) ;
 vsnprintf( buffer, 4096, format, _list ) ;
 va_end( _list ) ;
 
-#ifdef EDEBUG
-	// Output the string to the console.
-	cout << "[OUT]: " << buffer  ;
-
-	// Do we need to newline terminate it?
-	if( buffer[ strlen( buffer ) - 1 ] != '\n' )
-		{
-		cout << endl ;
-		}
-#endif
+logRxTx( buffer , OUT );
 
 // Append the line to the output buffer.
 ConnectionManager::Write( this, serverConnection, buffer ) ;
@@ -3853,5 +3803,42 @@ if( !isConnected() )
 ConnectionManager::Write( this, serverConnection, burstHoldBuffer.data() ) ;
 burstHoldBuffer.clear() ;
 }
+
+void xServer::logRxTx( const string& text, const logDir dir) {
+#if defined (EDEBUG) || defined (LOG_SOCKET)
+	logDest dest;
+	
+	if( verbose ) {
+		dest = BOTH;
+	} else {
+		dest = FILE;
+	}
+
+	string direction("");
+	switch ( dir ) {
+		case IN : direction = "[IN ] " ; break ;
+		case OUT: direction = "[OUT] " ; break ;
+	}
+	
+	string ending("");
+	if( text [ text.size() - 1 ] != '\n' ) {
+		ending = '\n';
+	}
+
+ #ifdef EDEBUG
+	if ( COUT == dest || BOTH == dest ) {
+		clog << direction << text << ending ;
+	}
+ #endif	
+
+ #ifdef LOG_SOCKET
+	if ( FILE == dest || BOTH == dest ) {
+		socketFile << direction << text << ending ;
+	}
+ #endif
+
+#endif
+}
+
 
 } // namespace gnuworld
