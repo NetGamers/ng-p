@@ -3,11 +3,6 @@
  *  Overall control client.
  */
 
-#warning *** This release changes the behaviour of Database Updates from backend
-#warning *** notifications to periodic updates.
-#warning *** Ensure you set your update_interval to a sane value (Eg: 360)
-#warning *** before starting the service.
-
 #include	<new>
 #include	<vector>
 #include	<iostream>
@@ -2327,6 +2322,11 @@ for( xServer::voiceVectorType::const_iterator ptr = theTargets.begin();
 	
 	if(polarity)
 		{ // Someone is being voiced
+		
+		// Find the sqlUser if we can
+		sqlUser* authUser = isAuthed(tmpUser->getClient(), false);
+		
+		// Is the invitee banned on this channel?
 		sqlBan* theBan = isBannedOnChan(reggedChan, tmpUser->getClient());
 		if(theBan && (theBan->getLevel() >= 25))
 			{ // Ban >= 25
@@ -2343,6 +2343,36 @@ for( xServer::voiceVectorType::const_iterator ptr = theTargets.begin();
 					} // Voicer is not a service
 				} // Voicee is not a service
 			} // Ban >= 25
+		
+#ifdef FEATURE_STRICTVOICE
+		// Is this channel set F_STRICTVOICE?
+		if(reggedChan->getFlag(sqlChannel::F_STRICTVOICE))
+			{
+			if(!authUser)
+				{
+				if(!tmpUser->getClient()->getMode(iClient::MODE_SERVICES))
+					{
+					Notice(theChanUser->getClient(), "%s is not allowed to be voiced in %s due to STRICTVOICE",
+								 tmpUser->getNickName().c_str(), reggedChan->getName().c_str());
+					Notice(tmpUser->getClient(), "You are not allowed to be voiced in %s",
+								 reggedChan->getName().c_str());
+					devoiceList.push_back(tmpUser->getClient());
+					} // Voicee is not a service
+				} // Voicee is not authed
+			else if(!(getEffectiveAccessLevel(authUser, reggedChan, false) >= level::voice))
+				{
+				if(!tmpUser->getClient()->getMode(iClient::MODE_SERVICES))
+					{
+					Notice(theChanUser->getClient(), "%s is not allowed to be voiced in %s due to STRICTVOICE",
+								 tmpUser->getNickName().c_str(), reggedChan->getName().c_str());
+					Notice(tmpUser->getClient(), "You are not allowed to be voiced in %s",
+								 reggedChan->getName().c_str());
+					devoiceList.push_back(tmpUser->getClient());
+					} // Voicee is not a service
+				} // Authed but doesnt have enough access
+			} // Does the channel have F_STRICTVOICE set?
+#endif
+			
 		} // Someone is being voiced
 	} // Iterate through voiced
 

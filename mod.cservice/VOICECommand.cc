@@ -20,7 +20,7 @@
  *
  * Caveats: None
  *
- * $Id: VOICECommand.cc,v 1.4 2002-01-29 23:27:44 jeekay Exp $
+ * $Id: VOICECommand.cc,v 1.5 2002-02-06 19:34:53 jeekay Exp $
  */
 
 #include	<string>
@@ -37,7 +37,7 @@
 using std::map ;
 using std::vector ;
 
-const char VOICECommand_cc_rcsId[] = "$Id: VOICECommand.cc,v 1.4 2002-01-29 23:27:44 jeekay Exp $" ;
+const char VOICECommand_cc_rcsId[] = "$Id: VOICECommand.cc,v 1.5 2002-02-06 19:34:53 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -197,7 +197,7 @@ while (counter < st2.size())
 		{
 		bot->Notice(theClient, bot->getResponse(theUser, language::already_voiced).c_str(),
 			target->getNickName().c_str(), theChan->getName().c_str());
-		counter++;
+		++counter;
 		continue ;
 		}
 
@@ -207,9 +207,31 @@ while (counter < st2.size())
 		bot->Notice(theClient, "%s isn't allowed to be voiced in %s",
 								tmpChanUser->getClient()->getNickName().c_str(),
 								theChan->getName().c_str());
-		counter++;
+		++counter;
 		continue;
 	}
+
+	sqlUser* authUser = bot->isAuthed(tmpChanUser->getClient(), false);
+
+#ifdef FEATURE_STRICTVOICE
+	if(theChan->getFlag(sqlChannel::F_STRICTVOICE))
+		{
+		if(!authUser)
+			{
+			bot->Notice(theClient, "The STRICTVOICE flag is set on %s (and %s is not authenticated)",
+									theChan->getName().c_str(), tmpChanUser->getNickName().c_str());
+			++counter;
+			continue;
+			}
+		else if(!(bot->getEffectiveAccessLevel(authUser, theChan, false) >= level::voice))
+			{
+			bot->Notice(theClient, "The STRICTVOICE flag is set on %s (and %s has insufficient access)",
+									theChan->getName().c_str(), authUser->getUserName().c_str());
+			++counter;
+			continue;
+			}
+		}
+#endif
 
 	// Check for duplicates.
 	duplicateMapType::iterator ptr = duplicateMap.find(target);

@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.14 2002-01-23 22:50:38 jeekay Exp $
+ * $Id: SETCommand.cc,v 1.15 2002-02-06 19:34:53 jeekay Exp $
  */
 
 #include	<string>
@@ -30,7 +30,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.14 2002-01-23 22:50:38 jeekay Exp $" ;
+const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.15 2002-02-06 19:34:53 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -714,6 +714,37 @@ else
 	    return true;
 	}
 
+#ifdef FEATURE_STRICTVOICE	
+	if(option == "STRICTVOICE")
+		{
+		if(level < level::set::strictvoice)
+			{
+			bot->Notice(theClient, "Sorry, you have insufficient access to perform that command");
+			return true;
+			}
+		
+		if(value == "ON")
+			{
+			theChan->setFlag(sqlChannel::F_STRICTVOICE);
+			}
+		else if(value == "OFF")
+			{
+			theChan->removeFlag(sqlChannel::F_STRICTVOICE);
+			}
+		else
+			{
+			bot->Notice(theClient, "Value of STRICTVOICE must be ON or OFF");
+			return true;
+			}
+		
+		theChan->commit();
+		bot->Notice(theClient, "STRICTVOICE for %s is %s",
+								theChan->getName().c_str(),
+								theChan->getFlag(sqlChannel::F_STRICTVOICE) ? "ON" : "OFF");
+		return true;
+		}
+#endif
+
 	if(option == "AUTOTOPIC")
 	{
 	    if(level < level::set::autotopic)
@@ -1169,9 +1200,10 @@ else
 			bot->Notice(theClient, "The COMMENT can be a maximum of 200 chars!");
 			return true;
 	    }
-
+		
+		if(!comment.empty()) comment = comment + string(" (by ") + theUser->getUserName() + string(")");
 		theChan->setComment(comment);
-	    theChan->commit();
+	  theChan->commit();
 
 		if(comment.empty())
 		{
