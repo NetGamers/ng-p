@@ -230,6 +230,7 @@ RegisterCommand(new SERVNOTICECommand(this, "SERVNOTICE", "<#channel> <text>", 5
 RegisterCommand(new SETTIMECommand(this, "SETTIME", "", 4));
 RegisterCommand(new SHUTDOWNCommand(this, "SHUTDOWN", "<message>", 5));
 RegisterCommand(new UPDATEDBCommand(this, "UPDATEDB", "", 20));
+RegisterCommand(new UPDATEIDLECommand(this, "UPDATEIDLE", "", 20));
 
 
 cserviceConfig = new (std::nothrow) EConfig( args ) ;

@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# "$Id: Makefile.in,v 1.15 2003-04-29 18:37:35 jeekay Exp $"
+# "$Id: Makefile.in,v 1.16 2003-11-04 20:47:38 jeekay Exp $"
 SHELL = @SHELL@
 
 srcdir = @srcdir@
@@ -175,6 +175,7 @@ libcservice_la_SOURCES = cservice.cc \
 	UNFORCECommand.cc \
 	UNSUSPENDCommand.cc \
 	UPDATEDBCommand.cc \
+	UPDATEIDLECommand.cc \
 	VERIFYCommand.cc \
 	VOICECommand.cc
 
@@ -211,7 +212,7 @@ am_libcservice_la_OBJECTS = cservice.lo networkData.lo sqlChannel.lo \
 	STATSCommand.lo STATUSCommand.lo SUPPORTCommand.lo \
 	SUSPENDCommand.lo TOPICCommand.lo UNBANCommand.lo \
 	UNFORCECommand.lo UNSUSPENDCommand.lo UPDATEDBCommand.lo \
-	VERIFYCommand.lo VOICECommand.lo
+	UPDATEIDLECommand.lo VERIFYCommand.lo VOICECommand.lo
 libcservice_la_OBJECTS = $(am_libcservice_la_OBJECTS)
 
 DEFS = @DEFS@
@@ -286,6 +287,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/UNFORCECommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/UNSUSPENDCommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/UPDATEDBCommand.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/UPDATEIDLECommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/VERIFYCommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/VOICECommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/cservice.Plo \
@@ -305,7 +307,7 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 DIST_SOURCES = $(libcservice_la_SOURCES)
-DIST_COMMON = README ChangeLog Makefile.am Makefile.in TODO configure
+DIST_COMMON = README ChangeLog Makefile.am Makefile.in configure
 SOURCES = $(libcservice_la_SOURCES)
 
 all: all-am
@@ -419,6 +421,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/UNFORCECommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/UNSUSPENDCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/UPDATEDBCommand.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/UPDATEIDLECommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/VERIFYCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/VOICECommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cservice.Plo@am__quote@

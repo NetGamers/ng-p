@@ -6,6 +6,7 @@
 * Check we are opped before issuing modes
 * If we join a channel, set AUTOJOIN
 * Added support for cmode +T
+* Added UPDATEIDLE to part channels with noone else in
 * Bumped version to 1.2.12
 
 2003-10-02 1.2.11 Jeekay
