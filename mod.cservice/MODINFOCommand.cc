@@ -13,7 +13,7 @@
  * Shouldn't really happen, as trying to MODINFO a forced access doesn't
  * make sense - adduser and then MODINFO that :)
  *
- * $Id: MODINFOCommand.cc,v 1.4 2002-08-14 22:00:48 jeekay Exp $
+ * $Id: MODINFOCommand.cc,v 1.5 2002-08-15 22:26:00 jeekay Exp $
  */
 
 #include	<string>
@@ -23,7 +23,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char MODINFOCommand_cc_rcsId[] = "$Id: MODINFOCommand.cc,v 1.4 2002-08-14 22:00:48 jeekay Exp $" ;
+const char MODINFOCommand_cc_rcsId[] = "$Id: MODINFOCommand.cc,v 1.5 2002-08-15 22:26:00 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -153,7 +153,7 @@ if (command == "ACCESS")
 	 * higher (or equal) than ours.
 	 */
 
-	if (level <= targetLevel || targetLevel >= 499)
+	if (level <= targetLevel || targetLevel >= 999)
 		{
 		/*
 		 * Let forced users modify their own user records in channels to
@@ -183,6 +183,11 @@ if (command == "ACCESS")
 				string("Invalid access level.")));
 		return false;
 		}
+
+  if((theChan->getName() != "*") && (newAccess >= 499) && (!bot->isForced(theChan, theUser))) {
+    bot->Notice(theClient, "Cannot modify a user with equal or higher access than your own.");
+    return false;
+  }
 
 	/*
 	 * And finally, check they aren't trying to give someone
