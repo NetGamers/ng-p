@@ -1,3 +1,14 @@
+/* UPDATECommand.cc
+ *
+ * Author: Jeekay - Originally written for NetGamers
+ *
+ * Purpose: Resets any database channel timestamps that dont match the
+ *          network timestamps. This is when the DB TS is 0, or if the
+ *          DB timestamp has managed to be larger than the channel TS.
+ *
+ * Insofar as a single source file can have a licence, this one is GPL'd
+ */
+
 #include	<string>
 
 #include	"StringTokenizer.h"
@@ -6,7 +17,7 @@
 #include "sqlChannel.h"
 #include "Network.h"
 
-const char UPDATEDBCommand_cc_rcsId[] = "$Id: UPDATEDBCommand.cc,v 1.3 2002-07-31 20:35:31 jeekay Exp $" ;
+const char UPDATEDBCommand_cc_rcsId[] = "$Id: UPDATEDBCommand.cc,v 1.4 2002-09-11 22:10:52 jeekay Exp $" ;
 
 namespace gnuworld
 {
