@@ -11,7 +11,7 @@
 #include	"cservice_config.h"
 #include  "libpq-int.h"
 
-const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.4 2002-02-08 23:12:46 jeekay Exp $" ;
+const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.5 2002-02-26 13:12:10 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -215,9 +215,8 @@ if (tmpChan)
 	}
 
 
-bot->Notice(theClient, "MassDeopPro: %i, FloodPro: %i",
-	theChan->getMassDeopPro(),
-	theChan->getFloodPro());
+bot->Notice(theClient, "MassDeopPro: %",
+	    theChan->getMassDeopPro());
 
 string flagsSet;
 if (theChan->getFlag(sqlChannel::F_NOPURGE)) flagsSet += "NOPURGE ";
