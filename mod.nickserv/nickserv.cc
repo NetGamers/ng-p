@@ -22,7 +22,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.10 2002-01-30 21:57:54 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.11 2002-01-31 15:52:43 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -236,12 +236,12 @@ const string Command = string_upper( st[ 0 ] ) ;
 
 // Abort if someone tries to do something password related
 // without doing full nick@server
- if(!secure && ((Command == "LOGIN") || (Command == "RECOVER")))
+/* if(!secure && ((Command == "LOGIN") || (Command == "RECOVER")))
    {
      Notice(theClient, "To use %s, you must use /msg %s@%s",
 	    Command.c_str(), getNickName().c_str(), getUplinkName().c_str());
      return false;
-   }
+     } */
 
 // Attempt to find a handler for this method.
 commandIterator commHandler = findCommand( Command ) ;
