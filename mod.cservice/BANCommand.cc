@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: BANCommand.cc,v 1.7 2002-10-19 20:07:11 jeekay Exp $
+ * $Id: BANCommand.cc,v 1.8 2003-02-14 15:28:36 jeekay Exp $
  */
 
 #include	<new>
@@ -33,7 +33,7 @@
 #include	"responses.h"
 #include	"match.h"
 
-const char BANCommand_cc_rcsId[] = "$Id: BANCommand.cc,v 1.7 2002-10-19 20:07:11 jeekay Exp $" ;
+const char BANCommand_cc_rcsId[] = "$Id: BANCommand.cc,v 1.8 2003-02-14 15:28:36 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -361,6 +361,7 @@ if (banLevel == 42)
 if (banLevel < 75)
 	{
 	bot->DeOp(theChannel, clientsToKick);
+	if(banLevel >= 25) bot->DeVoice(theChannel, clientsToKick);
 	}
 else
 	{
