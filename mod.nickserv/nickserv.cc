@@ -23,7 +23,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.38 2003-02-14 15:28:55 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.39 2003-10-11 14:16:22 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -569,9 +569,9 @@ bool nickserv::jupeNick( string theNick, string hostMask, string theReason, time
 			
 			stringstream outNick;
 			outNick << charYY << " N " << theNick
-							<< " 1 31337 juped " << theNick << ".nick.name +idk B]AAAB "
-							<< charYY << pos->first
-							<< " :" << theReason << ends;
+				<< " 1 31337 juped " << theNick << ".nick.name +idk B]AAAB "
+				<< charYY << pos->first
+				<< " :" << theReason << ends;
 			Write(outNick);
 			
 			Channel* theChan = Network->findChannel(debugChan);
