@@ -13,7 +13,7 @@
 #include	"levels.h"
 #include	"cservice_config.h"
 
-const char REMOVEALLCommand_cc_rcsId[] = "$Id: REMOVEALLCommand.cc,v 1.5 2002-09-13 21:30:40 jeekay Exp $" ;
+const char REMOVEALLCommand_cc_rcsId[] = "$Id: REMOVEALLCommand.cc,v 1.6 2002-09-14 14:56:00 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -93,8 +93,8 @@ if(!forceLevel)
 
 stringstream clearAllQuery;
 clearAllQuery	<< "SELECT user_id FROM levels WHERE"
-		<< " channel_id = "
-		<< theChan->getID()
+		<< " channel_id = "	<< theChan->getID()
+    << " AND access < 499"
 		<< ends;
 
 #ifdef LOG_SQL
@@ -145,8 +145,8 @@ for (int i = 0 ; i < bot->SQLDb->Tuples(); i++)
 
 stringstream deleteAllQuery;
 deleteAllQuery	<< "DELETE FROM levels WHERE"
-		<< " channel_id = "
-		<< theChan->getID()
+		<< " channel_id = " << theChan->getID()
+    << " AND access < 499"
 		<< ends;
 
 #ifdef LOG_SQL
