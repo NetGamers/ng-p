@@ -22,7 +22,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.11 2002-01-31 15:52:43 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.12 2002-02-01 03:30:16 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -208,6 +208,7 @@ theServer->RegisterEvent( EVT_QUIT, this );
 theServer->RegisterEvent( EVT_NICK , this );
 theServer->RegisterEvent( EVT_CHNICK, this );
 theServer->RegisterEvent( EVT_LOGGEDIN, this );
+theServer->RegisterEvent( EVT_FORCEDEAUTH, this );
 
 // Start the counters rolling
 processQueueID = theServer->RegisterTimer(::time(NULL) + timeToLive, this, NULL);
@@ -282,6 +283,18 @@ int nickserv::OnEvent( const eventType& theEvent,
 
 switch( theEvent )
 	{
+	case EVT_FORCEDEAUTH:
+		{
+		/* Data1 = iClient*
+		 * P has forcibly deauthed someone (clone probably)
+		 * We need to remove that iClient's current logged nick
+		 */
+		iClient* theClient = static_cast< iClient* >( Data1);
+		nsUser* theUser = static_cast< nsUser* >( theClient->getCustomData(this));
+		theUser->clearLoggedNick();
+		KillingQueue[theClient->getCharYYXXX()] = theUser;
+		break;
+		}
 	case EVT_LOGGEDIN:
 	  {
 	    // Data1 = iClient*, Data2 = string*

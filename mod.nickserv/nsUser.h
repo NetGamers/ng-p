@@ -54,7 +54,10 @@ public:
 		{ Flags |= INQUEUE; }
 
 	inline void setLoggedNick(string _Nick)
-		{ LoggedNick = _Nick; }	
+		{ LoggedNick = _Nick; }
+		
+	inline void clearLoggedNick()
+		{ LoggedNick = ""; }
 
 	inline void remLoggedIn() 
 		{ Flags &= ~LOGGEDIN; }
