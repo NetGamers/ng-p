@@ -1,6 +1,6 @@
 
 #ifndef __NICKSERV_H
-#define __NICKSERV_H "$Id: nickserv.h,v 1.4 2002-01-18 19:29:03 jeekay Exp $"
+#define __NICKSERV_H "$Id: nickserv.h,v 1.5 2002-01-23 01:05:47 jeekay Exp $"
 
 
 #include	<string>
@@ -89,6 +89,8 @@ protected:
 	int     adminRefreshTime;
 	
 public:
+	inline const string getDebugChannel()
+	  { return debugChan; }
 
 	/**
 	 * Default, and only constructor, receives the name
