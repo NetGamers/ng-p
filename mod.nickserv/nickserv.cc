@@ -23,7 +23,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.32 2002-04-12 22:28:25 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.33 2002-06-30 16:19:57 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -122,8 +122,7 @@ if (SQLDb->ConnectionBad ())
 else
 	{
 	elog	<< "nickserv::nickserv> Connection established to SQL "
-		<< "server. Backend PID: "
-		<< SQLDb->getPID()
+		<< "server."
 		<< endl ;
 	}
 

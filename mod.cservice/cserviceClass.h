@@ -1,12 +1,11 @@
 #ifndef __CSERVICECLASS_H
-#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.7 2002-06-09 09:04:44 jeekay Exp $"
+#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.8 2002-06-30 16:19:29 jeekay Exp $"
 
 #include	"EConfig.h"
 #include	"sqlChannel.h"
 #include	"sqlLevel.h"
 #include	"sqlBan.h"
 #include	"sqlUser.h"
-#include	"libpq-int.h"
 #include	"sqlPendingChannel.h"
 
 class PgDatabase;
@@ -26,9 +25,6 @@ public:
 	cmDatabase(const char* conninfo)
 	  : PgDatabase(conninfo) {}
 	virtual ~cmDatabase() {}
-
-	inline int getPID() const
-		{ return pgConn->be_pid; }
 };
 
 class Command;

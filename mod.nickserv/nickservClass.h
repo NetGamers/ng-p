@@ -1,7 +1,6 @@
 #ifndef __NICKSERVCLASS_H
-#define __NICKSERVCLASS_H "$Id: nickservClass.h,v 1.5 2002-04-03 20:41:52 jeekay Exp $"
+#define __NICKSERVCLASS_H "$Id: nickservClass.h,v 1.6 2002-06-30 16:19:57 jeekay Exp $"
 
-#include	"libpq-int.h"
 #include	"nsUser.h"
 #include	"juUser.h"
 #include	<set>
@@ -24,9 +23,6 @@ public:
 	nsDatabase(const string& conninfo)
 	 : PgDatabase(conninfo.c_str()) {}
 	virtual ~nsDatabase() {}
-
-	inline int getPID() const
-		{ return pgConn->be_pid; }
 };
 
 class nickserv : public xClient

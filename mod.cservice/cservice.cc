@@ -252,8 +252,7 @@ if (SQLDb->ConnectionBad ())
 else
 	{
 	elog	<< "*** [CMaster]: Connection established to SQL server. "
-			<< "Backend PID: " << SQLDb->getPID()
-			<< endl ;
+		<< endl;
 	}
 
 // The program will exit if these variables are not defined in the
