@@ -23,7 +23,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.26 2002-04-01 18:31:28 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.27 2002-04-01 22:09:51 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -706,8 +706,9 @@ return myCService->getEffectiveAccessLevel(csUser, csChan, false);
 
 void nickserv::processKillQueue( void )
 {
-clock_t startTime = ::clock();
-clock_t endTime = 0;
+timeval startTime, endTime;
+
+gettimeofday(&startTime, NULL);
 
 logDebugMessage("Processing kill queue - %d entr%s.",
 	KillingQueue.size(), (KillingQueue.size() == 1) ? ("y") : ("ies"));
@@ -795,9 +796,10 @@ for(killIterator pos = KillingQueue.begin(); pos != KillingQueue.end(); )
 		} // User has INQUEUE set
 	} // Iterative loop
 
-endTime = ::clock();
+gettimeofday(&endTime, NULL);
+
 logDebugMessage("Processed: %d; Warnings: %d; Kills: %d; Duration: %d ms",
-	iterations, warnings, kills, (endTime - startTime) / CLOCKS_PER_SEC);
+	iterations, warnings, kills, (endTime.tv_sec - startTime.tv_sec) * 1000 + (endTime.tv_usec - startTime.tv_usec) / 1000);
 
 return;
 }
