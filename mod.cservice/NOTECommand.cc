@@ -9,7 +9,7 @@
 
 #define LOG_SQL
 
-const char NOTECommand_cc_rcsId[] = "$Id: NOTECommand.cc,v 1.1 2002-01-16 23:14:42 morpheus Exp $" ;
+const char NOTECommand_cc_rcsId[] = "$Id: NOTECommand.cc,v 1.2 2002-01-17 00:49:54 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -46,6 +46,30 @@ bool NOTECommand::Exec(iClient* theClient, const string& Message)
 				language::not_registered).c_str(), st[2].c_str());
 			return false;
 		}
+		strstream thecount;
+		thecount	<< "SELECT COUNT(*) as count "
+				<< "FROM memo where to_id="
+				<< targetUser->getID()
+				<< ends;
+		
+		ExecStatusType status = bot->SQLDb->Exec( thecount.str() );
+		delete[] thecount.str() ;
+
+		if( PGRES_TUPLES_OK != status )
+                {
+                elog    << "SUPPORTCommand> SQL Error: "
+                                << bot->SQLDb->ErrorMessage()
+                                << endl ;
+                return false ;
+                }
+		
+		int count = atoi(bot->SQLDb->GetValue(0,0));
+		
+		if ( count >= 15 )
+		{
+			bot->Notice(theClient, "The recievers memobox is full");
+		} else {
+
 		strstream theQuery;
 		theQuery	<< "INSERT INTO memo "
 				<< "(from_id, to_id, content, ts) "
@@ -73,6 +97,7 @@ bool NOTECommand::Exec(iClient* theClient, const string& Message)
 		if (targetClient)
 			bot->Notice(targetClient, "You received a note from %s (type \002/msg x note read\002 to see it)", 
 			theUser->getUserName().c_str());
+		}
 	} else if (cmd == "READ") {
 		strstream theQuery;
 		theQuery	<< "SELECT memo.id, memo.ts, memo.content, users.user_name "
