@@ -4177,10 +4177,10 @@ const string cservice::getVerify(const int officialLevel)
 	typedef map<int, string> verifyTableType;
 	verifyTableType verifyTable;
 	verifyTable[1] = "an Official Planetarion Bot";
-	verifyTable[2] = "an Official Planetarion VirusFix Member";
-	verifyTable[3] = "an Official Planetarion PATeam Member";
-	verifyTable[4] = "an Official Planetarion PACrew Member";
-	verifyTable[5] = "a Senior Stats Admin";
+	verifyTable[2] = "a VirusFix Member";
+	verifyTable[3] = "a Planetarion Team Member";
+	verifyTable[4] = "a Planetarion Team Leader";
+	verifyTable[5] = "a Stats Bot Administrator";
 	verifyTable[50] = "an Official CSC Helper";
 	verifyTable[99] = "a Planetarion Creator";
 	
