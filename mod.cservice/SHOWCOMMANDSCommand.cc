@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.5 2002-01-21 14:22:43 morpheus Exp $" ;
+const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.6 2002-01-21 14:57:59 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -59,36 +59,6 @@ if( st.size() < 2)
 	return true;
 	}
 
-/*
- *  Fetch the sqlUser record attached to this client. If there isn't one,
- *  they aren't logged in - tell them they should be.
- */
-
-sqlUser* theUser = bot->isAuthed(theClient, false);
-if (!theUser)
-	{
-	bot->Notice(theClient, lvl_0_cmds);
-	if(theClient->isOper())
-		{
-		bot->Notice(theClient, lvl_oper_cmds);
-		}
-//		bot->Notice(theClient, cmdFooter);
-	return true;	
-	}
-
-/* 
- *  Check the channel is actually registered.
- */
-
-sqlChannel* theChan = bot->getChannelRecord(st[1]);
-if (!theChan)
-	{
-	bot->Notice(theClient,
-		bot->getResponse(theUser, language::chan_not_reg).c_str(),
-		st[1].c_str());
-	return false;
-	} 
-
 if(string_upper(st[1]) == "SET") {
  	
  	if( st.size() < 3)
@@ -131,6 +101,35 @@ if(string_upper(st[1]) == "SET") {
 	return true;
 }
 
+/*
+ *  Fetch the sqlUser record attached to this client. If there isn't one,
+ *  they aren't logged in - tell them they should be.
+ */
+
+sqlUser* theUser = bot->isAuthed(theClient, false);
+if (!theUser)
+	{
+	bot->Notice(theClient, lvl_0_cmds);
+	if(theClient->isOper())
+		{
+		bot->Notice(theClient, lvl_oper_cmds);
+		}
+//		bot->Notice(theClient, cmdFooter);
+	return true;	
+	}
+
+/* 
+ *  Check the channel is actually registered.
+ */
+
+sqlChannel* theChan = bot->getChannelRecord(st[1]);
+if (!theChan)
+	{
+	bot->Notice(theClient,
+		bot->getResponse(theUser, language::chan_not_reg).c_str(),
+		st[1].c_str());
+	return false;
+	} 
 
 /*
  *  Fetch the users access level.
