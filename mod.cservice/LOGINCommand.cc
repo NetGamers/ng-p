@@ -11,8 +11,8 @@
 #include	"networkData.h"
 #include	"cservice_config.h"
 #include	"Network.h"
-
-const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.5 2002-01-17 00:48:07 jeekay Exp $" ;
+#include	"events.h"
+const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.6 2002-01-17 21:13:33 mrbean Exp $" ;
 
 namespace gnuworld
 {
@@ -164,6 +164,10 @@ if (authTestUser)
 	tmpData->currentUser = NULL;
 	}
 
+string uname = theUser->getUserName();
+server->PostEvent(gnuworld::EVT_LOGGEDIN
+	,static_cast<void*>(theClient)
+	    ,static_cast<void*>(&uname));
 theUser->setLastSeen(bot->currentTime(), theClient->getNickUserHost());
 theUser->setFlag(sqlUser::F_LOGGEDIN);
 theUser->networkClient = theClient; // Who is authed as this user.
