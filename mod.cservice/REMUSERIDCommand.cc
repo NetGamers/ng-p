@@ -3,7 +3,7 @@
  *
  * 20020308 GK@PAnet - Initial Writing
  *
- * $Id: REMUSERIDCommand.cc,v 1.15 2003-01-19 21:07:03 jeekay Exp $
+ * $Id: REMUSERIDCommand.cc,v 1.16 2003-02-16 15:39:54 jeekay Exp $
  */
 
 #include	<string>
@@ -14,7 +14,7 @@
 #include "cservice.h"
 #include "networkData.h"
 
-const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.15 2003-01-19 21:07:03 jeekay Exp $" ;
+const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.16 2003-02-16 15:39:54 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -115,9 +115,10 @@ if(PGRES_TUPLES_OK != status)
 int chansOwned = atoi(bot->SQLDb->GetValue(0,0));
 if(chansOwned)
 	{
-	bot->Notice(theClient, "%s owns %d channels. Please deal with that first.",
-    targetUser->getUserName().c_str(),
-		chansOwned);
+	bot->Notice(theClient, "%s owns %d channel%s. Please deal with that first.",
+		targetUser->getUserName().c_str(),
+		chansOwned,
+		(chansOwned == 1) ? ("") : ("s"));
 	return false;
 	}
 
