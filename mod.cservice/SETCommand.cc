@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.5 2002-01-16 19:10:55 jeekay Exp $
+ * $Id: SETCommand.cc,v 1.6 2002-01-17 21:08:24 morpheus Exp $
  */
 
 #include	<string>
@@ -30,7 +30,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.5 2002-01-16 19:10:55 jeekay Exp $" ;
+const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.6 2002-01-17 21:08:24 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -142,12 +142,6 @@ if( st[1][0] != '#' ) // Didn't find a hash?
                 return true;
                 }
 
-	if (option == "WELCOME")
-	{
-		bot->Notice(theClient, "Under development");
-		return true;
-	}
-
 	if (option == "LANG")
 	{
 //		bot->Notice(theClient, "Coming soon!");
@@ -171,6 +165,28 @@ if( st[1][0] != '#' ) // Didn't find a hash?
 		return true;
 	}
 
+/*	if (option == "NOPURGE")
+	{
+
+		sqlUser* targetUser = bot->getUserRecord(st[2]);
+                if (!targetUser) {
+                        bot->Notice(theClient, bot->getResponse(theUser,
+                                language::not_registered).c_str(), st[2].c_str());
+                        return false;
+                }
+
+strstream queryString ;
+queryString     << "SELECT id"
+                <<
+                << " FROM users WHERE "
+                << "lower(user_name) = '"
+                << escapeSQLChars(string_lower(channelName))
+                << "'"
+                << ends ;
+
+		return true;
+	}
+*/
 	bot->Notice(theClient,
 		bot->getResponse(theUser,
 			language::invalid_option,
@@ -292,6 +308,12 @@ else
 		theChan->getName().c_str(),
 		theChan->getFlag(sqlChannel::F_CAUTION) ? "ON" : "OFF");
 	return true;
+	}
+
+	if (option == "WELCOME")
+	{
+		bot->Notice(theClient, "Under development");
+		return true;
 	}
 
 	if(option == "NOREG")
