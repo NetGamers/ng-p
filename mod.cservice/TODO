@@ -1,3 +1,0 @@
-8. Correction: /msg p auth/login answer.. Full syntax instead of just /msg p@cservice.planetarion.com
-14. Suggestion: StrictVOICE option.. same terms as StrictOP only what regards to voiced users only being allowed voice if added to the channel with minimum lvl 25 
-17. Add a functiuon that would allow channel owners to hide their channel's access list from those not on it (/msg p access #chan */-min/-max etc.)
