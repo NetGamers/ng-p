@@ -1,7 +1,7 @@
 /* networkData.h */
 
 #ifndef __NETWORKDATA_H
-#define __NETWORKDATA_H "$Id: networkData.h,v 1.1 2002-01-14 23:14:24 morpheus Exp $"
+#define __NETWORKDATA_H "$Id: networkData.h,v 1.2 2004-01-25 16:01:09 jeekay Exp $"
 
 #include	<string>
 #include	<ctime>
@@ -23,9 +23,6 @@ public:
 
  	// Timestamp of when last message was recieved from this user.
 	time_t messageTime;
-
-	// Count of all bytes outputted to this client.
-	unsigned int outputCount;
 
 	// Total flood points accumulated by input from this client.
 	unsigned int flood_points;

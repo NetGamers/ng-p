@@ -513,7 +513,6 @@ if( (getLastRecieved(theClient) + flood_duration) <= ::time(NULL) )
 	 */
 
 	setFloodPoints(theClient, 0);
-	setOutputTotal(theClient, 0);
 	setLastRecieved(theClient, ::time(NULL));
 	}
 else
@@ -584,109 +583,6 @@ else
 return false;
 }
 
-void cservice::setOutputTotal(const iClient* theClient, unsigned int count)
-{
-/*
- * This function sets the current output total in bytes
- * for this client.
- */
-
-networkData* tmpData =
-	static_cast< networkData* >( theClient->getCustomData(this) );
-
-if (!tmpData)
-	{
-	return;
-	}
-//assert(tmpData != NULL);
-
-tmpData->outputCount = count;
-}
-
-unsigned int cservice::getOutputTotal(const iClient* theClient)
-{
-networkData* tmpData =
-	static_cast< networkData* >( theClient->getCustomData(this) );
-
-if (!tmpData)
-	{
-	return 0;
-	}
-//assert(tmpData != NULL);
-
-return tmpData->outputCount;
-}
-
-bool cservice::hasOutputFlooded(iClient* theClient)
-{
-
-if( (getLastRecieved(theClient) + flood_duration) <= ::time(NULL) )
-	{
-	/*
-	 *  Reset a few things, they're out of the flood period now.
-	 *  Or, this is the first message from them.
-	 */
-
-	setOutputTotal(theClient, 0);
-	setFloodPoints(theClient, 0);
-	setLastRecieved(theClient, ::time(NULL));
-	}
-else
-	{
-	/*
-	 *  Inside the flood period, check their output count.
-	 */
-
-	if(getOutputTotal(theClient) > output_flood)
-		{
-		/*
-		 *  Check admin access, if present then
-		 *  don't trigger.
-		 */
-
-		sqlUser* theUser = isAuthed(theClient, false);
-		if (theUser && getAdminAccessLevel(theUser))
-			{
-			return false;
- 			}
-
-		setOutputTotal(theClient, 0);
-		setLastRecieved(theClient, ::time(NULL));
-		Notice(theClient, "I think I've sent you a little "
-			"too much data, I'm going to ignore you "
-			"for a while.");
-
-		// Send a silence numeric target, and mask to ignore
-		// messages from this user.
-		string silenceMask = string( "*!*" )
-			+ theClient->getUserName()
-			+ "@"
-			+ theClient->getInsecureHost();
-
-		stringstream s;
-		s	<< getCharYYXXX()
-			<< " SILENCE "
-			<< theClient->getCharYYXXX()
-			<< " "
-			<< silenceMask
-			<< ends;
-		Write( s.str() );
-
-		time_t expireTime = currentTime() + 3600;
-
-		silenceList.insert(silenceListType::value_type(silenceMask,
-			make_pair(expireTime, theClient->getCharYYXXX())));
-
-		setIgnored(theClient, true);
-
-		logAdminMessage("OUTPUT-FLOOD from %s", theClient->getNickUserHost().c_str());
-		return true;
-		}
-	}
-
-return false;
-}
-
 int cservice::OnPrivateMessage( iClient* theClient, const string& Message,
 	bool secure )
 {
@@ -747,11 +643,6 @@ if( commHandler == commandMap.end() )
 		return false;
 		}
 
-	if (hasOutputFlooded(theClient))
-		{
-		return false;
-		}
-
 	// Why use 3 here?  Should be in config file
 	// (Violation of "rule of numbers")
 	setFloodPoints(theClient, getFloodPoints(theClient) + 3);
@@ -767,14 +658,9 @@ else
 		return false;
 		}
 
-	if (hasOutputFlooded(theClient))
-		{
-		return false;
-		}
-
 	setFloodPoints(theClient, getFloodPoints(theClient)
 		+ commHandler->second->getFloodPoints() );
-  totalCommands++;
+	totalCommands++;
 	commHandler->second->Exec( theClient, Message ) ;
 	}
 
@@ -816,7 +702,7 @@ else if(Command == "VERSION")
 	xClient::DoCTCP(theClient, CTCP,
 		"NetGamers P10 Channel Services II ["
 		__DATE__ " " __TIME__
-		"] Release 1.2.14");
+		"] Release 1.2.15");
 	}
 else if(Command == "DCC")
 	{
@@ -3661,67 +3547,6 @@ time_t cservice::currentTime() const
 return dbTimeOffset + ::time(NULL);
 }
 
-int cservice::Notice( const iClient* Target, const string& Message )
-{
-size_t count = 0 ;
-
-if( Connected && MyUplink )
-	{
-	setOutputTotal( Target, getOutputTotal(Target) + Message.size() );
-	char buffer[512] = { 0 };
-	char *b = buffer ;
-	const char *m = 0 ;
-
-	// TODO: wtf is this bs?
-	// A walking timebomb.
-	for (m=Message.c_str();*m!=0;m++)
-		{
-		if (*m == '\n' || *m == '\r')
-			{
-			*b='\0';
-			count+=MyUplink->Write( "%s O %s :%s\r\n",
-				getCharYYXXX().c_str(),
-				Target->getCharYYXXX().c_str(),
-				buffer ) ;
-			b=buffer;
-			}
-		else
-			{
-			if (b<buffer+509)
-			  *(b++)=*m;
-			}
-
-		}
-        *b='\0';
-	count+=MyUplink->Write( "%s O %s :%s\r\n",
-		getCharYYXXX().c_str(),
-		Target->getCharYYXXX().c_str(),
-		buffer ) ;
-	}
-
-return count ;
-}
-
-int cservice::Notice( const iClient* Target, const char* Message, ... )
-{
-if( Connected && MyUplink && Message && Message[ 0 ] != 0 )
-	{
-	char buffer[ 512 ] = { 0 } ;
-	va_list list;
-
-	va_start(list, Message);
-	vsnprintf(buffer, 512, Message, list);
-	va_end(list);
-
-	setOutputTotal( Target, getOutputTotal(Target) + strlen(buffer) );
-	return MyUplink->Write("%s O %s :%s\r\n",
-		getCharYYXXX().c_str(),
-		Target->getCharYYXXX().c_str(),
-		buffer ) ;
-	}
-return -1 ;
-}
-
 void cservice::dbErrorMessage(iClient* theClient)
 {
 Notice(theClient,
@@ -4347,9 +4172,7 @@ void cservice::noticeAllAuthedClients(sqlUser* theUser, const char* Message, ...
       ptr != theUser->networkClientList.end(); ++ptr) {
       
       iClient* Target = (*ptr);
-      setOutputTotal(Target, getOutputTotal(Target) + strlen(buffer));
-      /* MyUplink->Write("%s O %s :%s\r\n",
-        getCharYYXXX().c_str(), Target->getCharYYXXX().c_str(), buffer); */
+
       Notice(Target, buffer);
     } // Iteration over authed users
   } // if(Connected && MyUplink && Message && Message[0] != 0)

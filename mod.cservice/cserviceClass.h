@@ -1,5 +1,5 @@
 #ifndef __CSERVICECLASS_H
-#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.19 2003-11-08 19:06:02 jeekay Exp $"
+#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.20 2004-01-25 16:01:09 jeekay Exp $"
 
 #include <map>
 
@@ -86,9 +86,6 @@ public:
                 const string& Message,
                 bool Secure = false ) ;
 	virtual int OnTimer(xServer::timerID, void*);
-	virtual int Notice( const iClient* Target,
-		const char* Message, ... ) ;
-	virtual int Notice( const iClient* Target, const string& ) ;
 	virtual int OnWhois( iClient* sourceClient,
 			iClient* targetClient );
 
@@ -177,10 +174,6 @@ public:
 
 	/* Find out when we first heard from this chap. */
 	time_t getLastRecieved(iClient*);
-
-	void setOutputTotal(const iClient* theClient, unsigned int count);
-	unsigned int getOutputTotal(const iClient* theClient);
-	bool hasOutputFlooded(iClient*);
 
 	/* Send the current MOTD to a user */
 	bool sendMOTD(const iClient* theClient);

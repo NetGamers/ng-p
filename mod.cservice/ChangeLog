@@ -1,3 +1,7 @@
+2004-01-25 1.2.15 Jeekay
+* Removed OutputFlood code as it only ever affected bots
+* Bumped version to 1.2.15
+
 2003-11-28 1.2.14 Jeekay
 * Prevent channels with COMMENT or LOCKED from being purged
 * Bumped version to 1.2.14
