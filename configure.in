@@ -1,11 +1,12 @@
-dnl $Id: configure.in,v 1.1 2002-01-14 23:19:12 morpheus Exp $
+dnl $Id: configure.in,v 1.2 2002-07-27 20:19:30 jeekay Exp $
 dnl ----------------------------------------------------------
 
 echo Configuring GNUWorld...
 echo
 
-AC_REVISION($Revision: 1.1 $)
-AC_INIT(src/main.cc)
+AC_REVISION($Revision: 1.2 $)
+AC_INIT
+AC_CONFIG_SRCDIR([src/main.cc])
 AM_INIT_AUTOMAKE(gnuworld,0.0)
 AM_CONFIG_HEADER(include/defs.h)
 
@@ -16,10 +17,8 @@ AC_LIBLTDL_CONVENIENCE
 dnl Substitute INCLTDL and LIBLTDL in the Makefiles
 dnl For some reason, INCLTDL and LIBLTDL aren't set
 dnl properly on OpenBSD
-INCLTDL="-I../libltdl"
-LIBLTDL="../libltdl/libltdlc.la"
-AC_SUBST(INCLTDL)
-AC_SUBST(LIBLTDL)
+INCLTDL="-I`pwd`/libltdl"
+LIBLTDL="`pwd`/libltdl/libltdlc.la"
 
 AC_ISC_POSIX
 
@@ -29,26 +28,44 @@ AC_LIBTOOL_DLOPEN
 dnl Configure libtool
 AM_PROG_LIBTOOL
 
-dnl Configure libltdl
-AC_CONFIG_SUBDIRS(libltdl)
+CFLAGS="$CFLAGS -Wall -pipe"
+CXXFLAGS="$CXXFLAGS -Wall -pipe"
 
-CFLAGS="-Wall -pipe"
-CXXFLAGS="-Wall -pipe"
-CXX="g++"
-LIBS=""
-
+prefix="`pwd`"
 libdir="`pwd`/bin"
-bindir="`pwd`/bin"
 glibdir="`pwd`/lib"
 
-AC_SUBST(glibdir)
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_CPP
-AC_LANG_CPLUSPLUS
+AC_LANG([C++])
 
 AC_PROG_MAKE_SET(gmake)
-AC_SUBST(LIBTOOL_DEPS)
+
+dnl Configure libltdl
+AC_CONFIG_SUBDIRS(libltdl)
+
+threadLib=no
+
+dnl AC_CHECK_LIB(lthread, pthread_create, threadLib=-llthread)
+
+if [test "$threadLib" = no]; then
+	AC_CHECK_LIB(pthread, pthread_create, threadLib=-lpthread)
+fi
+
+if [test "$threadLib" = no]; then
+	AC_CHECK_LIB(c, pthread_create, threadLib=-lc)
+fi
+
+if [test "$threadLib" = no]; then
+	AC_CHECK_LIB(c_r, pthread_create, threadLib=-lc_r)
+fi
+
+if [test "$threadLib" = no]; then
+	AC_MSG_RESULT([Unable to locate pthread_create in any library])
+else
+	LIBS="$LIBS $threadLib"
+fi
 
 dnl ----------------------------------------------------------
 dnl ----------------------------------------------------------
@@ -62,6 +79,9 @@ AC_CHECK_LIB(socket,socket)
 AC_CHECK_LIB(nsl,gethostbyname)
 dnl AC_CHECK_LIB(pthread,pthread_create)
 dnl AC_CHECK_LIB(posix4,sem_init)
+AC_SEARCH_LIBS(pthread_create,lthread pthread c c_r)
+AC_SEARCH_LIBS(pthread_kill,lthread pthread c c_r)
+AC_CHECK_FUNCS(pthread_create)
 
 dnl ----------------------------------------------------------
 dnl
@@ -69,7 +89,7 @@ dnl Checking for headers, functions, and a type declarations
 dnl
 
 AC_CHECK_HEADERS(sys/file.h unistd.h sys/stat.h sys/ioctl.h sys/resource.h )
-AC_CHECK_HEADERS(sys/time.h asm/ioctls.h xti_inet.h sys/filio.h)
+AC_CHECK_HEADERS(sys/time.h asm/ioctls.h xti_inet.h sys/filio.h getopt.h)
 AC_CHECK_HEADERS(sys/types.h sys/socket.h netinet/in.h sys/un.h pthread.h)
 
 AC_HEADER_STDC
@@ -94,85 +114,120 @@ else
   AC_CHECK_TYPE(socklen_t,int)
 fi
 
-useDebug=yes
-AC_ARG_WITH(debug, \
-[  --without-debug          Disable debugging in the executables],
-[useDebug=no]
+AC_ARG_WITH(debug,
+	AC_HELP_STRING([--without-debug],
+		       [Disable debugging in the executables]),
+	[dummy=true],
+	[CXXFLAGS="$CXXFLAGS -g"]
 )
 
-if test $useDebug = yes ; then
-	CXXFLAGS="$CXXFLAGS -g"
-fi
-
-useOptimization=no
-AC_ARG_WITH(optimization, \
-[  --with-optimization      Optimize the executables],
-[useOptimization=yes]
+AC_ARG_WITH(pedantic,
+	AC_HELP_STRING([--with-pedantic],
+			[Add -pedantic to compile options]),
+	[CXXFLAGS="$CXXFLAGS -pedantic"]
 )
 
-if test $useOptimization = yes ; then
-	CXXFLAGS="$CXXFLAGS -O"
-else
-	CXXFLAGS="$CXXFLAGS -O0"
-fi
-
-PGSQL_PREFIX=/usr/local/pgsql
-
-AC_ARG_WITH(pgsql, \
-[  --with-pgsql=PGSQLDIR   Specify location to find pgsql
-                          Default path is \"/usr/local/pgsql\"],
-[PGSQL_PREFIX=$withval]
+AC_ARG_WITH(optimization,
+	AC_HELP_STRING([--with-optimization],
+			[Optimize the executables]),
+	[CXXFLAGS="$CXXFLAGS -O"],
+	[CXXFLAGS="$CXXFLAGS -O0"]
 )
+
+AC_ARG_WITH(prof,
+	AC_HELP_STRING([--with-prof],
+			[Generate profiling information]),
+	[CXXFLAGS="$CXXFLAGS -pg"]
+)
+
+PGSQL_LIB=/usr/local/pgsql/lib
+AC_ARG_WITH(pgsql-lib,
+	AC_HELP_STRING([--with-pgsql-lib=PGSQLLIBDIR],
+			[Specify location to find libpq++.so, default is \
+/usr/local/pgsql/lib]),
+	[PGSQL_LIB=$withval]
+)
+dnl echo PGSQL_LIB: $PGSQL_LIB
+
+PGSQL_INCLUDE=/usr/local/pgsql/include
+AC_ARG_WITH(pgsql-include,
+	AC_HELP_STRING([--with-pgsql-include=PGSQLINCLUDEDIR],
+			[Specify location to find libpq++.h, default is \
+/usr/local/pgsql/include]),
+	[PGSQL_INCLUDE=$withval]
+)
+dnl echo PGSQL_INCLUDE: $PGSQL_INCLUDE
 
 AC_MSG_CHECKING(for libpq++.h)
-if test -f "/usr/local/include/pgsql/libpq++.h"; then
-	PGSQL_INCLUDE="/usr/local/include/pgsql"
-	PGSQL_LIB="/usr/local/lib"
-elif test -f "$PGSQL_PREFIX/include/libpq++.h"; then
-	PGSQL_INCLUDE="$PGSQL_PREFIX/include"
-	PGSQL_LIB="$PGSQL_PREFIX/lib"
-elif test -f "/usr/local/include/libpq++.h"; then
+if [test -f "$PGSQL_INCLUDE/libpq++.h"]; then
+	/bin/true
+elif [test -f "/usr/local/include/libpq++.h"]; then
 	PGSQL_INCLUDE=/usr/local/include
-	PGSQL_LIB=/usr/local/lib
-elif test -f "/usr/include/postgresql/libpq++.h"; then
+elif [test -f "/usr/include/postgresql/libpq++.h"]; then
 	PGSQL_INCLUDE=/usr/include/postgresql
-	PGSQL_LIB=/usr/lib/pgsql
-elif test -f "/usr/include/pgsql/libpq++.h"; then
+elif [test -f "/usr/include/pgsql/libpq++.h"]; then
 	PGSQL_INCLUDE=/usr/include/pgsql
-	PGSQL_LIB=/usr/lib/pgsql
-elif test -f "/usr/local/include/pgsql/libpq++.h"; then
-	PGSQL_INCLUDE=/usr/local/include/pgsql
-	PGSQL_LIB=/usr/local/lib
 else
-        AC_MSG_ERROR( Unable to find PostGreSQL )
+        AC_MSG_ERROR( Unable to find libpq++.h )
 fi
 AC_MSG_RESULT(yes)
 
-AC_SUBST(PGSQL_INCLUDE)
-AC_SUBST(PGSQL_LIB)
+AC_MSG_CHECKING(for libpq++.so)
+if [test -f "$PGSQL_LIB/libpq++.so"]; then
+	/bin/true
+elif [test -f "/usr/local/lib/libpq++.so"]; then
+	PGSQL_LIB=/usr/local/lib
+elif [test -f "/usr/lib/libpq++.so"]; then
+	PGSQL_LIB=/usr/lib
+elif [test -f "/usr/lib/postgresql/libpq++.so"]; then
+	PGSQL_LIB=/usr/lib/postgresql
+elif [test -f "/usr/lib/pgsql/libpq++.so"]; then
+	PGSQL_LIB=/usr/lib/pgsql
+elif [test -f "/usr/local/pgsql/lib/libpq++.so"]; then
+	PGSQL_LIB=/usr/local/pgsql/lib
+elif [test -f "/usr/local/postgresql/lib/libpq++.so"]; then
+	PGSQL_LIB=/usr/local/postgresql/lib
+else
+        AC_MSG_ERROR( Unable to find libpq++.so)
+fi
+AC_MSG_RESULT(yes)
 
-dnl echo "PGSQL_PREFIX: $PGSQL_PREFIX"
 dnl echo "PGSQL_INCLUDE: $PGSQL_INCLUDE"
 dnl echo "PGSQL_LIB: $PGSQL_LIB"
 dnl exit
 
-AC_SUBST(LDFLAGS)
-AC_SUBST(bindir)
-
 CXXFLAGS="$CXXFLAGS -I`pwd`/include -I`pwd`/lib"
 
-if test -d "/usr/local/include/g++/ext"; then
-	CXXFLAGS="$CXXFLAGS -I/usr/local/include/g++/ext"
+hashMapFile=
+
+if [test -f "/usr/include/g++/ext/hash_map"]; then
+	hashMapFile="/usr/include/g++/ext/hash_map"
+	AC_DEFINE(GNU_EXTENSIONS)
+elif [test -f "/usr/local/include/g++/ext/hash_map"]; then
+	hashMapFile="usr/local/include/g++/ext/hash_map";
+	AC_DEFINE(GNU_EXTENSIONS)
 fi
 
-if test -d "/usr/local/include/g++/backward"; then
-	CXXFLAGS="$CXXFLAGS -I/usr/local/include/g++/backward"
-fi
+gccVersion=`\gcc -v 2>&1 | \tail -1 | \cut -d" " -f3`
+dnl echo gccVersion: $gccVersion
 
-AC_SUBST(CXXFLAGS)
-AC_SUBST(LIB_PATH)
-AC_SUBST(BIN_PATH)
-AC_SUBST(SRC_PATH)
+gccMajor=`echo $gccVersion | \cut -d"." -f1`
+dnl echo gccMajor: $gccMajor
+
+if [test "$gccMajor" = "3"]; then
+	# 3.0.x have ext/hash_map, but std namespace
+	gccMid=`echo $gccVersion | \cut -d"." -f2`
+dnl	echo gccMid: $gccMid
+
+	if [test "$gccMid" = "0"]; then
+		AC_DEFINE(HASHMAPNS, std)
+	else
+		# 3.1 or above
+		AC_DEFINE(HASHMAPNS, __gnu_cxx)
+	fi
+else
+	AC_DEFINE(HASHMAPNS, std)
+fi
 
 echo
 echo "Detecting modules..."
@@ -181,16 +236,16 @@ echo
 MOD_DIRS=""
 searchForMods=yes
 
-AC_ARG_ENABLE(modules, \
-[  --enable-modules=[mods] Enable one or more modules; all modules
-                          found in the current directory are enabled
-                          by default.  Specify \"no\" (without quotes)
-                          to build server only],
+AC_ARG_ENABLE(modules,
+	AC_HELP_STRING([--enable-modules=mods],
+		[Enable one or more modules; all modules found in the \
+current directory are enabled by default.  Specify "no" (without quotes) \
+to build server only]),
 [
 dnl echo "enableval: $enableval"
-if test $enableval = "yes" ; then
+if [test $enableval = "yes"]; then
 	searchForMods=yes
-elif test $enableval = "no" ; then
+elif [test $enableval = "no"]; then
 	searchForMods=no
 else
 	tmp="mod.$enableval"
@@ -207,7 +262,7 @@ searchForMods=yes
 ]) dnl AC_ARG_ENABLE
 
 dnl echo "searchForMods: $searchForMods"
-if test $searchForMods = yes ; then
+if [test $searchForMods = yes]; then
 	mod_list=`\ls | \grep "mod."`
 dnl	echo "mod_list: $mod_list"
 
@@ -227,9 +282,20 @@ fi
 dnl echo "MOD_DIRS = $MOD_DIRS"
 AC_SUBST(MOD_DIRS)
 
-AC_OUTPUT(Makefile db/Makefile lib/Makefile src/Makefile \
+AC_SUBST(CXXFLAGS)
+AC_SUBST(INCLTDL)
+AC_SUBST(LIBLTDL)
+AC_SUBST(glibdir)
+AC_SUBST(LIBTOOL_DEPS)
+AC_SUBST(PGSQL_INCLUDE)
+AC_SUBST(PGSQL_LIB)
+AC_SUBST(bindir)
+
+AC_CONFIG_FILES([Makefile db/Makefile lib/Makefile src/Makefile \
 mod.cservice/Makefile \
-mod.nickserv/Makefile)
+mod.nickserv/Makefile])
+
+AC_OUTPUT
 
 echo
 echo Configuration has been finished, and everything seems to be allright
