@@ -1,5 +1,5 @@
 #ifndef __LEVELS_H
-#define __LEVELS_H "$Id: levels.h,v 1.14 2002-02-06 19:34:53 jeekay Exp $"
+#define __LEVELS_H "$Id: levels.h,v 1.15 2002-02-07 01:01:36 jeekay Exp $"
 
 /* 
  * levels.h
@@ -9,7 +9,7 @@
  * 
  * Defines access level constants for use in command handlers. 
  *
- * $Id: levels.h,v 1.14 2002-02-06 19:34:53 jeekay Exp $
+ * $Id: levels.h,v 1.15 2002-02-07 01:01:36 jeekay Exp $
  */
 
 namespace gnuworld {
@@ -84,7 +84,7 @@ namespace gnuworld {
  
   namespace set {
 #ifdef FEATURE_INVITE
-    const int autoinvite = 25;
+    const int autoinvite = 24;
 #endif
     const int alwaysop = 450;
     const int userflag = 450;
