@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.3 2002-01-16 00:26:57 morpheus Exp $
+ * $Id: SETCommand.cc,v 1.4 2002-01-16 00:41:00 morpheus Exp $
  */
 
 #include	<string>
@@ -30,7 +30,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.3 2002-01-16 00:26:57 morpheus Exp $" ;
+const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.4 2002-01-16 00:41:00 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -640,6 +640,8 @@ else
 #ifdef FEATURE_NOFORCE
 	if(option == "NOFORCE")
 	{
+		sqlChannel* admChan = bot->getChannelRecord("*");
+            	int admLevel = bot->getAccessLevel(theUser, admChan);
 		if(admLevel < level::set::noforce)
 		{
 			bot->Notice(theClient,
