@@ -13,7 +13,7 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.26 2004-04-24 10:02:12 jeekay Exp $
+ * $Id: CHANINFOCommand.cc,v 1.27 2004-05-01 15:31:43 jeekay Exp $
  */
 
 #include  <string>
@@ -27,7 +27,7 @@
 #include  "levels.h"
 #include  "responses.h"
 
-const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.26 2004-04-24 10:02:12 jeekay Exp $" ;
+const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.27 2004-05-01 15:31:43 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -183,6 +183,9 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) ) {
     
     bot->Notice(theClient, "Max Logins: %i",
       targetUser->getMaxLogins());
+    
+    bot->Notice(theClient, "Default memo action: %s",
+    	targetUser->getFlag(sqlUser::F_MEMO_REJECT) ? "Reject" : "Accept");
 
     sqlCommandLevel* theCommandLevel = bot->getLevelRequired("CHGADMIN", "ADMIN");
 
@@ -205,7 +208,6 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) ) {
     
     string flags;
     if(targetUser->getFlag(sqlUser::F_AUTOKILL))  flags += "AUTOKILL ";
-    if(targetUser->getFlag(sqlUser::F_NOTE))      flags += "NOTE ";
     if(targetUser->getFlag(sqlUser::F_NOPURGE))   flags += "NOPURGE ";
     if(targetUser->getFlag(sqlUser::F_BOT))       flags += "BOT ";
     if(targetUser->getFlag(sqlUser::F_INVIS))     flags += "INVISIBLE ";

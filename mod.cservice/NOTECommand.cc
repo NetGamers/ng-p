@@ -9,7 +9,7 @@
 
 #define LOG_SQL
 
-const char NOTECommand_cc_rcsId[] = "$Id: NOTECommand.cc,v 1.13 2003-11-19 22:39:06 jeekay Exp $" ;
+const char NOTECommand_cc_rcsId[] = "$Id: NOTECommand.cc,v 1.14 2004-05-01 15:31:43 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -35,7 +35,7 @@ if (st.size() < 2)
 sqlUser* theUser = bot->isAuthed(theClient, true);
 if (!theUser) return false;
 		
-string cmd = string_upper(st[1]);
+string cmd = string_upper(st[1]) ;
 	
 /*************
  * SEND NOTE *
@@ -58,68 +58,47 @@ if (cmd == "SEND")
 		} // No such target user
 		
 	/* First things first - is this user allowing incoming notes? */
-		
-	if(targetUser->getFlag(sqlUser::F_NOTE))
-   	{
-		/* The user has his NOTE set to OFF
-		 * Things to do:
-		 *  Does the user have anyone in his list?
-		 *   No->Reject with '%s disabled NOTE'
-		 *  Is the user on the list?
-		 *   No->Reject with 'You are not on %s's note allow list'
-		 *  Send note */
-			
-		stringstream theAllowedCount;
-		theAllowedCount << "SELECT COUNT(*) as count FROM note_allow WHERE"
-			<< " user_id = " << targetUser->getID() << ends;
-		ExecStatusType allowedCountStatus = bot->SQLDb->Exec(theAllowedCount.str().c_str());
-		
-		if(allowedCountStatus != PGRES_TUPLES_OK)
-			{
-			elog << "NOTECommand> SQL Error: "
-				<< bot->SQLDb->ErrorMessage()
-				<< endl;
-			bot->Notice(theClient, "Internal database error sending note.");
-			return false;
-			} // Internal database error
-		
-		int allowedCount = atoi(bot->SQLDb->GetValue(0,0));
-		if(allowedCount == 0)
-			{
-			// User has noone in his allowed list
-			bot->Notice(theClient, "%s has disabled incoming notes.",
-				targetUser->getUserName().c_str());
-			return false;
-			} // The user has noone allowed on their list
-			
-		/* The targets allow list is NOT empty */
-		
-		/* Is this user allowed to send mail to the target? */
-		stringstream theAllowed;
-		theAllowed << "SELECT user_id FROM note_allow WHERE"
-			<< " user_id = " << targetUser->getID()
-			<< " AND user_from_id = " << theUser->getID()
-			<< ends;
-		ExecStatusType allowStatus = bot->SQLDb->Exec(theAllowed.str().c_str());
-#ifdef LOG_SQL
-		elog << "NOTECommand:SQL> " << theAllowed.str().c_str() << endl;
-#endif		
-		if(PGRES_TUPLES_OK != allowStatus)
-			{
-			elog << "NOTECommand> SQL Error: "
-				<< bot->SQLDb->ErrorMessage()
-				<< endl;
-			bot->Notice(theClient, "Internal database error sending note.");
-			return false;
-			} // Internal database error
+	std::vector<unsigned int> userIdList;
 	
-		if(bot->SQLDb->Tuples() <= 0)
-			{
-			bot->Notice(theClient, "Sorry, you are not on %s's allowed note list.",
-				targetUser->getUserName().c_str());
-			return false;
-			} // Is this user in the target users allow?
-		} // targetUser->getFlag(sqlUser::F_NOTE)
+	stringstream getUserIdList;
+	getUserIdList	<< "SELECT user_from_id FROM note_allow WHERE"
+			<< " user_id = " << targetUser->getID()
+			;
+	ExecStatusType dbStatus = bot->SQLDb->Exec(getUserIdList.str().c_str());
+	
+	if( dbStatus != PGRES_TUPLES_OK ) {
+		/* Bizarre DB error */
+		elog	<< "NOTECommand> SQL Error: "
+			<< bot->SQLDb->ErrorMessage()
+			<< endl;
+		bot->Notice(theClient, "Internal database error whilst sending note.");
+		return false;
+	} // Database error of some sort
+
+	for( int row = 0 ; row < bot->SQLDb->Tuples() ; ++row ) {
+		unsigned int tempId = atoi(bot->SQLDb->GetValue(row, 0));
+		userIdList.push_back(tempId);
+	}
+	
+	std::vector<unsigned int>::const_iterator itr;
+	itr = find(userIdList.begin(), userIdList.end(), theUser->getID());
+	
+	/* Four possibilities, two of which lead to rejection:
+	 *   i) REJECT: Default ACCEPT, on list
+	 *  ii) REJECT: Default REJECT, not on list
+	 * iii) ACCEPT: Default ACCEPT, not on list
+	 *  iv) ACCEPT: Default REJECT, on list
+	 */
+	bool inList = ( itr != userIdList.end() );
+
+	if( ( targetUser->getFlag(sqlUser::F_MEMO_REJECT) && !inList ) ||
+	    ( !targetUser->getFlag(sqlUser::F_MEMO_REJECT) && inList ) )
+		{
+		/* This note sending is not allowed */
+		bot->Notice(theClient, "Sorry, that user is not accepting notes from you.");
+		return true;
+		}
+		
 			
 		/* The target user is allowing incoming notes from this user
 		 * Now we run the other checks before sending the note
@@ -272,15 +251,13 @@ if (cmd == "ERASE")
 
 if (cmd == "ALLOW")
 	{
-	// NOTE ALLOW CLEAR or
-	// NOTE ALLOW ADD nick or
-	// NOTE ALLOW DEL nick
-	if(st.size() < 3)
-		{
-		Usage(theClient);
-		return false;
-		}
-	string option = string_upper(st[2]);
+	/* NOTE ALLOW CLEAR or
+	 * NOTE ALLOW ADD nick or
+	 * NOTE ALLOW DEL nick
+	 * NOTE ALLOW LIST
+	 */
+
+	string option = ( st.size() < 3 ) ? "LIST" : string_upper(st[2]);
 	
 	if(option == "CLEAR")
 		{
@@ -352,7 +329,11 @@ if (cmd == "ALLOW")
 			namesList += allowUser;
 			if((i+1) != maxCount) namesList += ", ";
 			}
-		bot->Notice(theClient, "Allowed users: %s", namesList.c_str());
+			
+		bot->Notice(theClient, "Notes from users on this list will be %s.",
+			theUser->getFlag(sqlUser::F_MEMO_REJECT) ? "ACCEPTED" : "REJECTED"
+			);
+		bot->Notice(theClient, "User list: %s", namesList.c_str());
 		return true;
 		}
 	
@@ -421,7 +402,7 @@ if (cmd == "ALLOW")
 			return false;
 			}
 		
-		bot->Notice(theClient, "%s successfully added to your allow list.",
+		bot->Notice(theClient, "%s successfully added to your list.",
 			targetUser->getUserName().c_str());
 		return true;
 		} // if("ADD" == option)
@@ -452,7 +433,7 @@ if (cmd == "ALLOW")
 		int isExists = atoi(bot->SQLDb->GetValue(0,0));
 		if(!isExists)
 			{
-			bot->Notice(theClient, "%s is not on your allow list.",
+			bot->Notice(theClient, "%s is not on your list.",
 				targetUser->getUserName().c_str());
 			return false;
 			}
@@ -473,7 +454,7 @@ if (cmd == "ALLOW")
 			return false;
 			}
 		
-		bot->Notice(theClient, "%s successfully removed from your allow list.",
+		bot->Notice(theClient, "%s successfully removed from your list.",
 			targetUser->getUserName().c_str());
 		return true;
 		}

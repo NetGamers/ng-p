@@ -1,5 +1,7 @@
 2004-04-22 1.2.16 Jeekay
 * Handle bans of hidden hosts properly
+* Allow users to either accept or reject notes from a set of users
+* UPDATES
 * Bumped version to 1.2.16
 
 2004-01-25 1.2.15 Jeekay

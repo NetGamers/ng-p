@@ -4,7 +4,7 @@
  * Storage class for accessing user information either from the backend
  * or internal storage.
  *
- * $Id: sqlUser.cc,v 1.15 2003-01-14 17:08:12 jeekay Exp $
+ * $Id: sqlUser.cc,v 1.16 2004-05-01 15:31:43 jeekay Exp $
  */
 
 #include	<string.h>
@@ -24,13 +24,17 @@ namespace gnuworld
 using std::endl ;
 using std::ends ;
 
-const sqlUser::flagType sqlUser::F_GLOBAL_SUSPEND =	0x01 ;
-const sqlUser::flagType sqlUser::F_LOGGEDIN       = 0x02 ;
-const sqlUser::flagType sqlUser::F_INVIS          = 0x04 ;
-const sqlUser::flagType sqlUser::F_AUTOKILL       = 0x08 ;
-const sqlUser::flagType sqlUser::F_NOTE           = 0x10 ;
-const sqlUser::flagType sqlUser::F_NOPURGE        = 0x20 ;
-const sqlUser::flagType sqlUser::F_BOT            = 0x40 ;
+const sqlUser::flagType sqlUser::F_GLOBAL_SUSPEND	= 0x01 ;
+const sqlUser::flagType sqlUser::F_LOGGEDIN		= 0x02 ;
+const sqlUser::flagType sqlUser::F_INVIS		= 0x04 ;
+const sqlUser::flagType sqlUser::F_AUTOKILL		= 0x08 ;
+const sqlUser::flagType sqlUser::F_NOPURGE		= 0x20 ;
+const sqlUser::flagType sqlUser::F_BOT			= 0x40 ;
+/** If this flag is set, the user REJECTs memos by default */
+const sqlUser::flagType sqlUser::F_MEMO_REJECT		= 0x80 ;
+
+/** Sum of current flags				= 0xEF */
+
 
 
 const unsigned int sqlUser::EV_SUSPEND    = 1;

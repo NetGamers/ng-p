@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.29 2003-10-11 15:24:55 jeekay Exp $
+ * $Id: SETCommand.cc,v 1.30 2004-05-01 15:31:43 jeekay Exp $
  */
 
 #include  <string>
@@ -30,7 +30,7 @@
 #include  "responses.h"
 #include  "cservice_config.h"
 
-const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.29 2003-10-11 15:24:55 jeekay Exp $" ;
+const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.30 2004-05-01 15:31:43 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -110,6 +110,27 @@ if( st[1][0] != '#' ) // Didn't find a hash?
     bot->Notice(theClient, "Max Logins now set to %i", maxlogins);
     return true;
   } // option == MAXLOGINS
+  
+  if (option == "NOTE") {
+  	if (value == "ALLOW") {
+		theUser->removeFlag(sqlUser::F_MEMO_REJECT);
+	} else if (value == "REJECT") {
+		theUser->setFlag(sqlUser::F_MEMO_REJECT);
+	} else {
+		bot->Notice(theClient, "Value of %s must be ALLOW or REJECT.",
+			option.c_str()
+			);
+		return true;
+	}
+	
+	theUser->commit();
+	
+	bot->Notice(theClient, "Notes will now be %s by default.",
+		theUser->getFlag(sqlUser::F_MEMO_REJECT) ? "REJECTED" : "ACCEPTED"
+		);
+	
+	return true;
+  }
 
   if (option == "LANG")
   {
@@ -157,29 +178,6 @@ if( st[1][0] != '#' ) // Didn't find a hash?
     return true;
   }
 
-  if (option == "NOTE")
-  {
-    if (value == "OFF")
-    {
-      theUser->setFlag(sqlUser::F_NOTE);
-      theUser->commit();
-      bot->Notice(theClient, "Your NOTE system is now OFF.");
-      return true;
-    }
-    if (value == "ON")
-                {
-                        theUser->removeFlag(sqlUser::F_NOTE);
-                        theUser->commit();
-                        bot->Notice(theClient, "Your NOTE system is now ON.");
-                        return true;
-                }
-    bot->Notice(theClient,
-                        bot->getResponse(theUser,
-                                language::set_cmd_syntax_on_off,
-                                string("value of %s must be ON or OFF")).c_str(),
-                        option.c_str());
-                return true;
-  }
   bot->Notice(theClient,
     bot->getResponse(theUser,
       language::invalid_option,
@@ -321,8 +319,6 @@ else
 
   if (option == "WELCOME")
   {
-//    bot->Notice(theClient, "Under development");
-//    return true;
             string welcome = st.assemble(3);
             if(level < level::set::welcome)
             {

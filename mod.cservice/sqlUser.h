@@ -1,7 +1,7 @@
 /* sqlUser.h */
 
 #ifndef __SQLUSER_H
-#define __SQLUSER_H "$Id: sqlUser.h,v 1.12 2003-01-14 17:08:12 jeekay Exp $"
+#define __SQLUSER_H "$Id: sqlUser.h,v 1.13 2004-05-01 15:31:43 jeekay Exp $"
 
 #include <ctime>
 #include <string>
@@ -30,9 +30,9 @@ public:
 	static const flagType F_LOGGEDIN; // Deprecated.
 	static const flagType F_INVIS;
 	static const flagType F_AUTOKILL;
-	static const flagType F_NOTE;
 	static const flagType F_NOPURGE;
-  static const flagType F_BOT;
+	static const flagType F_BOT;
+	static const flagType F_MEMO_REJECT;
 	
 	/*
 	 *   User 'Event' Flags, used in the userlog table.
@@ -40,7 +40,7 @@ public:
 
 	static const unsigned int	EV_SUSPEND;
 	static const unsigned int	EV_UNSUSPEND;
-	static const unsigned int EV_COMMENT;
+	static const unsigned int	EV_COMMENT;
 
 	/*
 	 *  Methods to get data atrributes.
