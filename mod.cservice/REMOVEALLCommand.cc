@@ -13,7 +13,7 @@
 #include	"levels.h"
 #include	"cservice_config.h"
 
-const char REMOVEALLCommand_cc_rcsId[] = "$Id: REMOVEALLCommand.cc,v 1.2 2002-03-25 01:20:16 jeekay Exp $" ;
+const char REMOVEALLCommand_cc_rcsId[] = "$Id: REMOVEALLCommand.cc,v 1.3 2002-06-27 02:11:14 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -70,6 +70,20 @@ if (level < level::removeall)
 	return false;
 	}
 
+
+/*
+ * We need to ensure this user is forced before they can removeall
+ */
+
+int forceLevel = bot->isForced(theChan, theUser);
+if(!forceLevel)
+	{
+	bot->Notice(theClient, "You are required to FORCE the channel prior to using REMOVEALL.");
+	bot->logAdminMessage("%s (%s) - REMOVEALL - Failed - %s Not Forced",
+		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+		theChan->getName().c_str());
+	return false;
+	}
 
 /*
  *  Now, perform a fast query on the levels table for this channel.
