@@ -12,7 +12,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char COMMENTCommand_cc_rcsId[] = "$Id: COMMENTCommand.cc,v 1.6 2002-09-07 22:40:35 jeekay Exp $" ;
+const char COMMENTCommand_cc_rcsId[] = "$Id: COMMENTCommand.cc,v 1.7 2002-09-14 15:04:11 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -71,6 +71,7 @@ if(st[1][0] == '#') // we HAVE a channel!!
 		bot->logAdminMessage("%s (%s) - COMMENT - %s - <cleared>",
 			theClient->getNickName().c_str(), theUser->getUserName().c_str(),
 			targetChan->getName().c_str());
+    bot->writeChannelLog(targetChan, theClient, sqlChannel::EV_COMMENT, "Comment removed");
 		}
 	else
 		{
@@ -82,6 +83,7 @@ if(st[1][0] == '#') // we HAVE a channel!!
 		bot->logAdminMessage("%s (%s) - COMMENT - %s - %s",
 			theClient->getNickName().c_str(), theUser->getUserName().c_str(),
 			targetChan->getName().c_str(), myComment.c_str());
+    bot->writeChannelLog(targetChan, theClient, sqlChannel::EV_COMMENT, st.assemble(2));
 		}
 return true;
 }
