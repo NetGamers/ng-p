@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-# "$Id: Makefile.am,v 1.3 2002-01-23 01:12:53 ultimate Exp $"
+# "$Id: Makefile.am,v 1.4 2002-02-02 00:32:55 morpheus Exp $"
 
 lib_LTLIBRARIES = libcservice.la
 libcservice_la_LDFLAGS = -module -export-dynamic -L@PGSQL_LIB@ \
@@ -56,6 +56,7 @@ libcservice_la_SOURCES = cservice.cc \
 	SETTIMECommand.cc \
 	SHOWCOMMANDSCommand.cc \
 	SHOWIGNORECommand.cc \
+	SHUTDOWNCommand.cc \
 	STATSCommand.cc \
 	STATUSCommand.cc \
 	SUPPORTCommand.cc \
@@ -68,4 +69,3 @@ libcservice_la_SOURCES = cservice.cc \
 	VOICECommand.cc
 
 INCLUDES = -I@PGSQL_INCLUDE@ $(INCLTDL)
-
