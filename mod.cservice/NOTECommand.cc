@@ -9,7 +9,7 @@
 
 #define LOG_SQL
 
-const char NOTECommand_cc_rcsId[] = "$Id: NOTECommand.cc,v 1.7 2002-03-21 00:10:03 jeekay Exp $" ;
+const char NOTECommand_cc_rcsId[] = "$Id: NOTECommand.cc,v 1.8 2002-05-29 04:16:41 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -47,14 +47,66 @@ if (cmd == "SEND")
 		return true;
 		}
 
-	sqlUser* targetUser = bot->getUserRecord(st[2]);
+	string user = st[2];
+	
+	/* NOTE SEND FORCE username text */
+	if(string_upper(user) == "FORCE" && st.size() >= 5)
+		{ user = st[3]; }
+
+	sqlUser* targetUser = bot->getUserRecord(user);
 	if (!targetUser)
 		{
 		bot->Notice(theClient, bot->getResponse(theUser,
-			language::not_registered).c_str(), st[2].c_str());
+			language::not_registered).c_str(), user.c_str());
 		return false;
 		} // No such target user
+	
+	/* Are we an admin and are we forcing? Ignore restrictions in that case */
+	int aLevel = bot->getAdminAccessLevel(theUser);
+	if(string_upper(st[2]) == "FORCE" && aLevel)
+		{
+		strstream commitNote;
+		commitNote << "INSERT INTO memo "
+			<< "(from_id,to_id,content,ts) "
+			<< "VALUES ("
+			<< theUser->getID() << ", "
+			<< targetUser->getID() << ", "
+			<< "'" << escapeSQLChars(st.assemble(4)) << "',"
+			<< "now()::abstime::int4)"
+			<< ends;
+#ifdef LOG_SQL
+		elog << "NOTE:SEND:FORCE:SQL> "
+			<< commitNote.str()
+			<< endl;
+#endif
+		ExecStatusType status = bot->SQLDb->Exec(commitNote.str());
+		delete[] commitNote.str();
 		
+		if(PGRES_COMMAND_OK != status)
+			{
+			bot->dbErrorMessage(theClient);
+			elog << "NOTE:SEND:FORCE:Error> "
+				<< bot->SQLDb->ErrorMessage()
+				<< endl;
+			return false;
+			}
+		
+		bot->Notice(theClient, "Note force sent to %s", targetUser->getUserName().c_str());
+		iClient* targetClient = targetUser->isAuthed();
+		if(targetClient)
+			{
+			bot->Notice(targetClient, "You received a note from %s (type \002/msg %s note read\002 to see it)",
+				theUser->getUserName().c_str(), bot->getNickName().c_str());
+			} // if(targetClient)
+		
+		// Tell the world
+		bot->logAdminMessage("%s (%s) - NOTE FORCE - %s",
+			theClient->getNickName().c_str(), theUser->getUserName().c_str(),
+			targetUser->getUserName().c_str());
+
+		return true;
+		} // if(FORCE)
+	
 	/* First things first - is this user allowing incoming notes? */
 		
 	if(targetUser->getFlag(sqlUser::F_NOTE))
