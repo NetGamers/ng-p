@@ -1,4 +1,3 @@
-
 #include	<new>
 #include	<string>
 #include	<vector>
@@ -23,7 +22,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.33 2002-06-30 16:19:57 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.34 2002-07-01 00:29:59 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -483,12 +482,11 @@ return xClient::Kick( theChan, theClient, reason ) ;
 void nickserv::refreshAutoKillList( void )
 {
 ExecStatusType statusQuery;
-strstream autokillQuery;
+stringstream autokillQuery;
 autokillQuery << "SELECT lower(user_name) FROM users WHERE (flags & "
 	<< sqlUser::F_AUTOKILL << " <> 0)"
 	<< ends;
-statusQuery = SQLDb->Exec(autokillQuery.str());
-delete[] autokillQuery.str();
+statusQuery = SQLDb->Exec(autokillQuery.str().c_str());
 
 autoKillList.clear();
 for(int i = 0; i < SQLDb->Tuples(); i++)
@@ -568,22 +566,20 @@ bool nickserv::jupeNick( string theNick, string hostMask, string theReason, time
 			juUser* theUser = new juUser(theNick, pos->first, ::time(NULL), ::time(NULL)+duration, theReason, hostMask);
 			pos->second = theUser;
 			
-			strstream outNick;
+			stringstream outNick;
 			outNick << charYY << " N " << theNick
 							<< " 1 31337 juped " << theNick << ".nick.name +idk B]AAAB "
 							<< charYY << pos->first
 							<< " :" << theReason << ends;
-			Write(outNick.str());
-			delete[] outNick.str();
+			Write(outNick);
 			
 			Channel* theChan = Network->findChannel(debugChan);
 			if(theChan)
 				{
-				strstream outJoin;
+				stringstream outJoin;
 				outJoin << charYY << pos->first << " J "
 								<< debugChan << ends;
-				Write(outJoin.str());
-				delete[] outJoin.str();
+				Write(outJoin);
 				} // Debugchan exists
 			return true;
 			} // Empty numeric
@@ -599,10 +595,9 @@ bool nickserv::removeJupeNick( string theNick, string theReason = "End Of Jupe" 
 		juUser* theUser = pos->second;
 		if(theUser && (string_lower(theUser->getNickName()) == string_lower(theNick)))
 			{ // This is our nick
-			strstream outQuit;
+			stringstream outQuit;
 			outQuit << charYY << pos->first << " Q :" << theReason << ends;
-			Write(outQuit.str());
-			delete[] outQuit.str();
+			Write(outQuit);
 			
 			delete theUser;
 			pos->second = NULL;
@@ -631,10 +626,9 @@ void nickserv::checkJupeExpire( void )
 		juUser* theUser = pos->second;
 		if(theUser && (timeNow > *(theUser->getExpires())))
 			{
-			strstream outQuit;
+			stringstream outQuit;
 			outQuit << charYY << pos->first << " Q :Jupe Expired" << ends;
-			Write(outQuit.str());
-			delete[] outQuit.str();
+			Write(outQuit);
 			
 			delete theUser;
 			pos->second = NULL;
@@ -771,13 +765,12 @@ for(killIterator pos = KillingQueue.begin(); pos != KillingQueue.end(); )
 
 #ifndef __NS_DEBUG
 			Notice(tmpClient, "You have not logged into NickServ. You will now be autokilled.");
-			strstream s;
+			stringstream s;
 				s << getCharYY()
 					<< " D "
 					<< tmpClient->getCharYYXXX()
 					<< " :" << getNickName() << " [NickServ] AutoKill" << ends;
-			Write(s.str());
-			delete[] s.str();
+			Write(s);
 					
 			// Remove GNUworld data about user
 			nsUser *tmpData = static_cast< nsUser* >( tmpClient->getCustomData(this) );
