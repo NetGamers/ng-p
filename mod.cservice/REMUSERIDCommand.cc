@@ -3,7 +3,7 @@
  *
  * 20020308 GK@PAnet - Initial Writing
  *
- * $Id: REMUSERIDCommand.cc,v 1.4 2002-03-21 00:10:03 jeekay Exp $
+ * $Id: REMUSERIDCommand.cc,v 1.5 2002-03-23 00:42:27 jeekay Exp $
  */
 
 #include	<string>
@@ -13,7 +13,7 @@
 #include "cservice.h"
 #include "levels.h"
 
-const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.4 2002-03-21 00:10:03 jeekay Exp $" ;
+const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.5 2002-03-23 00:42:27 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -68,6 +68,38 @@ if(targetUser->getFlag(sqlUser::F_NOPURGE))
 	return true;
 	}
 
+/* First things first -
+ * Does this user own any channels? if so - abort!
+ */
+
+ExecStatusType status;
+
+strstream chanOwner;
+chanOwner << "SELECT COUNT(*) AS count FROM levels WHERE user_id = "
+	<< targetUser->getID() << " AND access = 500 AND channel_id <> 1"
+	<< ends;
+#ifdef LOG_SQL
+elog << "REMUSERID:cO:SQL> " << chanOwner.str() << endl;
+#endif
+status = bot->SQLDb->Exec(chanOwner.str());
+delete[] chanOwner.str();
+
+if(PGRES_TUPLES_OK != status)
+	{
+	elog << "REMUSERID::cO> SQL Error: "
+		<< bot->SQLDb->ErrorMessage()
+		<< endl;
+	bot->Notice(theClient, "Unknown SQL error removing user. Please contact a DB administrator.");
+	return false;
+	}
+
+int chansOwned = atoi(bot->SQLDb->GetValue(0,0));
+if(chansOwned)
+	{
+	bot->Notice(theClient, "This user owns channels. Please deal with that first.");
+	return false;
+	}
+
 /*
  * Now we know that this user exists and is in the current cache
  * We first need to delete it from the database
@@ -78,7 +110,6 @@ if(targetUser->getFlag(sqlUser::F_NOPURGE))
  */
  
 // First, we need to delete any references to levels this user has
-ExecStatusType status;
 
 strstream selectLevelQuery;
 selectLevelQuery << "SELECT user_id,channel_id FROM levels WHERE user_id = "
@@ -176,6 +207,29 @@ deleteAllowQuery << "DELETE FROM note_allow WHERE"
 	<< ends;
 status = bot->SQLDb->Exec(deleteAllowQuery.str());
 delete[] deleteAllowQuery.str();
+
+if(PGRES_COMMAND_OK != status)
+	{
+	elog << "REMUSERID::sqlError> "
+		<< bot->SQLDb->ErrorMessage()
+		<< endl;
+	bot->Notice(theClient, "Unknown SQL error removing user. Please contact a DB administrator.");
+	return false;
+	}
+
+/*
+ * Delete any userlog entries
+ */
+
+strstream deleteUserlogQuery;
+deleteUserlogQuery << "DELETE FROM userlog WHERE"
+	<< " user_id = " << targetUser->getID()
+	<< ends;
+#ifdef LOG_SQL
+elog << "REMUSERID:SQL> " << deleteUserlogQuery.str() << endl;
+#endif
+status = bot->SQLDb->Exec(deleteUserlogQuery.str());
+delete[] deleteUserlogQuery.str();
 
 if(PGRES_COMMAND_OK != status)
 	{
