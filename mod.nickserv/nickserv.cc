@@ -23,7 +23,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.16 2002-02-05 02:27:56 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.17 2002-02-05 03:13:45 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -129,7 +129,7 @@ else
 
 //RegisterCommand(new LOGINCommand( this, "LOGIN", "<password>")) ;
 //RegisterCommand(new RECOVERCommand( this, "RECOVER", "<username> <password>"));
-RegisterCommand(new JUPECommand( this, "JUPE", "(ADD|DEL) <nick> (duration)"));
+RegisterCommand(new JUPECommand( this, "JUPE", "(ADD|DEL|FORCEADD|INFO) <nick> (duration) (reason)"));
 RegisterCommand(new STATSCommand( this, "STATS", "<stat>"));
 RegisterCommand(new SAYCommand( this, "SAY", "<channel> <text>"));
 
@@ -475,7 +475,7 @@ int nickserv::OnTimer(xServer::timerID timer_id, void* data)
 					delete tmpData;
 					tmpClient->removeCustomData(this);
 					
-					jupeNick(tmpClient->getNickName());
+					jupeNick(tmpClient->getNickName(), "AutoKill Juped Nick", 0);
 
 					MyUplink->PostEvent(gnuworld::EVT_NSKILL, static_cast<void*>(tmpClient));
 #endif
@@ -702,7 +702,7 @@ void nickserv::initialiseJupeNumerics( void )
 		}
 }
 
-bool nickserv::jupeNick( string theNick, string theReason = "Juped Nick", time_t duration = 0 )
+bool nickserv::jupeNick( string theNick, string theReason, time_t duration )
 {
 	elog << "nickserv::jupeNick> Juping nick " << theNick << endl;
 	
