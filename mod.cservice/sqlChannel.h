@@ -1,7 +1,7 @@
 /* sqlChannel.h */
 
 #ifndef __SQLCHANNEL_H
-#define __SQLCHANNEL_H "$Id: sqlChannel.h,v 1.4 2002-02-06 19:34:53 jeekay Exp $"
+#define __SQLCHANNEL_H "$Id: sqlChannel.h,v 1.5 2002-02-16 21:40:02 jeekay Exp $"
 
 #include	<string>
 #include	<map>
@@ -63,6 +63,10 @@ public:
 	static const int	EV_COMMENT;
 	static const int	EV_REMOVEALL;
 	static const int	EV_IDLE;
+	
+	/* Suspend events */
+	static const int	EV_SUSPEND;
+	static const int	EV_UNSUSPEND;
 
 	/*
 	 *  Methods to get data atrributes.
@@ -139,6 +143,9 @@ public:
 
 	inline const string&		getWelcome() const
 		{ return welcome ; }
+	
+	inline const time_t& getSuspendExpires() const
+		{ return suspendExpires; }
 
 	/**
 	 * Load channel data from the backend using the channel name as
@@ -229,6 +236,9 @@ public:
 
 	inline void setWelcome( const string& _welcome )
 		{ welcome = _welcome; }
+	
+	inline void setSuspendExpires( const time_t& _suspendExpires )
+		{ suspendExpires = _suspendExpires; }
 
 	/**
 	 * Method to perform a SQL 'UPDATE' and commit changes to this
@@ -237,6 +247,8 @@ public:
 	bool commit();
 	bool insertRecord();
 	void setAllMembers(int);
+	
+	const string getLastEvent( unsigned short eventType, unsigned int& eventTime );
 
 public:
 	/*
@@ -277,6 +289,7 @@ protected:
 	unsigned int limit_grace; 
         unsigned int limit_max; 
 	string		welcome;
+	time_t		suspendExpires;
 
 	PgDatabase*	SQLDb;
 

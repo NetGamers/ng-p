@@ -9,7 +9,7 @@
  * 30/12/2000: Moved static SQL data to constants.h --Gte
  * Set loadData up to take data from rows other than 0.
  *
- * $Id: sqlChannel.cc,v 1.4 2002-02-06 19:34:53 jeekay Exp $
+ * $Id: sqlChannel.cc,v 1.5 2002-02-16 21:40:02 jeekay Exp $
  */
 
 #include	<strstream>
@@ -25,7 +25,7 @@
 #include	"cservice_config.h"
 
 const char sqlChannel_h_rcsId[] = __SQLCHANNEL_H ;
-const char sqlChannel_cc_rcsId[] = "$Id: sqlChannel.cc,v 1.4 2002-02-06 19:34:53 jeekay Exp $" ;
+const char sqlChannel_cc_rcsId[] = "$Id: sqlChannel.cc,v 1.5 2002-02-16 21:40:02 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -70,6 +70,10 @@ const int sqlChannel::EV_COMMENT 	= 9  ;
 const int sqlChannel::EV_REMOVEALL	= 10 ;
 const int sqlChannel::EV_IDLE		= 11 ;
 
+/* Suspend events */
+const int sqlChannel::EV_SUSPEND = 12 ;
+const int sqlChannel::EV_UNSUSPEND = 13 ;
+
 sqlChannel::sqlChannel(PgDatabase* _SQLDb)
  : id(0),
    name(),
@@ -92,7 +96,8 @@ sqlChannel::sqlChannel(PgDatabase* _SQLDb)
    last_limit_check(0),
    limit_grace(2), 
    limit_max(0), 
-   welcome(), 
+   welcome(),
+	 suspendExpires(0),
    SQLDb( _SQLDb )
 {
 }
@@ -222,6 +227,7 @@ limit_period = atoi(SQLDb->GetValue(row,15));
 limit_grace = atoi(SQLDb->GetValue(row,16));
 limit_max = atoi(SQLDb->GetValue(row,17));
 welcome = SQLDb->GetValue(row,18);
+suspendExpires = atoi(SQLDb->GetValue(row, 19));
 }
 
 bool sqlChannel::commit()
@@ -252,7 +258,8 @@ queryString	<< queryHeader
 		<< "limit_max = " << limit_max << ", "
 		<< "description = '" << escapeSQLChars(description) << "', "
 		<< "comment = '" << escapeSQLChars(comment) << "', "
-		<< "welcome = '" << escapeSQLChars(welcome) << "' "
+		<< "welcome = '" << escapeSQLChars(welcome) << "', "
+		<< "suspend_expires_ts = " << suspendExpires << " "
 		<< queryCondition << id
 		<< ends;
 
@@ -311,6 +318,37 @@ if( PGRES_COMMAND_OK != status )
 
 return true;
 }
+
+const string sqlChannel::getLastEvent(unsigned short eventType, unsigned int& eventTime)
+{
+strstream queryString;
+
+queryString << "SELECT message,ts FROM channellog"
+						<< " WHERE channelid = " << id
+						<< " AND event = " << eventType
+						<< " ORDER BY ts DESC LIMIT 1"
+						<< ends;
+
+#ifdef LOG_SQL
+elog << "sqlChannel::getLastEvent> "
+		 << queryString.str() << endl;
+#endif
+
+ExecStatusType status = SQLDb->Exec(queryString.str());
+delete[] queryString.str();
+
+if(PGRES_TUPLES_OK == status)
+	{
+	if(SQLDb->Tuples() < 1) { return(""); }
+	
+	string reason = SQLDb->GetValue(0, 0);
+	eventTime = atoi(SQLDb->GetValue(0, 1));
+	
+	return reason;
+	} // P_T_O == status
+
+return("");
+} // sqlChannel::getLastEvent()
 
 sqlChannel::~sqlChannel()
 {

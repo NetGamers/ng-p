@@ -13,7 +13,7 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.4 2002-01-31 16:08:46 jeekay Exp $
+ * $Id: CHANINFOCommand.cc,v 1.5 2002-02-16 21:40:01 jeekay Exp $
  */
 
 #include	<string>
@@ -26,7 +26,7 @@
 #include	"libpq++.h"
 #include	"cservice_config.h"
 
-const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.4 2002-01-31 16:08:46 jeekay Exp $" ;
+const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.5 2002-02-16 21:40:01 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -126,12 +126,6 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 			theUser->getUrl().c_str());
 		}
 
-/*	bot->Notice(theClient,
-		bot->getResponse(tmpUser,
-			language::lang,
-			string("Language: %i")).c_str(),
-		theUser->getLanguageId());
-*/
 	bot->Notice(theClient,string("Language: English"));
 
 	if( (theUser->getCoordX() && theUser->getCoordY() && theUser->getCoordZ() ) > 0)
@@ -314,6 +308,10 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 	return true;
 }
 
+/*
+ * We are INFOing a channel
+ */
+
 sqlUser* theUser = bot->isAuthed(theClient, false);
 sqlChannel* theChan = bot->getChannelRecord(st[1]);
 if( !theChan )
@@ -373,6 +371,32 @@ if( !theChan->getDescription().empty() )
 			language::desc,
 			string("Desc: %s")).c_str(),
 		theChan->getDescription().c_str());
+	}
+
+if(theChan->getFlag(sqlChannel::F_SUSPEND))
+	{
+	bot->Notice(theClient, "\002** This channel has been suspended by a CService Administrator **\002");
+	if(adminAccess)
+		{
+		unsigned int theTime;
+		string reason = theChan->getLastEvent(sqlChannel::EV_SUSPEND, theTime);
+		bot->Notice(theClient, "Channel suspended %s ago, Reason: %s", bot->prettyDuration(theTime).c_str(), reason.c_str());
+		bot->Notice(theClient, "Due to expire: %s", bot->prettyDuration(-(theChan->getSuspendExpires()) + 2*(bot->currentTime())).c_str());
+		}
+	}
+else
+	{
+	// Maybe the channel was unsuspended recently?
+	if(adminAccess)
+		{
+		unsigned int theTime;
+		string reason = theChan->getLastEvent(sqlChannel::EV_UNSUSPEND, theTime);
+		if(!reason.empty())
+			{
+			bot->Notice(theClient, "Channel was unsuspended %s ago.", bot->prettyDuration(theTime).c_str());
+			bot->Notice(theClient, "Unsuspended By: %s", reason.c_str());
+			}
+		}
 	}
 
 if( !theChan->getComment().empty() && adminAccess )

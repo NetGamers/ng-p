@@ -7,7 +7,7 @@
  * Suspends an user on the specified channel, if suspend duration 0
  * is defined, the user will be unsuspended.
  *
- * $Id: SUSPENDCommand.cc,v 1.3 2002-02-08 23:08:45 ultimate Exp $
+ * $Id: SUSPENDCommand.cc,v 1.4 2002-02-16 21:40:01 jeekay Exp $
  */
 
 #include	<string>
@@ -21,7 +21,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char SUSPENDCommand_cc_rcsId[] = "$Id: SUSPENDCommand.cc,v 1.3 2002-02-08 23:08:45 ultimate Exp $" ;
+const char SUSPENDCommand_cc_rcsId[] = "$Id: SUSPENDCommand.cc,v 1.4 2002-02-16 21:40:01 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -33,83 +33,12 @@ bool SUSPENDCommand::Exec( iClient* theClient, const string& Message )
 bot->incStat("COMMANDS.SUSPEND");
 
 StringTokenizer st( Message ) ;
-if( st.size() < 3 )
-	{
-	Usage(theClient);
-	return true;
-	}
-
 /* Is the user authenticated? */
 sqlUser* theUser = bot->isAuthed(theClient, true);
 if(!theUser)
 	{
 	return false;
 	}
-
-/*
- * Trying to suspend a user, or a channel?
- * If there is no #, check this person's admin access..
- * If it passes, we can suspend a whole user account. <g>
- */
-
-if ((st[1][0] != '#') && (st[1][0] != '*'))
-{
-	/* Got enough admin access? */
-	int level = bot->getAdminAccessLevel(theUser);
-	if (level < level::globalsuspend)
-	{
-		Usage(theClient);
-		return true;
-	}
-
-	/* Does this user account even exist? */
-	sqlUser* targetUser = bot->getUserRecord(st[1]);
-	if (!targetUser)
-		{
-		bot->Notice(theClient,
-			bot->getResponse(theUser, language::not_registered,
-				string("I don't know who %s is")).c_str(),
-		    	st[1].c_str());
-		return true;
-		}
-
-	/*
-	 *  Check the target's admin access, if its >= ours, don't
-	 *  allow it. :)
-	 */
-
-	int targetLevel = bot->getAdminAccessLevel(targetUser);
-	if (targetLevel >= level)
-	{
-	bot->Notice(theClient,
-		bot->getResponse(theUser,
-			language::suspend_access_higher,
-			string("Cannot suspend a user with equal or higher access than your own.")));
-	return false;
-	}
-
-	if (targetUser->getFlag(sqlUser::F_GLOBAL_SUSPEND))
-	{
-		bot->Notice(theClient, "%s is already suspended, you could always try execution?",
-			targetUser->getUserName().c_str());
-		return true;
-	}
-
-	// Suspend them.
-	targetUser->setFlag(sqlUser::F_GLOBAL_SUSPEND);
-	targetUser->commit();
-	bot->Notice(theClient, "%s has been globally suspended and will have level 0 access in all"
-		" channels until unsuspended.",
-		targetUser->getUserName().c_str());
-
-	targetUser->writeEvent(sqlUser::EV_SUSPEND, theUser, st.assemble(2));
-
-	bot->logAdminMessage("%s (%s) has globally suspended %s's user account.",
-		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
-		targetUser->getUserName().c_str());
-
-	return true;
-}
 
 if( st.size() < 4 )
 	{

@@ -8,7 +8,7 @@
  *
  * Caveats: None.
  *
- * $Id: UNSUSPENDCommand.cc,v 1.3 2002-02-08 23:08:45 ultimate Exp $
+ * $Id: UNSUSPENDCommand.cc,v 1.4 2002-02-16 21:40:01 jeekay Exp $
  */
 
 #include	<string>
@@ -20,7 +20,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char UNSUSPENDCommand_cc_rcsId[] = "$Id: UNSUSPENDCommand.cc,v 1.3 2002-02-08 23:08:45 ultimate Exp $" ;
+const char UNSUSPENDCommand_cc_rcsId[] = "$Id: UNSUSPENDCommand.cc,v 1.4 2002-02-16 21:40:01 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -50,55 +50,6 @@ if(!theUser)
 		string("Sorry, you are not authorised with me.")));
 	return false;
 	}
-
-/*
- * Trying to unsuspend a user, or a channel?
- * If there is no #, check this person's admin access.
- * If it passes, we can unsuspend a whole user account.
- * (Level 600)
- */
-
-if ((st[1][0] != '#') && (st[1][0] != '*'))
-{
-	// Got enough admin access?
-	int level = bot->getAdminAccessLevel(theUser);
-	if (level < level::globalsuspend)
-	{
-		Usage(theClient);
-		return true;
-	}
-
-	// Does this user account even exist?
-	sqlUser* targetUser = bot->getUserRecord(st[1]);
-	if (!targetUser)
-		{
-		bot->Notice(theClient,
-			bot->getResponse(theUser, language::not_registered,
-				string("I don't know who %s is")).c_str(),
-		    	st[1].c_str());
-		return true;
-		}
-
-	if (!targetUser->getFlag(sqlUser::F_GLOBAL_SUSPEND))
-	{
-		bot->Notice(theClient, "%s isn't suspended.", targetUser->getUserName().c_str());
-		return true;
-	}
-
-	// Unsuspend them.
-	targetUser->removeFlag(sqlUser::F_GLOBAL_SUSPEND);
-	targetUser->commit();
-	bot->Notice(theClient, "%s has been unsuspended.",
-		targetUser->getUserName().c_str());
-
-	targetUser->writeEvent(sqlUser::EV_UNSUSPEND, theUser, "");
-
-	bot->logAdminMessage("%s (%s) has unsuspended %s's user account.",
-	theClient->getNickName().c_str(), theUser->getUserName().c_str(),
-	targetUser->getUserName().c_str());
-
-	return true;
-}
 
 if( st.size() < 3 )
 	{

@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.15 2002-02-06 19:34:53 jeekay Exp $
+ * $Id: SETCommand.cc,v 1.16 2002-02-16 21:40:01 jeekay Exp $
  */
 
 #include	<string>
@@ -30,7 +30,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.15 2002-02-06 19:34:53 jeekay Exp $" ;
+const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.16 2002-02-16 21:40:01 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -539,39 +539,6 @@ else
 			option.c_str(),
 			theChan->getName().c_str(),
 			theChan->getFlag(sqlChannel::F_NOPURGE) ? "ON" : "OFF");
-	    return true;
-	}
-
-	if(option == "SUSPEND")
-	{
-	    // Check for admin access
-	    sqlChannel* admChan = bot->getChannelRecord("*");
-	    int admLevel = bot->getAccessLevel(theUser, admChan);
-	    if(admLevel < level::set::suspend)
-	    {
-			// No need to tell users about admin commands.
-			Usage(theClient);
-			return true;
-	    }
-	    if(value == "ON") theChan->setFlag(sqlChannel::F_SUSPEND);
-	    else if(value == "OFF") theChan->removeFlag(sqlChannel::F_SUSPEND);
-	    else
-	    {
-		bot->Notice(theClient,
-			bot->getResponse(theUser,
-				language::set_cmd_syntax_on_off,
-				string("value of %s must be ON or OFF")).c_str(),
-			option.c_str());
-		return true;
-	    }
-	    theChan->commit();
-	    bot->Notice(theClient,
-			bot->getResponse(theUser,
-				language::set_cmd_status,
-				string("%s for %s is %s")).c_str(),
-			option.c_str(),
-			theChan->getName().c_str(),
-			theChan->getFlag(sqlChannel::F_SUSPEND) ? "ON" : "OFF");
 	    return true;
 	}
 

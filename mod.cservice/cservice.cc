@@ -194,7 +194,8 @@ RegisterCommand(new OPERPARTCommand(this, "OPERPART", "<#channel>", 8));
 RegisterCommand(new CLEARMODECommand(this, "CLEARMODE", "<#channel>", 4));
 RegisterCommand(new SETTIMECommand(this, "SETTIME", "", 4));
 //RegisterCommand(new OPERSUSPENDCommand(this, "OPERSUSPEND", "<#channel>", 8));
-
+RegisterCommand(new GSUSPENDCommand(this, "GSUSPEND", "<chan/nick> <duration> <reason>", 5));
+RegisterCommand(new GUNSUSPENDCommand(this, "GUNSUSPEND", "<chan/nick> <reason>", 5));
 RegisterCommand(new INVMECommand(this, "INVME", "", 5));
 RegisterCommand(new REMIGNORECommand(this, "REMIGNORE", "<mask>", 5));
 RegisterCommand(new REGISTERCommand(this, "REGISTER", "<#channel> <username>", 8));
@@ -1424,6 +1425,91 @@ for (expireVectorType::const_iterator resultPtr = expireVector.begin();
 		} // for()
 }
 
+void cservice::expireGlobalSuspends()
+{
+/*
+-- Real SQL possibly:
+BEGIN TRANSACTION
+
+INSERT INTO channellog (ts,channelid,event,message,last_updated) SELECT now()::abstime::int4, channels.id, sqlChannel::EV_UNSUSPEND, 'Auto Unsuspend', now()::abstime::int4 FROM channels WHERE now()::abstime::int4 > channels.suspend_expires_ts AND channels.suspend_expires_ts <> 0;
+
+UPDATE channels SET flags = (flags & ~F_SUSPEND), last_updated=now()::abstime::int4, suspend_expires_ts = 0 WHERE now()::abstime::int4 > suspend_expires_ts AND suspend_expires_ts <> 0;
+
+COMMIT
+*/
+
+/*
+ * Here we try to expire any global suspends that need removing
+ * Note that this edits the DB directly. It does not become effective until after a DB refresh
+ */
+
+unsigned int Time = currentTime();
+
+strstream insertQuery;
+insertQuery << "INSERT INTO channellog (ts,channelid,event,message,last_updated)"
+						<< " SELECT " << Time << ", channels.id, " << sqlChannel::EV_UNSUSPEND << ","
+						<< " 'Auto Unsuspend', " << Time
+						<< " FROM channels WHERE " << Time << " > channels.suspend_expires_ts"
+						<< " AND channels.suspend_expires_ts <> 0"
+						<< ends;
+
+strstream updateQuery;
+updateQuery << "UPDATE channels SET flags = (flags & ~" << sqlChannel::F_SUSPEND << "),"
+						<< " last_updated=" << Time << ", suspend_expires_ts = 0"
+						<< " WHERE " << Time << " > suspend_expires_ts AND"
+						<< " suspend_expires_ts <> 0"
+						<< ends;
+
+#ifdef LOG_SQL
+elog << "expireGlobalSuspends> " << insertQuery.str() << endl;
+elog << "expireGlobalSuspends> " << updateQuery.str() << endl;
+#endif
+
+ExecStatusType status;
+
+status = SQLDb->Exec("BEGIN");
+if(PGRES_COMMAND_OK != status)
+	{
+	elog << "expireGlobalSuspends:BEGIN> SQL Error: "
+			 << SQLDb->ErrorMessage() << endl;
+	delete[] updateQuery.str();
+	delete[] insertQuery.str();
+	return;
+	}
+
+SQLDb->Exec(insertQuery.str());
+if(PGRES_COMMAND_OK != status)
+	{
+	elog << "expireGlobalSuspends:insert> SQL Error: "
+			 << SQLDb->ErrorMessage() << endl;
+	delete[] updateQuery.str();
+	delete[] insertQuery.str();
+	return;
+	}
+
+status = SQLDb->Exec(updateQuery.str());
+if(PGRES_COMMAND_OK != status)
+	{
+	elog << "expireGlobalSuspends:update> SQL Error: "
+			 << SQLDb->ErrorMessage() << endl;
+	delete[] updateQuery.str();
+	delete[] insertQuery.str();
+	return;
+	}
+
+SQLDb->ExecCommandOk("COMMIT");
+if(PGRES_COMMAND_OK != status)
+	{
+	elog << "expireGlobalSuspends:COMMIT> SQL Error: "
+			 << SQLDb->ErrorMessage() << endl;
+	delete[] updateQuery.str();
+	delete[] insertQuery.str();
+	return;
+	}
+
+return;
+}
+
 /**
  * This function removes any ignores that have expired.
  */
@@ -2042,6 +2128,7 @@ if (timer_id == expire_timerID)
 	expireBans();
 	expireSuspends();
 	expireSilence();
+	expireGlobalSuspends();
 
 	/* Refresh Timer */
 	time_t theTime = time(NULL) + expireInterval;
