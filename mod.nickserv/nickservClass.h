@@ -1,5 +1,5 @@
 #ifndef __NICKSERVCLASS_H
-#define __NICKSERVCLASS_H "$Id: nickservClass.h,v 1.3 2002-04-02 02:14:52 jeekay Exp $"
+#define __NICKSERVCLASS_H "$Id: nickservClass.h,v 1.4 2002-04-02 02:57:50 jeekay Exp $"
 
 #include	"libpq-int.h"
 #include	"nsUser.h"
@@ -50,7 +50,7 @@ protected:
 	typedef killQueue::iterator killIterator;
 
 	// This is the type where we store the current DB users with autokill set
-	typedef set<string,eqstr> autoKillListType;
+	typedef set<string> autoKillListType;
 
 	// Lists of juped nicks
 	typedef map<string, juUser*> jupeNickType;

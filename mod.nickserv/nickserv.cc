@@ -23,7 +23,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.30 2002-04-02 02:22:19 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.31 2002-04-02 02:57:32 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -485,7 +485,7 @@ void nickserv::refreshAutoKillList( void )
 {
 ExecStatusType statusQuery;
 strstream autokillQuery;
-autokillQuery << "SELECT user_name FROM users WHERE (flags & "
+autokillQuery << "SELECT lower(user_name) FROM users WHERE (flags & "
 	<< sqlUser::F_AUTOKILL << " <> 0)"
 	<< ends;
 statusQuery = SQLDb->Exec(autokillQuery.str());
@@ -499,9 +499,10 @@ for(int i = 0; i < SQLDb->Tuples(); i++)
 
 bool nickserv::checkUser(nsUser* tmpUser)
 {
-autoKillListType::const_iterator ptr = autoKillList.find(tmpUser->getNickName());
+autoKillListType::const_iterator ptr = autoKillList.find(string_lower(tmpUser->getNickName()));
 
-return (ptr == autoKillList.end());
+if(ptr == autoKillList.end()) { return false; }
+return true;
 }
 
 void nickserv::authUser(iClient* tmpClient, const string& authNick)
