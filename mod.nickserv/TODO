@@ -1,3 +1,4 @@
+*** Jeekay: This should be done before next tag
 When moving to a production network:
 
 Change query in checkUser() to include autokill again
