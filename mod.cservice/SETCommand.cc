@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.27 2003-02-14 16:11:59 jeekay Exp $
+ * $Id: SETCommand.cc,v 1.28 2003-10-02 18:17:39 jeekay Exp $
  */
 
 #include  <string>
@@ -30,7 +30,7 @@
 #include  "responses.h"
 #include  "cservice_config.h"
 
-const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.27 2003-02-14 16:11:59 jeekay Exp $" ;
+const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.28 2003-10-02 18:17:39 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -794,10 +794,7 @@ else
     int setting = atoi(value.c_str());
     if ( (setting < 0) || (setting > 3))
     {
-      bot->Notice(theClient,
-        bot->getResponse(theUser,
-          language::userflags_syntax,
-          string("Invalid USERFLAGS setting. Correct values are 0, 1, 2, 3.")));
+      bot->Notice(theClient, "Invalid USERFLAGS setting. Correct values are 0, 1, 2, 3.");
       return false;
     }
 
