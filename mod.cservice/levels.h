@@ -1,5 +1,5 @@
 #ifndef __LEVELS_H
-#define __LEVELS_H "$Id: levels.h,v 1.2 2002-01-16 00:00:21 morpheus Exp $"
+#define __LEVELS_H "$Id: levels.h,v 1.3 2002-01-17 19:24:04 morpheus Exp $"
 
 /* 
  * levels.h
@@ -9,7 +9,7 @@
  * 
  * Defines access level constants for use in command handlers. 
  *
- * $Id: levels.h,v 1.2 2002-01-16 00:00:21 morpheus Exp $
+ * $Id: levels.h,v 1.3 2002-01-17 19:24:04 morpheus Exp $
  */
 
 namespace gnuworld {
@@ -110,7 +110,7 @@ namespace gnuworld {
     const int tempman = 800;
     const int caution = 800;
     const int vacation = 800;
-    const int noforce = 950;
+    const int noforce = 900;
   }
 
   namespace immune {
