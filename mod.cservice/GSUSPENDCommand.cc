@@ -3,7 +3,7 @@
  *
  * Allow global suspending of nicks/channels
  *
- * $Id: GSUSPENDCommand.cc,v 1.1 2002-02-16 21:40:01 jeekay Exp $
+ * $Id: GSUSPENDCommand.cc,v 1.2 2002-02-17 08:13:18 jeekay Exp $
  */
 
 #include <string>
@@ -12,7 +12,7 @@
 #include "cservice.h"
 #include "levels.h"
 
-const char GSUSPENDCommand_cc_rcsId[] = "$Id: GSUSPENDCommand.cc,v 1.1 2002-02-16 21:40:01 jeekay Exp $";
+const char GSUSPENDCommand_cc_rcsId[] = "$Id: GSUSPENDCommand.cc,v 1.2 2002-02-17 08:13:18 jeekay Exp $";
 
 namespace gnuworld
 {
@@ -25,7 +25,7 @@ bot->incStat("COMMANDS.GSUSPEND");
 // /msg P gsuspend nick/chan duration reason
 
 StringTokenizer st( Message );
-if(st.size() < 3)
+if(st.size() < 4)
 	{
 	Usage(theClient);
 	return true;
