@@ -4,7 +4,7 @@
  *
  * Distributed under the GNU Public Licence
  *
- * $Id: CHINFOCommand.cc,v 1.6 2002-10-11 13:13:06 jeekay Exp $
+ * $Id: CHINFOCommand.cc,v 1.7 2003-02-05 19:04:29 jeekay Exp $
  */
 
 #include	<string>
@@ -14,7 +14,7 @@
 #include "cservice.h"
 #include "levels.h"
 
-const char CHINFOCommand_cc_rcsId[] = "$Id: CHINFOCommand.cc,v 1.6 2002-10-11 13:13:06 jeekay Exp $" ;
+const char CHINFOCommand_cc_rcsId[] = "$Id: CHINFOCommand.cc,v 1.7 2003-02-05 19:04:29 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -105,7 +105,7 @@ if((aLevel >= level::chinfo::nick) && ("NICK" == option))
 	
 	/* Next - check legality of new nick */
 	if(newdata[0] == '-' ||
-		newdata.size() < 3)
+		newdata.size() < 2)
 		{
 		bot->Notice(theClient, "Sorry, %s is an illegal nickname.",
 			newdata.c_str());
