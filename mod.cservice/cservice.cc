@@ -4144,17 +4144,17 @@ bot->Notice( theClient, string( "SYNTAX: " ) + getInfo() ) ;
 void cservice::writeForceLog(sqlUser* theUser, sqlChannel* theChan, const string& theMessage)
 {
 
-int uid = theUser->getID();
-int cid = theChan->getID();
+string username = theUser->getUserName();
+string channel = theChan->getName();
 
 strstream theLog;
-theLog  << "INSERT INTO forcelog (ts, user_id, channel_id, message) VALUES ("
+theLog  << "INSERT INTO forcelog (ts, username, channelname, message) VALUES ("
         << "now()::abstime::int4"
-        << ", "
-        << uid
-        << ", "
-        << cid
         << ", '"
+        << username
+        << "', '"
+        << channel
+        << "', '"
         << escapeSQLChars(theMessage)
         << "');"
         << ends;
