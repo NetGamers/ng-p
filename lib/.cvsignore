@@ -2,3 +2,4 @@ Makefile
 .deps
 .libs
 libgnuworld.la
+*.lo
