@@ -12,7 +12,7 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 
-const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.2 2002-01-16 23:16:25 morpheus Exp $" ;
+const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.3 2002-01-16 23:17:39 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -372,7 +372,7 @@ for (autoOpVectorType::const_iterator resultPtr = autoOpVector.begin();
 	 */
 	
 	strstream notesQuery;
-	notesQuery	<< "SELECT COUNT(id) FROM notes WHERE to_id = " << theUser->getID() << ends;
+	notesQuery	<< "SELECT COUNT(id) FROM memo WHERE to_id = " << theUser->getID() << ends;
 #ifdef LOG_SQL
 	elog	<< "LOGIN::sqlQuery> "
 		<< notesQuery.str()
