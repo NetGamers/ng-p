@@ -1,5 +1,5 @@
 #ifndef __CSERVICECLASS_H
-#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.22 2004-05-16 15:20:22 jeekay Exp $"
+#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.23 2004-08-28 12:30:12 jeekay Exp $"
 
 #include	<map>
 
@@ -259,6 +259,9 @@ public:
 	int idleUserPeriod;
 	int idleChannelPeriod;
 	int idleLevelPeriod;
+	
+	/** Duration after which a channel will be idle parted. */
+	int idleChannelPartPeriod;
 
 	/* Duration in seconds at which a 'pending' channel should
 	 * be notified that it is so. */

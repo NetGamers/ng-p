@@ -294,6 +294,7 @@ limitCheckPeriod = atoi((cserviceConfig->Require( "limit_check" )->second).c_str
 nickNickServ = cserviceConfig->Require("nickservNick")->second;
 loginDelay = atoi((cserviceConfig->Require( "login_delay" )->second).c_str());
 preloadUserDays = atoi((cserviceConfig->Require( "preload_user_days" )->second).c_str());
+idleChannelPartPeriod = atoi((cserviceConfig->Require( "idle_channel_part_period" )->second).c_str());
 
 userHits = 0;
 userCacheHits = 0;
@@ -1785,10 +1786,10 @@ void cservice::cacheExpireLevels()
 		 * If so, we might want to part and turn off autojoin.. etc.
 		 */
 
-		/* 2 Days for now, move to config.. (172800) */
-		if ( ((currentTime() - theChan->getLastUsed()) >= 172800) 
-		&& theChan->getInChan() 
-		&& !theChan->getFlag(sqlChannel::F_SPECIAL) )
+		/* Part after idleChannelPartPeriod seconds */
+		if ( 	(currentTime() - theChan->getLastUsed()) >= idleChannelPartPeriod
+			&& theChan->getInChan() 
+			&& !theChan->getFlag(sqlChannel::F_SPECIAL) )
 		{
 			/*
 			 * So long! and thanks for all the fish.
@@ -4238,7 +4239,12 @@ bool cservice::partIdleChannel( sqlChannel* sqlChan )
 	
 	--joinCount;
 	writeChannelLog(sqlChan, me, sqlChannel::EV_IDLE, "");
-	Part(sqlChan->getName(), "So long! And thanks for all the fish.");
+	
+	char buffer[512];
+	snprintf(buffer, 512, "Parting channel due to lack of activity for %i days.", 
+		idleChannelPartPeriod / 86400
+		);
+	Part(sqlChan->getName(), buffer);
 	
 	return true;
 }
