@@ -23,7 +23,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.27 2002-04-01 22:09:51 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.28 2002-04-01 22:27:10 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -488,7 +488,7 @@ unsigned short int userFlags;
 ExecStatusType status;
 strstream s;
 s << "SELECT id,user_name,flags from Users Where lower(user_name) = '"
-	    << string_lower(tmpUser->getNickName()) << "'" << ends;
+	    << escapeSQLChars(string_lower(tmpUser->getNickName())) << "'" << ends;
 status = SQLDb->Exec(s.str());
 
 delete[] s.str();
@@ -502,7 +502,9 @@ if(PGRES_TUPLES_OK == status)
 		}
 	return false;
 	}
-elog << " Query error!" << endl;
+elog << "nickserv::checkUser> Query error : "
+	<< SQLDb->ErrorMessage()
+	<< endl;
 return false;
 }
 
