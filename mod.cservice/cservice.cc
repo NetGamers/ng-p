@@ -4180,7 +4180,6 @@ const string cservice::getVerify(const int officialLevel)
 	verifyTable[2] = "a VirusFix Member";
 	verifyTable[3] = "a Planetarion Team Member";
 	verifyTable[4] = "a Planetarion Team Leader";
-	verifyTable[5] = "a Stats Bot Administrator";
 	verifyTable[50] = "an Official CSC Helper";
 	verifyTable[99] = "a Planetarion Creator";
 	
