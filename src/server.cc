@@ -23,7 +23,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: server.cc,v 1.6 2003-03-30 02:55:40 jeekay Exp $
+ * $Id: server.cc,v 1.7 2003-09-22 10:56:23 jeekay Exp $
  */
 
 #include	<sys/time.h>
@@ -72,7 +72,7 @@
 #include	"ConnectionHandler.h"
 #include	"Connection.h"
 
-const char server_cc_rcsId[] = "$Id: server.cc,v 1.6 2003-03-30 02:55:40 jeekay Exp $" ;
+const char server_cc_rcsId[] = "$Id: server.cc,v 1.7 2003-09-22 10:56:23 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -524,7 +524,7 @@ elog	<< "*** Connected to "
 WriteDuringBurst( "PASS :%s\n", Password.c_str() ) ;
 
 // Send our server information.
-WriteDuringBurst( "SERVER %s %d %d %d J%02d %s :%s\n",
+WriteDuringBurst( "SERVER %s %d %d %d J%02d %s +s :%s\n",
 	        ServerName.c_str(),
 		1,
 		StartTime,
