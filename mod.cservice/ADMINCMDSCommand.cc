@@ -4,7 +4,7 @@
  * (c) Copyright 2002 Rasmus Hansen (GK@panet)
  * Distributed under the GNU Public License
  *
- * $Id: ADMINCMDSCommand.cc,v 1.27 2005-03-20 16:41:23 jeekay Exp $
+ * $Id: ADMINCMDSCommand.cc,v 1.28 2005-04-02 21:46:23 jeekay Exp $
  */
 
 #include	<string>
@@ -61,7 +61,7 @@ if(aLevel >= 900)
 
 if(aLevel >= 850)
 	{
-	bot->Notice(theClient, "\002Level  850 - CSC Director");
+	bot->Notice(theClient, "\002Level  850 - CSC Assistant Manager");
 	bot->Notice(theClient, "REMUSER * (nick)");
 	bot->Notice(theClient, "\002");
 	}

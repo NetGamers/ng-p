@@ -116,7 +116,7 @@ if((level >= level::admin::nadmin) && (level < level::admin::director))
 
 if ((level >= level::admin::director) && (level < level::admin::amanager)) 
 	{
-	bot->Notice(theClient,"%s is a CSC Director%s and logged in as %s",
+	bot->Notice(theClient,"%s is a CSC Supervisor%s and logged in as %s",
 		target->getNickUserHost().c_str(),
 		extra.c_str(),
 		theUser->getUserName().c_str());
