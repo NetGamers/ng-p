@@ -1,3 +1,6 @@
+2005-03-31 1.2.21 Jeekay
+* Bumped version to 1.2.21
+
 2004-12-02 1.2.20 Jeekay
 * Added a space after INVISIBLE flag in STATUS
 * Add subjects to global notices to allow users to selectively filter them
