@@ -1,5 +1,6 @@
 2003-11-08 1.2.13 Jeekay
 * Fixed spurious RECOVER messages
+* Fixed core when a user was serveropped and globally suspended
 * Bumped version to 1.2.13
 
 2003-10-10 1.2.12 Jeekay

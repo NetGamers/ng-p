@@ -2608,8 +2608,9 @@ for( xServer::opVectorType::const_iterator ptr = theTargets.begin() ;
 		// Has the target user's account been suspended?
 		if (authUser && authUser->getFlag(sqlUser::F_GLOBAL_SUSPEND))
 		{
-			Notice(theChanUser->getClient(), "The user %s (%s) has been suspended by a CService Administrator.",
-				authUser->getUserName().c_str(), tmpUser->getClient()->getNickName().c_str());
+			if(theChanUser)
+				Notice(theChanUser->getClient(), "The user %s (%s) has been suspended by a CService Administrator.",
+					authUser->getUserName().c_str(), tmpUser->getClient()->getNickName().c_str());
 			deopList.push_back(tmpUser->getClient());
 			sourceHasBeenBad = true;
 		}
