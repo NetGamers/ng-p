@@ -162,7 +162,7 @@ RegisterCommand(new RANDOMCommand(this, "RANDOM", "", 4));
 RegisterCommand(new SHOWIGNORECommand(this, "SHOWIGNORE", "", 3));
 RegisterCommand(new SUPPORTCommand(this, "SUPPORT", "#channel <YES|NO>", 15));
 #ifdef FEATURE_MEMOSERV
-RegisterCommand(new NOTECommand(this, "NOTE", "[SEND <username> <text>] | READ | [ERASE <id>|ALL]", 4));
+RegisterCommand(new NOTECommand(this, "NOTE", "[SEND <username> <text>] | READ | ERASE [<id>|ALL] | ALLOW [(CLEAR|LIST)|(ADD|REM <nick>)]", 4));
 RegisterCommand(new RELEASECommand(this, "RELEASE", "", 4));
 #endif
 

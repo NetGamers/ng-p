@@ -3,7 +3,7 @@
  *
  * 20020308 GK@PAnet - Initial Writing
  *
- * $Id: REMUSERIDCommand.cc,v 1.3 2002-03-20 21:31:41 jeekay Exp $
+ * $Id: REMUSERIDCommand.cc,v 1.4 2002-03-21 00:10:03 jeekay Exp $
  */
 
 #include	<string>
@@ -13,7 +13,7 @@
 #include "cservice.h"
 #include "levels.h"
 
-const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.3 2002-03-20 21:31:41 jeekay Exp $" ;
+const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.4 2002-03-21 00:10:03 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -155,6 +155,27 @@ deleteMemoQuery << "DELETE FROM memo WHERE"
 	<< ends;
 status = bot->SQLDb->Exec(deleteMemoQuery.str());
 delete[] deleteMemoQuery.str();
+
+if(PGRES_COMMAND_OK != status)
+	{
+	elog << "REMUSERID::sqlError> "
+		<< bot->SQLDb->ErrorMessage()
+		<< endl;
+	bot->Notice(theClient, "Unknown SQL error removing user. Please contact a DB administrator.");
+	return false;
+	}
+
+/*
+ * Delete any note allow records
+ */
+
+strstream deleteAllowQuery;
+deleteAllowQuery << "DELETE FROM note_allow WHERE"
+	<< " user_id = " << targetUser->getID()
+	<< " OR user_from_id = " << targetUser->getID()
+	<< ends;
+status = bot->SQLDb->Exec(deleteAllowQuery.str());
+delete[] deleteAllowQuery.str();
 
 if(PGRES_COMMAND_OK != status)
 	{
