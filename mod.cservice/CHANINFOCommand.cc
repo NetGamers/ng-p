@@ -13,7 +13,7 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.19 2002-10-29 16:13:00 jeekay Exp $
+ * $Id: CHANINFOCommand.cc,v 1.20 2002-10-29 16:16:36 jeekay Exp $
  */
 
 #include  <string>
@@ -27,7 +27,7 @@
 #include  "levels.h"
 #include  "responses.h"
 
-const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.19 2002-10-29 16:13:00 jeekay Exp $" ;
+const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.20 2002-10-29 16:16:36 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -82,7 +82,7 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) ) {
           string("Unable to view user details (Invisible)")));
       return false;
     } // if(!admin or !oper)
-  } if(target is invisible)
+  } // if(target is invisible)
 
   bot->Notice(theClient,
     bot->getResponse(theUser,
@@ -267,7 +267,7 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) ) {
   } if( adminAccess || (theUser == targetUser) || (theClient->isOper() && ! bot->getAdminAccessLevel(targetUser)))
 
   return true;
-} if(is a user)
+} // if(is a user)
 
 /*
  * We are INFOing a channel
