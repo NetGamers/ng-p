@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.6 2002-02-05 03:39:03 jeekay Exp $" ;
+const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.7 2002-02-15 03:11:59 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -81,37 +81,23 @@ if (!theUser)
 	}
 
 sqlChannel* theChan = bot->getChannelRecord("#coder-com");
-if (!theChan) 
-	{
-	elog << "Cannot find the #coder-com channel!" << endl;
-	return true;
-	}
+if (!theChan) elog << "Cannot find the #coder-com channel!" << endl;
 
-sqlChannel* virusChan = bot->getChannelRecord("#virusfix");
-if (!virusChan)
-        {
-        elog << "Cannot find the #virusfix channel!" << endl;
-        return true;
-        }
+sqlChannel* officialChan = bot->getChannelRecord("#official");
+if (!officialChan) elog << "Cannot find #official channel!" << endl;
 
-
-// TODO: Move all the levels to constants in levels.h
 
 int level = bot->getAdminAccessLevel(theUser); 
+
 int cLevel;
-if (!theChan)
-	cLevel = 0;
-else
-	cLevel = bot->getEffectiveAccessLevel(theUser, theChan, false);
+if (!theChan)	cLevel = 0;
+else cLevel = bot->getEffectiveAccessLevel(theUser, theChan, false);
 
-int vLevel;
-if (!virusChan)
-        vLevel = 0;
-else
-        vLevel = bot->getEffectiveAccessLevel(theUser, virusChan, false);
+int oLevel;
+if(!officialChan) oLevel = 0;
+else oLevel = bot->getEffectiveAccessLevel(theUser, officialChan, false);
 
-
-if ( (0 == level) && (0 == cLevel) && (level::virusfix::base > vLevel) ) 
+if ( (0 == level) && (0 == cLevel) && (0 == oLevel) ) 
 	{
 	bot->Notice(theClient, 
 		bot->getResponse(tmpUser,
@@ -224,23 +210,36 @@ if (cLevel > level::coder::devel)
 	return true;
 	}
 
+// #official replies
+// 1 = Official Planetarion Bot
+// 2 = Official Planetarion PACrew Member
+// 3 = Official Planetarion Virusfix Member
+// 99 = Planetarion Creator
 
-/*
- * #virusfix verify replies
- *
- * [02:02] <Kheldar> have it verify like:
- * [02:04] <Kheldar> 17:03 -P- Icewatcher!Icewatcher@89dyn165.com21.casema.net is an Official Virusfix
- * Member and logged in as Icewatcher
- */
-
-if(vLevel >= level::virusfix::base)
+if(1 == oLevel)
 	{
-	bot->Notice(theClient, "%s is an Official Virusfix Member%s and logged in as %s",
-		target->getNickUserHost().c_str(), extra.c_str(), theUser->getUserName().c_str());
+	bot->Notice(theClient, "%s is an Official Planetarion Bot%s and logged in as %s", target->getNickUserHost().c_str(), extra.c_str(), theUser->getUserName().c_str());
 	return true;
 	}
 
+if(2 == oLevel)
+	{
+	bot->Notice(theClient, "%s is an Official Planetarion PACrew Member%s and logged in as %s", target->getNickUserHost().c_str(), extra.c_str(), theUser->getUserName().c_str());
+	return true;
+	}
 
+if(3 == oLevel)
+	{
+	bot->Notice(theClient, "%s is an Official Planetarion Virusfix Member%s and logged in as %s", target->getNickUserHost().c_str(), extra.c_str(), theUser->getUserName().c_str());
+	return true;
+	}
+
+if(99 == oLevel)
+	{
+	bot->Notice(theClient, "%s is an Official Planetarion Game Creator%s and logged in as %s", target->getNickUserHost().c_str(), extra.c_str(), theUser->getUserName().c_str());
+	return true;
+	}
+	
 return true ;
 }
 
