@@ -13,7 +13,7 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.3 2002-01-24 00:52:21 jeekay Exp $
+ * $Id: CHANINFOCommand.cc,v 1.4 2002-01-31 16:08:46 jeekay Exp $
  */
 
 #include	<string>
@@ -26,7 +26,7 @@
 #include	"libpq++.h"
 #include	"cservice_config.h"
 
-const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.3 2002-01-24 00:52:21 jeekay Exp $" ;
+const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.4 2002-01-31 16:08:46 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -260,7 +260,7 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 			chanName = bot->SQLDb->GetValue(i,0);
 			chanAccess = bot->SQLDb->GetValue(i,1);
 			// 4 for 2 spaces, 2 brackets + comma.
-			if ((channelList.size() + chanName.size() + chanAccess.size() +6) >= 480)
+			if ((channelList.size() + chanName.size() + chanAccess.size() +6) >= 450)
 				{
 				bot->Notice(theClient,
 					bot->getResponse(tmpUser,
