@@ -23,7 +23,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.29 2002-04-02 02:14:52 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.30 2002-04-02 02:22:19 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -494,7 +494,6 @@ delete[] autokillQuery.str();
 for(int i = 0; i < SQLDb->Tuples(); i++)
 	{
 	autoKillList.insert(SQLDb->GetValue(i, 0));
-	elog << "Autokill Nick: " << SQLDb->GetValue(i, 0) << endl;
 	}
 }
 
