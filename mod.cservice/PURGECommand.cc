@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: PURGECommand.cc,v 1.4 2002-03-25 01:20:16 jeekay Exp $
+ * $Id: PURGECommand.cc,v 1.5 2002-03-28 18:23:12 jeekay Exp $
  */
 
 #include	<string>
@@ -22,7 +22,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.4 2002-03-25 01:20:16 jeekay Exp $" ;
+const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.5 2002-03-28 18:23:12 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -90,9 +90,11 @@ if("FORCE" == string_upper(st[1]))
 	 * Now grab the ID as we need to clear channellog too
 	 */
 	
+	string targetChan = string_lower(st[2]);
+	
 	strstream queryChan;
 	queryChan << "SELECT id FROM channels WHERE lower(name) = '"
-		<< escapeSQLChars(st[2]) << "'"
+		<< escapeSQLChars(targetChan) << "'"
 		<< ends;
 #ifdef LOG_SQL
 	elog << "PURGEFORCE:SQL> " << queryChan.str() << endl;
