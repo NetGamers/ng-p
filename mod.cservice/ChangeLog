@@ -1,3 +1,6 @@
+2004-11-20 1.2.19 Jeekay
+* Bumped version to 1.2.19
+
 2004-09-28 1.2.18 Jeekay
 * Change INFO so only the user/csc/opers can see if a user is globally suspended
 * Added PARTNER channel flag
