@@ -197,7 +197,7 @@ RegisterCommand(new OPERJOINCommand(this, "OPERJOIN", "<#channel>", 8));
 RegisterCommand(new OPERPARTCommand(this, "OPERPART", "<#channel>", 8));
 RegisterCommand(new CLEARMODECommand(this, "CLEARMODE", "<#channel>", 4));
 RegisterCommand(new SETTIMECommand(this, "SETTIME", "", 4));
-RegisterCommand(new OPERSUSPENDCommand(this, "OPERSUSPEND", "<#channel>", 8));
+//RegisterCommand(new OPERSUSPENDCommand(this, "OPERSUSPEND", "<#channel>", 8));
 
 RegisterCommand(new INVMECommand(this, "INVME", "", 5));
 RegisterCommand(new REMIGNORECommand(this, "REMIGNORE", "<mask>", 5));
