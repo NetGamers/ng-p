@@ -9,7 +9,7 @@
  * Caveats: None
  *
  *
- * $Id: REMUSERCommand.cc,v 1.7 2002-10-20 02:12:08 jeekay Exp $
+ * $Id: REMUSERCommand.cc,v 1.8 2003-02-18 21:33:33 jeekay Exp $
  */
 
 #include	<string>
@@ -22,7 +22,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char REMUSERCommand_cc_rcsId[] = "$Id: REMUSERCommand.cc,v 1.7 2002-10-20 02:12:08 jeekay Exp $" ;
+const char REMUSERCommand_cc_rcsId[] = "$Id: REMUSERCommand.cc,v 1.8 2003-02-18 21:33:33 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -82,11 +82,11 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 	sqlUser* targetUser = bot->getUserRecord(st[2]);
 
 	int level = bot->getEffectiveAccessLevel(theUser, theChan, true);
-  sqlCommandLevel* chgAdminLevel = bot->getLevelRequired("CHGADMIN", "ADMIN");
+	sqlCommandLevel* chgAdminLevel = bot->getLevelRequired("CHGADMIN", "ADMIN");
 
 	/*
 	 * check if we are removing admins or normal users
-	 * cause removinging admins requires high access ;)
+	 * cause removing admins requires high access ;)
 	 */
 
 	if (theChan->getName() == "*")
@@ -145,7 +145,12 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 	 *  Unless they are trying to remove themself.. in which case its ok ;)
 	 */
 
-	if ((level <= targetLevel) && (targetUser != theUser) || (targetLevel == 499 && !bot->isForced(theChan, theUser)))
+	if(targetLevel == 499 && !bot->isForced(theChan, theUser)) {
+		bot->Notice(theClient, "Only CService may remove users with 499+ access.");
+		return false;
+	}
+
+	if ((level <= targetLevel) && (targetUser != theUser))
 	{
 		bot->Notice(theClient,
 			bot->getResponse(theUser,

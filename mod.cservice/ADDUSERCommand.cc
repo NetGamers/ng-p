@@ -11,7 +11,7 @@
  *
  * Caveats: None
  *
- * $Id: ADDUSERCommand.cc,v 1.10 2002-11-05 00:24:27 jeekay Exp $
+ * $Id: ADDUSERCommand.cc,v 1.11 2003-02-18 21:33:33 jeekay Exp $
  */
 
 #include	<string>
@@ -25,7 +25,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char ADDUSERCommand_cc_rcsId[] = "$Id: ADDUSERCommand.cc,v 1.10 2002-11-05 00:24:27 jeekay Exp $" ;
+const char ADDUSERCommand_cc_rcsId[] = "$Id: ADDUSERCommand.cc,v 1.11 2003-02-18 21:33:33 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -117,7 +117,12 @@ if (level < level::adduser)
  */
 int targetAccess = atoi(st[3].c_str());
 
-if (level <= targetAccess || (targetAccess == 499 && !bot->isForced(theChan, theUser)))
+if(targetAccess >= 499 && !bot->isForced(theChan, theUser)) {
+	bot->Notice(theClient, "Only CService may add users with 499+ access.");
+	return true;
+}
+
+if (level <= targetAccess)
 	{
 	bot->Notice(theClient,
 		bot->getResponse(theUser,

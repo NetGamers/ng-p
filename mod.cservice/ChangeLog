@@ -2,6 +2,8 @@
 * BAN now devoices clients if a ban level 25-74 is set
 * If a voicee is ever devoiced by us, deop the voicer
 * Fixed error message given when DESCRIPTION/URL string was SET too long
+* Changed error message used if ADDUSER/MODINFO/REMUSER is performed on a user
+  with 499 in the channel to be more descriptive.
 * Bumped version to 1.2.05
 
 2003-01-27 1.2.04 Jeekay

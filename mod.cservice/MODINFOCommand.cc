@@ -13,7 +13,7 @@
  * Shouldn't really happen, as trying to MODINFO a forced access doesn't
  * make sense - adduser and then MODINFO that :)
  *
- * $Id: MODINFOCommand.cc,v 1.7 2002-10-20 02:12:07 jeekay Exp $
+ * $Id: MODINFOCommand.cc,v 1.8 2003-02-18 21:33:33 jeekay Exp $
  */
 
 #include	<string>
@@ -24,7 +24,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char MODINFOCommand_cc_rcsId[] = "$Id: MODINFOCommand.cc,v 1.7 2002-10-20 02:12:07 jeekay Exp $" ;
+const char MODINFOCommand_cc_rcsId[] = "$Id: MODINFOCommand.cc,v 1.8 2003-02-18 21:33:33 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -146,7 +146,7 @@ if (targetLevel == 0)
 	}
 
 /*
- *  Figure out what they're doing - ACCESS or AUTOOP.
+ *  Figure out what they're doing - ACCESS or AUTOMODE
  */
 
 if (command == "ACCESS")
@@ -188,7 +188,7 @@ if (command == "ACCESS")
 		}
 
   if((theChan->getName() != "*") && (newAccess >= 499) && (!bot->isForced(theChan, theUser))) {
-    bot->Notice(theClient, "Cannot modify a user with equal or higher access than your own.");
+    bot->Notice(theClient, "Only CService may modify users with 499+ access.");
     return false;
   }
 
@@ -209,8 +209,8 @@ if (command == "ACCESS")
 	sqlLevel* aLevel = bot->getLevelRecord(targetUser, theChan);
 
   /* Check we arent trying to lower a 499 */
-  if((theChan->getName() != "*") && (aLevel->getAccess()==499) && (!bot->isForced(theChan, theUser))) {
-    bot->Notice(theClient, "You cannot modify a user that has access level 499.");
+  if(theChan->getName() != "*" && aLevel->getAccess()==499 && !bot->isForced(theChan, theUser)) {
+    bot->Notice(theClient, "Only CService may modify users with 499+ access.");
     return false;
   }
 
