@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.4 2002-01-16 00:41:00 morpheus Exp $
+ * $Id: SETCommand.cc,v 1.5 2002-01-16 19:10:55 jeekay Exp $
  */
 
 #include	<string>
@@ -30,7 +30,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.4 2002-01-16 00:41:00 morpheus Exp $" ;
+const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.5 2002-01-16 19:10:55 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -1148,9 +1148,9 @@ else
     
 	   unsigned int limit_offset = atoi(value.c_str());
     
-           if ((limit_offset <= 1) | (limit_offset > 20))
+           if ((limit_offset <= 1) || (limit_offset > 20))
                    { 
-                           bot->Notice(theClient, "Invalid floating-limit Margin (2-20 Allowed)."); 
+                           bot->Notice(theClient, "Invalid floating limit margin (2-20 Allowed)."); 
                            return true; 
                    } 
     
