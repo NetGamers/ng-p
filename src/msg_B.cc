@@ -1,5 +1,24 @@
 /**
  * msg_B.cc
+ * Author: Daniel Karrels (dan@karrels.com)
+ * Copyright (C) 2002 Daniel Karrels <dan@karrels.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
+ * USA.
+ *
+ * $Id: msg_B.cc,v 1.2 2002-07-01 00:28:27 jeekay Exp $
  */
 
 #include	<sys/types.h>
@@ -9,7 +28,7 @@
 #include	<string>
 #include	<vector>
 #include	<iostream>
-#include	<pair.h>
+#include	<utility>
 
 #include	<cassert>
 
@@ -22,11 +41,20 @@
 #include	"Network.h"
 #include	"iClient.h"
 
-const char msg_B_cc_rcsId[] = "$Id: msg_B.cc,v 1.1 2002-01-14 23:20:59 morpheus Exp $" ;
+const char server_h_rcsId[] = __SERVER_H ;
+const char xparameters_h_rcsId[] = __XPARAMETERS_H ;
+const char StringTokenizer_h_rcsId[] = __STRINGTOKENIZER_H ;
+const char ELog_h_rcsId[] = __ELOG_H ;
+const char Channel_h_rcsId[] = __CHANNEL_H ;
+const char ChannelUser_h_rcsId[] = __CHANNELUSER_H ;
+const char Network_h_rcsId[] = __NETWORK_H ;
+const char iClient_h_rcsId[] = __ICLIENT_H ;
+const char msg_B_cc_rcsId[] = "$Id: msg_B.cc,v 1.2 2002-07-01 00:28:27 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
+using std::pair ;
 using std::string ;
 using std::vector ;
 using std::endl ;
@@ -124,30 +152,30 @@ if( '+' == Param[ whichToken ][ 0 ] )
 		switch( *currentPtr )
 			{
 			case 't':
-				onChannelModeT( theChan, true, 0 ) ;
+				OnChannelModeT( theChan, true, 0 ) ;
 				break ;
 			case 'n':
-				onChannelModeN( theChan, true, 0 ) ;
+				OnChannelModeN( theChan, true, 0 ) ;
 				break ;
 			case 'm':
-				onChannelModeM( theChan, true, 0 ) ;
+				OnChannelModeM( theChan, true, 0 ) ;
 				break ;
 			case 'p':
-				onChannelModeP( theChan, true, 0 ) ;
+				OnChannelModeP( theChan, true, 0 ) ;
 				break ;
 			case 's':
-				onChannelModeS( theChan, true, 0 ) ;
+				OnChannelModeS( theChan, true, 0 ) ;
 				break ;
 			case 'i':
-				onChannelModeI( theChan, true, 0 ) ;
+				OnChannelModeI( theChan, true, 0 ) ;
 				break ;
  			case 'l':
-				onChannelModeL( theChan, true, 0,
+				OnChannelModeL( theChan, true, 0,
 					::atoi( Param[ whichToken + 1 ] ) ) ;
 				whichToken++ ;
 				break ;
 			case 'k':
-				onChannelModeK( theChan, true, 0,
+				OnChannelModeK( theChan, true, 0,
 					Param[ whichToken + 1 ] ) ;
 				whichToken++ ;
 				break ;
@@ -362,11 +390,11 @@ for( StringTokenizer::const_iterator ptr = st.begin() ; ptr != st.end() ;
 // all listening clients
 if( !opVector.empty() )
 	{
-	onChannelModeO( theChan, 0, opVector ) ;
+	OnChannelModeO( theChan, 0, opVector ) ;
 	}
 if( !voiceVector.empty() )
 	{
-	onChannelModeV( theChan, 0, voiceVector ) ;
+	OnChannelModeV( theChan, 0, voiceVector ) ;
 	}
 
 }
@@ -396,7 +424,7 @@ for( StringTokenizer::size_type i = 0 ; i < st.size() ; ++i )
 
 if( !banVector.empty() )
 	{
-	onChannelModeB( theChan, 0, banVector ) ;
+	OnChannelModeB( theChan, 0, banVector ) ;
 	}
 }
 

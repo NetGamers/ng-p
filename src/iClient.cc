@@ -1,4 +1,23 @@
-/* iClient.cc
+/**
+ * iClient.cc
+ * Copyright (C) 2002 Daniel Karrels <dan@karrels.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
+ * USA.
+ *
+ * $Id: iClient.cc,v 1.2 2002-07-01 00:28:26 jeekay Exp $
  */
 
 #include	<new>
@@ -16,7 +35,7 @@
 #include	"ip.h"
 
 const char iClient_h_rcsId[] = __ICLIENT_H ;
-const char iClient_cc_rcsId[] = "$Id: iClient.cc,v 1.1 2002-01-14 23:20:58 morpheus Exp $" ;
+const char iClient_cc_rcsId[] = "$Id: iClient.cc,v 1.2 2002-07-01 00:28:26 jeekay Exp $" ;
 const char client_h_rcsId[] = __CLIENT_H ;
 const char Numeric_h_rcsId[] = __NUMERIC_H ;
 const char ip_h_rcsId[] = __IP_H ;
@@ -27,11 +46,13 @@ namespace gnuworld
 using std::string ;
 using std::map ;
 
-const iClient::modeType iClient::MODE_OPER = 0x01 ;
-const iClient::modeType iClient::MODE_WALLOPS = 0x02 ;
-const iClient::modeType iClient::MODE_INVISIBLE = 0x04 ;
-const iClient::modeType iClient::MODE_DEAF = 0x08 ;
-const iClient::modeType iClient::MODE_SERVICES = 0x10 ;
+const iClient::modeType iClient::MODE_OPER        = 0x01 ;
+const iClient::modeType iClient::MODE_WALLOPS     = 0x02 ;
+const iClient::modeType iClient::MODE_INVISIBLE   = 0x04 ;
+const iClient::modeType iClient::MODE_DEAF        = 0x08 ;
+const iClient::modeType iClient::MODE_SERVICES    = 0x10 ;
+const iClient::modeType iClient::MODE_REGISTERED  = 0x20 ;
+const iClient::modeType iClient::MODE_HIDDEN_HOST = 0x40 ;
 
 iClient::iClient( const unsigned int& _uplink,
 	const string& _yxx,
@@ -39,7 +60,9 @@ iClient::iClient( const unsigned int& _uplink,
 	const string& _userName,
 	const string& _hostBase64,
 	const string& _insecureHost,
+	const string& _realInsecureHost,
 	const string& _mode,
+	const string& _account,
 	const string& _description,
 	const time_t& _connectTime )
 : intYY( _uplink ),
@@ -47,11 +70,11 @@ iClient::iClient( const unsigned int& _uplink,
 	userName( _userName ),
 	IP( xIP( _hostBase64, true ).GetLongIP() ),
 	insecureHost( _insecureHost ),
-#ifdef CLIENT_DESC
+	realInsecureHost( _realInsecureHost ),
 	description( _description),
-#endif
 	connectTime( _connectTime ),
-	mode( 0 )
+	mode( 0 ),
+	account( _account )
 {
 if( 5 == _yxx.size() )
 	{
@@ -116,6 +139,16 @@ for( string::size_type i = 0 ; i < newModes.size() ; i++ )
 		case 'D':
 			mode |= MODE_DEAF ;
 			break ;
+		case 'r':
+		case 'R':
+			mode |= MODE_REGISTERED ;
+			if (isModeR() && isModeX()) setHiddenHost();
+			break ;
+		case 'x':
+		case 'X':
+			mode |= MODE_HIDDEN_HOST ;
+			if (isModeR() && isModeX()) setHiddenHost();
+			break ;
 		default:
 			// Unknown mode
 			break ;
@@ -150,6 +183,8 @@ if( mode & MODE_WALLOPS )	retMe += 'w' ;
 if( mode & MODE_INVISIBLE )	retMe += 'i' ;
 if( mode & MODE_DEAF )		retMe += 'd' ;
 if( mode & MODE_SERVICES )	retMe += 'k' ;
+if( mode & MODE_REGISTERED )	retMe += 'r' ;
+if( mode & MODE_HIDDEN_HOST )	retMe += 'x' ;
 
 return retMe ;
 }

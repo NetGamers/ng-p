@@ -1,13 +1,33 @@
-/* main.cc
- * $Id: main.cc,v 1.1 2002-01-14 23:20:58 morpheus Exp $
+/**
+ * main.cc
+ * Copyright (C) 2002 Daniel Karrels <dan@karrels.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
+ * USA.
+ *
+ * $Id: main.cc,v 1.2 2002-07-01 00:28:27 jeekay Exp $
  */
 
 #include	<new>
 #include	<fstream>
+#include	<iostream>
 
 #include	<sys/time.h>
 #include	<sys/types.h>
 #include	<unistd.h>
+#include	<getopt.h>
 
 #include	<cstdio>
 #include	<cstdlib>
@@ -21,8 +41,10 @@
 #include	"moduleLoader.h"
 #include	"md5hash.h"
 
+void		gnu() ;
+
 const char config_h_rcsId[] = __CONFIG_H ;
-const char main_cc_rcsId[] = "$Id: main.cc,v 1.1 2002-01-14 23:20:58 morpheus Exp $" ;
+const char main_cc_rcsId[] = "$Id: main.cc,v 1.2 2002-07-01 00:28:27 jeekay Exp $" ;
 const char ELog_h_rcsId[] = __ELOG_H ;
 const char FileSocket_h_rcsId[] = __FILESOCKET_H ;
 const char server_h_rcsId[] = __SERVER_H ;
@@ -48,21 +70,42 @@ void usage( const string& progName )
 {
 clog << "Usage: " << progName << " [options]\n" ;
 clog << "\nOptions:\n" ;
-clog << "-c: Verbose output\n" ;
+clog << "  -c, --verbose\t\tVerbose output\n" ;
 #ifdef EDEBUG
-  clog << "-d <debug filename>: Specify the debug output file\n" ;
+  clog << "  -d <debug filename>, --debug=<debug file name>" << endl ;
+  clog << "\t\t\tSpecify the debug output file\n" ;
 #endif
-clog << "-f <conf filename>: Specify the config file name\n" ;
-clog << "-h: Print this help menu\n" ;
-clog << "-s <socket file>: Run in simulation mode\n" ;
+clog << "  -f <conf filename>, --config=<config filename>" << endl ;
+clog << "\t\t\tSpecify the config file name\n" ;
+clog << "  -h, --help\t\tPrint this help menu\n" ;
+clog << "  -s <socket file>, --socket=<socket file name>" << endl ;
+clog << "\t\t\tRun in simulation mode\n" ;
 clog << endl ;
+}
+
+void gnu()
+{
+clog	<< "GNUWorld version 1.1" << endl ;
+clog	<< "Copyright (C) 2002 Free Software Foundation, Inc." << endl ;
+clog	<< "GNUWorld comes with NO WARRANTY," << endl ;
+clog	<< "to the extent permitted by law." << endl ;
+clog	<< "You may redistribute copies of GNUWorld" << endl ;
+clog	<< "under the terms of the GNU General Public License." << endl ;
+clog	<< "For more information about these matters," << endl ;
+clog	<< "see the files named COPYING." << endl ;
+clog	<< endl ;
 }
 
 int main( int argc, char** argv )
 {
 
+// output gnu information
+gnu() ;
+
+// This is done to intialize the hasher
 md5 dummy ;
 
+// Allocate a new instance of the xServer
 gnuworld::xServer* theServer =
 	new (std::nothrow) gnuworld::xServer( argc, argv ) ;
 assert( theServer != 0 ) ;
@@ -88,7 +131,7 @@ assert( theServer != 0 ) ;
 	}
 
 // Connect to the server
-clog << "*** Connecting...\n" ;
+clog << "*** Connecting..." << endl ;
 
 if( theServer->Connect() < 0 )
 	{
@@ -117,24 +160,47 @@ string simFileName ;
 verbose = false ;
 
 int c = EOF ;
-while( (c = getopt( argc, argv, "cd:f:hs:" )) != EOF )
+while( (c = getopt( argc, argv, "cd:f:hs:")) != EOF )
+//while( true )
 	{
+/*
+	int option_index = 0 ;
+	struct option cmdLineArgs[] = {
+		{ "verbose", no_argument, NULL, 0 },
+		{ "debug", no_argument, NULL, 1 },
+		{ "config", required_argument, NULL, 2 },
+		{ "help", no_argument, NULL, 3 },
+		{ "socket", required_argument, NULL, 4 },
+		{ 0, 0, 0, 0 }
+	} ;
+	c = getopt_long_only( argc, argv, "cd:f:hs:",
+		cmdLineArgs, &option_index ) ;
+	if( -1 == c )
+		{
+		break ;
+		}
+*/
 	switch( c )
 		{
+		case 0:
 		case 'c':
 			verbose = true ;
 			break ;
 #ifdef EDEBUG
+		case 1:
 		case 'd':
 			elogFileName = optarg ;
 			break ;
 #endif
+		case 2:
 		case 'f':
 			configFileName = optarg ;
 			break ;
+		case 3:
 		case 'h':
 			usage( argv[ 0 ] ) ;
 			::exit( 0 ) ;
+		case 4:
 		case 's':
 			simFileName = optarg ;
 			clog << "*** Running in simulation mode...\n" ;
@@ -152,7 +218,6 @@ while( (c = getopt( argc, argv, "cd:f:hs:" )) != EOF )
 		} // close switch
 	} // close while
 
-
 #ifdef EDEBUG
 	elog.openFile( elogFileName.c_str() ) ;
 	if( !elog.isOpen() )
@@ -169,6 +234,8 @@ if( verbose )
 	elog.setStream( &clog ) ;
 	elog	<< "*** Running in verbose mode...\n" ;
 	}
+
+setupSignals();
 
 // Sets up the server internals
 initializeSystem() ;
@@ -378,6 +445,14 @@ if( SIG_ERR == ::signal( SIGUSR1,
 		<< endl ;
 	return false ;
 	}
+if( SIG_ERR == ::signal( SIGUSR2,
+	static_cast< void (*)( int ) >( sigHandler ) ) )
+	{
+	clog	<< "*** Unable to establish signal hander for SIGUSR2"
+		<< endl ;
+	return false ;
+	}
+
 if( SIG_ERR == ::signal( SIGTERM,
 	static_cast< void (*)( int ) >( sigHandler ) ) )
 	{

@@ -8,7 +8,7 @@
 #include	"ChannelUser.h"
 
 const char ChannelUser_h_rcsId[] = __CHANNELUSER_H ;
-const char ChannelUser_cc_rcsId[] = "$Id: ChannelUser.cc,v 1.1 2002-01-14 23:20:57 morpheus Exp $" ;
+const char ChannelUser_cc_rcsId[] = "$Id: ChannelUser.cc,v 1.2 2002-07-01 00:28:25 jeekay Exp $" ;
 const char iClient_h_rcsId[] = __ICLIENT_H ;
 
 namespace gnuworld

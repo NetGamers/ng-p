@@ -5,20 +5,39 @@
  * proper.  It manages network I/O, parsing and distributing
  * incoming messages, notifying attached clients of
  * system events, on, and on, and on.
+ *
+ * Copyright (C) 2002 Daniel Karrels <dan@karrels.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
+ * USA.
+ *
+ * $Id: server.cc,v 1.2 2002-07-01 00:28:31 jeekay Exp $
  */
+
+#include	<sys/time.h>
+#include	<unistd.h>
 
 #include	<new>
 #include	<string>
 #include	<list>
 #include	<vector>
 #include	<algorithm>
-#include	<strstream>
+#include	<sstream>
 #include	<stack>
 #include	<iostream>
-#include	<pair.h>
-
-#include	<sys/time.h>
-#include	<unistd.h>
+#include	<utility>
 
 #include	<cstdlib>
 #include	<cstdio>
@@ -48,9 +67,11 @@
 #include	"ServerTimerHandlers.h"
 #include	"LoadClientTimerHandler.h"
 #include	"UnloadClientTimerHandler.h"
+#include	"ConnectionManager.h"
+#include	"Connection.h"
 
 const char server_h_rcsId[] = __SERVER_H ;
-const char server_cc_rcsId[] = "$Id: server.cc,v 1.1 2002-01-14 23:21:02 morpheus Exp $" ;
+const char server_cc_rcsId[] = "$Id: server.cc,v 1.2 2002-07-01 00:28:31 jeekay Exp $" ;
 const char config_h_rcsId[] = __CONFIG_H ;
 const char misc_h_rcsId[] = __MISC_H ;
 const char events_h_rcsId[] = __EVENTS_H ;
@@ -69,23 +90,26 @@ const char moduleLoader_h_rcsId[] = __MODULELOADER_H ;
 const char ServerTimerHandler_h_rcsId[] = __SERVERTIMERHANDLERS_H ;
 const char LoadClientTimerHandler_h_rcsId[] = __LOADCLIENTTIMERHANDLER_H ;
 const char UnloadClientTimerHandler_h_rcsId[] = __UNLOADCLIENTTIMERHANDLER_H ;
+const char ConnectionManager_h_rcsId[] = __CONNECTIONMANAGER_H ;
+const char Connection_h_rcsId[] = __CONNECTION_H ;
 
 namespace gnuworld
 {
 
+using std::pair ;
 using std::string ;
 using std::vector ;
 using std::list ;
 using std::endl ;
 using std::ends ;
-using std::strstream ;
+using std::stringstream ;
 using std::stack ;
 using std::unary_function ;
 using std::clog ;
 using std::cout ;
 using std::min ;
 
-// The object containing the network data structures
+/// The object containing the network data structures
 xNetwork*	Network = 0 ;
 
 // Some static xServer variables for tracking signals
@@ -107,7 +131,7 @@ virtual void operator() ( xClient* theClient )
 if( NULL == theClient ) return ;
 theClient->OnSignal( whichSig ) ;
 }
- 
+
 int     whichSig ;
 } ;
 
@@ -125,7 +149,7 @@ if( !readConfigFile( configFileName ) )
 // Output the information to the console.
 elog << "Numeric: " << intYY << endl ;
 elog << "Max Clients (bogus): " << intXXX << endl ;
-elog << "Uplink Name: " << UplinkName << endl ;  
+elog << "Uplink Name: " << UplinkName << endl ;
 elog << "Port: " << Port << endl ;
 elog << "Server Name: " << ServerName << endl ;
 elog << "Server Description: " << ServerDescription << endl ;
@@ -256,6 +280,8 @@ REGISTER_MSG( "O", P );
 REGISTER_MSG( "P", P );
 REGISTER_MSG( "PRIVMSG", PRIVMSG );
 
+REGISTER_MSG( "351", M351 );
+
 // Mode
 REGISTER_MSG( "M", M );
 
@@ -319,6 +345,9 @@ REGISTER_MSG( "DS", DS ) ;
 
 // Admin
 REGISTER_MSG( "AD", AD ) ;
+
+// Account
+REGISTER_MSG( "AC", AC ) ;
 
 // Non-tokenized command handlers
 
@@ -392,7 +421,6 @@ Network = new (std::nothrow) xNetwork ;
 assert( Network != 0 ) ;
 
 Network->setServer( this ) ;
-
 }
 
 bool xServer::readConfigFile( const string& fileName )
@@ -425,7 +453,7 @@ EConfig conf( fileName ) ;
 
 /*
  * Load and attach any modules specified in the config.
- */ 
+ */
 EConfig::const_iterator ptr = conf.Find( "module" ) ;
 for( ; ptr != conf.end() && ptr->first == "module" ; ++ptr )
 	{
@@ -473,7 +501,7 @@ RegisterTimer( ::time( 0 ) + pingUpdateInterval,
 	new PINGTimer( this, pingUpdateInterval ),
 	static_cast< void* >( this ) ) ;
 }
- 
+
 /**
  * Initiate a server shutdown.
  */
@@ -662,7 +690,7 @@ if( s[ 0 ] != ':' )
 	// whether it be server or client
 	Sender = YXX ;
 
-	} 
+	}
 
 // :ripper.ufl.edu 442 EuWorld3 #nowhere :You're not on that channel
 else
@@ -847,21 +875,18 @@ for( jupedServerListType::iterator ptr = jupedServers.begin() ;
 // Don't really care if we found a server in the jupe list or not.
 
 // Prepare the output buffer that will squit the server.
-strstream s ;
+stringstream s ;
 s	<< charYY
 	<< " SQ "
 	<< serverName
 	<< ' '
-	<< time( 0 )
+	<< theServer->getStartTime()
 	<< " :"
 	<< reason
 	<< ends ;
 
 // Notify the rest of the network of the SQUIT.
 Write( s ) ;
-
-// Deallocate stupid frozen strstream.
-delete[] s.str() ;
 
 // The server that is being squit has already been removed from
 // both the network server table and the juped servers table.
@@ -900,7 +925,6 @@ if( tmp != NULL )
 	// SquitServer() will also deallocate the server.
 	// Make sure not to attempt to use the bogus tmp pointer.
 	tmp = 0 ;
-
 	}
 else if( !jupedServers.empty() )
 	{
@@ -947,7 +971,7 @@ string charYYXXX( fakeServer->getCharYY() ) ;
 charYYXXX += "]]]" ;
 
 // Burst the new server's info./
-// IRCu checks for "JUPE " as being the beginning of the 
+// IRCu checks for "JUPE " as being the beginning of the
 // reason as a jupe server.  This was because before servers
 // couldn't link without [ip] being added to their realname
 // field unless they were juped by uworld.  Now anyone can
@@ -956,15 +980,15 @@ Write( "%s S %s %d %d %d J%02d %s 0 :JUPE Reason: %s\n",
 		getCharYY(),
 		fakeServer->getName().c_str(),
 		2,
-		0, 
-		fakeServer->getConnectTime(),
+		0,
+		fakeServer->getConnectTime()-24*3600*365,
 		10, // version
 		charYYXXX.c_str(),
 		description.c_str() ) ;
 
 // Write burst acknowledgements.
-Write( "%s EB", fakeServer->getCharYY() ) ;
-Write( "%s EA", fakeServer->getCharYY() ) ;
+Write( "%s EB\n", fakeServer->getCharYY() ) ;
+Write( "%s EA\n", fakeServer->getCharYY() ) ;
 
 // Add this fake server to the internal list of juped servers.
 jupedServers.push_back( fakeServer->getIntYY() ) ;
@@ -1135,7 +1159,8 @@ return false ;
  */
 void xServer::PostEvent( const eventType& theEvent,
 	void* Data1, void* Data2,
-	void* Data3, void* Data4 )
+	void* Data3, void* Data4,
+	const xClient* ourClient )
 {
 
 // Make sure the event is valid.
@@ -1154,7 +1179,9 @@ list< xClient* >::iterator ptr = eventList[ theEvent ].begin(),
 for( ; ptr != end ; ++ptr )
 	{
 	// Notify this client of the event
-	(*ptr)->OnEvent( theEvent, Data1, Data2, Data3, Data4 ) ;
+	// if he didnt cause the event to trigger
+	if((*ptr) != ourClient)
+		(*ptr)->OnEvent( theEvent, Data1, Data2, Data3, Data4 ) ;
 	}
 }
 
@@ -1475,7 +1502,7 @@ assert( NULL != Client ) ;
 // update Client.
 if( !Network->addClient( Client ) )
 	{
-	elog	<< "xServer::AttachClient> Network->addClient failed"
+	elog	<< "xServer::AttachClient> Failed to update network tables"
 		<< endl ;
 	return false ;
 	}
@@ -1494,7 +1521,9 @@ iClient* theIClient = new (std::nothrow) iClient(
 	Client->getUserName(),
 	"AAAAAA",
 	Client->getHostName(),
+	Client->getHostName(),
 	Client->getModes(),
+	"",
 	Client->getDescription(),
 	::time( 0 ) ) ;
 assert( theIClient != 0 ) ;
@@ -1874,14 +1903,14 @@ return buf.size() ;
 }
 
 /**
- * Write the contents of a std::strstream to the uplink connection.
+ * Write the contents of a std::stringstream to the uplink connection.
  */
-size_t xServer::Write( strstream& s )
+size_t xServer::Write( const stringstream& s )
 {
 return Write( string( s.str() ) ) ;
 }
 
-size_t xServer::WriteDuringBurst( strstream& s )
+size_t xServer::WriteDuringBurst( const stringstream& s )
 {
 return WriteDuringBurst( string( s.str() ) ) ;
 }
@@ -1976,7 +2005,7 @@ return strlen( buffer ) ;
 
 }
 
-bool xServer::removeGline( const string& userHost )
+bool xServer::removeGline( const string& userHost, const xClient* remClient )
 {
 
 // This method is true if we find the gline in our internal
@@ -1988,17 +2017,17 @@ glineIterator ptr = gline_begin() ;
 for( ; ptr != gline_end() ; ++ptr )
 	{
 	// Is this the gline in question?
-	if( !strcasecmp( (*ptr)->getUserHost(), userHost ) )
+	if(strcasecmp((*ptr)->getUserHost(),userHost))
 		{
-		// Yup, found it
-		foundGline = true ;
-
-		break ;
+		continue;
 		}
+	// Yup, found it
+	foundGline = true ;
+	break ;
 	}
 
 // Found it, notify the network that we are removing it
-strstream s ;
+stringstream s ;
 s	<< charYY
 	<< " GL * -"
 	<< userHost
@@ -2006,7 +2035,6 @@ s	<< charYY
 
 // Write the data to the network output buffer(s)
 Write( s ) ;
-delete[] s.str() ;
 
 // Did we find the gline in the interal gline structure?
 if( foundGline )
@@ -2015,9 +2043,16 @@ if( foundGline )
 	glineList.erase( ptr ) ;
 
 	// Let all clients know that the gline has been removed
-	PostEvent( EVT_REMGLINE,
-		static_cast< void* >( *ptr ) ) ;
-
+	if(remClient)
+		{
+		PostEvent( EVT_REMGLINE,
+			static_cast< void* >( *ptr ), 0,0,0,remClient ) ;
+		}
+	else
+		{
+		PostEvent( EVT_REMGLINE,
+			static_cast< void* >( *ptr ) ) ;
+		}
 	// Deallocate the gline
 	delete *ptr ;
 
@@ -2033,7 +2068,9 @@ bool xServer::setGline(
 	const string& setBy,
 	const string& userHost,
 	const string& reason,
-	const time_t& duration )
+	const time_t& duration,
+	const xClient* setClient,
+	const string& server )
 {
 
 // Remove any old matches
@@ -2044,17 +2081,25 @@ Gline* newGline =
 assert( newGline != 0 ) ;
 
 // Notify the rest of the network
-strstream s ;
-s	<< getCharYY() << " GL * +"
+stringstream s ;
+s	<< getCharYY() << " GL "
+	<< server << " +"
 	<< userHost << ' '
 	<< duration << " :"
 	<< reason << ends ;
 Write( s ) ;
-delete[] s.str() ;
 
 glineList.push_back( newGline ) ;
-PostEvent( EVT_GLINE,
-	static_cast< void* >( newGline ) ) ;
+if(setClient)
+	{
+	PostEvent( EVT_GLINE,
+		static_cast< void* >( newGline ), 0,0,0,setClient ) ;
+	}
+else
+	{
+	PostEvent( EVT_GLINE,
+		static_cast< void* >( newGline ) ) ;
+	}
 
 return true ;
 }
@@ -2096,14 +2141,13 @@ time_t now = ::time( 0 ) ;
 for( const_glineIterator ptr = gline_begin() ;
 	ptr != gline_end() ; ++ptr )
 	{
-	strstream s ;
+	stringstream s ;
 	s	<< getCharYY() << " GL * +"
 		<< (*ptr)->getUserHost() << ' '
 		<< ((*ptr)->getExpiration() - now) << " :"
 		<< (*ptr)->getReason() << ends ;
 
 	Write( s ) ;
-	delete[] s.str() ;
 	}
 }
 
@@ -2112,7 +2156,7 @@ void xServer::removeMatchingGlines( const string& wildHost )
 for( glineIterator ptr = gline_begin() ; ptr != gline_end() ; )
 	{
 	// TODO: Does this work with two wildHost's?
-	if( !match( wildHost, (*ptr)->getUserHost() ) )
+	if( !strcasecmp( wildHost, (*ptr)->getUserHost() ) )
 		{
 		ptr = glineList.erase( ptr ) ;
 
@@ -2157,7 +2201,7 @@ void xServer::PartChannel( xClient* theClient, Channel* theChan,
 assert( theClient != 0 ) ;
 assert( theChan != 0 ) ;
 
-strstream s ;
+stringstream s ;
 s	<< theClient->getCharYYXXX()
 	<< " L "
 	<< theChan->getName()
@@ -2166,7 +2210,6 @@ s	<< theClient->getCharYYXXX()
 	<< ends ;
 
 Write( s ) ;
-delete[] s.str() ;
 
 OnPartChannel( theClient, theChan ) ;
 OnPartChannel( theClient->getInstance(), theChan ) ;
@@ -2269,7 +2312,7 @@ if( theChan && (0 == joinTime) )
 if( (NULL == theChan) && bursting )
 	{
 	// Need to burst the channel
-	strstream s ;
+	stringstream s ;
 	s	<< getCharYY()
 		<< " B "
 		<< chanName << ' '
@@ -2285,7 +2328,6 @@ if( (NULL == theChan) && bursting )
 		s	<< ends ;
 
 	Write( s ) ;
-	delete[] s.str() ;
 
 	// Instantiate the new channel
 	theChan = new (std::nothrow) Channel( chanName, time( 0 ) ) ;
@@ -2320,27 +2362,25 @@ else if( NULL == theChan )
 		// Create the channel
 		// The client automatically gets op in this case
 	{
-	strstream s ;
+	stringstream s ;
 	s	<< theClient->getCharYYXXX()
 		<< " C "
 		<< chanName
 		<< ' '
-		<< postJoinTime 
+		<< postJoinTime
 		<< ends ;
 	Write( s ) ;
-	delete[] s.str() ;
 	}
 
 	if( !chanModes.empty() )
 		{
-		strstream s ;
+		stringstream s ;
 		s	<< theClient->getCharYYXXX()
 			<< " M "
 			<< chanName << ' '
 			<< chanModes
 			<< ends ;
 		Write( s ) ;
-		delete[] s.str() ;
 		}
 
 	// Instantiate the new channel
@@ -2394,7 +2434,7 @@ else if( bursting )
 	// existing one, we need to set the our Network channel state to
 	// match that supplied in this line. (Because we are authoritive
 	// in this channel, any existing modes will be removed by ircu).
-	strstream s ;
+	stringstream s ;
 	s	<< getCharYY()
 		<< " B "
 		<< chanName << ' '
@@ -2410,26 +2450,24 @@ else if( bursting )
 		s	<< ends ;
 
 	Write( s ) ;
-	delete[] s.str() ;
 	}
 else
 	{
 	// After bursting, and the channel exists
 		{
-		strstream s2 ;
+		stringstream s2 ;
 		s2	<< theClient->getCharYYXXX()
 			<< " J "
 			<< chanName
 			<< ends ;
 
 		Write( s2 ) ;
-		delete[] s2.str() ;
 		}
 
 	if( getOps )
 		{
 		// Op the bot
-		strstream s ;
+		stringstream s ;
 		s	<< charYY
 			<< " M "
 			<< chanName
@@ -2438,19 +2476,17 @@ else
 			<< ends ;
 
 		Write( s ) ;
-		delete[] s.str() ;
 		}
 
 	if( !chanModes.empty() )
 		{
 		// Set the channel modes
-		strstream s ;
+		stringstream s ;
 		s	<< theClient->getCharYYXXX() << " M "
 			<< chanName << ' '
 			<< chanModes << ends ;
 
 		Write( s ) ;
-		delete[] s.str() ;
 		}
 	}
 
@@ -2589,7 +2625,7 @@ return true ;
 // K N Isomer 2 957217279 ~perry p136-tnt1.ham.ihug.co.nz DLbaCI KAC :*Unknown*
 void xServer::BurstClient( xClient* theClient, bool localClient )
 {
-strstream s ;
+stringstream s ;
 s	<< getCharYY() << " N "
 	<< theClient->getNickName() << ' '
 	<< (localClient ? '1' : '2') << " 31337 "
@@ -2600,7 +2636,6 @@ s	<< getCharYY() << " N "
 	<< theClient->getCharYYXXX() << " :"
 	<< theClient->getDescription() << ends ;
 Write( s ) ;
-delete[] s.str() ;
 
 theClient->Connect( 31337 ) ;
 }
@@ -2810,9 +2845,11 @@ bool xServer::PostSignal( int whichSig )
 // First, notify the server signal handler
 bool handledSignal = OnSignal( whichSig ) ;
 
-Network->foreach_xClient( handleSignal( whichSig ) ) ;
+//TODO: figure out why foreach_xClient doesnt work
 
-/*
+//Network->foreach_xClient( handleSignal( whichSig ) ) ;
+
+
 // Pass this signal on to each xClient.
 xNetwork::localClientIterator ptr = Network->localClient_begin() ;
 for( ; ptr != Network->localClient_end() ; ++ptr )
@@ -2823,7 +2860,7 @@ for( ; ptr != Network->localClient_end() ; ++ptr )
 		}
 	(*ptr)->OnSignal( whichSig ) ;
 	}
-*/
+
 
 return handledSignal ;
 }
@@ -2839,6 +2876,9 @@ switch( whichSig )
 		break ;
 	case SIGHUP:
 		retMe = true ;
+		break ;
+	case SIGUSR2:
+		retMe = true;
 		break ;
 	default:
 		break ;
@@ -2856,7 +2896,7 @@ mainLoop() ;
 // polarity is true if the mode is being set, false otherwise
 // sourceUser is the source of the mode change; this variable
 // may be NULL if a server is setting the mode
-void xServer::onChannelModeT( Channel* theChan, bool polarity,
+void xServer::OnChannelModeT( Channel* theChan, bool polarity,
 	ChannelUser* sourceUser )
 {
 theChan->onModeT( polarity ) ;
@@ -2898,7 +2938,7 @@ for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 // polarity is true if the mode is being set, false otherwise
 // sourceUser is the source of the mode change; this variable
 // may be NULL if a server is setting the mode
-void xServer::onChannelModeN( Channel* theChan, bool polarity,
+void xServer::OnChannelModeN( Channel* theChan, bool polarity,
 	ChannelUser* sourceUser )
 {
 theChan->onModeN( polarity ) ;
@@ -2940,7 +2980,7 @@ for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 // polarity is true if the mode is being set, false otherwise
 // sourceUser is the source of the mode change; this variable
 // may be NULL if a server is setting the mode
-void xServer::onChannelModeS( Channel* theChan, bool polarity,
+void xServer::OnChannelModeS( Channel* theChan, bool polarity,
 	ChannelUser* sourceUser )
 {
 theChan->onModeS( polarity ) ;
@@ -2982,7 +3022,7 @@ for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 // polarity is true if the mode is being set, false otherwise
 // sourceUser is the source of the mode change; this variable
 // may be NULL if a server is setting the mode
-void xServer::onChannelModeP( Channel* theChan, bool polarity,
+void xServer::OnChannelModeP( Channel* theChan, bool polarity,
 	ChannelUser* sourceUser )
 {
 theChan->onModeP( polarity ) ;
@@ -3024,7 +3064,7 @@ for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 // polarity is true if the mode is being set, false otherwise
 // sourceUser is the source of the mode change; this variable
 // may be NULL if a server is setting the mode
-void xServer::onChannelModeM( Channel* theChan, bool polarity,
+void xServer::OnChannelModeM( Channel* theChan, bool polarity,
 	ChannelUser* sourceUser )
 {
 theChan->onModeM( polarity ) ;
@@ -3066,7 +3106,7 @@ for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 // polarity is true if the mode is being set, false otherwise
 // sourceUser is the source of the mode change; this variable
 // may be NULL if a server is setting the mode
-void xServer::onChannelModeI( Channel* theChan, bool polarity,
+void xServer::OnChannelModeI( Channel* theChan, bool polarity,
 	ChannelUser* sourceUser )
 {
 theChan->onModeI( polarity ) ;
@@ -3108,7 +3148,7 @@ for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 // polarity is true if the mode is being set, false otherwise
 // sourceUser is the source of the mode change; this variable
 // may be NULL if a server is setting the mode
-void xServer::onChannelModeL( Channel* theChan, bool polarity,
+void xServer::OnChannelModeL( Channel* theChan, bool polarity,
 	ChannelUser* sourceUser, unsigned int limit )
 {
 theChan->onModeL( polarity, limit ) ;
@@ -3151,7 +3191,7 @@ for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 // polarity is true if the mode is being set, false otherwise
 // sourceUser is the source of the mode change; this variable
 // may be NULL if a server is setting the mode
-void xServer::onChannelModeK( Channel* theChan, bool polarity,
+void xServer::OnChannelModeK( Channel* theChan, bool polarity,
 	ChannelUser* sourceUser, const string& key )
 {
 theChan->onModeK( polarity, key ) ;
@@ -3194,7 +3234,7 @@ for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 // polarity is true if the mode is being set, false otherwise
 // sourceUser is the source of the mode change; this variable
 // may be NULL if a server is setting the mode
-void xServer::onChannelModeO( Channel* theChan, ChannelUser* sourceUser,
+void xServer::OnChannelModeO( Channel* theChan, ChannelUser* sourceUser,
 	const xServer::opVectorType& opVector )
 {
 theChan->onModeO( opVector ) ;
@@ -3236,7 +3276,7 @@ for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 // polarity is true if the mode is being set, false otherwise
 // sourceUser is the source of the mode change; this variable
 // may be NULL if a server is setting the mode
-void xServer::onChannelModeV( Channel* theChan, ChannelUser* sourceUser,
+void xServer::OnChannelModeV( Channel* theChan, ChannelUser* sourceUser,
 	const xServer::voiceVectorType& voiceVector )
 {
 theChan->onModeV( voiceVector ) ;
@@ -3279,7 +3319,7 @@ for( list< xClient* >::iterator ptr = listPtr->begin(), end = listPtr->end() ;
 // polarity is true if the mode is being set, false otherwise
 // sourceUser is the source of the mode change; this variable
 // may be NULL if a server is setting the mode
-void xServer::onChannelModeB( Channel* theChan, ChannelUser* sourceUser,
+void xServer::OnChannelModeB( Channel* theChan, ChannelUser* sourceUser,
 	xServer::banVectorType& banVector )
 {
 
@@ -3325,35 +3365,35 @@ void xServer::removeAllChanModes( Channel* theChan )
 // This is a protected method, theChan is non-NULL
 if( theChan->getMode( Channel::MODE_T ) )
 	{
-	onChannelModeT( theChan, false, 0 ) ;
+	OnChannelModeT( theChan, false, 0 ) ;
 	}
 if( theChan->getMode( Channel::MODE_N ) )
 	{
-	onChannelModeN( theChan, false, 0 ) ;
+	OnChannelModeN( theChan, false, 0 ) ;
 	}
 if( theChan->getMode( Channel::MODE_S ) )
 	{
-	onChannelModeS( theChan, false, 0 ) ;
+	OnChannelModeS( theChan, false, 0 ) ;
 	}
 if( theChan->getMode( Channel::MODE_P ) )
 	{
-	onChannelModeP( theChan, false, 0 ) ;
+	OnChannelModeP( theChan, false, 0 ) ;
 	}
 if( theChan->getMode( Channel::MODE_M ) )
 	{
-	onChannelModeM( theChan, false, 0 ) ;
+	OnChannelModeM( theChan, false, 0 ) ;
 	}
 if( theChan->getMode( Channel::MODE_I ) )
 	{
-	onChannelModeI( theChan, false, 0 ) ;
+	OnChannelModeI( theChan, false, 0 ) ;
 	}
 if( theChan->getMode( Channel::MODE_L ) )
 	{
-	onChannelModeL( theChan, false, 0, 0 ) ;
+	OnChannelModeL( theChan, false, 0, 0 ) ;
 	}
 if( theChan->getMode( Channel::MODE_K ) )
 	{
-	onChannelModeK( theChan, false, 0, string() ) ;
+	OnChannelModeK( theChan, false, 0, string() ) ;
 	}
 
 opVectorType opVector ;
@@ -3387,15 +3427,15 @@ for( ; ptr != end ; ++ptr )
 
 if( !opVector.empty() )
 	{
-	onChannelModeO( theChan, 0, opVector ) ;
+	OnChannelModeO( theChan, 0, opVector ) ;
 	}
 if( !voiceVector.empty() )
 	{
-	onChannelModeV( theChan, 0, voiceVector ) ;
+	OnChannelModeV( theChan, 0, voiceVector ) ;
 	}
 if( !banVector.empty() )
 	{
-	onChannelModeB( theChan, 0, banVector ) ;
+	OnChannelModeB( theChan, 0, banVector ) ;
 	}
 }
 
@@ -3404,7 +3444,7 @@ void xServer::updateGlines()
 time_t now = ::time( 0 ) ;
 
 glineIterator	ptr = gline_begin(),
-		end = gline_end() ;  
+		end = gline_end() ;
 for( ; ptr != end ; )
 	{
 	if( (*ptr)->getExpiration() <= now )
@@ -3450,16 +3490,13 @@ if( msg.empty() )
 	return -1 ;
 	}
 
-strstream s ;
+stringstream s ;
 s	<< getCharYY()
 	<< " WA :"
 	<< msg
 	<< ends ;
 
-int retMe = Write( s ) ;
-delete[] s.str() ;
-
-return retMe ;
+return Write( s ) ;
 }
 
 int xServer::Mode( xClient* theClient,
@@ -3537,27 +3574,27 @@ for( string::const_iterator modePtr = modes.begin() ;
 			polarity = false ;
 			break ;
 		case 't':
-			onChannelModeT( theChan, polarity,
+			OnChannelModeT( theChan, polarity,
 				theUser ) ;
 			break ;
 		case 'n':
-			onChannelModeN( theChan, polarity,
+			OnChannelModeN( theChan, polarity,
 				theUser ) ;
 			break ;
 		case 's':
-			onChannelModeS( theChan, polarity,
+			OnChannelModeS( theChan, polarity,
 				theUser ) ;
 			break ;
 		case 'p':
-			onChannelModeP( theChan, polarity,
+			OnChannelModeP( theChan, polarity,
 				theUser ) ;
 			break ;
 		case 'i':
-			onChannelModeI( theChan, polarity,
+			OnChannelModeI( theChan, polarity,
 				theUser ) ;
 			break ;
 		case 'm':
-			onChannelModeM( theChan, polarity,
+			OnChannelModeM( theChan, polarity,
 				theUser ) ;
 			break ;
 		case 'b':
@@ -3591,14 +3628,14 @@ for( string::const_iterator modePtr = modes.begin() ;
 			break ;
 		case 'k':
 			// Channel mode 'k' always has an argument
-			onChannelModeK( theChan, polarity, theUser,
+			OnChannelModeK( theChan, polarity, theUser,
 				*argPtr ) ;
 			++argPtr ;
 			break ;
 		case 'l':
 			// Channel mode 'l' only has an argument if
 			// it's being added, but not removed
-			onChannelModeL( theChan, polarity, theUser,
+			OnChannelModeL( theChan, polarity, theUser,
 				polarity ? atoi( (*argPtr).c_str() )
 				: 0 ) ;
 			if( polarity )
@@ -3611,7 +3648,7 @@ for( string::const_iterator modePtr = modes.begin() ;
 
 // Write the modes to the network before updating tables and notifying
 // other xClients...this will keep the output buffers synched
-strstream s ;
+stringstream s ;
 s	<< getCharYY()
 	<< ' '
 	<< theChan->getName()
@@ -3627,20 +3664,19 @@ if( !args.empty() )
 s	<< ends ;
 
 retMe = Write( s ) ;
-delete[] s.str() ;
 
 // Update internal tables and notify all xClients of mode change(s)
 if( !opVector.empty() )
 	{
-	onChannelModeO( theChan, theUser, opVector ) ;
+	OnChannelModeO( theChan, theUser, opVector ) ;
 	}
 if( !voiceVector.empty() )
 	{
-	onChannelModeV( theChan, theUser, voiceVector ) ;
+	OnChannelModeV( theChan, theUser, voiceVector ) ;
 	}
 if( !banVector.empty() )
 	{
-	onChannelModeB( theChan, theUser, banVector ) ;
+	OnChannelModeB( theChan, theUser, banVector ) ;
 	}
 
 return retMe ;
@@ -3784,19 +3820,19 @@ if( (string::npos == exPos) || (string::npos == atPos) ||
 
 return true ;
 }
-/*
-   bool xServer::isJuped(const iServer* theServer) 
-   { 
-   for( jupedServerListType::iterator ptr = jupedServers.begin() ; 
-           ptr != jupedServers.end() ; ++ptr ) 
-           { 
-           if( *ptr== theServer->getIntYY() ) 
-                   { 
-                   return true; 
-                   } 
-           } 
-    
-   return false; 
-*/
+
+bool xServer::isJuped( const iServer* theServer ) const
+{
+for( jupedServerListType::const_iterator ptr = jupedServers.begin() ;
+	ptr != jupedServers.end() ; ++ptr )
+	{
+	if( *ptr == theServer->getIntYY() )
+		{
+		return true;
+		}
+	}
+
+return false;
+}
 
 } // namespace gnuworld

@@ -1,5 +1,23 @@
 /**
  * msg_N.cc
+ * Copyright (C) 2002 Daniel Karrels <dan@karrels.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
+ * USA.
+ *
+ * $Id: msg_N.cc,v 1.2 2002-07-01 00:28:29 jeekay Exp $
  */
 
 #include	<new>
@@ -13,13 +31,16 @@
 #include	"ip.h"
 #include	"Network.h"
 #include	"ELog.h"
+#include	"xparameters.h"
 
-const char msg_N_cc_rcsId[] = "$Id: msg_N.cc,v 1.1 2002-01-14 23:21:00 morpheus Exp $" ;
+const char msg_N_cc_rcsId[] = "$Id: msg_N.cc,v 1.2 2002-07-01 00:28:29 jeekay Exp $" ;
 const char iClient_h_rcsId[] = __ICLIENT_H ;
 const char events_h_rcsId[] = __EVENTS_H ;
 const char ip_h_rcsId[] = __IP_H ;
 const char Network_h_rcsId[] = __NETWORK_H ;
 const char ELog_h_rcsId[] = __ELOG_H ;
+const char server_h_rcsId[] = __SERVER_H ;
+const char xparameters_h_rcsId[] = __XPARAMETERS_H ;
 
 namespace gnuworld
 {
@@ -74,16 +95,30 @@ const char* modes = "+" ;
 const char* host = params[ 6 ] ;
 const char* yyxxx = params[ 7 ] ;
 const char* description = params [ 8 ] ;
+const char* account = "";
 
-// Are modes specified?
-if( params.size() > 9 )
+// Are modes specified? (With a +r?)
+// If so, token 7 is the authenticated account name,
+// the rest shuffle up.
+// TODO: Make this more futureproof.
+if( params.size() > 10 )
 	{
-	// Yup, all trailing fields
-	// are offset by one.
 	modes = params[ 6 ] ;
-	host = params[ 7 ] ;
-	yyxxx = params[ 8 ] ;
-	description = params[ 9 ];
+	account = params[ 7 ];
+	host = params[ 8 ] ;
+	yyxxx = params[ 9 ] ;
+	description = params[ 10 ];
+	}
+	else
+	{
+	if( params.size() > 9 )
+		{
+		// Just plain modes here without any parameters
+		modes = params[ 6 ] ;
+		host = params[ 7 ] ;
+		yyxxx = params[ 8 ] ;
+		description = params[ 9 ];
+		}
 	}
 
 iClient* newClient = new (std::nothrow) iClient(
@@ -93,28 +128,30 @@ iClient* newClient = new (std::nothrow) iClient(
 		params[ 4 ], // username
 		host, // base 64 host
 		params[ 5 ], // insecurehost
+		params[ 5 ], // realInsecurehost
 		modes,
+		account,
 		description,
 		atoi( params[ 3 ] ) // connection time
 		) ;
 assert( newClient != 0 ) ;
 
-//elog << "Adding client: " << *newClient ;
 if( !Network->addClient( newClient ) )
 	{
 	elog	<< "xServer::MSG_B> Failed to add client: "
-		<< *newClient << ", user already exists? "
+		<< *newClient
+		<< ", user already exists? "
 		<< (Network->findClient( newClient->getCharYYXXX() ) ?
-		   "yes" : "no") << endl ;
+		   "yes" : "no")
+		<< endl ;
 	delete newClient ;
 	return -1 ;
 	}
 
-// TODO: Should this be posted? 
+// TODO: Should this be posted?
 PostEvent( EVT_NICK, static_cast< void* >( newClient ) ) ;
 
 return 0 ;
-
 }
 
 } // namespace gnuworld

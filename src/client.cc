@@ -1,9 +1,11 @@
-/* client.cc
+/*
+ * client.cc
+ * $Id: client.cc,v 1.2 2002-07-01 00:28:26 jeekay Exp $
  */
 
 #include	<new>
 #include	<string>
-#include	<strstream>
+#include	<sstream>
 #include	<iostream>
 
 #include	<cstdio>
@@ -28,7 +30,7 @@
 #include	"events.h"
 
 const char xClient_h_rcsId[] = __CLIENT_H ;
-const char xClient_cc_rcsId[] = "$Id: client.cc,v 1.1 2002-01-14 23:20:58 morpheus Exp $" ;
+const char xClient_cc_rcsId[] = "$Id: client.cc,v 1.2 2002-07-01 00:28:26 jeekay Exp $" ;
 const char config_h_rcsId[] = __CONFIG_H ;
 const char misc_h_rcsId[] = __MISC_H ;
 const char Numeric_h_rcsId[] = __NUMERIC_H ;
@@ -44,7 +46,7 @@ namespace gnuworld
 {
 
 using std::string ;
-using std::strstream ;
+using std::stringstream ;
 using std::ends ;
 using std::endl ;
 
@@ -128,14 +130,13 @@ if( !Connected )
 	return -1 ;
 	}
 
-strstream s ;
+stringstream s ;
 s	<< getCharYYXXX()
 	<< " Q :"
 	<< Message
 	<< ends ;
 
 MyUplink->Write( s ) ;
-delete[] s.str() ;
 
 Connected = false ;
 return OnQuit() ;
@@ -194,7 +195,7 @@ for( ; ptr != end ; ++ptr )
 // Output to the network if we are connected
 if( (MyUplink != NULL) && MyUplink->isConnected() && !Value.empty() )
 	{
-	strstream s ;
+	stringstream s ;
 	s	<< getCharYYXXX()
 		<< " M "
 		<< getCharYYXXX()
@@ -202,10 +203,7 @@ if( (MyUplink != NULL) && MyUplink->isConnected() && !Value.empty() )
 		<< Value
 		<< ends ;
 
-	int retMe = MyUplink->Write( s ) ;
-	delete[] s.str() ;
-
-	return retMe ;
+	return MyUplink->Write( s ) ;
 	}
 
 return( 1 ) ;
@@ -229,7 +227,8 @@ int xClient::Wallops( const char* Format, ... )
 {
 if( Connected && MyUplink && Format && Format[ 0 ] != 0 )
 	{
-	char buffer[ 1024 ] = { 0 } ;
+	char buffer[ 1024 ] ;
+	memset( buffer, 0, 1024 ) ;
 	va_list list;
 
 	va_start( list, Format ) ;
@@ -320,7 +319,8 @@ int xClient::Message( const iClient* Target, const char* Message, ... )
 {
 if( Connected && MyUplink && Message && Message[ 0 ] !=0 )
 	{
-	char buffer[ 1024 ] = { 0 } ;
+	char buffer[ 1024 ] ;
+	memset( buffer, 0, 1024 ) ;
 	va_list list;
 
 	va_start( list, Message ) ;
@@ -385,7 +385,8 @@ int xClient::Notice( const iClient* Target, const char* Message, ... )
 {
 if( Connected && MyUplink && Message && Message[ 0 ] != 0 )
 	{
-	char buffer[ 1024 ] = { 0 } ;
+	char buffer[ 1024 ] ;
+	memset( buffer, 0, 1024 ) ;
 	va_list list;
 
 	va_start(list, Message);
@@ -405,7 +406,8 @@ int xClient::Notice( const string& Channel, const char* Message, ... )
 {
 if( Connected && MyUplink && Message && Message[ 0 ] != 0 )
 	{
-	char buffer[ 1024 ] = { 0 } ;
+	char buffer[ 1024 ] ;
+	memset( buffer, 0, 1024 ) ;
 	va_list list;
 
 	va_start(list, Message);
@@ -506,6 +508,11 @@ int xClient::OnPrivateMessage( iClient*, const string&, bool )
 return 0;
 }
 
+int xClient::OnServerMessage( iServer*, const string&, bool )
+{
+return 0;
+}
+
 int xClient::OnConnect()
 {
 Connected = true ;
@@ -585,8 +592,8 @@ if( theUser->getMode( ChannelUser::MODE_O ) )
 	return true ;
 	}
 
-bool onChannel = isOnChannel( theChan ) ;
-if( !onChannel )
+bool OnChannel = isOnChannel( theChan ) ;
+if( !OnChannel )
 	{
 	// Join, giving ourselves ops
 	Join( theChan, string(), 0, true ) ;
@@ -621,7 +628,7 @@ Write( "%s M %s +o %s",
 	theClient->getCharYYXXX().c_str() ) ;
 
 // Was the bot on the channel previously?
-if( !onChannel )
+if( !OnChannel )
 	{
 	Part( theChan ) ;
 	}
@@ -630,7 +637,7 @@ xServer::opVectorType opVector ;
 opVector.push_back( xServer::opVectorType::value_type(
 	true, theUser ) ) ;
 
-MyUplink->onChannelModeO( theChan, 0, opVector ) ;
+MyUplink->OnChannelModeO( theChan, 0, opVector ) ;
 
 return true ;
 }
@@ -645,8 +652,8 @@ if( !Connected )
 	return false ;
 	}
 
-bool onChannel = isOnChannel( theChan ) ;
-if( !onChannel )
+bool OnChannel = isOnChannel( theChan ) ;
+if( !OnChannel )
 	{
 	// Join, giving ourselves ops
 	Join( theChan, string(), 0, true ) ;
@@ -717,14 +724,13 @@ for( xServer::opVectorType::const_iterator ptr = opVector.begin(),
 	if( (MAX_CHAN_MODES == modeString.size()) ||
 		((ptr + 1) == end) )
 		{
-		strstream s ;
+		stringstream s ;
 		s	<< getCharYYXXX() << " M "
 			<< theChan->getName() << ' '
 			<< "+" << modeString << ' ' << args
 			<< ends ;
 
 		Write( s ) ;
-		delete[] s.str() ;
 
 		modeString.erase( modeString.begin(), modeString.end() ) ;
 		args.erase( args.begin(), args.end() ) ;
@@ -733,9 +739,9 @@ for( xServer::opVectorType::const_iterator ptr = opVector.begin(),
 
 	} // for()
 
-MyUplink->onChannelModeO( theChan, 0, opVector ) ;
+MyUplink->OnChannelModeO( theChan, 0, opVector ) ;
 
-if( !onChannel )
+if( !OnChannel )
 	{
 	Part( theChan ) ;
 	}
@@ -753,8 +759,8 @@ if( !Connected )
 	return false ;
 	}
 
-bool onChannel = isOnChannel( theChan ) ;
-if( !onChannel )
+bool OnChannel = isOnChannel( theChan ) ;
+if( !OnChannel )
 	{
 	// Join, giving ourselves ops
 	Join( theChan, string(), 0, true ) ;
@@ -827,14 +833,13 @@ for( xServer::voiceVectorType::const_iterator ptr = voiceVector.begin(),
 	if( (MAX_CHAN_MODES == modeString.size()) ||
 		((ptr + 1) == end) )
 		{
-		strstream s ;
+		stringstream s ;
 		s	<< getCharYYXXX() << " M "
 			<< theChan->getName() << ' '
 			<< "+" << modeString << ' ' << args
 			<< ends ;
 
 		Write( s ) ;
-		delete[] s.str() ;
 
 		modeString.erase( modeString.begin(), modeString.end() ) ;
 		args.erase( args.begin(), args.end() ) ;
@@ -843,9 +848,9 @@ for( xServer::voiceVectorType::const_iterator ptr = voiceVector.begin(),
 
 	} // for()
 
-MyUplink->onChannelModeV( theChan, 0, voiceVector ) ;
+MyUplink->OnChannelModeV( theChan, 0, voiceVector ) ;
 
-if( !onChannel )
+if( !OnChannel )
 	{
 	Part( theChan ) ;
 	}
@@ -878,8 +883,8 @@ if( theUser->getMode( ChannelUser::MODE_V ) )
 	return true ;
 	}
 
-bool onChannel = isOnChannel( theChan ) ;
-if( !onChannel )
+bool OnChannel = isOnChannel( theChan ) ;
+if( !OnChannel )
 	{
 	// Join, giving ourselves ops
 	Join( theChan, string(), 0, true ) ;
@@ -912,7 +917,7 @@ Write( "%s M %s +v %s",
 	theChan->getName().c_str(),
 	theClient->getCharYYXXX().c_str() ) ;
 
-if( !onChannel )
+if( !OnChannel )
 	{
 	Part( theChan ) ;
 	}
@@ -921,7 +926,7 @@ xServer::voiceVectorType voiceVector ;
 voiceVector.push_back( xServer::voiceVectorType::value_type(
 	true, theUser ) ) ;
 
-MyUplink->onChannelModeV( theChan, 0, voiceVector ) ;
+MyUplink->OnChannelModeV( theChan, 0, voiceVector ) ;
 
 return true ;
 } 
@@ -951,8 +956,8 @@ if( !theUser->getMode( ChannelUser::MODE_O ) )
 	return true ;
 	}
 
-bool onChannel = isOnChannel( theChan ) ;
-if( !onChannel )
+bool OnChannel = isOnChannel( theChan ) ;
+if( !OnChannel )
 	{
 	// Join, giving ourselves ops
 	Join( theChan, string(), 0, true ) ;
@@ -985,7 +990,7 @@ Write( "%s M %s -o %s",
 	theChan->getName().c_str(),
 	theClient->getCharYYXXX().c_str() ) ;
 
-if( !onChannel )
+if( !OnChannel )
 	{
 	Part( theChan ) ;
 	}
@@ -994,9 +999,9 @@ xServer::opVectorType opVector ;
 opVector.push_back( xServer::opVectorType::value_type(
 	false, theUser ) ) ;
 
-MyUplink->onChannelModeO( theChan, 0, opVector ) ;
+MyUplink->OnChannelModeO( theChan, 0, opVector ) ;
 
-if( !onChannel )
+if( !OnChannel )
 	{
 	Part( theChan ) ;
 	}
@@ -1014,8 +1019,8 @@ if( !Connected )
 	return false ;
 	}
 
-bool onChannel = isOnChannel( theChan ) ;
-if( !onChannel )
+bool OnChannel = isOnChannel( theChan ) ;
+if( !OnChannel )
 	{
 	// Join, giving ourselves ops
 	Join( theChan, string(), 0, true ) ;
@@ -1086,14 +1091,13 @@ for( xServer::opVectorType::const_iterator ptr = opVector.begin(),
 	if( (MAX_CHAN_MODES == modeString.size()) ||
 		((ptr + 1) == end) )
 		{
-		strstream s ;
+		stringstream s ;
 		s	<< getCharYYXXX() << " M "
 			<< theChan->getName() << ' '
 			<< "-" << modeString << ' ' << args
 			<< ends ;
 
 		Write( s ) ;
-		delete[] s.str() ;
 
 		modeString.erase( modeString.begin(), modeString.end() ) ;
 		args.erase( args.begin(), args.end() ) ;
@@ -1102,9 +1106,9 @@ for( xServer::opVectorType::const_iterator ptr = opVector.begin(),
 
 	} // for()
 
-MyUplink->onChannelModeO( theChan, 0, opVector ) ;
+MyUplink->OnChannelModeO( theChan, 0, opVector ) ;
 
-if( !onChannel )
+if( !OnChannel )
 	{
 	Part( theChan ) ;
 	}
@@ -1137,8 +1141,8 @@ if( !theUser->getMode( ChannelUser::MODE_V ) )
 	return true ;
 	}
 
-bool onChannel = isOnChannel( theChan ) ;
-if( !onChannel )
+bool OnChannel = isOnChannel( theChan ) ;
+if( !OnChannel )
 	{
 	// Join, giving ourselves ops
 	Join( theChan, string(), 0, true ) ;
@@ -1175,9 +1179,9 @@ xServer::voiceVectorType voiceVector ;
 voiceVector.push_back( xServer::voiceVectorType::value_type(
 	false, theUser ) ) ;
 
-MyUplink->onChannelModeV( theChan, 0, voiceVector ) ;
+MyUplink->OnChannelModeV( theChan, 0, voiceVector ) ;
 
-if( !onChannel )
+if( !OnChannel )
 	{
 	Part( theChan ) ;
 	}
@@ -1195,8 +1199,8 @@ if( !Connected )
 	return false ;
 	}
 
-bool onChannel = isOnChannel( theChan ) ;
-if( !onChannel )
+bool OnChannel = isOnChannel( theChan ) ;
+if( !OnChannel )
 	{
 	// Join, giving ourselves ops
 	Join( theChan, string(), 0, true ) ;
@@ -1268,14 +1272,13 @@ for( xServer::voiceVectorType::const_iterator ptr = voiceVector.begin(),
 	if( (MAX_CHAN_MODES == modeString.size()) ||
 		((ptr + 1) == end) )
 		{
-		strstream s ;
+		stringstream s ;
 		s	<< getCharYYXXX() << " M "
 			<< theChan->getName() << ' '
 			<< "-" << modeString << ' ' << args
 			<< ends ;
 
 		Write( s ) ;
-		delete[] s.str() ;
 
 		modeString.erase( modeString.begin(), modeString.end() ) ;
 		args.erase( args.begin(), args.end() ) ;
@@ -1284,9 +1287,9 @@ for( xServer::voiceVectorType::const_iterator ptr = voiceVector.begin(),
 
 	} // for()
 
-MyUplink->onChannelModeV( theChan, 0, voiceVector ) ;
+MyUplink->OnChannelModeV( theChan, 0, voiceVector ) ;
 
-if( !onChannel )
+if( !OnChannel )
 	{
 	Part( theChan ) ;
 	}
@@ -1310,8 +1313,8 @@ if( 0 == theChan->findUser( theClient ) )
 	return true ;
 	}
 
-bool onChannel = isOnChannel( theChan ) ;
-if( !onChannel )
+bool OnChannel = isOnChannel( theChan ) ;
+if( !OnChannel )
 	{
 	// Join, giving ourselves ops
 	Join( theChan, string(), 0, true ) ;
@@ -1352,9 +1355,9 @@ xServer::banVectorType banVector ;
 banVector.push_back( xServer::banVectorType::value_type(
 	true, banMask ) ) ;
 
-MyUplink->onChannelModeB( theChan, 0, banVector ) ;
+MyUplink->OnChannelModeB( theChan, 0, banVector ) ;
 
-if( !onChannel )
+if( !OnChannel )
 	{
 	Part( theChan ) ;
 	}
@@ -1377,8 +1380,8 @@ if( !theChan->findBan( banMask ) )
 	}
 
 // Ban exists, remove it
-bool onChannel = isOnChannel( theChan ) ;
-if( !onChannel )
+bool OnChannel = isOnChannel( theChan ) ;
+if( !OnChannel )
 	{
 	// Join, giving ourselves ops
 	Join( theChan, string(), 0, true ) ;
@@ -1415,9 +1418,9 @@ xServer::banVectorType banVector ;
 banVector.push_back( xServer::banVectorType::value_type(
 	false, banMask ) ) ;
 
-MyUplink->onChannelModeB( theChan, 0, banVector ) ;
+MyUplink->OnChannelModeB( theChan, 0, banVector ) ;
 
-if( !onChannel )
+if( !OnChannel )
 	{
 	Part( theChan ) ;
 	}
@@ -1435,8 +1438,8 @@ if( !Connected )
 	return false ;
 	}
 
-bool onChannel = isOnChannel( theChan ) ;
-if( !onChannel )
+bool OnChannel = isOnChannel( theChan ) ;
+if( !OnChannel )
 	{
 	// Join, giving ourselves ops
 	Join( theChan, string(), 0, true ) ;
@@ -1503,14 +1506,13 @@ for( xServer::banVectorType::const_iterator ptr = banVector.begin(),
 	if( ((MAX_CHAN_MODES + 1) == modeString.size()) ||
 		((ptr + 1) == end) )
 		{
-		strstream s ;
+		stringstream s ;
 		s	<< getCharYYXXX() << " M "
 			<< theChan->getName() << ' '
 			<< modeString << ' ' << args
 			<< ends ;
 
 		Write( s ) ;
-		delete[] s.str() ;
 
 		modeString.erase( modeString.begin(), modeString.end() ) ;
 		args.erase( args.begin(), args.end() ) ;
@@ -1519,9 +1521,9 @@ for( xServer::banVectorType::const_iterator ptr = banVector.begin(),
 
 	} // for()
 
-MyUplink->onChannelModeB( theChan, 0, banVector ) ;
+MyUplink->OnChannelModeB( theChan, 0, banVector ) ;
 
-if( !onChannel )
+if( !OnChannel )
 	{
 	Part( theChan ) ;
 	}
@@ -1546,8 +1548,8 @@ if( 0 == theChan->findUser( theClient ) )
 	return true ;
 	}
 
-bool onChannel = isOnChannel( theChan ) ;
-if( !onChannel )
+bool OnChannel = isOnChannel( theChan ) ;
+if( !OnChannel )
 	{
 	// Join, giving ourselves ops
 	Join( theChan, string(), 0, true ) ;
@@ -1588,7 +1590,7 @@ Write( "%s K %s %s :%s",
 	theClient->getCharYYXXX().c_str(),
 	reason.c_str() ) ;
 
-if( !onChannel )
+if( !OnChannel )
 	{
 	Part( theChan ) ;
 	}
@@ -1620,8 +1622,8 @@ if( NULL == theChan->findUser( theClient ) )
 	return false ;
 	}
 
-bool onChannel = isOnChannel( theChan ) ;
-if( !onChannel )
+bool OnChannel = isOnChannel( theChan ) ;
+if( !OnChannel )
 	{
 	// Join, giving ourselves ops
 	Join( theChan, string(), 0, true ) ;
@@ -1649,17 +1651,16 @@ else
 	// The bot has ops
 	}
 
-strstream s ;
+stringstream s ;
 s	<< getCharYYXXX() << " K "
 	<< theChan->getName() << ' '
 	<< theClient->getCharYYXXX() << " :"
 	<< reason << ends ;
 
 Write( s ) ;
-delete[] s.str() ;
 
 // TODO: OnPartChannel()
-if( !onChannel )
+if( !OnChannel )
 	{
 	Part( theChan ) ;
 	}
@@ -1682,8 +1683,8 @@ if( theClients.empty() )
 	return true ;
 	}
 
-bool onChannel = isOnChannel( theChan ) ;
-if( !onChannel )
+bool OnChannel = isOnChannel( theChan ) ;
+if( !OnChannel )
 	{
 	// Join, giving ourselves ops
 	Join( theChan, string(), 0, true ) ;
@@ -1723,19 +1724,17 @@ for( vector< iClient* >::const_iterator ptr = theClients.begin() ;
 		continue ;
 		}
 
-	strstream s ;
+	stringstream s ;
 	s	<< getCharYYXXX() << " K "
 		<< theChan->getName() << ' '
 		<< (*ptr)->getCharYYXXX() << " :"
 		<< reason << ends ;
 
 	Write( s ) ;
-	delete[] s.str() ;
-
 	}
 
 // TODO: OnPartChannel()
-if( !onChannel )
+if( !OnChannel )
 	{
 	Part( theChan ) ;
 	}
@@ -1799,8 +1798,8 @@ if( NULL == theChan )
 	return false ;
 	}
 
-bool onChannel = isOnChannel( theChan ) ;
-if( !onChannel )
+bool OnChannel = isOnChannel( theChan ) ;
+if( !OnChannel )
 	{
 	Join( theChan ) ;
 	}
@@ -1810,7 +1809,7 @@ Write( "%s I %s %s",
 	theClient->getNickName().c_str(),
 	theChan->getName().c_str() ) ;
 
-if( !onChannel )
+if( !OnChannel )
 	{
 	Part( theChan ) ;
 	}
@@ -1823,8 +1822,8 @@ bool xClient::Invite( iClient* theClient, Channel* theChan )
 assert( theClient != 0 ) ;
 assert( theChan != 0 ) ;
 
-bool onChannel = isOnChannel( theChan ) ;
-if( !onChannel )
+bool OnChannel = isOnChannel( theChan ) ;
+if( !OnChannel )
 	{
 	Join( theChan ) ;
 	}
@@ -1834,7 +1833,7 @@ Write( "%s I %s %s",
 	theClient->getNickName().c_str(),
 	theChan->getName().c_str() ) ;
 
-if( !onChannel )
+if( !OnChannel )
 	{
 	Part( theChan ) ;
 	}
@@ -1855,7 +1854,8 @@ return isOnChannel( theChan->getName() ) ;
 
 int xClient::Write( const char* format, ... )
 {
-char buf[ 4096 ] = { 0 } ;
+char buf[ 4096 ] ;
+memset( buf, 0, 4096 ) ;
 va_list _list ;
 
 va_start( _list, format ) ;
@@ -1878,7 +1878,8 @@ Channel* theChan = Network->findChannel( chanName ) ;
 if( NULL == theChan )
 	{
 	elog	<< "xClient::OnJoin> Failed to find channel: "
-		<< chanName << endl ;
+		<< chanName
+		<< endl ;
 	return ;
 	}
 OnJoin( theChan ) ;
@@ -1897,7 +1898,8 @@ Channel* theChan = Network->findChannel( chanName ) ;
 if( NULL == theChan )
 	{
 	elog	<< "xClient::OnPart> Failed to find channel: "
-		<< chanName << endl ;
+		<< chanName
+		<< endl ;
 	return ;
 	}
 OnPart( theChan ) ;

@@ -1,12 +1,30 @@
-/* Network.cc
+/**
+ * Network.cc
  * Author: Daniel Karrels dan@karrels.com
+ * Copyright (C) 2002 Daniel Karrels <dan@karrels.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
+ * USA.
+ *
+ * $Id: Network.cc,v 1.2 2002-07-01 00:28:26 jeekay Exp $
  */
 
 #include	<new>
 #include	<iostream>
 #include	<string>
 #include	<list>
-#include	<hash_map.h>
 #include	<algorithm>
 
 #include	<cassert>
@@ -21,9 +39,19 @@
 #include	"Numeric.h"
 #include	"match.h"
 #include	"StringTokenizer.h"
+#include	"ip.h"
+#include	"defs.h"
+
+/*
+#ifdef GNU_EXTENSIONS
+ #include       <ext/hash_map>
+#else
+ #include       <hash_map>
+#endif
+*/
 
 const char xNetwork_h_rcsId[] = __NETWORK_H ;
-const char xNetwork_cc_rcsId[] = "$Id: Network.cc,v 1.1 2002-01-14 23:20:57 morpheus Exp $" ;
+const char xNetwork_cc_rcsId[] = "$Id: Network.cc,v 1.2 2002-07-01 00:28:26 jeekay Exp $" ;
 const char ELog_h_rcsId[] = __ELOG_H ;
 const char iClient_h_rcsId[] = __ICLIENT_H ;
 const char Channel_h_rcsId[] = __CHANNEL_H ;
@@ -36,11 +64,12 @@ const char StringTokenizer_cc_rcsId[] = __STRINGTOKENIZER_H ;
 namespace gnuworld
 {
 
+using std::map ;
+//using HASHMAPNS::hash ;
+//using HASHMAPNS::hash_map ;
 using std::string ;
 using std::endl ;
 using std::list ;
-using std::hash_map ;
-using std::hash ;
 using std::unary_function ;
 
 xNetwork::xNetwork()
@@ -55,50 +84,18 @@ bool xNetwork::addClient( iClient* newClient )
 {
 assert( NULL != newClient ) ;
 
-// Make sure the client is on a valid server
-networkVectorType::size_type YY =
-	static_cast< networkVectorType::size_type >( newClient->getIntYY() ) ;
-
-// We should definitely have all servers before receiving
-// client bursts.
-if( YY >= clients.size() )
+if( !numericMap.insert( numericMapType::value_type(
+	newClient->getIntYYXXX(), newClient ) ).second )
 	{
-	char charYY[ 3 ] = { 0 } ;
-
-	// No server!
-	elog	<< "xNetwork::addClient> Server not found: "
-		<< YY
-		<< "("
-		<< inttobase64( charYY, YY, 2 )
-		<< ")"
+	elog	<< "xNetwork::addClient> Insert into numericMap failed"
 		<< endl ;
 	return false ;
 	}
 
-// Do we need to add this client to the end of the list,
-// i.e., a new numeric?
-clientVectorType::size_type XXX =
-	static_cast< clientVectorType::size_type >( newClient->getIntXXX() ) ;
+//elog	<< "xNetwork::addClient> Added client: "
+//	<< *newClient
+//	<< endl ;
 
-// Is this a new numeric?
-while( XXX >= clients[ YY ].size() )
-	{
-	clients[ YY ].push_back( NULL ) ;
-	}
-
-// Is another client already occupying this slot?
-if( clients[ YY ][ XXX ] != NULL )
-	{
-	// Numeric collission
-	elog	<< "xNetwork::addClient> Numeric collision: "
-		<< newClient->getCharYYXXX()
-		<< endl ;
-
-	// Delete the old one
-	delete clients[ YY ][ XXX ] ;
-	}
-
-clients[ YY ][ XXX ] = newClient ;
 addNick( newClient ) ;
 
 return true ;
@@ -112,6 +109,12 @@ return true ;
 bool xNetwork::addClient( xClient* newClient )
 {
 assert( NULL != newClient ) ;
+
+if( findLocalNick( newClient->getNickName() ) != 0 )
+	{
+	// Nickname already exists on this serer
+	return false ;
+	}
 
 // First, find a new numeric for this client
 xClientVectorType::size_type pos = 0 ;
@@ -144,39 +147,13 @@ bool xNetwork::addServer( iServer* newServer )
 {
 assert( newServer != NULL ) ;
 
-serverVectorType::size_type YY =
-	static_cast< serverVectorType::size_type >( newServer->getIntYY() ) ;
-
-// It is possible that numerics received are out of order
-while( YY >= servers.size() )
+if( !serverMap.insert( serverMapType::value_type(
+	newServer->getIntYY(), newServer ) ).second )
 	{
-	// Make sure to update both the servers and
-	// clients array as they are synchronized
-	// with each other.
-	servers.push_back( NULL ) ;
-	clients.push_back( clientVectorType() ) ;
-	}
-
-if( NULL != servers[ YY ] )
-	{
-	elog	<< "xNetwork::addServer> Numeric collission: "
-		<< newServer->getCharYY()
+	elog	<< "xNetwork::addServer> Insert into serverMap failed"
 		<< endl ;
-
-	// The show must go on!
-	delete servers[ YY ] ;
-	// TODO: Clear the clients for this particular server
-
+	return false ;
 	}
-
-servers[ YY ] = newServer ;
-clients[ YY ].clear() ;
-
-// Optimize a bit
-clients[ YY ].reserve( newServer->getIntXXX() ) ;
-
-//elog << "addServer> " << *newServer << endl ;
-
 return true ;
 }
 
@@ -184,60 +161,37 @@ bool xNetwork::addChannel( Channel* theChan )
 {
 assert( theChan != NULL ) ;
 
-//elog << "Adding channel: " << *theChan << endl ;
+//elog	<< "Adding channel: "
+//	<< *theChan
+//	<< endl ;
 
 return channelMap.insert(
 	channelMapType::value_type( theChan->getName(),
 		theChan ) ).second ;
 }
 
-iClient* xNetwork::findClient( const unsigned int& YY,
-	const unsigned int& XXX ) const
+iClient* xNetwork::findClient( const unsigned int& intYY,
+	const unsigned int& intXXX ) const
 {
-if( static_cast< serverVectorType::size_type >( YY ) >= servers.size()
-	|| NULL == servers[ YY ] )
+unsigned int intYYXXX = combinebase64int( intYY, intXXX ) ;
+
+numericMapType::const_iterator ptr = numericMap.find( intYYXXX ) ;
+if( ptr == numericMap.end() )
 	{
-//	elog	<< "xNetwork::findClient> Server not found: "
-//		<< YY << endl ;
 	return 0 ;
 	}
-
-// Server exists, but does the client?
-if( static_cast< networkVectorType::size_type >( XXX ) >= clients[ YY ].size() )
-	{
-	// Client not found
-//	elog	<< "xNetwork::findClient> Client not found: "
-//		<< "YY: " << YY << ", XXX: " << XXX << endl ;
-	return 0 ;
-	}
-
-// This could still return NULL
-return clients[ YY ][ XXX ] ;
+return ptr->second ;
 }
 
 iClient* xNetwork::findClient( const string& yyxxx ) const
 {
-unsigned int	yy = 0,
-		xxx = 0 ;
-
-if( yyxxx.size() == 5 )
+unsigned int intYYXXX = base64toint( yyxxx.c_str(), yyxxx.size() ) ;
+numericMapType::const_iterator ptr = numericMap.find( intYYXXX ) ;
+if( ptr == numericMap.end() )
 	{
-	// n2k
-	yy = base64toint( yyxxx.c_str(), 2 ) ;
-	xxx = base64toint( yyxxx.c_str() + 2, 3 ) ;
+	return 0 ;
 	}
-else if( yyxxx.size() == 3 )
-	{
-	// yxx
-	yy = base64toint( yyxxx.c_str(), 1 ) ;
-	xxx = base64toint( yyxxx.c_str() + 1, 2 ) ;
-	}
-else
-	{
-	return NULL ;
-	}
-
-return findClient( yy, xxx ) ;
+return ptr->second ;
 }
 
 iClient* xNetwork::findNick( const string& nick ) const
@@ -313,27 +267,38 @@ return findServer( base64toint( YY.c_str(), YY.size() ) ) ;
 
 iServer* xNetwork::findServer( const unsigned int& YY ) const
 {
-if( static_cast< serverVectorType::size_type >( YY ) >= servers.size() )
+serverMapType::const_iterator ptr = serverMap.find( YY ) ;
+if( ptr == serverMap.end() )
 	{
 	return 0 ;
 	}
-return servers[ YY ] ;
+return ptr->second ;
 }
 
 iServer* xNetwork::findServerName( const string& name ) const
 {
-for( serverVectorType::size_type i = 0 ; i < servers.size() ; i++ )
+for( serverMapType::const_iterator ptr = serverMap.begin(),
+	endPtr = serverMap.end() ; ptr != endPtr ; ++ptr )
 	{
-	if( NULL == servers[ i ] )
+	if( !strcasecmp( ptr->second->getName(), name ) )
 		{
-		continue ;
-		}
-	if( !strcasecmp( servers[ i ]->getName(), name ) )
-		{
-		return servers[ i ] ;
+		return ptr->second ;
 		}
 	}
-return NULL ;
+return 0 ;
+}
+
+iServer* xNetwork::findExpandedServerName( const string& name ) const
+{
+for( serverMapType::const_iterator ptr = serverMap.begin(),
+	endPtr = serverMap.end() ; ptr != endPtr ; ++ptr )
+	{
+	if( !match( ptr->second->getName(), name ) )
+		{
+		return ptr->second ;
+		}
+	}
+return 0 ;
 }
 
 Channel* xNetwork::findChannel( const string& name ) const
@@ -348,43 +313,37 @@ if( ptr == channelMap.end() )
 return ptr->second ;
 }
 
-iClient* xNetwork::removeClient( const unsigned int& YY,
-	const unsigned int& XXX )
+iClient* xNetwork::removeClient( const unsigned int& intYY,
+	const unsigned int& intXXX )
 {
+return removeClient( combinebase64int( intYY, intXXX ) ) ;
+}
 
-if( static_cast< networkVectorType::size_type >( YY ) >= clients.size() )
+iClient* xNetwork::removeClient( const string& yyxxx )
+{
+return removeClient( base64toint( yyxxx.c_str(), 5 ) ) ;
+}
+
+iClient* xNetwork::removeClient( const unsigned int& intYYXXX )
+{
+numericMapType::iterator ptr = numericMap.find( intYYXXX ) ;
+if( ptr == numericMap.end() )
 	{
-	elog	<< "xNetwork::removeClient> Bad YY: "
-		<< YY
+	elog	<< "xNetwork::removeClient> Unable to find client "
+		<< "numeric: "
+		<< intYYXXX
 		<< endl ;
 	return 0 ;
 	}
-if( static_cast< clientVectorType::size_type >( XXX ) >= clients[ YY ].size() )
-	{
-	elog	<< "xNetwork::removeClient> Bad XXX: "
-		<< XXX
-		<< endl ;
-	return 0 ;
-	}
 
-iClient* retMe = clients[ YY ][ XXX ] ;
-clients[ YY ][ XXX ] = NULL ;
+//elog	<< "xNetwork::removeClient> Removing client: "
+//	<< *(ptr->second)
+//	<< endl ;
 
-if( retMe != NULL )
-	{
-	removeNick( retMe->getNickName() ) ;
-	}
+numericMap.erase( ptr ) ;
 
-if( NULL == retMe )
-	{
-	elog	<< "xNetwork::removeClient( int, int )> Unable to find user "
-		<< "YY: "
-		<< YY
-		<< ", XXX: "
-		<< XXX
-		<< endl ;
-	return 0 ;
-	}
+iClient* retMe = ptr->second ;
+removeNick( retMe->getNickName() ) ;
 
 // Remove all associations between client->channel
 iClient::channelIterator chanPtr = retMe->channels_begin() ;
@@ -406,13 +365,13 @@ while( chanPtr != retMe->channels_end() )
 			<< *retMe
 			<< endl ;
 		}
-	delete theChanUser ;
+	delete theChanUser ; theChanUser = 0 ;
 
 	if( (*chanPtr)->empty() )
 		{
-//		elog	<< "xNetwork::removeClient> Removing channel "
-//			<< (*chanPtr)->getName()
-//			<< endl ;
+		elog	<< "xNetwork::removeClient> Removing channel "
+			<< (*chanPtr)->getName()
+			<< endl ;
 
 		delete removeChannel( (*chanPtr)->getName() ) ;
 		}
@@ -421,26 +380,6 @@ while( chanPtr != retMe->channels_end() )
 retMe->clearChannels() ;
 
 return retMe ;
-}
-
-iClient* xNetwork::removeClient( const string& yyxxx )
-{
-unsigned int	yy = 0,
-		xxx = 0 ;
-
-if( yyxxx.size() == 5 )
-	{
-	// n2k
-	yy = base64toint( yyxxx.c_str(), 2 ) ;
-	xxx = base64toint( yyxxx.c_str() + 2, 3 ) ;
-	}
-else
-	{
-	// yxx
-	yy = convert2n[ yyxxx[ 0 ] ] ;
-	xxx = base64toint( yyxxx.c_str() + 1, 2 ) ;
-	}
-return removeClient( yy, xxx ) ;
 }
 
 iClient* xNetwork::removeClient( iClient* theClient )
@@ -482,55 +421,79 @@ iServer* xNetwork::removeServer( const unsigned int& YY,
 	bool postEvent )
 {
 
-// Make sure the server numeric (YY) is valid.
-if( static_cast< serverVectorType::size_type >( YY ) >= servers.size() )
+// Attempt to find the server being removed
+serverMapType::iterator serverIterator = serverMap.find( YY ) ;
+
+// Did we find the server?
+if( serverIterator == serverMap.end() )
 	{
-	elog	<< "xNetwork::removeServer> Bad YY: "
+	// Nope, log an error
+	elog	<< "xNetwork::removeServer> Failed to find server "
+		<< "numeric: "
 		<< YY
 		<< endl ;
+
+	// Let the caller know that the remove failed
 	return 0 ;
 	}
 
-//elog	<< "xNetwork::removeServer> Removing server " << YY
-//	<< ", name: " << servers[ YY ]->getName() << endl ;
+// Grab a pointer to the iServer for convenience and readability
+iServer* serverPtr = serverIterator->second ;
 
-// Delete each client on this server
-for( clientVectorType::size_type i = 0 ; i < clients[ YY ].size() ; i++ )
+// Remove the server from the internal table
+serverMap.erase( serverIterator ) ;
+
+// Verbose debugging information
+//elog	<< "xNetwork::removeServer> Removing server: "
+//	<< *serverPtr
+//	<< endl ;
+
+// Walk through the numericMap looking for clients which are on
+// the server being removed.
+// This algorithm is O(N) :(
+for( numericMapType::iterator clientIterator = numericMap.begin() ; 
+	clientIterator != numericMap.end() ; )
 	{
-
-	// It's possible that this iClient* may point to NULL.
-	iClient* theClient = clients[ YY ][ i ] ;
-	if( NULL == theClient )
+	// Is this client on the server that is being removed?
+	if( YY != clientIterator->second->getIntYY() )
 		{
-		// Unused numeric, no big deal
-//		elog << "xNetwork::removeServer> Found NULL iClient\n" ;
+		// Nope, move to next client
+		++clientIterator ;
+
+		// Skip rest of the loop
 		continue ;
 		}
 
-	// Remove channel->client associations
-	iClient::channelIterator chanPtr = theClient->channels_begin() ;
-	while( chanPtr != theClient->channels_end() )
-		{
-		delete (*chanPtr)->removeUser( theClient ) ;
+	// Let removeClient() handle:
+	// - Removing the client<->channel interactions
+	// - Removing the channel itself, if empty
+	// - Removing the client from the internal tables
+	//
+	// The removal of an element from a hash_map<> invalidates
+	// the iterator (or perhaps all iterators, still searching
+	// for documentation on this).  However, hash_map::erase()
+	// does not return an updated iterator, so we have to make
+	// a little work around here to make sure we keep a valid
+	// iterator.
 
-		// Is the channel now empty?
-		if( (*chanPtr)->empty() )
-			{
-			// The channel is now empty, there is no worry
-			// of finding another user on this server
-			// which is in this channel (it's empty!)
-			// This removal should be safe...
-			delete removeChannel( (*chanPtr)->getName() ) ;
-			}
+	// nextIterator is the iterator past the current iterator
+	numericMapType::iterator nextIterator( clientIterator ) ;
+	++nextIterator ;
 
-		// Even if the channel is deallocated and removed
-		// from the channel table, this increment here is still
-		// safe.
-		++chanPtr ;
-		}
-	theClient->clearChannels() ;
+	// Remove the iClient and perform functions described above.
+	// This method calls numericMap.erase(), and so after the
+	// call to removeClient(), the clientIterator is no longer
+	// valid.
+	iClient* theClient = removeClient( clientIterator->second ) ;
+
+	// Point the clientIterator to the nextIterator
+	clientIterator = nextIterator ;
 
 	// Should we post this as an EVT_QUIT event?
+	// It seems that this may add unneeded complexity in handling
+	// requests of the client modules since they can call methods
+	// which may attempt to access the server to which this client
+	// is/was connected (the server is no longer in the tables)
 	if( postEvent )
 		{
 		// Yes, post the event
@@ -538,17 +501,12 @@ for( clientVectorType::size_type i = 0 ; i < clients[ YY ].size() ; i++ )
 			static_cast< void* >( theClient ) ) ;
 		}
 
-	removeNick( theClient->getNickName() ) ;
+	// Be sure to deallocate the iClient's allocated heap space
 	delete theClient ;
-	clients[ YY ][ i ] = NULL ;
 	}
 
-// Clear the client vector associated with this server
-clients[ YY ].clear() ;
-
-iServer* retMe = servers[ YY ] ;
-servers[ YY ] = NULL ;
-return retMe ;
+// Return the server being removed
+return serverPtr ;
 }
 
 iServer* xNetwork::removeServer( const string& YY )
@@ -558,12 +516,12 @@ return removeServer( base64toint( YY.c_str() ) ) ;
 
 iServer* xNetwork::removeServerName( const string& name )
 {
-iServer* theServer = findServerName( name ) ;
-if( NULL == theServer )
+iServer* serverPtr = findServerName( name ) ;
+if( NULL == serverPtr )
 	{
 	return NULL ;
 	}
-return removeServer( theServer->getIntYY() ) ;
+return removeServer( serverPtr->getIntYY() ) ;
 }
 
 Channel* xNetwork::removeChannel( const string& name )
@@ -605,6 +563,7 @@ if( NULL == theClient )
 // we already have it.
 removeNick( theClient->getNickName() ) ;
 
+// oldNick is used in the event posting
 string oldNick = theClient->getNickName() ;
 
 // Change the client's nickname
@@ -621,12 +580,13 @@ theServer->PostEvent( EVT_CHNICK,
 	static_cast< void* >( theClient ),
 	static_cast< void* >( &oldNick ) ) ;
 
+// TODO: theServer->PostNickChange() --> OnNickChange()
 }
 
 void xNetwork::addNick( iClient* theClient )
 {
 // This is a protected method, theClient is guaranteed to
-// be non-NULL
+// be non-NULL.
 if( !nickMap.insert( nickMapType::value_type(
 	theClient->getNickName(), theClient ) ).second )
 	{
@@ -638,83 +598,130 @@ if( !nickMap.insert( nickMapType::value_type(
 
 /**
  * Handle a netsplit.
- * Per requirements, this method does NOT remove or deallocate
- * the server referenced by intYY.
+ * This method removes and deallocated the server corresponding
+ * to the numeric (intYY), and all of its leaf servers (and all
+ * of their leaf servers, etc).
  * Our uplink server has its own numeric as its uplinkIntYY.
+ * This method was once a disturbingly complicated recursive method.
+ * It turned out that the previous implementation was not robust
+ * to modifications made to internal data structure types.
+ * Therefore, it has been greatly simplified here, to where even
+ * someone like me can understand it.
+ * The idea here is to use a simple recursive method to gather the
+ * server numerics which need to be removed, and then perform the
+ * removals in an iterative manner.
+ * (intYY) is the server numeric of the server to be removed.
+ * The caller of this method is responsible for posting the
+ * EVT_NETBREAK event.
  */
 void xNetwork::OnSplit( const unsigned int& intYY )
 {
-// TODO: Post events
-for( serverVectorType::size_type i = 0 ; i < servers.size() ; ++i )
+
+// yyVector will be used to hold server numerics of servers
+// to be removed.
+typedef vector< unsigned int > yyVectorType ;
+yyVectorType yyVector ;
+
+// Of course add the top level server to the list of servers
+// to be removed.
+yyVector.push_back( intYY ) ;
+
+// Recursive method to find all leaf servers of intYY, and all
+// of each of those servers' leaf servers.
+// This is much simpler than having the entire OnSplit() method
+// recursive.
+findLeaves( yyVector, intYY ) ;
+
+// yyVector should now have all leaf servers (if any) of intYY,
+// each of which must be removed.
+
+// Now iterate through the server numeric vector once more and
+// remove the servers from the network data tables.
+// Note that this will call removeServer() for each server,
+// which will remove that server from the data tables, and also
+// deallocate the server pointer.
+// removeServer() will also remove all iClient's resident on that
+// server (and deallocate them), and also remove any channels
+// which are determined to be empty as a result of the netsplit.
+
+for( yyVectorType::const_iterator yyIterator = yyVector.begin() ;
+	yyIterator != yyVector.end() ; ++yyIterator )
 	{
-	if( NULL == servers[ i ] )
-		{
-		}
-	else if( servers[ i ]->getUplinkIntYY() == servers[ i ]->getIntYY() )
-		{
-		// It's our uplink.  Prevent infinite recursion here
-		// by just ignoring this server.
-//		elog	<< "xServer::OnSplit> Found uplink\n" ;
-		}
-	else if( servers[ i ]->getUplinkIntYY() == intYY )
-		{
-		// servers[ i ] is a leaf to intYY
+	// Obtain a pointer to the server in question for convenience
+	// and readability
+	iServer* removeMe = findServer( *yyIterator ) ;
+	assert( removeMe != 0 ) ;
 
-//		elog	<< "xNetwork::OnSplit> Removing "
-//			<< servers[ i ]->getName() << endl ;
+	// Generate some debugging information
+//	elog	<< "xNetwork::OnSplit> Removing server: "
+//		<< *removeMe
+//		<< endl ;
 
-		// Remember the numeric to be removed.
-		const unsigned int removeIntYY = servers[ i ]->getIntYY() ;
-
-		// Post a netbreak event 
-                   string reason("Uplink Splitted"); 
-    
-                   theServer->PostEvent(EVT_NETBREAK, 
-                              static_cast<void *>(servers[i]), 
-                              static_cast<void *>(findServer(intYY)), 
-                              static_cast<void *>(&reason)); 
-
-
-		// Remove servers[ i ].
-		delete removeServer( servers[ i ]->getIntYY(), true ) ;
-
-		// Remove servers[ i ]'s leaf servers.
-		OnSplit( removeIntYY ) ;
-
-		}
+	// Remove the server, its clients, any empty channels,
+	// and post events for all of the above.
+	delete removeServer( removeMe->getIntYY(), true ) ;
 	}
 }
 
+/**
+ * This is a simple recursive method which traverses the
+ * serverMap looking for all leaves to server whose numeric
+ * is uplinkIntYY.  Any server which is found to be a leaf
+ * to uplinkIntYY is then passed into a recursive call to
+ * findLeaves() for that particular leaf server, etc.
+ * This method does not modify any data tables, it only
+ * walks the serverMap table.
+ */
+void xNetwork::findLeaves( vector< unsigned int >& yyVector,
+	const unsigned int uplinkIntYY ) const
+{
+
+// Begin our walk down the serverMap looking for leaf servers
+// of uplinkIntYY.
+for( serverMapType::const_iterator serverIterator = serverMap.begin() ;
+	serverIterator != serverMap.end() ; ++serverIterator )
+	{
+
+	// Obtain a pointer to this iServer for convenience and
+	// readability
+	const iServer* serverPtr = serverIterator->second ;
+
+	// Check to see if this server is our uplink, don't want
+	// to remove that one :)
+	if( theServer->getUplinkIntYY() == serverPtr->getIntYY() )
+		{
+		// It's our uplink.  Prevent infinite recursion here
+		// by just ignoring this server (base case).
+
+//		elog	<< "xServer::findLeaves> Found uplink"
+//			<< endl ;
+		}
+	else if( serverPtr->getUplinkIntYY() == uplinkIntYY )
+		{
+		// serverPtr is a leaf to uplinkIntYY
+
+		// Add serverPtr to the list of leaves to server
+		// uplinkIntYY
+		yyVector.push_back( serverPtr->getIntYY() ) ;
+
+		// Call this method recursively to find leaves
+		// of serverPtr.
+		findLeaves( yyVector, serverPtr->getIntYY() ) ;
+
+		} // else if()
+
+	} // for()
+
+} // findLeaves()
+
 size_t xNetwork::serverList_size() const
 {
-size_t i = 0 ;
-for( serverVectorType::const_iterator ptr = servers.begin() ;
-	ptr != servers.end() ; ++ptr )
-	{
-	if( *ptr != NULL )
-		{
-		++i ;
-		}
-	}
-return i ;
+return static_cast< size_t >( serverMap.size() ) ;
 }
 
 size_t xNetwork::clientList_size() const
 {
-size_t i = 0 ;
-for( networkVectorType::const_iterator ptr = clients.begin() ;
-	ptr != clients.end() ; ++ptr )
-	{
-	for( clientVectorType::size_type cPtr = 0 ; cPtr < (*ptr).size() ;
-		++cPtr )
-		{
-		if( (*ptr)[ cPtr ] != NULL )
-			{
-			++i ;
-			}
-		}
-	}
-return i ;
+return static_cast< size_t >( numericMap.size() ) ;
 }
 
 void xNetwork::foreach_xClient( xNetwork::fe_xClientBase f )
@@ -722,45 +729,24 @@ void xNetwork::foreach_xClient( xNetwork::fe_xClientBase f )
 std::for_each( localClients.begin(), localClients.end(), f ) ;
 }
 
-size_t xNetwork::countClients( const iServer* theServer ) const
+size_t xNetwork::countClients( const iServer* serverPtr ) const
 {
 assert( theServer != 0 ) ;
 
-// Find the server in the internal server table
-serverVectorType::size_type serverID = 0 ;
-for( ; serverID < servers.size() ; ++serverID )
-	{
-	if( theServer == servers[ serverID ] )
-		{
-		// Found it
-		break ;
-		}
-	}
+// Server numeric for which to search
+const unsigned int YY = serverPtr->getIntYY() ;
 
-// Was the server found?
-if( serverID >= servers.size() )
-	{
-	// Did not find the server
-	return 0 ;
-	}
-
-// Iterate through this server's info and count the number
-// of clients
-
-// numClients will hold the number of clients found
+// The number of clients found for the given server
 size_t numClients = 0 ;
 
-for( clientVectorType::size_type clientID = 0 ;
-	clientID < clients[ serverID ].size() ; ++clientID )
+for( numericMapType::const_iterator ptr = numericMap.begin(),
+	endPtr = numericMap.end() ; ptr != endPtr ; ++ptr )
 	{
-	// Only increment numClients if this client is non-NULL
-	if( NULL != clients[ serverID ][ clientID ] )
+	if( YY == ptr->second->getIntYY() )
 		{
 		++numClients ;
 		}
 	}
-
-// Return the number of clients found to the caller
 return numClients ;
 }
 
@@ -768,25 +754,16 @@ list< const iClient* > xNetwork::matchHost( const string& wildHost ) const
 {
 list< const iClient* > retMe ;
 
-for( networkVectorType::const_iterator sPtr = clients.begin() ;
-	sPtr != clients.end() ; ++sPtr )
+for( numericMapType::const_iterator ptr = numericMap.begin(),
+	endPtr = numericMap.end() ; ptr != endPtr ; ++ptr )
 	{
-
-	for( clientVectorType::const_iterator cPtr = (*sPtr).begin() ;
-		cPtr != (*sPtr).end() ; ++cPtr )
+	const iClient* clientPtr = ptr->second ;
+	if( !match( wildHost, clientPtr->getInsecureHost() ) ||
+		!match( wildHost,
+			xIP( clientPtr->getIP() ).GetNumericIP() ) )
 		{
-		if( NULL == *cPtr )
-			{
-			// No client present at this numeric,
-			// no big deal
-			continue ;
-			}
-
-		if( !match( wildHost, (*cPtr)->getInsecureHost() ) )
-			{
-			// Found a match
-			retMe.push_back( *cPtr ) ;
-			}
+		// Found a match
+		retMe.push_back( clientPtr ) ;
 		}
 	}
 
@@ -840,32 +817,22 @@ return retMe ;
 
 size_t xNetwork::countMatchingUserHost( const string& wildUserHost ) const
 {
-return matchUserHost( wildUserHost ).size() ;
+return static_cast< size_t >( matchUserHost( wildUserHost ).size() ) ;
 }
 
 list< const iClient* > xNetwork::findHost( const string& hostName ) const
 {
 list< const iClient* > retMe ;
 
-for( networkVectorType::const_iterator sPtr = clients.begin() ;
-	sPtr != clients.end() ; ++sPtr )
+for( numericMapType::const_iterator ptr = numericMap.begin(),
+	endPtr = numericMap.end() ; ptr != endPtr ; ++ptr )
 	{
+	const iClient* clientPtr = ptr->second ;
 
-	for( clientVectorType::const_iterator cPtr = (*sPtr).begin() ;
-		cPtr !=(*sPtr).end() ; ++cPtr )
+	if( !strcasecmp( hostName, clientPtr->getInsecureHost() ) )
 		{
-		if( NULL == *cPtr )
-			{
-			// No client present at this numeric,
-			// no big deal
-			continue ;
-			}
-
-		if( !strcasecmp( hostName, (*cPtr)->getInsecureHost() ) )
-			{
-			// Found a match
-			retMe.push_back( *cPtr ) ;
-			}
+		// Found a match
+		retMe.push_back( clientPtr ) ;
 		}
 	}
 
@@ -880,6 +847,24 @@ return static_cast< size_t >( matchHost( wildHost ).size() ) ;
 size_t xNetwork::countHost( const string& hostName ) const
 {
 return static_cast< size_t >( findHost( hostName ).size() ) ;
+}
+
+list< const iClient* > xNetwork::matchRealName( const string& realName ) const
+{
+list< const iClient* > retMe ;
+
+for( numericMapType::const_iterator ptr = numericMap.begin(),
+	endPtr = numericMap.end() ; ptr != endPtr ; ++ptr )
+	{
+	const iClient* clientPtr = ptr->second ;
+
+	if( !match( realName, clientPtr->getDescription() ) )
+		{
+		retMe.push_back( clientPtr ) ;
+		}
+	}
+
+return retMe;
 }
 
 } // namespace gnuworld

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.1 2002-01-14 23:20:57 morpheus Exp $
+## $Id: Makefile.am,v 1.2 2002-07-01 00:28:25 jeekay Exp $
 
 bin_PROGRAMS = gnuworld
 
@@ -19,6 +19,7 @@ gnuworld_SOURCES = Channel.cc \
 	iServer.cc \
 	ip.cc \
 	main.cc \
+	msg_AC.cc \
 	msg_AD.cc \
 	msg_B.cc \
 	msg_C.cc \
@@ -36,6 +37,7 @@ gnuworld_SOURCES = Channel.cc \
 	msg_K.cc \
 	msg_L.cc \
 	msg_M.cc \
+	msg_M351.cc \
 	msg_N.cc \
 	msg_NOOP.cc \
 	msg_P.cc \

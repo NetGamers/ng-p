@@ -16,7 +16,7 @@
 #include	"Numeric.h"
 
 const char xIP_h_rcsId[] = __IP_H ;
-const char xIP_cc_rcsId[] = "$Id: ip.cc,v 1.1 2002-01-14 23:20:58 morpheus Exp $" ;
+const char xIP_cc_rcsId[] = "$Id: ip.cc,v 1.2 2002-07-01 00:28:27 jeekay Exp $" ;
 const char Numeric_h_rcsId[] = __NUMERIC_H ;
 
 namespace gnuworld

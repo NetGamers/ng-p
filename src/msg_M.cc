@@ -1,5 +1,23 @@
 /**
  * msg_M.cc
+ * Copyright (C) 2002 Daniel Karrels <dan@karrels.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
+ * USA.
+ *
+ * $Id: msg_M.cc,v 1.2 2002-07-01 00:28:29 jeekay Exp $
  */
 
 #include	<new>
@@ -18,7 +36,7 @@
 #include	"ELog.h"
 #include	"StringTokenizer.h"
 
-const char msg_M_cc_rcsId[] = "$Id: msg_M.cc,v 1.1 2002-01-14 23:21:00 morpheus Exp $" ;
+const char msg_M_cc_rcsId[] = "$Id: msg_M.cc,v 1.2 2002-07-01 00:28:29 jeekay Exp $" ;
 const char misc_h_rcsId[] = __MISC_H ;
 const char events_h_rcsId[] = __EVENTS_H ;
 const char server_h_rcsId[] = __SERVER_H ;
@@ -138,27 +156,27 @@ for( const char* modePtr = Param[ 2 ] ; *modePtr ; ++modePtr )
 			polarity = false ;
 			break ;
 		case 't':
-			onChannelModeT( theChan,
+			OnChannelModeT( theChan,
 				polarity, theUser ) ;
 			break ;
 		case 'n':
-			onChannelModeN( theChan,
+			OnChannelModeN( theChan,
 				polarity, theUser ) ;
 			break ;
 		case 's':
-			onChannelModeS( theChan,
+			OnChannelModeS( theChan,
 				polarity, theUser ) ;
 			break ;
 		case 'p':
-			onChannelModeP( theChan,
+			OnChannelModeP( theChan,
 				polarity, theUser ) ;
 			break ;
 		case 'm':
-			onChannelModeM( theChan,
+			OnChannelModeM( theChan,
 				polarity, theUser ) ;
 			break ;
 		case 'i':
-			onChannelModeI( theChan,
+			OnChannelModeI( theChan,
 				polarity, theUser ) ;
 			break ;
 
@@ -174,7 +192,7 @@ for( const char* modePtr = Param[ 2 ] ; *modePtr ; ++modePtr )
 				continue ;
 				}
 
-			onChannelModeL( theChan,
+			OnChannelModeL( theChan,
 				polarity, theUser,
 				polarity ? atoi( Param[ argPos++ ] )
 					: 0 ) ;
@@ -191,7 +209,7 @@ for( const char* modePtr = Param[ 2 ] ; *modePtr ; ++modePtr )
 				continue ;
 				}
 
-			onChannelModeK( theChan,
+			OnChannelModeK( theChan,
 				polarity, theUser,
 				Param[ argPos++ ] ) ;
 			break ;
@@ -300,15 +318,15 @@ for( const char* modePtr = Param[ 2 ] ; *modePtr ; ++modePtr )
 
 if( !opVector.empty() )
 	{
-	onChannelModeO( theChan, theUser, opVector ) ;
+	OnChannelModeO( theChan, theUser, opVector ) ;
 	}
 if( !voiceVector.empty() )
 	{
-	onChannelModeV( theChan, theUser, voiceVector ) ;
+	OnChannelModeV( theChan, theUser, voiceVector ) ;
 	}
 if( !banVector.empty() )
 	{
-	onChannelModeB( theChan, theUser, banVector ) ;
+	OnChannelModeB( theChan, theUser, banVector ) ;
 	}
 
 return 0 ;
@@ -360,6 +378,10 @@ for( const char* modePtr = Param[ 2 ] ; *modePtr ; ++modePtr )
 		case 'w':
 			if( plus )	theClient->setModeW() ;
 			else		theClient->removeModeW() ;
+			break ;
+		case 'x':
+			if( plus )	theClient->setModeX() ;
+			else		theClient->removeModeX() ;
 			break ;
 		case 'o':
 		case 'O':
