@@ -15,7 +15,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char SHUTDOWNCommand_cc_rcsId[] = "$Id: SHUTDOWNCommand.cc,v 1.1 2002-02-02 00:32:55 morpheus Exp $" ;
+const char SHUTDOWNCommand_cc_rcsId[] = "$Id: SHUTDOWNCommand.cc,v 1.2 2002-10-19 20:07:11 jeekay Exp $" ;
 namespace gnuworld
 {
 using std::string ;
@@ -53,7 +53,7 @@ if (admLevel < level::shutdown)
 	return false;
 	}
 
-bot->logAdminMessage("%s issued the shutdown command! Bye! xxx!\n", theClient->getNickName().c_str());
+bot->logAdminMessage("%s issued the shutdown command! Bye! xxx!", theClient->getNickName().c_str());
 bot->Exit( st.assemble(1).c_str());
 
 char buf[ 512 ] = { 0 } ;
