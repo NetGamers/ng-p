@@ -8,7 +8,7 @@
  *
  * Caveats: None.
  *
- * $Id: UNSUSPENDCommand.cc,v 1.4 2002-02-16 21:40:01 jeekay Exp $
+ * $Id: UNSUSPENDCommand.cc,v 1.5 2002-03-05 20:50:50 jeekay Exp $
  */
 
 #include	<string>
@@ -20,7 +20,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char UNSUSPENDCommand_cc_rcsId[] = "$Id: UNSUSPENDCommand.cc,v 1.4 2002-02-16 21:40:01 jeekay Exp $" ;
+const char UNSUSPENDCommand_cc_rcsId[] = "$Id: UNSUSPENDCommand.cc,v 1.5 2002-03-05 20:50:50 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -91,7 +91,7 @@ int level = bot->getEffectiveAccessLevel(theUser, theChan, true);
 
 if (theChan->getName() == "*")
         {
-        if (level < level::chgadmin)
+        if (level < level::susadmin)
                 {
                 bot->Notice(theClient, "Sorry, you have insufficient access to perform that command");
                 return false;

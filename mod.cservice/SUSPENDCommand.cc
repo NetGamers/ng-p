@@ -7,7 +7,7 @@
  * Suspends an user on the specified channel, if suspend duration 0
  * is defined, the user will be unsuspended.
  *
- * $Id: SUSPENDCommand.cc,v 1.4 2002-02-16 21:40:01 jeekay Exp $
+ * $Id: SUSPENDCommand.cc,v 1.5 2002-03-05 20:50:50 jeekay Exp $
  */
 
 #include	<string>
@@ -21,7 +21,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char SUSPENDCommand_cc_rcsId[] = "$Id: SUSPENDCommand.cc,v 1.4 2002-02-16 21:40:01 jeekay Exp $" ;
+const char SUSPENDCommand_cc_rcsId[] = "$Id: SUSPENDCommand.cc,v 1.5 2002-03-05 20:50:50 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -76,7 +76,7 @@ int level = bot->getEffectiveAccessLevel(theUser, theChan, true);
 
 if (theChan->getName() == "*")
         {
-        if (level < level::chgadmin)
+        if (level < level::susadmin)
                 {
                 bot->Notice(theClient, "Sorry, you have insufficient access to perform that command");
                 return false;
