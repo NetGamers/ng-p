@@ -688,7 +688,7 @@ const string Command = string_upper( st[ 0 ] ) ;
 lockedCommandsType::const_iterator myCommand = lockedCommands.find(Command);
 if(myCommand != lockedCommands.end())
 	{
-	Notice(theClient, "Sorry, this command has been disabled by an admin.");
+	Notice(theClient, "Sorry, this command has been disabled by a CSC Developer.");
 	return false;
 	}
 

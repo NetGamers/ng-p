@@ -4,7 +4,7 @@
  *
  * Distributed under the GNU Public Licence
  *
- * $Id: DEBUGCommand.cc,v 1.1 2002-03-25 03:35:36 jeekay Exp $
+ * $Id: DEBUGCommand.cc,v 1.2 2002-03-26 02:07:46 jeekay Exp $
  */
 
 #include	<string>
@@ -15,7 +15,7 @@
 #include "cservice.h"
 #include "levels.h"
 
-const char DEBUGCommand_cc_rcsId[] = "$Id: DEBUGCommand.cc,v 1.1 2002-03-25 03:35:36 jeekay Exp $" ;
+const char DEBUGCommand_cc_rcsId[] = "$Id: DEBUGCommand.cc,v 1.2 2002-03-26 02:07:46 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -107,6 +107,12 @@ string data = st.assemble(4);
 
 if("LOCK" == command && "ADD" == option)
 	{
+	if("DEBUG" == function)
+		{
+		bot->Notice(theClient, "I don't think that'd be a very good idea.");
+		return false;
+		}
+	
 	cservice::lockedCommandsType::const_iterator myCommand;
 	myCommand = bot->lockedCommands.find(function);
 	if(myCommand != bot->lockedCommands.end())
