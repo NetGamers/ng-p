@@ -13,7 +13,7 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.15 2002-09-13 21:30:38 jeekay Exp $
+ * $Id: CHANINFOCommand.cc,v 1.16 2002-09-24 20:06:17 jeekay Exp $
  */
 
 #include	<string>
@@ -26,7 +26,7 @@
 #include	"libpq++.h"
 #include	"cservice_config.h"
 
-const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.15 2002-09-13 21:30:38 jeekay Exp $" ;
+const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.16 2002-09-24 20:06:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -48,10 +48,10 @@ if( st.size() < 2 )
 	return true;
 	}
 
-sqlUser* tmpUser = bot->isAuthed(theClient, false);
+sqlUser* theUser = bot->isAuthed(theClient, false);
 
 int adminAccess = 0; 
-if (tmpUser) adminAccess = bot->getAdminAccessLevel(tmpUser); 
+if (theUser) adminAccess = bot->getAdminAccessLevel(theUser); 
 
 /*
  *  Are we checking info about a user or a channel?
@@ -61,12 +61,12 @@ if (tmpUser) adminAccess = bot->getAdminAccessLevel(tmpUser);
 if( string::npos == st[ 1 ].find_first_of( '#' ) )
 	{
 	// Nope, look by user then.
-	sqlUser* theUser = bot->getUserRecord(st[1]);
+	sqlUser* targetUser = bot->getUserRecord(st[1]);
 
-	if (!theUser)
+	if (!targetUser)
 		{
 		bot->Notice(theClient,
-			bot->getResponse(tmpUser,
+			bot->getResponse(theUser,
 				language::not_registered,
 				string("The user %s doesn't appear to be registered.")).c_str(),
 			st[1].c_str());
@@ -75,17 +75,17 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 
 	/* Keep details private. */
 
-	if (theUser->getFlag(sqlUser::F_INVIS))
+	if (targetUser->getFlag(sqlUser::F_INVIS))
 		{
 
 		/* If they don't have * access or not opered op, deny. */
-                if( !((tmpUser) && bot->getAdminAccessLevel(tmpUser)) && (tmpUser != theUser) && !(theClient->isOper()))
+                if( !((theUser) && bot->getAdminAccessLevel(theUser)) && (theUser != targetUser) && !(theClient->isOper()))
 
 		/* If they don't have * access, deny. */
-		if( !((tmpUser) && bot->getAdminAccessLevel(tmpUser)) && (tmpUser != theUser))
+		if( !((theUser) && bot->getAdminAccessLevel(theUser)) && (theUser != targetUser))
 			{
 			bot->Notice(theClient,
-				bot->getResponse(tmpUser,
+				bot->getResponse(theUser,
 					language::no_peeking,
 					string("Unable to view user details (Invisible)")));
 			return false;
@@ -93,62 +93,65 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 		}
 
 	bot->Notice(theClient,
-		bot->getResponse(tmpUser,
+		bot->getResponse(theUser,
 			language::info_about,
 			string("Information about: %s (%i)")).c_str(),
-		theUser->getUserName().c_str(), theUser->getID());
+		targetUser->getUserName().c_str(), targetUser->getID());
 
-	if (theUser->getID() == 1)
+	if (targetUser->getID() == 1)
 	{
 		bot->Notice(theClient," - The one that was, the one that is, the one that will be.");
 	}
 
-	if (theUser->getID() == 66)
+	if (targetUser->getID() == 66)
 	{
 		bot->Notice(theClient," - What do you mean you want to demolish Planetarion to make way for a new"
 		" hyperspace expressway?");
 	}
 	
-	if (theUser->getID() == 23326)
+	if (targetUser->getID() == 23326)
 	{
 		bot->Notice(theClient, " - Wibble!");
 	}
 
-	iClient* targetClient = theUser->isAuthed();
-	string loggedOn = targetClient ?
-		targetClient->getNickUserHost() : "Offline";
+	/* Loop over all the people we might be logged in as */
+  bot->Notice(theClient, "Currently logged on via:");
+  int aCount = 0;
+  
+  for(sqlUser::networkClientListType::iterator ptr = targetUser->networkClientList.begin();
+    ptr != targetUser->networkClientList.end(); ++ptr) {
+    
+    bot->Notice(theClient, " " + (*ptr)->getNickUserHost());
+    aCount++;
+  }
+  
+  if(!aCount) { bot->Notice(theClient, " OFFLINE"); }
 
-	bot->Notice(theClient,
-		bot->getResponse(tmpUser,
-			language::curr_logged_on,
-			string("Currently logged on via: %s")).c_str(),
-		loggedOn.c_str());
-
-	if( !theUser->getUrl().empty() )
+	if( !targetUser->getUrl().empty() )
 		{
 		bot->Notice(theClient,
-			bot->getResponse(tmpUser,
+			bot->getResponse(theUser,
 				language::url,
 				string("URL: %s")).c_str(),
-			theUser->getUrl().c_str());
+			targetUser->getUrl().c_str());
 		}
 
 	bot->Notice(theClient,string("Language: English"));
 
-	if( (theUser->getCoordX() && theUser->getCoordY() && theUser->getCoordZ() ) > 0)
+	if( (targetUser->getCoordX() && targetUser->getCoordY() && targetUser->getCoordZ() ) > 0)
                 {
                 bot->Notice(theClient, "Coordinates: %i:%i:%i",
-                        theUser->getCoordX(),
-                        theUser->getCoordY(),
-                        theUser->getCoordZ());
+                        targetUser->getCoordX(),
+                        targetUser->getCoordY(),
+                        targetUser->getCoordZ());
                 }
          
-        if(!theUser->getAlliance().empty())
+        if(!targetUser->getAlliance().empty())
                 {
-                bot->Notice(theClient, "Alliance: %s", theUser->getAlliance().c_str());
+                bot->Notice(theClient, "Alliance: %s", targetUser->getAlliance().c_str());
                 }
 
-	if (theUser->getFlag(sqlUser::F_INVIS))
+	if (targetUser->getFlag(sqlUser::F_INVIS))
 		{
 		bot->Notice(theClient, "INVISIBLE is On");
 		} else
@@ -157,12 +160,12 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 		}
 
 	bot->Notice(theClient,
-		bot->getResponse(tmpUser,
+		bot->getResponse(theUser,
 			language::last_seen,
 			string("Last Seen: %s")).c_str(),
-		bot->prettyDuration(theUser->getLastSeen()).c_str());
+		bot->prettyDuration(targetUser->getLastSeen()).c_str());
 
-	if (theUser->getFlag(sqlUser::F_GLOBAL_SUSPEND))
+	if (targetUser->getFlag(sqlUser::F_GLOBAL_SUSPEND))
 		{
 		bot->Notice(theClient, "\002** This account has been suspended by a CService Administrator **\002");
 		}
@@ -174,26 +177,26 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 	 */
 
 	unsigned int theTime; 
-        string userComments = theUser->getLastEvent(sqlUser::EV_COMMENT, theTime); 
+        string userComments = targetUser->getLastEvent(sqlUser::EV_COMMENT, theTime); 
     
 
-	if(!theUser->getComment().empty())
+	if(!targetUser->getComment().empty())
 		{
 			bot->Notice(theClient,"\002Admin Comment\002: %s",
-					theUser->getComment().c_str());
+					targetUser->getComment().c_str());
 		}
 
-	if (theUser->getFlag(sqlUser::F_GLOBAL_SUSPEND))
+	if (targetUser->getFlag(sqlUser::F_GLOBAL_SUSPEND))
 		{
 		/*
 		 * Perform a lookup to get the last SUSPEND event from the userlog.
 		 */
 		unsigned int theTime;
-		string reason = theUser->getLastEvent(sqlUser::EV_SUSPEND, theTime);
+		string reason = targetUser->getLastEvent(sqlUser::EV_SUSPEND, theTime);
 
 		bot->Notice(theClient, "Account suspended %s ago, Reason: %s", bot->prettyDuration(theTime).c_str(),
 			reason.c_str());
-		bot->Notice(theClient, "Due to expire: %s", bot->prettyDuration(-(theUser->getSuspendedExpire()) + 2*(bot->currentTime())).c_str());
+		bot->Notice(theClient, "Due to expire: %s", bot->prettyDuration(-(targetUser->getSuspendedExpire()) + 2*(bot->currentTime())).c_str());
 		} else
 		{
 		/*
@@ -201,7 +204,7 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 		 */
 
 		unsigned int theTime;
-		string reason = theUser->getLastEvent(sqlUser::EV_UNSUSPEND, theTime);
+		string reason = targetUser->getLastEvent(sqlUser::EV_UNSUSPEND, theTime);
 		if (!reason.empty())
 			{
 			bot->Notice(theClient, "Account was unsuspended %s ago", bot->prettyDuration(theTime).c_str());
@@ -215,18 +218,21 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 	 * Only show to those with admin access, or the actual user.
 	 */
 
-	int targetAdmin = bot->getAdminAccessLevel(theUser);
-	if( adminAccess || (tmpUser == theUser) || (theClient->isOper() && ! bot->getAdminAccessLevel(theUser)))
+	int targetAdmin = bot->getAdminAccessLevel(targetUser);
+	if( adminAccess || (theUser == targetUser) || (theClient->isOper() && ! bot->getAdminAccessLevel(targetUser)))
 		{
 		bot->Notice(theClient, "EMail: %s",
-			theUser->getEmail().c_str());
+			targetUser->getEmail().c_str());
 
 		bot->Notice(theClient, "Last Hostmask: %s", 
-			theUser->getLastHostMask().c_str()); 
+			targetUser->getLastHostMask().c_str());
+    
+    bot->Notice(theClient, "Max Logins: %i",
+      targetUser->getMaxLogins());
 
 		if(adminAccess && (!targetAdmin || (adminAccess >= level::chgadmin)))
 			{
-			int myQuestion = theUser->getQuestionID();
+			int myQuestion = targetUser->getQuestionID();
 			if(myQuestion >= 1 && myQuestion <= 4)
 				{
 				string myQuestions[5];
@@ -236,8 +242,8 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 				myQuestions[3] = "What's your father's birthdate?";
 				myQuestions[4] = "What's your spouse's name?";
 		
-				bot->Notice(theClient, "Verification Question: %s", myQuestions[theUser->getQuestionID()].c_str());
-				bot->Notice(theClient, "Verification Answer  : %s", theUser->getVerificationData().c_str());
+				bot->Notice(theClient, "Verification Question: %s", myQuestions[targetUser->getQuestionID()].c_str());
+				bot->Notice(theClient, "Verification Answer  : %s", targetUser->getVerificationData().c_str());
 				}
 			else
 				{
@@ -250,7 +256,7 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 
 		channelsQuery	<< "SELECT channels.name,levels.access FROM levels,channels "
 				<< "WHERE levels.channel_id = channels.id AND channels.registered_ts <> 0 AND levels.user_id = "
-				<< theUser->getID()
+				<< targetUser->getID()
 				<< " ORDER BY levels.access DESC"
 				<< ends;
 
@@ -285,7 +291,7 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 			if ((channelList.size() + chanName.size() + chanAccess.size() +6) >= 450)
 				{
 				bot->Notice(theClient,
-					bot->getResponse(tmpUser,
+					bot->getResponse(theUser,
 						language::channels,
 						string("Channels: %s")).c_str(),
 					channelList.c_str());
@@ -304,33 +310,10 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 			} // for()
 
 		bot->Notice(theClient,
-			bot->getResponse(tmpUser,
+			bot->getResponse(theUser,
 				language::channels,
 				string("Channels: %s")).c_str(),
 			channelList.c_str());
-		}
-
-	/*
-	 *  Debug info:
-	 */
-
-	// TODO: Violation of rule of numbers
-	if( ((tmpUser) && (bot->getAdminAccessLevel(tmpUser) > 950)) )
-		{
-		if (!targetClient)
-			{
-			return true;
-			}
-		bot->Notice(theClient,
-			bot->getResponse(tmpUser,
-				language::inp_flood,
-				string("Input Flood Points: %i")).c_str(),
-			bot->getFloodPoints(targetClient));
-		bot->Notice(theClient,
-			bot->getResponse(tmpUser,
-				language::out_flood,
-				string("Ouput Flood (Bytes): %i")).c_str(),
-			bot->getOutputTotal(targetClient));
 		}
 
 	return true;
@@ -340,7 +323,6 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
  * We are INFOing a channel
  */
 
-sqlUser* theUser = bot->isAuthed(theClient, false);
 sqlChannel* theChan = bot->getChannelRecord(st[1]);
 if( !theChan )
 	{
@@ -428,7 +410,7 @@ else
 
 if( !theChan->getComment().empty() && adminAccess )
 	{
-	if((tmpUser) && bot->getAdminAccessLevel(tmpUser))
+	if((theUser) && bot->getAdminAccessLevel(theUser))
 		{
 		bot->Notice(theClient, "Comments: %s",
 			theChan->getComment().c_str());

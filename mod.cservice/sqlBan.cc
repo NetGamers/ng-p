@@ -4,7 +4,7 @@
  * Storage class for accessing Ban information either from the backend
  * or internal storage.
  * 
- * $Id: sqlBan.cc,v 1.3 2002-09-13 21:30:41 jeekay Exp $
+ * $Id: sqlBan.cc,v 1.4 2002-09-24 20:06:19 jeekay Exp $
  */
  
 #include	<string> 
@@ -19,7 +19,7 @@
 #include	"cservice_config.h"
  
 const char sqlBan_h_rcsId[] = __SQLBAN_H ;
-const char sqlBan_cc_rcsId[] = "$Id: sqlBan.cc,v 1.3 2002-09-13 21:30:41 jeekay Exp $" ;
+const char sqlBan_cc_rcsId[] = "$Id: sqlBan.cc,v 1.4 2002-09-24 20:06:19 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -72,11 +72,11 @@ static const char* queryHeader =    "UPDATE bans ";
 stringstream queryString;
 queryString	<< queryHeader 
 		<< "SET channel_id = " << channel_id << ", "
-		<< "set_by = '" << set_by << "', "
+		<< "set_by = '" << escapeSQLChars(set_by) << "', "
 		<< "set_ts = " << set_ts << ", "
 		<< "level = " << level << ", "
 		<< "expires = " << expires << ", "
-		<< "banmask = '" << banmask << "', "
+		<< "banmask = '" << escapeSQLChars(banmask) << "', "
 		<< "reason = '" << escapeSQLChars(reason) << "', " 
 		<< "last_updated = now()::abstime::int4 "
 		<< " WHERE id = " << id

@@ -9,7 +9,7 @@
 
 #define LOG_SQL
 
-const char NOTECommand_cc_rcsId[] = "$Id: NOTECommand.cc,v 1.11 2002-09-13 21:30:39 jeekay Exp $" ;
+const char NOTECommand_cc_rcsId[] = "$Id: NOTECommand.cc,v 1.12 2002-09-24 20:06:18 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -173,10 +173,9 @@ if (cmd == "SEND")
 
 			bot->Notice(theClient, "Note sent to %s", targetUser->getUserName().c_str());
 
-			iClient* targetClient = targetUser->isAuthed();
-			if (targetClient)
+			if (targetUser->isAuthed())
 				{
-				bot->Notice(targetClient, "You received a note from %s (type \002/msg %s note read\002 to see it)", 
+				bot->noticeAllAuthedClients(targetUser, "You received a note from %s (type \002/msg %s note read\002 to see it)", 
 					theUser->getUserName().c_str(), bot->getNickName().c_str());
 				} // targetClient exists
 		}// count < 15

@@ -1,5 +1,5 @@
 #ifndef __CSERVICECLASS_H
-#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.11 2002-09-14 15:36:53 jeekay Exp $"
+#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.12 2002-09-24 20:06:18 jeekay Exp $"
 
 #include <map>
 
@@ -436,6 +436,8 @@ public:
 
 	void incStat(const string& name);
 	void incStat(const string& name, unsigned int amount);
+  
+  void noticeAllAuthedClients(sqlUser* theUser, const char* Message, ... );
   
   unsigned int totalCommands;
   

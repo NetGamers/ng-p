@@ -4,7 +4,7 @@
  *
  * Distributed under the GNU Public Licence
  *
- * $Id: CHINFOCommand.cc,v 1.4 2002-03-25 01:20:15 jeekay Exp $
+ * $Id: CHINFOCommand.cc,v 1.5 2002-09-24 20:06:17 jeekay Exp $
  */
 
 #include	<string>
@@ -14,7 +14,7 @@
 #include "cservice.h"
 #include "levels.h"
 
-const char CHINFOCommand_cc_rcsId[] = "$Id: CHINFOCommand.cc,v 1.4 2002-03-25 01:20:15 jeekay Exp $" ;
+const char CHINFOCommand_cc_rcsId[] = "$Id: CHINFOCommand.cc,v 1.5 2002-09-24 20:06:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -120,10 +120,9 @@ if((aLevel >= level::chinfo::nick) && ("NICK" == option))
 	targetUser->commit();
 	
 	/* Then we check if the user is logged on */
-	iClient* targetClient = targetUser->isAuthed();
-	if(targetClient)
+	if(targetUser->isAuthed())
 		{
-		bot->Notice(targetClient, "Your registered nick has been changed from %s to %s by %s (%s)",
+		bot->noticeAllAuthedClients(targetUser, "Your registered nick has been changed from %s to %s by %s (%s)",
 			userName.c_str(), newdata.c_str(), theClient->getNickName().c_str(),
 			theUser->getUserName().c_str());
 		}

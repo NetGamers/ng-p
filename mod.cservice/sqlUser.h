@@ -1,16 +1,19 @@
 /* sqlUser.h */
 
 #ifndef __SQLUSER_H
-#define __SQLUSER_H "$Id: sqlUser.h,v 1.9 2002-07-17 19:10:00 jeekay Exp $"
+#define __SQLUSER_H "$Id: sqlUser.h,v 1.10 2002-09-24 20:06:19 jeekay Exp $"
 
-#include	<string>
-#include	<ctime>
+#include <ctime>
+#include <string>
+#include <vector>
+
 #include	"libpq++.h"
 
 namespace gnuworld
 {
 
 using std::string ;
+using std::vector ;
 
 class iClient;
 
@@ -88,8 +91,23 @@ public:
 	inline const string&		getEmail() const
 		{ return email ; }
 
-	inline iClient* isAuthed()
-		{ return networkClient; }
+	inline bool isAuthed()
+		{ return (networkClientList.size() != 0); }
+  
+  inline void addAuthedClient(iClient* theClient)
+    { networkClientList.push_back(theClient); }
+  
+  inline void removeAuthedClient(iClient* theClient) {
+    networkClientListType::iterator ptr = networkClientList.begin();
+    while(ptr != networkClientList.end()) {
+      iClient* testClient = *ptr;
+      if(testClient == theClient) {
+        ptr = networkClientList.erase(ptr);
+      } else {
+        ++ptr;
+      }
+    }
+  }
 
 	inline const string&		getComment() const
 		{ return comment; }
@@ -102,6 +120,9 @@ public:
 	
 	inline const string& getVerificationData() const
 		{ return verificationData; }
+  
+  inline const unsigned int& getMaxLogins() const
+    { return maxlogins; }
 
 	/*
 	 *  Methods to set data atrributes.
@@ -154,6 +175,9 @@ public:
 
 	inline void setComment( const string& _comment )
 		{ comment = _comment; }
+  
+  inline void setMaxLogins(const unsigned int& _maxlogins)
+    { maxlogins = _maxlogins; }
 
 	/*
 	 * Method to perform a SQL 'UPDATE' and commit changes to this
@@ -168,9 +192,11 @@ public:
 	bool loadData( int );
 	bool loadData( const string& );
 	void setAllMembers( int );
-	iClient*	networkClient;
 	void writeEvent( unsigned short, sqlUser*, const string& );
 	const string getLastEvent( unsigned short, unsigned int&);
+  
+  typedef vector <iClient*> networkClientListType;
+  networkClientListType networkClientList;
 
 protected:
 
@@ -194,6 +220,7 @@ protected:
 	time_t suspendedExpire;
 	unsigned int questionID;
 	string verificationData;
+  unsigned int maxlogins;
 
 	PgDatabase*	SQLDb;
 } ;

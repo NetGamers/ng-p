@@ -2,7 +2,6 @@
 
 #include	<string>
 
-#include	"md5hash.h"
 #include	"StringTokenizer.h"
 #include	"ELog.h"
 #include	"cservice.h"
@@ -12,7 +11,7 @@
 #include	"Network.h"
 #include	"events.h"
 
-const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.15 2002-09-13 21:30:38 jeekay Exp $" ;
+const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.16 2002-09-24 20:06:18 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -47,15 +46,6 @@ if(loginTime >= (unsigned int)bot->currentTime())
 	return false;
 }
 
-/*
- * Allow the login ONLY after burst
- */
-/*
-if (!bot->getUplink()->IsEndOfBurst()) {
-	bot->Notice(theClient, "LOGIN Temporarily disabled while synchronising with network, please try again in a few minutes."); 
-	return false;
-}
-*/
 /*
  * Check theClient isn't already logged in, if so, tell
  * them they shouldn't be.
@@ -105,39 +95,17 @@ if(!bot->isPasswordRight(theUser, st.assemble(2)))
 	return false;
 	}
 
-/*
- *  Check this user isn't already spoken for..
- *  If someone HAS authenticated as this user, then deauth that other
- *  person.
- */
+/* Dont exceed MAXLOGINS */
+if(theUser->networkClientList.size() >= theUser->getMaxLogins()) {
+  bot->Notice(theClient, "AUTHENTICATION FAILED AS %s.",
+    theUser->getUserName().c_str());
+  return false;
+}
 
-iClient* authTestUser = theUser->isAuthed();
-if (authTestUser)
-	{
-	bot->Notice(authTestUser,
-		bot->getResponse(tmpUser,
-			language::no_longer_auth,
-			string("NOTICE: %s has now authenticated as %s, you are no longer authenticated.")).c_str(),
-			theClient->getNickUserHost().c_str(),
-			theUser->getUserName().c_str());
-
-	networkData* tmpData =
-		static_cast< networkData* >( authTestUser->getCustomData(bot) ) ;
-	if( NULL == tmpData )
-		{
-		bot->Notice( authTestUser,
-			"Internal error." ) ;
-		elog	<< "LOGINCommand> tmpData is NULL for: "
-			<< *authTestUser
-			<< endl ;
-		return false ;
-		}
-
-	// Remove the pointer from the iClient to the sqlUser.
-	tmpData->currentUser = NULL;
-	server->PostEvent(gnuworld::EVT_FORCEDEAUTH, 
-										static_cast< void* >( authTestUser));
-	}
+if(theUser->isAuthed()) {
+  bot->noticeAllAuthedClients(theUser, "%s has just authenticated as you (%s).",
+    theClient->getNickUserHost().c_str(), theUser->getUserName().c_str());
+}
 
 string uname = theUser->getUserName();
 server->PostEvent(gnuworld::EVT_LOGGEDIN
@@ -145,16 +113,16 @@ server->PostEvent(gnuworld::EVT_LOGGEDIN
 	    ,static_cast<void*>(&uname));
 theUser->setLastSeen(bot->currentTime(), theClient->getNickUserHost());
 theUser->setFlag(sqlUser::F_LOGGEDIN);
-theUser->networkClient = theClient; // Who is authed as this user.
+theUser->addAuthedClient(theClient);
 
 networkData* newData =
 	static_cast< networkData* >( theClient->getCustomData(bot) ) ;
 if( NULL == newData )
 	{
-	bot->Notice( authTestUser,
+	bot->Notice( theClient,
 		"Internal error." ) ;
 	elog	<< "LOGINCommand> newData is NULL for: "
-		<< *authTestUser
+		<< theClient
 		<< endl ;
 	return false ;
 	}
@@ -168,11 +136,21 @@ bot->Notice(theClient,
 
 bot->sendMOTD(theClient);
 
-/*if(strcasecmp(theClient->getNickName(),st[1]))
-	{
-	bot->Notice(theClient,"You didn't login as your nickname. if that is because your nickname is taken, you can use the RECOVER command to get it back");
-	}
-*/
+/*
+ * Send out an AC token to the network for this user. Format:
+ * [Source Server] AC [Users Numeric] [Users name]
+ * fx: AX AC APAFD jeekay
+ */
+
+stringstream ac;
+ac << bot->getCharYY()
+  << " AC "
+  << theClient->getCharYYXXX()
+  << " " << theUser->getUserName()
+  << ends;
+bot->Write(ac);
+theClient->setAccount(theUser->getUserName());
+
 /*
  * If the user account has been suspended, make sure they don't get
  * auto-opped.

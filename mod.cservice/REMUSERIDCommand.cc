@@ -3,7 +3,7 @@
  *
  * 20020308 GK@PAnet - Initial Writing
  *
- * $Id: REMUSERIDCommand.cc,v 1.11 2002-09-13 21:30:40 jeekay Exp $
+ * $Id: REMUSERIDCommand.cc,v 1.12 2002-09-24 20:06:18 jeekay Exp $
  */
 
 #include	<string>
@@ -14,7 +14,7 @@
 #include "levels.h"
 #include "networkData.h"
 
-const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.11 2002-09-13 21:30:40 jeekay Exp $" ;
+const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.12 2002-09-24 20:06:18 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -78,21 +78,16 @@ if(targetUser->getFlag(sqlUser::F_NOPURGE))
 	}
 
 /* Very first things first - is the user currently logged in? */
-iClient* authTestUser = targetUser->isAuthed();
-if(authTestUser)
-	{
-	networkData* tmpData = static_cast< networkData* >( authTestUser->getCustomData(bot) );
-	if(!tmpData)
-		{
-		bot->Notice(theClient, "Wierd internal error.");
-		elog << "REMUSERID> tmpData null this user" << endl;
-		return false;
-		}
-	
-	tmpData->currentUser = NULL;
-	targetUser->networkClient = NULL;
-	server->PostEvent(gnuworld::EVT_FORCEDEAUTH, static_cast< void* >( authTestUser));
-	}
+if(targetUser->isAuthed()) {
+  for(sqlUser::networkClientListType::iterator ptr = targetUser->networkClientList.begin();
+    ptr != targetUser->networkClientList.end(); ++ptr) {
+    
+    iClient* authTestUser = (*ptr);
+
+    targetUser->removeAuthedClient(authTestUser);    
+    server->PostEvent(gnuworld::EVT_FORCEDEAUTH, static_cast< void* >( authTestUser));
+  }
+}
 
 /* First things first -
  * Does this user own any channels? if so - abort!
@@ -289,8 +284,8 @@ if(PGRES_COMMAND_OK != status)
 bot->Notice(theClient, "Successfully removed %s from the database.", st[1].c_str());
 
 // Was the user logged in? Notice them
-if(authTestUser)
-	bot->Notice(authTestUser, "Your registered nick has been purged. You are no longer authenticated.");
+if(targetUser->isAuthed())
+	bot->noticeAllAuthedClients(targetUser, "Your registered nick has been purged. You are no longer authenticated.");
 
 
 // The user has now been deleted from the database

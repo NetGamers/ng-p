@@ -4,7 +4,7 @@
  * Storage class for accessing user information either from the backend
  * or internal storage.
  *
- * $Id: sqlUser.cc,v 1.12 2002-09-13 21:30:41 jeekay Exp $
+ * $Id: sqlUser.cc,v 1.13 2002-09-24 20:06:19 jeekay Exp $
  */
 
 #include	<string.h>
@@ -38,8 +38,7 @@ const unsigned int sqlUser::EV_UNSUSPEND	= 2;
 const unsigned int sqlUser::EV_COMMENT          = 3;
 
 sqlUser::sqlUser(PgDatabase* _SQLDb)
- : networkClient(0),
-   id( 0 ),
+ : id( 0 ),
    user_name(),
    password(),
    last_seen( 0 ),
@@ -54,6 +53,7 @@ sqlUser::sqlUser(PgDatabase* _SQLDb)
    email(),
    last_hostmask(),
    comment(),
+   maxlogins(0),
    SQLDb( _SQLDb )
 {
 }
@@ -182,6 +182,7 @@ comment = SQLDb->GetValue(row, 13);
 suspendedExpire = atoi(SQLDb->GetValue(row, 14));
 questionID = atoi(SQLDb->GetValue(row, 15));
 verificationData = SQLDb->GetValue(row, 16);
+maxlogins = atoi(SQLDb->GetValue(row, 17));
 
 /* Fetch the "Last Seen" time from the users_lastseen table. */
 
@@ -212,7 +213,8 @@ queryString	<< queryHeader
 		<< "suspended_expire_ts = " << suspendedExpire << ", "
 		<< "question_id = " << questionID << ", "
 		<< "verificationdata = '" << escapeSQLChars(verificationData) << "', "
-		<< "email = '" << escapeSQLChars(email) << "' "
+		<< "email = '" << escapeSQLChars(email) << "', "
+    << "maxlogins = " << maxlogins << " "
 		<< queryCondition << id
 		<< ends;
 

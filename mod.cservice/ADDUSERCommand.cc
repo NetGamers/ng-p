@@ -11,7 +11,7 @@
  *
  * Caveats: None
  *
- * $Id: ADDUSERCommand.cc,v 1.7 2002-09-13 21:30:38 jeekay Exp $
+ * $Id: ADDUSERCommand.cc,v 1.8 2002-09-24 20:06:17 jeekay Exp $
  */
 
 #include	<string>
@@ -24,7 +24,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char ADDUSERCommand_cc_rcsId[] = "$Id: ADDUSERCommand.cc,v 1.7 2002-09-13 21:30:38 jeekay Exp $" ;
+const char ADDUSERCommand_cc_rcsId[] = "$Id: ADDUSERCommand.cc,v 1.8 2002-09-24 20:06:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -198,6 +198,8 @@ for(StringTokenizer::size_type counter = 0; counter < st2.size(); ++counter)
 	 *  Now, build up the SQL query & execute it!
 	 */
 
+  string lastModifMask = "(" + theUser->getUserName() + ")" + theClient->getNickUserHost();
+  
 	stringstream theQuery;
 	theQuery	<< queryHeader
 			<< "VALUES ("
@@ -206,11 +208,9 @@ for(StringTokenizer::size_type counter = 0; counter < st2.size(); ++counter)
 			<< targetAccess << ","
 			<< targetFlags << ","
 			<< bot->currentTime() << ","
-			<< "'(" << theUser->getUserName() << ") "
-	                   << theClient->getNickUserHost() << "',"
+			<< "'" << escapeSQLChars(lastModifMask) << "',"
 			<< bot->currentTime() << ","
-			<< "'(" << theUser->getUserName() << ") "
-	                   << theClient->getNickUserHost() << "',"
+			<< "'" << escapeSQLChars(lastModifMask) << "',"
 			<< bot->currentTime()
 			<< ");"
 			<< ends;
