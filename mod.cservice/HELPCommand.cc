@@ -8,7 +8,7 @@
  *
  * Caveats: Needs to be written :)
  *
- * $Id: HELPCommand.cc,v 1.5 2004-08-25 20:32:40 jeekay Exp $
+ * $Id: HELPCommand.cc,v 1.6 2004-08-25 21:48:06 jeekay Exp $
  */
 
 #include	<string>
@@ -71,10 +71,18 @@ void HELPCommand::Exec( iClient* theClient, const string& Message )
 	if (msg.empty())
 	msg = bot->getHelpMessage(theUser, "INDEX");
 
-	if (!msg.empty())
-		bot->Notice(theClient, msg);
-	else
+	if (!msg.empty()) {
+		/* This may be a multi-line message */
+		StringTokenizer helpmsg( msg , '\n' );
+		
+		for( StringTokenizer::const_iterator itr = helpmsg.begin() ;
+		     itr != helpmsg.end() ; ++itr ) {
+			bot->Notice(theClient, *itr);
+		}
+		// bot->Notice(theClient, msg);
+	} else {
 		bot->Notice(theClient, "There is no help available for that topic.");
+	}
 
 	return ;
 } 
