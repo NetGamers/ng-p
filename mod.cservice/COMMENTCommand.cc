@@ -12,7 +12,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char COMMENTCommand_cc_rcsId[] = "$Id: COMMENTCommand.cc,v 1.3 2002-03-25 01:20:15 jeekay Exp $" ;
+const char COMMENTCommand_cc_rcsId[] = "$Id: COMMENTCommand.cc,v 1.4 2002-04-04 19:16:33 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -74,13 +74,14 @@ if(st[1][0] == '#') // we HAVE a channel!!
 		}
 	else
 		{
-		targetChan->setComment(st.assemble(2));
+		string myComment = "(" + theUser->getUserName() + ") " + st.assemble(2);
+		targetChan->setComment(myComment);
 		targetChan->commit();
 		bot->Notice(theClient, "COMMENT for channel %s is now: %s", st[1].c_str(),
-			st.assemble(2).c_str()); 
+			myComment.c_str()); 
 		bot->logAdminMessage("%s (%s) - COMMENT - %s - %s",
 			theClient->getNickName().c_str(), theUser->getUserName().c_str(),
-			targetChan->getName().c_str(), st.assemble(2).c_str());
+			targetChan->getName().c_str(), myComment.c_str());
 		}
 return true;
 }
@@ -120,7 +121,7 @@ if (string_upper(st[2]) == "OFF")
 		targetUser->getUserName().c_str());
 } else
 {
-	string comment = st.assemble(2) + " (by " + theUser->getUserName() + ")";
+	string comment = "(" + theUser->getUserName() + ") " + st.assemble(2);
 	targetUser->setComment(comment);
         targetUser->commit();
 	bot->Notice(theClient, "COMMENT for user %s set to: %s", targetUser->getUserName().c_str(),

@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.17 2002-03-25 01:20:17 jeekay Exp $
+ * $Id: SETCommand.cc,v 1.18 2002-04-04 19:16:33 jeekay Exp $
  */
 
 #include	<string>
@@ -30,7 +30,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.17 2002-03-25 01:20:17 jeekay Exp $" ;
+const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.18 2002-04-04 19:16:33 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -1172,14 +1172,14 @@ else
 	}
 
 
-	if(option == "COMMENT")
+/*	if(option == "COMMENT")
 	{
-	    /* Check for admin access */
+	    // Check for admin access
 	    sqlChannel* admChan = bot->getChannelRecord("*");
             int admLevel = bot->getAccessLevel(theUser, admChan); 
 	    if(admLevel < level::set::comment)
 			{
-			/* No need to tell users about admin commands. */
+			// No need to tell users about admin commands.
 			Usage(theClient);
 			return true;
 			}
@@ -1207,7 +1207,7 @@ else
 		}
 
 	    return true;
-	}
+	} */
 
 	if(option == "FLOATLIM") 
            { 
