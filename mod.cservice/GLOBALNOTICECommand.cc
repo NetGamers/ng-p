@@ -5,7 +5,7 @@
  *
  * Sends a notice to all users as 'CService'
  *
- * $Id: GLOBALNOTICECommand.cc,v 1.1 2005-03-20 16:39:25 jeekay Exp $
+ * $Id: GLOBALNOTICECommand.cc,v 1.2 2005-03-20 16:40:28 jeekay Exp $
  */
 
 #include	<string>
@@ -46,7 +46,7 @@ if((admLevel < globalNoticeLevel->getLevel()) && !(theClient->isOper())) { retur
 
 bot->incStat("COMMANDS.GLOBALNOTICE");
 
-// GLOB[AL]NOTICE subject $target.dom Message
+// GLOBALNOTICE subject $target.dom Message
 StringTokenizer st( Message );
 if(st.size() < 4) {
 	Usage(theClient);
