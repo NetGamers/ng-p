@@ -1,7 +1,7 @@
 /* sqlUser.h */
 
 #ifndef __SQLUSER_H
-#define __SQLUSER_H "$Id: sqlUser.h,v 1.7 2002-03-23 17:29:21 jeekay Exp $"
+#define __SQLUSER_H "$Id: sqlUser.h,v 1.8 2002-03-24 01:06:51 jeekay Exp $"
 
 #include	<string>
 #include	<ctime>
@@ -105,7 +105,13 @@ public:
 	/*
 	 *  Methods to set data atrributes.
 	 */
-	 
+	
+	inline void setVerificationData(const string& _verificationData)
+		{ verificationData = _verificationData; }
+	
+	inline void setQuestionID(const int& _questionID)
+		{ questionID = _questionID; }
+	
 	inline void setSuspendedExpire( const time_t& _suspendedExpire )
 		{ suspendedExpire = _suspendedExpire; }
 	
@@ -129,18 +135,21 @@ public:
 
 	inline void setEmail( const string& _email )
 		{ email = _email; }
+	
+	inline void setUserName( const string& _user_name )
+		{ user_name = _user_name; }
 
-        inline void setCoordX( const unsigned int& _coordX )
-                { coordX = _coordX; }
+	inline void setCoordX( const unsigned int& _coordX )
+		{ coordX = _coordX; }
         
-        inline void setCoordY( const unsigned int& _coordY )
-                { coordY = _coordY; }
+	inline void setCoordY( const unsigned int& _coordY )
+		{ coordY = _coordY; }
         
-        inline void setCoordZ( const unsigned int& _coordZ )
-                { coordZ = _coordZ; }
+	inline void setCoordZ( const unsigned int& _coordZ )
+		{ coordZ = _coordZ; }
 
-        inline void setAlliance( const string& _alliance )
-                { alliance = _alliance; }
+	inline void setAlliance( const string& _alliance )
+		{ alliance = _alliance; }
 
 	inline void setComment( const string& _comment )
 		{ comment = _comment; }

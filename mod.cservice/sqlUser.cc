@@ -4,7 +4,7 @@
  * Storage class for accessing user information either from the backend
  * or internal storage.
  *
- * $Id: sqlUser.cc,v 1.7 2002-03-23 17:29:21 jeekay Exp $
+ * $Id: sqlUser.cc,v 1.8 2002-03-24 01:06:51 jeekay Exp $
  */
 
 #include	<strstream.h>
@@ -202,15 +202,19 @@ static const char* queryCondition = "WHERE id = ";
 strstream queryString;
 queryString	<< queryHeader
 		<< "SET flags = " << flags << ", "
+		<< "user_name = '" << escapeSQLChars(user_name) << "', "
 		<< "password = '" << password << "', "
 		<< "language_id = " << language_id << ", "
-                << "coordX = " << coordX << ", "
-                << "coordY = " << coordY << ", "
-                << "coordZ = " << coordZ << ", "
-                << "alliance = '" << alliance << "', "
+		<< "coordX = " << coordX << ", "
+		<< "coordY = " << coordY << ", "
+		<< "coordZ = " << coordZ << ", "
+		<< "alliance = '" << alliance << "', "
 		<< "comment = '" << comment << "', "
 		<< "last_updated = now()::abstime::int4, "
-		<< "suspended_expire_ts = " << suspendedExpire << " "
+		<< "suspended_expire_ts = " << suspendedExpire << ", "
+		<< "question_id = " << questionID << ", "
+		<< "verificationdata = '" << escapeSQLChars(verificationData) << "', "
+		<< "email = '" << escapeSQLChars(email) << "' "
 		<< queryCondition << id
 		<< ends;
 
