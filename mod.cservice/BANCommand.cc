@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: BANCommand.cc,v 1.2 2002-01-23 17:17:23 ultimate Exp $
+ * $Id: BANCommand.cc,v 1.3 2002-01-24 00:53:11 jeekay Exp $
  */
 
 #include	<new>
@@ -33,7 +33,7 @@
 #include	"responses.h"
 #include	"match.h"
 
-const char BANCommand_cc_rcsId[] = "$Id: BANCommand.cc,v 1.2 2002-01-23 17:17:23 ultimate Exp $" ;
+const char BANCommand_cc_rcsId[] = "$Id: BANCommand.cc,v 1.3 2002-01-24 00:53:11 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -213,6 +213,15 @@ if(banReason.size() > 128)
 
 int banDuration = banTime * 3600;
 string banTarget = st[2];
+
+// Is this a wildcard ban?
+if(bot->validUserMask(banTarget) && level < level::massban)
+{
+	bot->Notice(theClient, bot->getResponse(theUser,
+													language::insuf_access).c_str());
+	return false;
+}
+
 
 bool isNick = bot->validUserMask( banTarget ) ? false : true ;
 

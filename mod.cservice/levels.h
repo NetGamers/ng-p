@@ -1,5 +1,5 @@
 #ifndef __LEVELS_H
-#define __LEVELS_H "$Id: levels.h,v 1.10 2002-01-23 22:11:19 jeekay Exp $"
+#define __LEVELS_H "$Id: levels.h,v 1.11 2002-01-24 00:53:11 jeekay Exp $"
 
 /* 
  * levels.h
@@ -9,7 +9,7 @@
  * 
  * Defines access level constants for use in command handlers. 
  *
- * $Id: levels.h,v 1.10 2002-01-23 22:11:19 jeekay Exp $
+ * $Id: levels.h,v 1.11 2002-01-24 00:53:11 jeekay Exp $
  */
 
 namespace gnuworld {
@@ -42,9 +42,11 @@ namespace gnuworld {
   const int suspend = 100;
   const int unsuspend = 100;
   
-  const int masskick = 200;
   const int status2 = 100; // Users can see the channel modes too
   
+  const int masskick = 200;
+  const int massban = 200;
+
   const int adduser = 400;
   const int clearmode = 400;
   const int modinfo = 400;
