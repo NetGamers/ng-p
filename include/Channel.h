@@ -1,14 +1,35 @@
-/* Channel.h */
+/*
+ * Channel.h
+ * Author: Daniel Karrels (dan@karerls.com)
+ * Copyright (C) 2002 Daniel Karrels <dan@karrels.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
+ * USA.
+ *
+ * $Id: Channel.h,v 1.2 2002-07-01 00:16:12 jeekay Exp $
+ */
 
 #ifndef __CHANNEL_H
-#define __CHANNEL_H "$Id: Channel.h,v 1.1 2002-01-14 23:19:22 morpheus Exp $"
+#define __CHANNEL_H "$Id: Channel.h,v 1.2 2002-07-01 00:16:12 jeekay Exp $"
 
 #include	<string>
 #include	<map>
 #include	<iostream>
 #include	<vector>
 #include	<list>
-#include	<pair.h>
+#include	<utility>
 
 #include	<ctime>
 
@@ -24,7 +45,7 @@ using std::map ;
 using std::list ;
 using std::vector ;
 using std::endl ;
-
+using std::pair ;
 
 /// Forward declaration of class iClient.
 class iClient ;
@@ -185,6 +206,12 @@ public:
 	 * comparison, not a wildcard match.
 	 */
 	void removeBan( const string& banMask ) ;
+
+	/**
+	 * Remove all the bans in the channels ban list.
+	 */
+	inline void removeAllBans()
+		{ banList.clear(); }
 
 	/**
 	 * Find a ban in the channel's ban list which lexically matches
@@ -362,6 +389,23 @@ public:
 	 */
 	ChannelUser* findUser( iClient* theClient ) const ;
 
+#ifdef TOPIC_TRACK	
+	
+	/**
+	 * Returns the channel topic (if TOPIC_TRACK is defined)
+	 */
+    	const string& getTopic() const
+		{ return topic; }
+
+	/**
+	 * Sets this channel's topic value to the value passed in.
+	 * This method exists only if TOPIC_TRACK is defined.
+	 */
+	void setTopic(const string& _Topic)
+		{ topic = _Topic; }
+	
+#endif	
+	
 	/**
 	 * Convenience operator for outputting Channel information
 	 * to a C++ output stream.
@@ -467,7 +511,7 @@ protected:
 	 * The time at which this channel was created.
 	 */
 	time_t		creationTime ;
-	
+
 	/**
 	 * This channel's current modes.
 	 */
@@ -497,6 +541,13 @@ protected:
 	 * The structure used to store the channel bans.
 	 */
 	banListType	banList ;
+	
+#ifdef TOPIC_TRACK
+	/**
+	 * This channel's topic, only if TOPIC_TRACK is defined.
+	 */
+	string		topic;
+#endif
 
 } ;
 

@@ -1,10 +1,29 @@
-/* iServer.h
+/**
+ * iServer.h
  * iServer objects represent servers across the network, except
  * for the GNUWorld server itself (see class xServer).
+ * Copyright (C) 2002 Daniel Karrels <dan@karrels.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
+ * USA.
+ *
+ * $Id: iServer.h,v 1.2 2002-07-01 00:16:14 jeekay Exp $
  */
 
 #ifndef __ISERVER_H
-#define __ISERVER_H "$Id: iServer.h,v 1.1 2002-01-14 23:19:26 morpheus Exp $"
+#define __ISERVER_H "$Id: iServer.h,v 1.2 2002-07-01 00:16:14 jeekay Exp $"
 
 #include	<iostream>
 #include	<string>
@@ -117,7 +136,7 @@ public:
 
 	/**
 	 * Nice debugging method for outputting the iServer's
-	 * information to an ELog stream.
+	 * information to a standard c++ output stream.
 	 */
 	friend std::ostream& operator<<( std::ostream& out,
 		const iServer& serv )

@@ -1,15 +1,33 @@
-/* xNetwork.h
- * Author: Daniel Karrels dan@karrels.com
+/**
+ * Network.h
+ * Author: Daniel Karrels (dan@karrels.com)
+ * Copyright (C) 2002 Daniel Karrels <dan@karrels.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
+ * USA.
+ *
+ * $Id: Network.h,v 1.2 2002-07-01 00:16:13 jeekay Exp $
  */
 
 #ifndef __NETWORK_H
-#define __NETWORK_H "$Id: Network.h,v 1.1 2002-01-14 23:19:23 morpheus Exp $"
+#define __NETWORK_H "$Id: Network.h,v 1.2 2002-07-01 00:16:13 jeekay Exp $"
 
 #include	<vector>
 #include	<string>
 #include	<map>
 #include	<list>
-#include	<hash_map.h>
 #include	<algorithm>
 
 #include	<ctime>
@@ -19,16 +37,25 @@
 #include	"Channel.h"
 #include	"client.h"
 #include	"misc.h" // struct noCaseCompare
+#include	"defs.h"
+
+/**
+#ifdef GNU_EXTENSIONS
+ #include	<ext/hash_map>
+#else
+ #include	<hash_map>
+#endif
+*/
 
 namespace gnuworld
 {
 
+//using HASHMAPNS::hash_map ;
+//using HASHMAPNS::hash ;
 using std::string ;
 using std::vector ;
 using std::map ;
 using std::list ;
-using std::hash ;
-using std::hash_map ;
 using std::unary_function ;
 
 class xServer ;
@@ -45,24 +72,6 @@ class xNetwork
 {
 
 private:
-	/**
-	 * This is the vector type that will hold
-	 * pointers to iServer's.
-	 */
-	typedef vector< iServer* > serverVectorType ;
-
-	/**
-	 * This is the vector type that will hold
-	 * pointers to iClient's.
-	 */
-	typedef vector< iClient* > clientVectorType ;
-
-	/**
-	 * This is a vector of clientVectorType's.
-	 * This type will be used to hold vectors of iClients,
-	 * one for each server. (Described below.)
-	 */
-	typedef vector< clientVectorType > networkVectorType ;
 
 	/**
 	 * This is the type of vector for storing
@@ -74,12 +83,28 @@ private:
 	 * This is the type used to store the network Channel
 	 * instances.
 	 */
-	typedef hash_map< string, Channel*, eHash, eqstr > channelMapType ;
+	typedef map< string, Channel*, noCaseCompare > channelMapType ;
+//	typedef hash_map< string, Channel*, eHash, eqstr > channelMapType ;
 
 	/**
 	 * This is the type used to store the nick name/iClient* pairs.
 	 */
-	typedef hash_map< string, iClient*, eHash, eqstr > nickMapType ;
+	typedef map< string, iClient*, noCaseCompare > nickMapType ;
+//	typedef hash_map< string, iClient*, eHash, eqstr > nickMapType ;
+
+	/**
+	 * The type used to store information about iClient's,
+	 * keyed by integer numeric.
+	 */
+	typedef map< unsigned int, iClient* > numericMapType ;
+//	typedef hash_map< unsigned int, iClient* > numericMapType ;
+
+	/**
+	 * The type used to store information about iServer's,
+	 * keyed by integer numeric.
+	 */
+	typedef map< unsigned int, iServer* > serverMapType ;
+//	typedef hash_map< unsigned int, iServer* > serverMapType ;
 
 public:
 
@@ -190,6 +215,13 @@ public:
 	virtual iServer*	findServerName( const string& name ) const ;
 
 	/**
+	 * Find a remote server by a wildmask name.
+	 * Returns NULL if not found.
+	 */
+	virtual iServer*	findExpandedServerName( const string& name )
+					const ;
+
+	/**
 	 * Find a global channel by case insensitive name.
 	 * Returns NULL if not found.
 	 */
@@ -198,8 +230,16 @@ public:
 	/* Removal methods. */
 
 	/**
-	 * Remove a remote client by integer numeric, and return a pointer
-	 * to it.
+	 * Remove a remote client by integer numeric and return a
+	 * pointer to the iClient.	
+	 * Return NULL if not found.
+	 */
+	virtual iClient*	removeClient(
+					const unsigned int& intYYXXX ) ;
+
+	/**
+	 * Remove a remote client by integer server and client numerics,
+	 * and return a pointer to the iClient.
 	 * Returns NULL if not found.
 	 */
 	virtual iClient*	removeClient( const unsigned int& YY,
@@ -280,6 +320,8 @@ public:
 
 	/**
 	 * Remove a channel from the network table.
+	 * Returns the Channel which has been removed, or NULL if the
+	 * channel was not found.
 	 */
 	virtual Channel*	removeChannel( const Channel* theChan ) ;
 
@@ -296,51 +338,50 @@ public:
 	/**
 	 * This method performs a recursive removal of all servers
 	 * which are uplinked by intYY.
-	 * The original server referenced by intYY is neither removed
-	 * nor deleted.
+	 * The server referenced by intYY is deallocated in this
+	 * method.
 	 */
 	virtual void		OnSplit( const unsigned int& intYY ) ;
-
 
 	/**
 	 * Define a non-const iterator for walking through the
 	 * structure of remote servers.
 	 */
-	typedef serverVectorType::iterator serverIterator ;
+	typedef serverMapType::iterator serverIterator ;
 
 	/**
 	 * Define a const iterator for walking through the structure
 	 * of remote servers.
 	 */
-	typedef serverVectorType::const_iterator const_serverIterator ;
+	typedef serverMapType::const_iterator const_serverIterator ;
 
 	/**
 	 * Return a non-const iterator to the beginning of the
 	 * remote servers table.
 	 */
 	inline serverIterator server_begin()
-		{ return servers.begin() ; }
+		{ return serverMap.begin() ; }
 
 	/**
 	 * Return a non-const iterator to the end of the
 	 * remote servers table.
 	 */
 	inline serverIterator server_end()
-		{ return servers.end() ; }
+		{ return serverMap.end() ; }
 
 	/**
 	 * Return a const iterator to the beginning of the
 	 * remote servers table.
 	 */
 	inline const_serverIterator server_begin() const
-		{ return servers.begin() ; }
+		{ return serverMap.begin() ; }
 
 	/**
 	 * Return a const iterator to the end of the remote
 	 * servers table.
 	 */
 	inline const_serverIterator server_end() const
-		{ return servers.end() ; }
+		{ return serverMap.end() ; }
 
 	/**
 	 * Define a non-const iterator for walking through the
@@ -383,6 +424,24 @@ public:
 		{ return localClients.end() ; }
 
 	/**
+	 * Define a non-const iterator for walking through the 
+	 * channels structure
+	 */
+	typedef channelMapType::const_iterator	constChannelIterator;
+	
+	/**
+	 * Returns an iterator to the begining of the channels structure
+	 */
+	inline constChannelIterator		channels_begin() const
+		{ return channelMap.begin(); }
+	
+	/**
+	 * Returns an iterator to the end of the channels structure
+	 */
+	inline constChannelIterator		channels_end() const
+		{ return channelMap.end(); }
+
+	/**
 	 * Return the number of channels currently stored in the
 	 * the channel table.
 	 */
@@ -410,9 +469,9 @@ public:
 	 * A base class unary function used in foreach_xClient.
 	 */
 	struct fe_xClientBase : public unary_function< xClient*, void >
-	{
-	virtual void operator() ( xClient* ) {}
-	} ;
+		{
+		virtual void operator() ( xClient* ) {}
+		} ;
 
 	/**
 	 * Execute a unary function for each xClient.  Keep in mind
@@ -471,6 +530,14 @@ public:
 	 */
 	virtual size_t	countHost( const string& hostName ) const ;
 
+	/**
+	 * Match the given client real name string, which may include
+	 * wildcards, to each client on the network.  Return a
+	 * list of pointers to const iClient's which match.
+	 */
+	virtual list< const iClient* >	matchRealName( const string& )
+			const ;
+
 protected:
 
 	/**
@@ -492,17 +559,12 @@ protected:
 	void addNick( iClient* ) ;
 
 	/**
-	 * This is a vector of iServer*, one for each server
-	 * on the network.
+	 * Perform a simple recursive search for all leaves of
+	 * the server whose numeric is the second arguments, and
+	 * place each of those servers' numerics into the vector.
 	 */
-	serverVectorType		servers ;
-
-	/**
-	 * This is a vector of vector of iClient*.
-	 * The index into clients is the server on which
-	 * the client resides.
-	 */
-	networkVectorType		clients ;
+	void	findLeaves( vector< unsigned int >& yyVector,
+			const unsigned int intYY ) const ;
 
 	/**
 	 * The vector of local clients.
@@ -520,6 +582,18 @@ protected:
 	 * cross references.
 	 */
 	nickMapType			nickMap ;
+
+	/**
+	 * The container used to store the network iClient's,
+	 * keyed by iClient numeric.
+	 */
+	numericMapType			numericMap ;
+
+	/**
+	 * The container used to store the network iServer's,
+	 * keyed by iServer numeric.
+	 */
+	serverMapType			serverMap ;
 
 	/**
 	 * This variable is used backwards calls to the main server.

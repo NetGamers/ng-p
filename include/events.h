@@ -1,12 +1,32 @@
-/* Events.h
+/**
+ * Events.h
  * This file defines the basic network and channel events that
  * the GNUWorld server may distribute to its services clients.
  * Hopefully most of these are pretty self explanatory.
  * This file was originally created by Orlando Bassotto.
+ *
+ * Copyright (C) 2002 Daniel Karrels <dan@karrels.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
+ * USA.
+ *
+ * $Id: events.h,v 1.4 2002-07-01 00:16:13 jeekay Exp $
  */
 
 #ifndef __EVENTS_H
-#define __EVENTS_H "$Id: events.h,v 1.3 2002-01-29 18:40:25 jeekay Exp $"
+#define __EVENTS_H "$Id: events.h,v 1.4 2002-07-01 00:16:13 jeekay Exp $"
 
 namespace gnuworld
 {
@@ -31,9 +51,10 @@ enum
 	EVT_KILL,
 	EVT_NICK,
 	EVT_CHNICK,
-	EVT_LOGGEDIN,
 	EVT_NSKILL,
 	EVT_FORCEDEAUTH,
+	EVT_LOGGEDIN,
+	EVT_ACCOUNT,
 
 	// EVT_NOOP must always be last
 	EVT_NOOP
@@ -91,6 +112,8 @@ typedef int channelEventType ;
  *  1) Gline*
  * EVT_REMGLINE
  *  1) Gline*
+ * EVT_ACCOUNT
+ *  1) iClient*
  *
  * Channel Events
  * --------------

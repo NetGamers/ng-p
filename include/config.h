@@ -1,9 +1,27 @@
-/* config.h
- * $Id: config.h,v 1.1 2002-01-14 23:19:25 morpheus Exp $
+/**
+ * config.h
+ * Copyright (C) 2002 Daniel Karrels <dan@karrels.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
+ * USA.
+ *
+ * $Id: config.h,v 1.2 2002-07-01 00:16:13 jeekay Exp $
  */
 
 #ifndef __CONFIG_H
-#define __CONFIG_H "$Id: config.h,v 1.1 2002-01-14 23:19:25 morpheus Exp $"
+#define __CONFIG_H "$Id: config.h,v 1.2 2002-07-01 00:16:13 jeekay Exp $"
 
 /* config.h */
 /* GNUWorld main configuration file */
@@ -34,7 +52,7 @@
  * This is the name of the default file from which GNUWorld
  * will read its server characteristics.
  */
-#define CONFFILE "gnuworld.conf"
+#define CONFFILE "GNUWorld.conf"
 
 /**
  * LOGFILE
@@ -80,5 +98,18 @@
  * The maximum number of channel modes per command.
  */
 #define MAX_CHAN_MODES 10
+
+/**
+ * HIDDEN_HOST
+ * The suffix to be appended to the authenticated username
+ * to form the hidden host-mask when a user sets +x.
+ */
+#define HIDDEN_HOST ".users.undernet.org"
+
+/**
+ * TOPIC_TRACK
+ * Set if you want gnuworld to track topics in the network channels
+ */
+#undef TOPIC_TRACK
 
 #endif /* __CONFIG_H */

@@ -1,6 +1,24 @@
-/* server.h
+/**
+ * server.h
  * This is the header file for the server itself.
  * This class originally created by Orlando Bassotto.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
+ * USA.
+ *
+ * $Id: server.h,v 1.2 2002-07-01 00:16:14 jeekay Exp $
  */
 
 /* Command Map Description
@@ -13,18 +31,17 @@
  * with: MSG_
  * Pointers to offsets of these functions within the
  * global variable xServer* Server are stored in a
- * VectorTrie (see web page).
+ * hash_map<>
  */
 
 #ifndef __SERVER_H
-#define __SERVER_H "$Id: server.h,v 1.1 2002-01-14 23:19:27 morpheus Exp $"
+#define __SERVER_H "$Id: server.h,v 1.2 2002-07-01 00:16:14 jeekay Exp $"
 
 #include	<string>
 #include	<vector>
 #include	<list>
-#include	<strstream>
+#include	<sstream>
 #include	<map>
-#include	<hash_map.h>
 #include	<queue>
 #include	<algorithm>
 
@@ -43,15 +60,25 @@
 #include	"moduleLoader.h"
 #include	"ELog.h"
 #include	"TimerHandler.h"
+#include	"defs.h"
+
+/*
+#ifdef GNU_EXTENSIONS
+ #include       <ext/hash_map>
+#else
+ #include       <hash_map>
+#endif
+*/
 
 namespace gnuworld
 {
 
+//using HASHMAPNS::hash ;
+//using HASHMAPNS::hash_map ;
 using std::string ;
 using std::list ;
 using std::vector ;
-using std::strstream ;
-using std::hash_map ;
+using std::stringstream ;
 using std::priority_queue ;
 using std::map ;
 
@@ -82,6 +109,8 @@ class xClient ;
 /// Forward declaration of Channel
 class Channel ;
 
+/// The type used to store messages for delivery to clients of
+/// class xServer
 enum MessageType
 	{
 	SRV_SUCCESS, // all ok
@@ -274,18 +303,18 @@ public:
 	virtual size_t WriteDuringBurst( const char*, ... ) ;
 
 	/**
-	 * Append a std::strstream to the output buffer.
+	 * Append a std::stringstream to the output buffer.
 	 * The second argument determines if data should be written
 	 * during burst time.
 	 */
-	virtual size_t Write( strstream& ) ;
+	virtual size_t Write( const stringstream& ) ;
 
 	/**
 	 * This method is similar to the above Write(), except
 	 * that the data will be written to the normal output
 	 * buffer even during burst time.
 	 */
-	virtual size_t WriteDuringBurst( strstream& ) ;
+	virtual size_t WriteDuringBurst( const stringstream& ) ;
 
 	/**
 	 * Write any bufferred data to the network.
@@ -325,12 +354,15 @@ public:
 	virtual bool setGline( const string& setBy,
 		const string& userHost,
 		const string& reason,
-		const time_t& duration ) ;
+		const time_t& duration, 
+		const xClient* setClient = NULL,  
+		const string& server = "*") ;
 
 	/**
 	 * Remove a network gline and update internal gline table.
 	 */
-	virtual bool removeGline( const string& userHost ) ;
+	virtual bool removeGline( const string& userHost,
+		const  xClient* remClient = NULL) ;
 
 	/**
 	 * Find a gline by lexical searching, case insensitive.
@@ -555,7 +587,8 @@ public:
 	 * events.
 	 */
 	virtual void PostEvent( const eventType&,
-		void* = 0, void* = 0, void* = 0, void* = 0 ) ;
+		void* = 0, void* = 0, void* = 0, void* = 0 ,
+		const xClient* ourClient = 0) ;
 
 	/**
 	 * Post a channel event to the rest of the system.  Note
@@ -726,6 +759,18 @@ public:
 		{ return ConnectionTime ; }
 
 	/**
+	 * Returns the total number of bytes recieved from the uplink
+	 */
+	inline const unsigned long getTotalReceived() const
+		{ return theSock->getTotalReceived(); }
+
+	/**
+	 * Returns the total number of bytes sent to the uplink
+	 */
+	inline const unsigned long getTotalSent() const
+		{ return theSock->getTotalSent(); }
+	
+	/**
 	 * This is a simple mutator of the server's socket pointer.
 	 * This is used ONLY for implementing the simulation mode.
 	 */
@@ -760,7 +805,7 @@ public:
 	 * if the mode is being set/unset by a server.
 	 * detected.
 	 */
-	virtual void	onChannelModeT( Channel*, bool, ChannelUser* ) ;
+	virtual void	OnChannelModeT( Channel*, bool, ChannelUser* ) ;
 
 	/**
 	 * This method is called when a channel mode 'n' change is
@@ -768,7 +813,7 @@ public:
 	 * Keep in mind that the source ChannelUser may be NULL
 	 * if the mode is being set/unset by a server.
 	 */
-	virtual void	onChannelModeN( Channel*, bool, ChannelUser* ) ;
+	virtual void	OnChannelModeN( Channel*, bool, ChannelUser* ) ;
 
 	/**
 	 * This method is called when a channel mode 's' change is
@@ -776,7 +821,7 @@ public:
 	 * Keep in mind that the source ChannelUser may be NULL
 	 * if the mode is being set/unset by a server.
 	 */
-	virtual void	onChannelModeS( Channel*, bool, ChannelUser* ) ;
+	virtual void	OnChannelModeS( Channel*, bool, ChannelUser* ) ;
 
 	/**
 	 * This method is called when a channel mode 'p' change is
@@ -784,7 +829,7 @@ public:
 	 * Keep in mind that the source ChannelUser may be NULL
 	 * if the mode is being set/unset by a server.
 	 */
-	virtual void	onChannelModeP( Channel*, bool, ChannelUser* ) ;
+	virtual void	OnChannelModeP( Channel*, bool, ChannelUser* ) ;
 
 	/**
 	 * This method is called when a channel mode 'm' change is
@@ -792,7 +837,7 @@ public:
 	 * Keep in mind that the source ChannelUser may be NULL
 	 * if the mode is being set/unset by a server.
 	 */
-	virtual void	onChannelModeM( Channel*, bool, ChannelUser* ) ;
+	virtual void	OnChannelModeM( Channel*, bool, ChannelUser* ) ;
 
 	/**
 	 * This method is called when a channel mode 'i' change is
@@ -800,7 +845,7 @@ public:
 	 * Keep in mind that the source ChannelUser may be NULL
 	 * if the mode is being set/unset by a server.
 	 */
-	virtual void	onChannelModeI( Channel*, bool, ChannelUser* ) ;
+	virtual void	OnChannelModeI( Channel*, bool, ChannelUser* ) ;
 
 	/**
 	 * This method is called when a channel mode 'l' change is
@@ -808,7 +853,7 @@ public:
 	 * Keep in mind that the source ChannelUser may be NULL
 	 * if the mode is being set/unset by a server.
 	 */
-	virtual void	onChannelModeL( Channel*, bool,
+	virtual void	OnChannelModeL( Channel*, bool,
 				ChannelUser*, unsigned int ) ;
 
 	/**
@@ -817,7 +862,7 @@ public:
 	 * Keep in mind that the source ChannelUser may be NULL
 	 * if the mode is being set/unset by a server.
 	 */
-	virtual void	onChannelModeK( Channel*, bool,
+	virtual void	OnChannelModeK( Channel*, bool,
 				ChannelUser*, const string& ) ;
 
 	/**
@@ -826,7 +871,7 @@ public:
 	 * Keep in mind that the source ChannelUser may be NULL
 	 * if the mode is being set/unset by a server.
 	 */
-	virtual void	onChannelModeO( Channel*, ChannelUser*,
+	virtual void	OnChannelModeO( Channel*, ChannelUser*,
 		const opVectorType& ) ;
 
 	/**
@@ -835,7 +880,7 @@ public:
 	 * Keep in mind that the source ChannelUser may be NULL
 	 * if the mode is being set/unset by a server.
 	 */
-	virtual void	onChannelModeV( Channel*, ChannelUser*,
+	virtual void	OnChannelModeV( Channel*, ChannelUser*,
 		const voiceVectorType& ) ;
 
 	/**
@@ -844,7 +889,7 @@ public:
 	 * Keep in mind that the source ChannelUser may be NULL
 	 * if the mode is being set/unset by a server.
 	 */
-	virtual void	onChannelModeB( Channel*, ChannelUser*,
+	virtual void	OnChannelModeB( Channel*, ChannelUser*,
 		banVectorType& ) ;
 
 	/**
@@ -852,6 +897,11 @@ public:
 	 * expire.
 	 */
 	virtual void updateGlines() ;
+
+	/**
+	 * Check if a server is juped
+	 */
+	virtual bool isJuped( const iServer* ) const ;
 
 protected:
 
@@ -971,6 +1021,7 @@ protected:
 	 * This method is called when a user mode change is detected.
 	 */
 	virtual void	onUserModeChange( xParameters& ) ;
+
 
 	/**
 	 * This variable is false when no signal has occured, true
@@ -1136,10 +1187,17 @@ protected:
 	/// W(HOIS) message handler.
 	DECLARE_MSG(W);
 
+	/// Account message handler.
+	DECLARE_MSG(AC);
+
 	/// NOOP message.
 	/// Use this handler for any messages that we don't need to handle.
 	/// Included for completeness.
 	DECLARE_MSG(NOOP);
+
+	/// 351 message
+	/// when our client recieve back a version reply from a server
+	DECLARE_MSG(M351);
 
 	// Non-tokenized command handlers
 	// Replication of code *sigh*
@@ -1155,8 +1213,8 @@ protected:
 	 * the bound offset of the command handler methods
 	 * are stored in this structure.
 	 */
-	typedef hash_map< string, int (xServer::*)( xParameters& ),
-		eHash, eqstr > commandMapType ;
+	typedef map< string, int (xServer::*)( xParameters& ) >
+		commandMapType ;
 
 	/**
 	 * A pointer to the server command handler.
@@ -1215,8 +1273,7 @@ protected:
 	/**
 	 * Type used to store the channel event map.
 	 */
-	typedef hash_map< string, list< xClient* >*, eHash, eqstr >
-		channelEventMapType ;
+	typedef map< string, list< xClient* >* > channelEventMapType ;
 
 	/**
 	 * This structure provides a nice iterator interface, and

@@ -1,7 +1,27 @@
-/* ChannelUser.h */
+/**
+ * ChannelUser.h
+ * Copyright (C) 2002 Daniel Karrels <dan@karrels.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
+ * USA.
+ *
+ * $Id: ChannelUser.h,v 1.2 2002-07-01 00:16:12 jeekay Exp $
+ */
 
 #ifndef __CHANNELUSER_H
-#define __CHANNELUSER_H "$Id: ChannelUser.h,v 1.1 2002-01-14 23:19:22 morpheus Exp $"
+#define __CHANNELUSER_H "$Id: ChannelUser.h,v 1.2 2002-07-01 00:16:12 jeekay Exp $"
 
 #include	<string>
 
@@ -36,8 +56,8 @@ public:
 	/// Bit representing channel user mode +v
 	static const modeType	MODE_V ;
 
-	/// ZOMBIE is true if the iClient is in the zombie state
-	const static modeType   ZOMBIE ;
+	/// Bit representing channel user zombie state
+	static const modeType   ZOMBIE ;
 
 	/**
 	 * Construct a ChannelUser given an iClient
@@ -57,12 +77,24 @@ public:
 	inline bool getMode( const modeType& whichMode ) const
 		{ return (whichMode == (modes & whichMode)) ; }
 
+	/**
+	 * Return true if this user has mode +o on this channel,
+	 * false otherwise.
+	 */
 	inline bool isModeO() const
 		{ return getMode( MODE_O ) ; }
 
+	/**
+	 * Return true if this user has mode +v on this channel,
+	 * false otherwise.
+	 */
 	inline bool isModeV() const
 		{ return getMode( MODE_V ) ; }
 
+	/**
+	 * Return true if this user is currently a zombie in this
+	 * channel, false otherwise.
+	 */
 	inline bool isZombie() const
 		{ return getMode( ZOMBIE ) ; }
 
@@ -79,12 +111,21 @@ public:
 	inline void setMode( const modeType& whichMode )
 		{ modes |= whichMode ; }
 
+	/**
+	 * Set the user's mode +o state in this channel.
+	 */
 	inline void setModeO()
 		{ setMode( MODE_O ) ; }
 
+	/**
+	 * Set the user's mode +v state in this channel.
+	 */
 	inline void setModeV()
 		{ return setMode( MODE_V ) ; }
 
+	/**
+	 * Set this user's zombie state to true in this channel.
+	 */
 	inline void setZombie()
 		{ setMode( ZOMBIE ) ; }
 
@@ -94,12 +135,21 @@ public:
 	inline void removeMode( const modeType& whichMode )
 		{ modes &= ~whichMode ; }
 
+	/**
+	 * Remove the user's mode +o state in this channel.
+	 */
 	inline void removeModeO()
 		{ removeMode( MODE_O ) ; }
 
+	/**
+	 * Remove the user's mode +v state in this channel.
+	 */
 	inline void removeModeV()
 		{ removeMode( MODE_V ) ; }
 
+	/**
+	 * Remove the user's zombie state in this channel.
+	 */
 	inline void removeZombie()
 		{ removeMode( ZOMBIE ) ; }
 

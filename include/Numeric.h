@@ -1,11 +1,29 @@
-/* Numeric.h
+/**
+ * Numeric.h
  * This file contains basic routines for converting numerics between
  * integer and char* and std::string formats.
  * The majority of this code is from the Undernet ircu code base.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
+ * USA.
+ *
+ * $Id: Numeric.h,v 1.2 2002-07-01 00:16:13 jeekay Exp $
  */
 
 #ifndef __NUMERIC_H
-#define __NUMERIC_H "$Id: Numeric.h,v 1.1 2002-01-14 23:19:23 morpheus Exp $"
+#define __NUMERIC_H "$Id: Numeric.h,v 1.2 2002-07-01 00:16:13 jeekay Exp $"
 
 /*
  * Numeric nicks are new as of version ircu2.10.00beta1.
@@ -133,7 +151,7 @@ inline const char* inttobase64( char* buf, unsigned int v, size_t count )
 {
 assert( buf != 0 ) ;
 
-buf[count] = '\0';  
+buf[count] = '\0';
 while (count > 0)
 	{
 	buf[ --count ] = convert2y[(v & NUMNICKMASK)];
@@ -141,6 +159,17 @@ while (count > 0)
 	}
 
 return buf;
+}
+
+inline const unsigned int combinebase64int( const unsigned int& intYY,
+	const unsigned int& intXXX )
+{
+char charYYXXX[ 6 ] ;
+
+inttobase64( charYYXXX, intYY, 2 ) ;
+inttobase64( &charYYXXX[ 2 ], intXXX, 3 ) ;
+
+return base64toint( charYYXXX, 5 ) ;
 }
 
 } // namespace gnuworld

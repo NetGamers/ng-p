@@ -1,10 +1,29 @@
-/* client.h
- * This file originally created by Orlando Bassotto.
+/**
+ * client.h
+ * Copyright (C) 2002 Daniel Karrels <dan@karrels.com>
+ *                    Orlando Bassotto
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *       
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of  
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
+ * USA.
+ *
  */
 
 #ifndef __CLIENT_H
-#define __CLIENT_H "$Id: client.h,v 1.1 2002-01-14 23:19:24 morpheus Exp $"
+#define __CLIENT_H "$Id: client.h,v 1.2 2002-07-01 00:16:13 jeekay Exp $"
 
+#include	<sstream>
 #include	<string>
 
 #include	"server.h"
@@ -15,7 +34,8 @@
 
 namespace gnuworld
 {
- 
+
+using std::stringstream ; 
 using std::string ;
 
 /**
@@ -103,7 +123,7 @@ public:
 	/**
 	 * Write a string of data to the network.
 	 */
-	virtual int Write( strstream& s )
+	virtual int Write( const stringstream& s )
 		{ return QuoteAsServer( s.str() ) ; }
 
 	/**
@@ -321,6 +341,13 @@ public:
 	 * is issued to the client.
 	 */
 	virtual int OnPrivateMessage( iClient* Sender,
+		const string& Message, bool secure = false ) ;
+
+	/**
+	 * OnServerMessage is called when a server message
+	 * a client
+	 */
+	virtual int OnServerMessage( iServer* Sender,
 		const string& Message, bool secure = false ) ;
 
 	/**

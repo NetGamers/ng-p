@@ -1,7 +1,27 @@
-/* Gline.h */
+/**
+ * Gline.h
+ * Copyright (C) 2002 Daniel Karrels <dan@karrels.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
+ * USA.
+ *
+ * $Id: Gline.h,v 1.2 2002-07-01 00:16:12 jeekay Exp $
+ */
 
 #ifndef __GLINE_H
-#define __GLINE_H "$Id: Gline.h,v 1.1 2002-01-14 23:19:23 morpheus Exp $"
+#define __GLINE_H "$Id: Gline.h,v 1.2 2002-07-01 00:16:12 jeekay Exp $"
 
 #include	<string>
 #include	<iostream>
@@ -89,6 +109,30 @@ public:
 		{ return expiration ; }
 
 	/**
+	 * Retrieve the user/server who set this gline.
+	 */
+	inline void setSetBy( const string& _setBy )
+		{ setBy = _setBy; }
+
+	/**
+	 * Set the hostmask affected by this gline.
+	 */
+	inline void setHost( const string& _host )
+		{ userHost = _host; }
+
+	/**
+	 * Set the reason for this gline.
+	 */
+	inline void setReason( const string& _reason )
+		{ reason = _reason; }
+
+	/**
+	 * Set the expiration time on this gline.
+	 */
+	inline void setExpiration( const time_t _expiration )
+		{ expiration = _expiration; }
+
+	/**
 	 * Convenience operator method which allows the output
 	 * of a Gline instance to a C++ standard output stream.
 	 */
@@ -100,7 +144,7 @@ public:
 		<< "Expires: " << rhs.expiration ;
 	return out ;
 	}
-
+	
 protected:
 
 	/**

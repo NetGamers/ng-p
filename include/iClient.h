@@ -1,8 +1,27 @@
-/* iClient.h
+/**
+ * iClient.h
+ * Copyright (C) 2002 Daniel Karrels <dan@karrels.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
+ * USA.
+ *
+ * $Id: iClient.h,v 1.2 2002-07-01 00:16:14 jeekay Exp $
  */
 
 #ifndef __ICLIENT_H
-#define __ICLIENT_H "$Id: iClient.h,v 1.1 2002-01-14 23:19:26 morpheus Exp $"
+#define __ICLIENT_H "$Id: iClient.h,v 1.2 2002-07-01 00:16:14 jeekay Exp $"
 
 #include	<string>
 #include	<list>
@@ -63,6 +82,12 @@ public:
 	/// MODE_SERVICES is true if the iClient is a service agent.
 	const static modeType	MODE_SERVICES ;
 
+	/// MODE_REGISTERED is true if the iClient has an account set.
+	const static modeType	MODE_REGISTERED ;
+
+	/// MODE_HIDDEN_HOST is true if the iClient has HIDDEN_HOST (+x) set.
+	const static modeType	MODE_HIDDEN_HOST ;
+
 	/// Iterator for channels this user is on.
 	typedef channelListType::iterator channelIterator ;
 
@@ -82,8 +107,10 @@ public:
 		const string& _userName,
 		const string& _hostBase64,
 		const string& _insecureHost,
+		const string& _realInsecureHost,
 		const string& _mode,
-		const string& _description,    
+		const string& _account,
+		const string& _description,
 		const time_t& _connectTime ) ;
 
 	/**
@@ -114,18 +141,45 @@ public:
 		{ return insecureHost ;}
 
 	/**
+	 * Retrieve the iClient's 'real' host name.
+	 */
+	inline const string& getRealInsecureHost() const
+		{ return realInsecureHost ;}
+
+	/**
 	 * Retrieve a string of the form: nick!user@host for this user.
 	 */
 	inline const string getNickUserHost() const
 		{ return (nickName + '!' + userName + '@' + insecureHost) ; }
 
-#ifdef CLIENT_DESC
 	/**
 	 * Retrieve client's 'real-name' field.
 	 */
 	inline const string& getDescription() const
 		{ return description ; }
-#endif
+
+	/**
+	 * Overwrite this clients "Real Host" with a "Hidden Host".
+	 */
+	inline void setHiddenHost()
+		{ insecureHost = account + string(HIDDEN_HOST); }
+
+	/**
+	 * Set/Retrieve client's 'account' field.
+	 */
+	inline const string& getAccount() const
+		{ return account ; }
+
+	/**
+	 * I really have no idea what this is...someone wanna pass me
+	 * a bone here people?
+	 */
+	inline void setAccount( const string& _account )
+		{
+		account = _account ;
+		setMode(MODE_REGISTERED);
+		if (isModeR() && isModeX()) setHiddenHost();
+		}
 
 	/**
 	 * Retrieve the iClient's connection time.
@@ -213,20 +267,47 @@ public:
 	inline bool getMode( const modeType& theMode ) const
 		{ return (theMode == (mode & theMode)) ; }
 
+	/**
+	 * Return true if this client has the +i mode set, false otherwise.
+	 */
 	inline bool isModeI() const
 		{ return getMode( MODE_INVISIBLE ) ; }
 
+	/**
+	 * Return true if this client has the +w mode set, false otherwise.
+	 */
 	inline bool isModeW() const
 		{ return getMode( MODE_WALLOPS ) ; }
 
+	/**
+	 * Return true if this client has the +k mode set, false otherwise.
+	 */
 	inline bool isModeK() const
 		{ return getMode( MODE_SERVICES ) ; }
 
+	/**
+	 * Return true if this client has the +o mode set, false otherwise.
+	 */
 	inline bool isModeO() const
 		{ return getMode( MODE_OPER ) ; }
 
+	/**
+	 * Return true if this client has the +d mode set, false otherwise.
+	 */
 	inline bool isModeD() const
 		{ return getMode( MODE_DEAF ) ; }
+
+	/**
+	 * Return true if this client has the +r mode set, false otherwise.
+	 */
+	inline bool isModeR() const
+		{ return getMode( MODE_REGISTERED ) ; }
+
+	/**
+	 * Return true if this client has the +x mode set, false otherwise.
+	 */
+	inline bool isModeX() const
+		{ return getMode( MODE_HIDDEN_HOST ) ; }
 
 	/**
 	 * Return true if this iClient is an oper, false otherwise.
@@ -246,20 +327,44 @@ public:
 	inline void setMode( const modeType& newMode )
 		{ mode |= newMode ; }
 
+	/**
+	 * Set mode +i for this user.
+	 */
 	inline void setModeI()
 		{ setMode( MODE_INVISIBLE ) ; }
 
+	/**
+	 * Set mode +w for this user.
+	 */
 	inline void setModeW()
 		{ setMode( MODE_WALLOPS ) ; }
 
+	/**
+	 * Set mode +k for this user.
+	 */
 	inline void setModeK()
 		{ setMode( MODE_SERVICES ) ; }
 
+	/**
+	 * Set mode +d for this user.
+	 */
 	inline void setModeD()
 		{ setMode( MODE_DEAF ) ; }
 
+	/**
+	 * Set mode +o for this user.
+	 */
 	inline void setModeO()
 		{ setMode( MODE_OPER ) ; }
+
+	/**
+	 * Set mode +x for this user.
+	 */
+	inline void setModeX()
+		{
+		setMode( MODE_HIDDEN_HOST ) ;
+		if (isModeR() && isModeX()) setHiddenHost();
+		}
 
 	/**
 	 * Remove a user mode for this iClient.
@@ -267,20 +372,41 @@ public:
 	inline void removeMode( const modeType& theMode )
 		{ mode &= ~theMode ; }
 
+	/**
+	 * Remove user mode 'i'.
+	 */
 	inline void removeModeI()
 		{ removeMode( MODE_INVISIBLE ) ; }
 
+	/**
+	 * Remove user mode 'w'.
+	 */
 	inline void removeModeW()
 		{ removeMode( MODE_WALLOPS ) ; }
 
+	/**
+	 * Remove user mode 'k'.
+	 */
 	inline void removeModeK()
 		{ removeMode( MODE_SERVICES ) ; }
 
+	/**
+	 * Remove user mode 'd'.
+	 */
 	inline void removeModeD()
 		{ removeMode( MODE_DEAF ) ; }
 
+	/**
+	 * Remove user mode 'o'.
+	 */
 	inline void removeModeO()
 		{ removeMode( MODE_OPER ) ; }
+
+	/**
+	 * Remove user mode 'x'.
+	 */
+	inline void removeModeX()
+		{ removeMode( MODE_HIDDEN_HOST ) ; }
 
 	/**
 	 * Return a string representation of this iClient's user
@@ -360,6 +486,10 @@ public:
 			<< theClient.userName << '@'
 			<< theClient.insecureHost
 			<< " Numeric: " << theClient.getCharYYXXX()
+			<< ", int YY/XXX/YYXXX: "
+			<< theClient.getIntYY() << '/'
+			<< theClient.getIntXXX() << '/'
+			<< theClient.getIntYYXXX()
 			<< std::endl ;
 		return out ;
 		}
@@ -411,15 +541,20 @@ protected:
 
 	/**
 	 * This client's hostname as it appears to network users.
+	 * (Possibly a hidden-hostname is the user is +x)
 	 */
 	string		insecureHost ;
 
-#ifdef CLIENT_DESC
+	/**
+	 * This client's actual network hostname, unhidden and
+	 * exposed.
+	 */
+	string		realInsecureHost ;
+
 	/**
 	 * This client's 'real-name' field data.
 	 */
 	string		description ;
-#endif // CLIENT_DESC
 
 	/**
 	 * The time at which this iClient connected to the network.
@@ -430,6 +565,11 @@ protected:
 	 * This client's current user modes.
 	 */
 	modeType	mode ;
+
+	/**
+	 * This client's "Account".
+	 */
+	string		account ;
 
 	/**
 	 * This client's integer per-server numeric.

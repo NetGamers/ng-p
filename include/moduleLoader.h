@@ -1,7 +1,7 @@
 /* moduleLoader.h */
 
 #ifndef __MODULELOADER_H
-#define __MODULELOADER_H "$Id: moduleLoader.h,v 1.1 2002-01-14 23:19:26 morpheus Exp $"
+#define __MODULELOADER_H "$Id: moduleLoader.h,v 1.2 2002-07-01 00:16:14 jeekay Exp $"
 
 #include	<iostream>
 #include	<string>
@@ -17,6 +17,11 @@ namespace gnuworld
 using std::string ;
 using std::endl ;
 
+/**
+ * This is a templated module loader class.  The templated type is the
+ * type of object to retrieve from the module.  This class is used with
+ * libtool for maximum portability.
+ */
 template< class modType >
 class moduleLoader
 { 
@@ -68,7 +73,16 @@ public:
 		::exit( 0 ) ;
 		}
 
-	string fileName( string( "./" ) + moduleName ) ;
+	string fileName( moduleName ) ;
+	if( fileName[ 0 ] != '/' )
+		{
+		// No absolute path specified
+		// Attempt to find the module in the currect directory
+		fileName = string( "./" ) + fileName ;
+		}
+
+	// Libtool libraries end with .la, and at this point, this class
+	// only supports libtool libraries
 	if( string::npos == fileName.find( ".la" ) )
 		{
 		// TODO: This should be more thorough
