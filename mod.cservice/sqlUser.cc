@@ -4,7 +4,7 @@
  * Storage class for accessing user information either from the backend
  * or internal storage.
  *
- * $Id: sqlUser.cc,v 1.13 2002-09-24 20:06:19 jeekay Exp $
+ * $Id: sqlUser.cc,v 1.14 2002-10-23 19:49:02 jeekay Exp $
  */
 
 #include	<string.h>
@@ -46,10 +46,6 @@ sqlUser::sqlUser(PgDatabase* _SQLDb)
    language_id( 0 ),
    flags( 0 ),
    last_used( 0 ),
-   coordX( 0 ),
-   coordY( 0 ),
-   coordZ( 0 ),
-   alliance(),
    email(),
    last_hostmask(),
    comment(),
@@ -174,15 +170,11 @@ flags = atoi(SQLDb->GetValue(row, 5));
 last_updated_by = SQLDb->GetValue(row, 6);
 last_updated = atoi(SQLDb->GetValue(row, 7));
 email = SQLDb->GetValue(row, 8);
-coordX = atoi(SQLDb->GetValue(row, 9));
-coordY = atoi(SQLDb->GetValue(row, 10));
-coordZ = atoi(SQLDb->GetValue(row, 11));
-alliance = SQLDb->GetValue(row, 12);
-comment = SQLDb->GetValue(row, 13);
-suspendedExpire = atoi(SQLDb->GetValue(row, 14));
-questionID = atoi(SQLDb->GetValue(row, 15));
-verificationData = SQLDb->GetValue(row, 16);
-maxlogins = atoi(SQLDb->GetValue(row, 17));
+comment = SQLDb->GetValue(row, 9);
+suspendedExpire = atoi(SQLDb->GetValue(row, 10));
+questionID = atoi(SQLDb->GetValue(row, 11));
+verificationData = SQLDb->GetValue(row, 12);
+maxlogins = atoi(SQLDb->GetValue(row, 13));
 
 /* Fetch the "Last Seen" time from the users_lastseen table. */
 
@@ -204,10 +196,6 @@ queryString	<< queryHeader
 		<< "user_name = '" << escapeSQLChars(user_name) << "', "
 		<< "password = '" << password << "', "
 		<< "language_id = " << language_id << ", "
-		<< "coordX = " << coordX << ", "
-		<< "coordY = " << coordY << ", "
-		<< "coordZ = " << coordZ << ", "
-		<< "alliance = '" << escapeSQLChars(alliance) << "', "
 		<< "comment = '" << escapeSQLChars(comment) << "', "
 		<< "last_updated = now()::abstime::int4, "
 		<< "suspended_expire_ts = " << suspendedExpire << ", "

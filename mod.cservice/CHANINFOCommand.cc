@@ -13,7 +13,7 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.17 2002-10-20 02:12:06 jeekay Exp $
+ * $Id: CHANINFOCommand.cc,v 1.18 2002-10-23 19:49:01 jeekay Exp $
  */
 
 #include	<string>
@@ -27,7 +27,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.17 2002-10-20 02:12:06 jeekay Exp $" ;
+const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.18 2002-10-23 19:49:01 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -78,12 +78,8 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 
 	if (targetUser->getFlag(sqlUser::F_INVIS))
 		{
-
-		/* If they don't have * access or not opered op, deny. */
-                if( !((theUser) && bot->getAdminAccessLevel(theUser)) && (theUser != targetUser) && !(theClient->isOper()))
-
-		/* If they don't have * access, deny. */
-		if( !((theUser) && bot->getAdminAccessLevel(theUser)) && (theUser != targetUser))
+		/* If they don't have * access or not opered, deny. */
+		if( !((theUser) && bot->getAdminAccessLevel(theUser)) && (theUser != targetUser) && !(theClient->isOper()))
 			{
 			bot->Notice(theClient,
 				bot->getResponse(theUser,
@@ -109,11 +105,6 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 		bot->Notice(theClient," - What do you mean you want to demolish Planetarion to make way for a new"
 		" hyperspace expressway?");
 	}
-	
-	if (targetUser->getID() == 23326)
-	{
-		bot->Notice(theClient, " - Wibble!");
-	}
 
 	/* Loop over all the people we might be logged in as */
   bot->Notice(theClient, "Currently logged on via:");
@@ -138,19 +129,6 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 		}
 
 	bot->Notice(theClient,string("Language: English"));
-
-	if( (targetUser->getCoordX() && targetUser->getCoordY() && targetUser->getCoordZ() ) > 0)
-                {
-                bot->Notice(theClient, "Coordinates: %i:%i:%i",
-                        targetUser->getCoordX(),
-                        targetUser->getCoordY(),
-                        targetUser->getCoordZ());
-                }
-         
-        if(!targetUser->getAlliance().empty())
-                {
-                bot->Notice(theClient, "Alliance: %s", targetUser->getAlliance().c_str());
-                }
 
 	if (targetUser->getFlag(sqlUser::F_INVIS))
 		{

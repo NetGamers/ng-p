@@ -1,7 +1,7 @@
 /* sqlUser.h */
 
 #ifndef __SQLUSER_H
-#define __SQLUSER_H "$Id: sqlUser.h,v 1.10 2002-09-24 20:06:19 jeekay Exp $"
+#define __SQLUSER_H "$Id: sqlUser.h,v 1.11 2002-10-23 19:49:02 jeekay Exp $"
 
 #include <ctime>
 #include <string>
@@ -40,7 +40,7 @@ public:
 
 	static const unsigned int	EV_SUSPEND;
 	static const unsigned int	EV_UNSUSPEND;
-	static const unsigned int       EV_COMMENT;
+	static const unsigned int EV_COMMENT;
 
 	/*
 	 *  Methods to get data atrributes.
@@ -63,18 +63,6 @@ public:
 
 	inline bool		getFlag( const flagType& whichFlag ) const
 		{ return (whichFlag == (flags & whichFlag)) ; }
-
-        inline const unsigned int&      getCoordX() const
-                { return coordX ; }
-        
-        inline const unsigned int&      getCoordY() const
-                { return coordY ; }
-         
-        inline const unsigned int&      getCoordZ() const
-                { return coordZ ; }
-        
-        inline const string&            getAlliance() const 
-                { return alliance ; }
 
 	inline const flagType&		getFlags() const
 		{ return flags ; }
@@ -161,18 +149,6 @@ public:
 	inline void setUserName( const string& _user_name )
 		{ user_name = _user_name; }
 
-	inline void setCoordX( const unsigned int& _coordX )
-		{ coordX = _coordX; }
-        
-	inline void setCoordY( const unsigned int& _coordY )
-		{ coordY = _coordY; }
-        
-	inline void setCoordZ( const unsigned int& _coordZ )
-		{ coordZ = _coordZ; }
-
-	inline void setAlliance( const string& _alliance )
-		{ alliance = _alliance; }
-
 	inline void setComment( const string& _comment )
 		{ comment = _comment; }
   
@@ -210,10 +186,6 @@ protected:
 	string		last_updated_by ;
 	time_t		last_updated ;
 	time_t		last_used;
-	unsigned int    coordX ;
-	unsigned int    coordY ;
-	unsigned int    coordZ ;
-	string          alliance ;
 	string		email ;
 	string          last_hostmask ;
 	string		comment ;

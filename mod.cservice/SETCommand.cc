@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.22 2002-10-20 02:12:09 jeekay Exp $
+ * $Id: SETCommand.cc,v 1.23 2002-10-23 19:49:02 jeekay Exp $
  */
 
 #include	<string>
@@ -30,7 +30,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.22 2002-10-20 02:12:09 jeekay Exp $" ;
+const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.23 2002-10-23 19:49:02 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -97,54 +97,9 @@ if( st[1][0] != '#' ) // Didn't find a hash?
 	        return true;
 	}
 
-        if (option == "COORDS")   
-                {
-                StringTokenizer cs( st[2], ':' );
-                if( cs.size() != 3)
-                        {
-                        bot->Notice(theClient, "Incorrect coordinate syntax, use: xx:yy:zz");
-                        return true;
-                        }
-                if(!IsNumeric(cs[0]) || !IsNumeric(cs[1]) || !IsNumeric(cs[2]))
-                        {
-                        bot->Notice(theClient, "The coordinates have to be numerics.");
-                        return true;
-                        }
-                if(atoi(cs[0].c_str()) > 500 || atoi(cs[1].c_str()) > 25 || atoi(cs[2].c_str()) > 25)
-                        {
-                        bot->Notice(theClient, "Excessive coordinate values.");
-                        return true;
-                        }
-                theUser->setCoordX( atoi(cs[0].c_str()) );
-                theUser->setCoordY( atoi(cs[1].c_str()) );
-                theUser->setCoordZ( atoi(cs[2].c_str()) );
-                theUser->commit();
-                
-                bot->Notice(theClient, "Your coordinates are: %i:%i:%i",
-                            theUser->getCoordX(),
-                            theUser->getCoordY(),
-                            theUser->getCoordZ());
-                return true;
-                }
-         
-        if (option == "ALLIANCE") 
-                {
-                string tmpAlliance = st.assemble(2);
-                
-                if(strlen(tmpAlliance.c_str()) > 36)
-                        {
-                        bot->Notice(theClient, "length of ALLIANCE is too long");
-                        return true;
-                        }
-                theUser->setAlliance(tmpAlliance);
-                theUser->commit();
-                bot->Notice(theClient, "Your ALLIANCE is: %s", tmpAlliance.c_str());
-                return true;
-                }
-
   if (option == "MAXLOGINS") {
     unsigned int maxlogins = atoi(value.c_str());
-    if(maxlogins > 3 || maxlogins <= 0) {
+    if(maxlogins > 3 || maxlogins < 1) {
       bot->Notice(theClient, "Max Logins cannot be greater than 3 or less than 1");
       return false;
     }
@@ -272,7 +227,7 @@ else
 	}
 
 	/*
-	 * Check the "Locked" status first, so admin's can bypas to turn it OFF :)
+	 * Check the "Locked" status first, so admin's can bypass to turn it OFF :)
 	 */
 
 	if(option == "LOCKED")
@@ -322,8 +277,8 @@ else
 		int admLevel = bot->getAdminAccessLevel(theUser);
 		if (admLevel < level::set::locked)
 			{
-			bot->Notice(theClient, "The channel settings for %s have been locked by a cservice"
-				" administrator and cannot be changed.", theChan->getName().c_str());
+			bot->Notice(theClient, "The channel settings for %s have been locked by a CService"
+				" Administrator and cannot be changed.", theChan->getName().c_str());
 			return(true);
 			}
 	}
