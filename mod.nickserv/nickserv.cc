@@ -23,7 +23,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.21 2002-02-15 00:34:51 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.22 2002-02-15 01:52:09 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -86,6 +86,7 @@ dbConnCheckMax = atoi((conf.Require("dbConnCheckMax")->second).c_str());
 debugChan = conf.Require("debug_chan")->second;
 
 timeToLive = atoi((conf.Require("timeToLive")->second).c_str());
+initialWait = atoi((conf.Require("initialWait")->second).c_str());
 adminRefreshTime = atoi((conf.Require("adminRefreshTime")->second).c_str());
 
 jupeNumericStart = atoi((conf.Require("jupeNumericStart")->second).c_str());
@@ -223,7 +224,7 @@ theServer->RegisterEvent( EVT_LOGGEDIN, this );
 theServer->RegisterEvent( EVT_FORCEDEAUTH, this );
 
 // Start the counters rolling
-processQueueID = theServer->RegisterTimer(::time(NULL) + timeToLive, this, NULL);
+processQueueID = theServer->RegisterTimer(::time(NULL) + timeToLive + initialWait, this, NULL);
 if(!processQueueID)
 	elog << "nickserv::ImplementServer> Unable to register timer for processQueueID" << endl;
 
