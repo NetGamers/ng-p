@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.13 2002-03-05 20:50:50 jeekay Exp $" ;
+const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.14 2002-03-09 22:06:19 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -20,7 +20,7 @@ static const char* lvl_950_cmds  = "\002Level  950\002: quote";
 static const char* lvl_900_cmds  = "\002Level  900\002: servnotice rehash say shutdown";
 static const char* lvl_850_cmds  = "\002Level  850\002: *(adduser remuser modinfo) globnotice";
 static const char* lvl_800_cmds  = "\002Level  800\002: *(suspend unsuspend)";
-static const char* lvl_750_cmds  = "\002Level  750\002: gsuspend(user) gunsuspend(user)";
+static const char* lvl_750_cmds  = "\002Level  750\002: gsuspend(user) gunsuspend(user) remuserid";
 static const char* lvl_600_cmds  = "\002Level  600\002: gsuspend(chan) gunsuspend(chan) purge removeall register comment(user)";
 static const char* lvl_501_cmds  = "\002Level  501\002: remignore invme comment(chan)";
 static const char* lvl_500_cmds  = "\002Level  500\002: set";
