@@ -12,7 +12,7 @@
 #include	"ELog.h"
 #include	"cservice.h"
 
-const char OFFICIALCommand_cc_rcsId[] = "$Id: OFFICIALCommand.cc,v 1.1 2003-01-14 17:08:11 jeekay Exp $" ;
+const char OFFICIALCommand_cc_rcsId[] = "$Id: OFFICIALCommand.cc,v 1.2 2003-01-15 12:54:50 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -23,16 +23,11 @@ bool OFFICIALCommand::Exec( iClient* theClient, const string& Message )
 bot->incStat("COMMANDS.OFFICIAL");
 
 /* Possible uses:
- *   i) OFFICIAL CHECK <user> - returns a clients official level and appropriate verify
- *  ii) OFFICIAL CLEAR <user> - sets a clients official level to 0
- * iii) OFFICIAL SET <user> <level> - sets a clients official level and appropriate verify
+ *   i) OFFICIAL LIST                 - list the verifies available
+ *  ii) OFFICIAL CHECK <user>         - returns a clients official level and appropriate verify
+ * iii) OFFICIAL CLEAR <user>         - sets a clients official level to 0
+ *  iv) OFFICIAL SET   <user> <level> - sets a clients official level
  */
-
-StringTokenizer st( Message ) ;
-if( st.size() < 3 )	{
-	Usage(theClient);
-	return true;
-}
 
 sqlUser* theUser=bot->isAuthed(theClient, true);
 if(!theUser) return true;
@@ -45,7 +40,41 @@ if(admLevel < officialLevel->getLevel()) {
   return true;
 }
 
+StringTokenizer st( Message ) ;
+
+/***********************
+ * 2   C O M M A N D S *
+ ***********************/
+
+if( st.size() < 2 )	{
+	Usage(theClient);
+	return true;
+}
+
 string command = string_upper(st[1]);
+
+if("LIST" == command) {
+  bot->Notice(theClient, "Available verifies (%u total):",
+    bot->verifies.size());
+
+  cservice::verifiesType::const_iterator itr = bot->verifies.begin();
+  for( ; itr != bot->verifies.end(); ++itr) {
+    bot->Notice(theClient, "[%03u] %s",
+      itr->first,
+      itr->second.c_str());
+  }
+  
+  return true;
+}
+
+/***********************
+ * 3   C O M M A N D S *
+ ***********************/
+
+if( st.size() < 3 )	{
+	Usage(theClient);
+	return true;
+}
 
 sqlUser* targetUser = bot->getUserRecord(st[2]);
 if(!targetUser) {

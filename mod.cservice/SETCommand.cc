@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.25 2002-11-23 07:27:30 jeekay Exp $
+ * $Id: SETCommand.cc,v 1.26 2003-01-15 12:54:50 jeekay Exp $
  */
 
 #include  <string>
@@ -30,7 +30,7 @@
 #include  "responses.h"
 #include  "cservice_config.h"
 
-const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.25 2002-11-23 07:27:30 jeekay Exp $" ;
+const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.26 2003-01-15 12:54:50 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -728,52 +728,36 @@ else
   }
 #endif
 
-  if(option == "AUTOJOIN")
-  {
-      if(level < level::set::autojoin)
-      {
-                bot->Notice(theClient,
-                                bot->getResponse(theUser,
-                                language::insuf_access,
-                                string("You do not have enough access!")));
+  if(option == "AUTOJOIN") {
+    if(level < level::set::autojoin) {
+      bot->Notice(theClient,
+        bot->getResponse(theUser,
+          language::insuf_access,
+          string("You do not have enough access!")));
 
-    return true;
-      }
-      if(value == "ON")
-      {
-        theChan->setFlag(sqlChannel::F_AUTOJOIN);
+      return true;
+    }
+    
+    if(value == "ON") {
+      theChan->setFlag(sqlChannel::F_AUTOJOIN);
       theChan->setInChan(true);
+      bot->writeChannelLog(theChan, theClient, sqlChannel::EV_JOIN, "");
       bot->getUplink()->RegisterChannelEvent( theChan->getName(), bot ) ;
-      bot->Join(theChan->getName(), "",
-        theChan->getChannelTS(), false);
+      bot->Join(theChan->getName(), "", theChan->getChannelTS(), false);
       bot->joinCount++;
       bot->reopQ.insert(cservice::reopQType::value_type(theChan->getName(), bot->currentTime() + 15) );
-    if (tmpChan)
-      {
-      if(theChan->getFlag(sqlChannel::F_NOOP)) bot->deopAllOnChan(tmpChan);
-      if(theChan->getFlag(sqlChannel::F_STRICTOP)) bot->deopAllUnAuthedOnChan(tmpChan);
+    
+      if (tmpChan) {
+        if(theChan->getFlag(sqlChannel::F_NOOP)) bot->deopAllOnChan(tmpChan);
+        if(theChan->getFlag(sqlChannel::F_STRICTOP)) bot->deopAllUnAuthedOnChan(tmpChan);
       }
-    }
-      else if(value == "OFF")
-      {
-        theChan->removeFlag(sqlChannel::F_AUTOJOIN);
+    } else if(value == "OFF") {
+      theChan->removeFlag(sqlChannel::F_AUTOJOIN);
       theChan->setInChan(false);
       bot->joinCount--;
       bot->getUplink()->UnRegisterChannelEvent( theChan->getName(), bot ) ;
       bot->Part(theChan->getName());
-    }
-      else
-      {
-      bot->Notice(theClient,
-      bot->getResponse(theUser,
-        language::set_cmd_status,
-        string("%s for %s is %s")).c_str(),
-      option.c_str(),
-      theChan->getName().c_str(),
-      theChan->getFlag(sqlChannel::F_AUTOJOIN) ? "ON" : "OFF");
-    return true;
-      }
-      theChan->commit();
+    } else {
       bot->Notice(theClient,
       bot->getResponse(theUser,
         language::set_cmd_status,
@@ -782,7 +766,19 @@ else
       theChan->getName().c_str(),
       theChan->getFlag(sqlChannel::F_AUTOJOIN) ? "ON" : "OFF");
       return true;
-  }
+    }
+    
+    theChan->commit();
+    bot->Notice(theClient,
+      bot->getResponse(theUser,
+        language::set_cmd_status,
+        string("%s for %s is %s")).c_str(),
+        option.c_str(),
+    theChan->getName().c_str(),
+    theChan->getFlag(sqlChannel::F_AUTOJOIN) ? "ON" : "OFF");
+    
+    return true;
+  } // AUTOJOIN
 
   if(option == "USERFLAGS")
   {
