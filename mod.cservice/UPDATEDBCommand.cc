@@ -6,7 +6,7 @@
 #include "sqlChannel.h"
 #include "Network.h"
 
-const char UPDATEDBCommand_cc_rcsId[] = "$Id: UPDATEDBCommand.cc,v 1.2 2002-07-19 14:50:44 jeekay Exp $" ;
+const char UPDATEDBCommand_cc_rcsId[] = "$Id: UPDATEDBCommand.cc,v 1.3 2002-07-31 20:35:31 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -43,12 +43,11 @@ if( st.size() != 1 )
    }
 
    Channel* netChan = Network->findChannel(myChan->getName());
-
-   if(!netChan) {
-     continue;
-   }
-   if(netChan->getCreationTime() < myChan->getChannelTS()) {
-     bot->Notice(theClient, "Mismatch on %d (%s)", myChan->getID(), myChan->getName().c_str());
+   if(!netChan) { continue; }
+   
+   if((netChan->getCreationTime() < myChan->getChannelTS()) || (myChan->getChannelTS() == 0)) {
+     bot->Notice(theClient, "Mismatch on %d (%s). DB:%d Net:%d",
+      myChan->getID(), myChan->getName().c_str(), myChan->getChannelTS(), netChan->getCreationTime());
      myChan->setChannelTS(netChan->getCreationTime());
      myChan->commit();
      mismatchCount++;
