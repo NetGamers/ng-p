@@ -153,7 +153,7 @@ cservice::cservice(const string& args)
 RegisterCommand(new SHOWCOMMANDSCommand(this, "SHOWCOMMANDS", "[#channel]", 3));
 RegisterCommand(new LOGINCommand(this, "LOGIN", "<username> <password>", 10));
 RegisterCommand(new LOGINCommand(this, "AUTH", "<username> <password>", 10));
-RegisterCommand(new RECOVERCommand(this, "RECOVER", "<username> [password]", 10));
+RegisterCommand(new RECOVERCommand(this, "RECOVER", "", 10));
 RegisterCommand(new ACCESSCommand(this, "ACCESS", "[channel] [username] [-min n] [-max n] [-op] [-voice] [-none] [-modif]", 5));
 RegisterCommand(new CHANINFOCommand(this, "CHANINFO", "<#channel>", 3));
 RegisterCommand(new ISREGCommand(this, "ISREG", "<#channel>", 4));
