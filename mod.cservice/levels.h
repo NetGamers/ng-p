@@ -1,5 +1,5 @@
 #ifndef __LEVELS_H
-#define __LEVELS_H "$Id: levels.h,v 1.23 2002-03-18 23:56:41 jeekay Exp $"
+#define __LEVELS_H "$Id: levels.h,v 1.24 2002-03-22 15:34:46 jeekay Exp $"
 
 /* 
  * levels.h
@@ -9,7 +9,7 @@
  * 
  * Defines access level constants for use in command handlers. 
  *
- * $Id: levels.h,v 1.23 2002-03-18 23:56:41 jeekay Exp $
+ * $Id: levels.h,v 1.24 2002-03-22 15:34:46 jeekay Exp $
  */
 
 namespace gnuworld {
@@ -58,20 +58,22 @@ namespace gnuworld {
   const int setcmd = 450;
 
   const int logs = 501; // Level that logs are visible at 
-  const int invme = 501;
-  const int remignore = 501;
-  const int chancomment = 501;
 
   const int addcommentcmd = 600;
-  const int usercomment = 600;
-  const int purge = 600; 
-  const int registercmd = 600;
+  const int invme = 600;
+  const int remignore = 600;
   const int removeall = 600;
-  const int csuspend = 600; // Level required to suspend a channel
+
+  const int chancomment = 650;
+  const int registercmd = 650;
+
+  const int csuspend = 700; // Level required to suspend a channel
+  const int purge = 700; 
 
   const int globalsuspend = 750;
   const int nsuspend = 750; // Level required to suspend a nick
   const int remuserid = 750;
+  const int usercomment = 750;
 
   const int susadmin = 800; // (un)suspending of *
 
@@ -82,9 +84,9 @@ namespace gnuworld {
   const int rehash = 900;
   const int say = 900;
   const int servnotice = 900;
+  const int shutdown = 900;
 
   // Debug Commands
-  const int shutdown = 900;
   const int quote = 950;
   const int boostall = 1000;
  
@@ -118,16 +120,17 @@ namespace gnuworld {
     const int autojoin = 500;
     
     const int comment = 501;
-    const int locked = 501;
+
+    const int locked = 650;
 
     const int nopurge = 800;
     const int special = 800;
     const int noreg = 800;
     const int neverreg = 800;
-    const int suspend = 600;
     const int tempman = 800;
     const int caution = 800;
     const int vacation = 800;
+
     const int noforce = 900;
   }
 

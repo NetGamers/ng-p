@@ -214,6 +214,7 @@ RegisterCommand(new STATSCommand(this, "STATS", "", 8));
 RegisterCommand(new SHUTDOWNCommand(this, "SHUTDOWN", "<message>", 5));
 //RegisterCommand(new ADDCOMMENTCommand(this, "ADDCOMMENT", "<username> <comment>", 10));
 RegisterCommand(new COMMENTCommand(this, "COMMENT", "<username/channel> <comment/off>", 10));
+RegisterCommand(new ADMINCMDSCommand(this, "ADMINCMDS", "", 2));
 
 cserviceConfig = new (std::nothrow) EConfig( args ) ;
 assert( cserviceConfig != 0 ) ;

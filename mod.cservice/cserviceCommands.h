@@ -1,5 +1,5 @@
 #ifndef __CSERVICECOMMANDS_H
-#define __CSERVICECOMMANDS_H "$Id: cserviceCommands.h,v 1.9 2002-03-19 19:49:37 jeekay Exp $"
+#define __CSERVICECOMMANDS_H "$Id: cserviceCommands.h,v 1.10 2002-03-22 15:34:46 jeekay Exp $"
 
 #include	<string>
 #include	"iClient.h"
@@ -118,6 +118,7 @@ DECLARE_COMMAND( OPERSUSPEND )
 
 // Admin level commands.
 
+DECLARE_COMMAND( ADMINCMDS )
 DECLARE_COMMAND( GSUSPEND )
 DECLARE_COMMAND( GUNSUSPEND )
 DECLARE_COMMAND( GLOBNOTICE )
