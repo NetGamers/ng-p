@@ -6,7 +6,7 @@
  */
 
 #ifndef __EVENTS_H
-#define __EVENTS_H "$Id: events.h,v 1.2 2002-01-15 00:09:07 jeekay Exp $"
+#define __EVENTS_H "$Id: events.h,v 1.3 2002-01-29 18:40:25 jeekay Exp $"
 
 namespace gnuworld
 {
@@ -32,6 +32,8 @@ enum
 	EVT_NICK,
 	EVT_CHNICK,
 	EVT_LOGGEDIN,
+	EVT_NSKILL,
+	EVT_FORCEDEAUTH,
 
 	// EVT_NOOP must always be last
 	EVT_NOOP
