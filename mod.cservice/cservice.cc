@@ -214,7 +214,7 @@ RegisterCommand(new GLOBNOTICECommand(this, "GLOBNOTICE", "<$*.target> <text>", 
 RegisterCommand(new GLOBNOTICECommand(this, "GLOBALNOTICE", "<$*.target> <text>", 5));
 RegisterCommand(new SAYCommand(this, "SAY", "<#channel> <text>", 5));
 RegisterCommand(new QUOTECommand(this, "QUOTE", "<text>", 5));
-RegisterCommand(new REHASHCommand(this, "REHASH", "[translations|help]", 5));
+RegisterCommand(new REHASHCommand(this, "REHASH", "[commands|help|translations]", 5));
 RegisterCommand(new STATSCommand(this, "STATS", "", 8));
 RegisterCommand(new SHUTDOWNCommand(this, "SHUTDOWN", "<message>", 5));
 RegisterCommand(new COMMENTCommand(this, "COMMENT", "<username/channel> <comment/off>", 10));
