@@ -13,7 +13,7 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.20 2002-10-29 16:16:36 jeekay Exp $
+ * $Id: CHANINFOCommand.cc,v 1.21 2002-10-29 17:45:50 jeekay Exp $
  */
 
 #include  <string>
@@ -27,7 +27,7 @@
 #include  "levels.h"
 #include  "responses.h"
 
-const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.20 2002-10-29 16:16:36 jeekay Exp $" ;
+const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.21 2002-10-29 17:45:50 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -205,6 +205,13 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) ) {
       }
     } // if(adminAccess && (!targetAdmin || (adminAccess >= theCommandLevel->getLevel())))
     
+    string flags;
+    if(targetUser->getFlag(sqlUser::F_AUTOKILL)) flags += "AUTOKILL ";
+    if(targetUser->getFlag(sqlUser::F_NOTE)) flags += "NOTE ";
+    if(targetUser->getFlag(sqlUser::F_NOPURGE)) flags += "NOPURGE ";
+    if(targetUser->getFlag(sqlUser::F_BOT)) flags += "BOT ";
+    bot->Notice(theClient, "Flags: %s", flags.c_str());
+
     stringstream channelsQuery;
     string channelList ;
 
