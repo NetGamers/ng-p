@@ -12,7 +12,7 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 #include	"events.h"
-const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.8 2002-02-01 03:31:53 jeekay Exp $" ;
+const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.9 2002-02-18 02:59:06 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -257,7 +257,15 @@ for (autoOpVectorType::const_iterator resultPtr = autoOpVector.begin();
 	resultPtr != autoOpVector.end(); ++resultPtr)
 	{
 
-	/* If the autoop flag isn't set in this record */
+	/*
+	 *  Would probably be wise to check they're not suspended too :)
+	 *  (*smack* Ace)
+	 *	GK@PAnet: Lets do this first to save time
+	 */
+
+	if(resultPtr->suspend_expires > 0) { continue; }
+
+	/* If the auto(op/voice/invite) flag isn't set in this record */
 	if (!(resultPtr->flags & sqlLevel::F_AUTOOP) &&
 	#ifdef FEATURE_INVITE
 		!(resultPtr->flags & sqlLevel::F_AUTOINVITE) &&
@@ -267,20 +275,67 @@ for (autoOpVectorType::const_iterator resultPtr = autoOpVector.begin();
 		continue;
 		}
 
+	/*
+	 * Is this channel registered?
+	 */
+	 
 	sqlChannel* theChan = bot->getChannelRecord(resultPtr->channel_id);
-	if (!theChan)
-		{
-		continue;
-		}
+	if (!theChan) { continue; }
 
 	/* 
-         * Make sure the channel isn't suspended.. 
-         */ 
+   * Make sure the channel isn't suspended.. 
+   */ 
     
-         if (theChan->getFlag(sqlChannel::F_SUSPEND)) 
-		{ 
-			continue; 
-                } 
+	if (theChan->getFlag(sqlChannel::F_SUSPEND)) 
+		{ continue; } 
+
+	/*
+	 * Check they aren't banned < 75 in the chan.
+	 * GK@PAnet: This also stops autoinvite and autovoice.. bug?
+	 */
+
+	sqlBan* tmpBan = bot->isBannedOnChan(theChan, theClient);
+	if( tmpBan && (tmpBan->getLevel() < 75) )
+		{ continue; }
+
+	/*
+	 * Does the channel currently exist on the network?
+	 */
+
+	Channel* netChan = Network->findChannel(theChan->getName());
+	if (!netChan) { continue; }
+	
+	/*
+	 * Don't attempt to do anything if we're not in the channel, or not op'd.
+	 */
+
+	ChannelUser* tmpBotUser = netChan->findUser(bot->getInstance());
+	if (!tmpBotUser) { continue; }
+
+	if (!theChan->getInChan() || !tmpBotUser->getMode(ChannelUser::MODE_O))
+		{ continue; }
+
+	/*
+	 * Attempt to find the user in the channel
+	 */
+
+	ChannelUser* tmpChanUser = netChan->findUser(theClient) ;
+	
+#ifdef FEATURE_INVITE
+	/*
+	 * If the user is not in the channel and they have the
+	 * AUTOINVITE flag set, invite them!
+	 */
+
+	if(!tmpChanUser && (resultPtr->flags & sqlLevel::F_AUTOINVITE))
+		{ bot->Invite(theClient, netChan->getName()); }
+#endif
+	
+	/*
+	 * If the user is not in the channel, we cant op/voice them
+	 */
+	
+	if(!tmpChanUser) { continue; }
 
 	/*
 	 * Check if the channel is NOOP.
@@ -289,75 +344,7 @@ for (autoOpVectorType::const_iterator resultPtr = autoOpVector.begin();
 	 */
 
 	if(theChan->getFlag(sqlChannel::F_NOOP))
-		{
-		continue;
-		}
-
-	/*
-	 * Check they aren't banned < 75 in the chan.
-	 */
-
-	sqlBan* tmpBan = bot->isBannedOnChan(theChan, theClient);
-	if( tmpBan && (tmpBan->getLevel() < 75) )
-		{
-		continue;
-		}
-
-	/*
-	 * Check if they're already opped.
-	 */
-
-	Channel* netChan = Network->findChannel(theChan->getName());
-	if (!netChan)
-		{
-		continue;
-		}
-
-	ChannelUser* tmpChanUser = netChan->findUser(theClient) ;
-	if(!tmpChanUser)
-		{
-		#ifdef FEATURE_INVITE
-		int isSuspended = 0;
-		sqlChannel* curChan = bot->getChannelRecord(netChan->getName());
-		sqlLevel* curLevel = bot->getLevelRecord(theUser, curChan);
-		isSuspended = curLevel->getSuspendExpire();
-		if(isSuspended)
-			{
-			bot->Notice(theClient, "You have not been invited to %s as your channel access has been suspended.", netChan->getName().c_str());
-			continue;
-			}
-		if ( resultPtr->flags & sqlLevel::F_AUTOINVITE)
-			{
-			bot->Invite(theClient, netChan->getName());
-			}
-		#endif
-		continue;
-		}
-
-	/*
-	 * Don't attempt to op if we're not in the channel, or not op'd.
-	 */
-
-	ChannelUser* tmpBotUser = netChan->findUser(bot->getInstance());
-	if (!tmpBotUser)
-		{
-		continue;
-		}
-
-	if (!theChan->getInChan() || !tmpBotUser->getMode(ChannelUser::MODE_O))
-		{
-		continue;
-		}
-
-	/*
-	 *  Would probably be wise to check they're not suspended too :)
-	 *  (*smack* Ace)
-	 */
-
-	if(resultPtr->suspend_expires > 0)
-	{
-		continue;
-	}
+		{	continue;	}
 
 	/*
  	 *  If its AUTOOP, check for op's and do the deed.
@@ -387,7 +374,8 @@ for (autoOpVectorType::const_iterator resultPtr = autoOpVector.begin();
 	 */
 	
 	strstream notesQuery;
-	notesQuery	<< "SELECT COUNT(id) FROM memo WHERE to_id = " << theUser->getID() << ends;
+	notesQuery	<< "SELECT COUNT(id) FROM memo WHERE to_id = "
+							<< theUser->getID() << ends;
 #ifdef LOG_SQL
 	elog	<< "LOGIN::sqlQuery> "
 		<< notesQuery.str()
@@ -449,10 +437,8 @@ if( PGRES_TUPLES_OK != status )
 for(int i = 0; i < bot->SQLDb->Tuples(); i++)
 	{
 		string channelName = bot->SQLDb->GetValue(i, 0);
-		bot->Notice(theClient, "You have been named as a supporter in a new channel application"
-			" for %s. You may visit the website to register your support or to make an objection. Alternatively, you can"
-			" type '\002/msg X support %s YES\002' or '\002/msg X support %s NO\002' to confirm or deny your support.",
-			channelName.c_str(), channelName.c_str(), channelName.c_str());
+		string botName = bot->getNickName();
+		bot->Notice(theClient, "You have been named as a supporter in a new channel application for %s. You may visit the website to register your support or to make an objection. Alternatively, you can type '\002/msg %s support %s YES\002' or '\002/msg %s support %s NO\002' to confirm or deny your support.", channelName.c_str(), botName.c_str(), channelName.c_str(), botName.c_str(), channelName.c_str());
 	}
 
 return true;
