@@ -1,6 +1,6 @@
 
 #ifndef __NICKSERV_H
-#define __NICKSERV_H "$Id: nickserv.h,v 1.6 2002-02-04 00:44:31 jeekay Exp $"
+#define __NICKSERV_H "$Id: nickserv.h,v 1.7 2002-02-04 04:45:34 jeekay Exp $"
 
 
 #include	<string>
@@ -20,6 +20,7 @@
 #include	"md5hash.h" 
 #include	"nickservCommands.h"
 #include	"nsUser.h"
+#include	"juUser.h"
 
 // The flag in the cservice db
 #define F_AUTOKILL 0x08
@@ -36,7 +37,7 @@ namespace nserv
 class Command;
 //using gnuworld::xServer;
 /*
- *  Sublcass the postgres API to create our own accessor
+ *  Subclass the postgres API to create our own accessor
  *  to get at the PID information.
  */
 
@@ -78,6 +79,10 @@ protected:
 	// Lists of NS admins
 	typedef map<string, int> adminListType;
 	typedef adminListType::iterator adminIteratorType;
+	
+	// Lists of juped nicks
+	typedef map<string, juUser*> jupeNickType;
+	typedef jupeNickType::iterator jupeIteratorType;
 
 	// Logs debug information
 	string  debugChan;
@@ -87,6 +92,11 @@ protected:
 
 	// How frequently we refresh admin records
 	int     adminRefreshTime;
+	
+	// How often do we kill juped nicks
+	unsigned int jupeRefreshTime;
+	unsigned int jupeNumericStart;
+	unsigned int jupeNumericCount;
 	
 	// DB connection times
 	int dbConnCheckTime;
@@ -204,6 +214,11 @@ public:
 	short int getAdminAccessLevel( string theNick );
 	void refreshAdminAccessLevels( void );
 	
+	/* How to jupe nicks */
+	void initialiseJupeNumerics( void );
+	bool jupeNick( string theNick, string theReason = "Juped Nick" );
+	bool removeJupeNick( string theNick, string theReason = "End Of Jupe" );
+	
 	// Check the DB connection is ok
 	void checkDBConnectionStatus( void );
 	
@@ -279,7 +294,9 @@ protected:
 	killQueue		KillingQueue;
 
 	adminListType adminList;
-
+	
+	jupeNickType jupedNickList;
+	
 	xServer::timerID processQueueID;
 	xServer::timerID refreshAdminID;
 	xServer::timerID dbConnCheckID;

@@ -1,5 +1,5 @@
 #ifndef __NICKSERVCOMMANDS_H
-#define __NICKSERVCOMMANDS_H "$Id: nickservCommands.h,v 1.4 2002-01-30 21:57:55 jeekay Exp $"
+#define __NICKSERVCOMMANDS_H "$Id: nickservCommands.h,v 1.5 2002-02-04 04:45:35 jeekay Exp $"
 
 #include	<string>
 #include	"iClient.h"
@@ -68,6 +68,7 @@ public: \
 
 //DECLARE_COMMAND( LOGIN );
 //DECLARE_COMMAND( RECOVER );
+DECLARE_COMMAND( JUPE );
 DECLARE_COMMAND( STATS );
 DECLARE_COMMAND( SAY );
 

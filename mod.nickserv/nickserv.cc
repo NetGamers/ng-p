@@ -6,6 +6,7 @@
 #include	<algorithm>
 
 #include	<cstring>
+#include <time.h>
 
 #include	"client.h"
 #include	"iClient.h"
@@ -22,7 +23,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.13 2002-02-04 00:44:31 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.14 2002-02-04 04:45:34 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -78,11 +79,17 @@ confSqlDb = conf.Require( "sql_db" )->second;
 confSqlPort = conf.Require( "sql_port" )->second;
 confSqlUser = conf.Require( "sql_user" )->second;
 confSqlPass = conf.Require( "sql_pass" )->second;
-debugChan = conf.Require("debug_chan")->second;
-timeToLive = atoi((conf.Require("timeToLive")->second).c_str());
-adminRefreshTime = atoi((conf.Require("adminRefreshTime")->second).c_str());
+
 dbConnCheckTime = atoi((conf.Require("dbConnCheckTime")->second).c_str());
 dbConnCheckMax = atoi((conf.Require("dbConnCheckMax")->second).c_str());
+
+debugChan = conf.Require("debug_chan")->second;
+
+timeToLive = atoi((conf.Require("timeToLive")->second).c_str());
+adminRefreshTime = atoi((conf.Require("adminRefreshTime")->second).c_str());
+
+jupeNumericStart = atoi((conf.Require("jupeNumericStart")->second).c_str());
+jupeNumericCount = atoi((conf.Require("jupeNumericCount")->second).c_str());
 
 string Query = "host=" + confSqlHost + " dbname=" + confSqlDb + " port=" + confSqlPort + " user=" +confSqlUser+ " password="+confSqlPass;
 
@@ -123,11 +130,15 @@ authLen = atoi(conf.Require("authLen")->second.c_str());
 
 //RegisterCommand(new LOGINCommand( this, "LOGIN", "<password>")) ;
 //RegisterCommand(new RECOVERCommand( this, "RECOVER", "<username> <password>"));
+RegisterCommand(new JUPECommand( this, "JUPE", "(ADD|DEL) <nick> (duration)"));
 RegisterCommand(new STATSCommand( this, "STATS", "<stat>"));
 RegisterCommand(new SAYCommand( this, "SAY", "<channel> <text>"));
 
 // Load all the admin names and levels
 refreshAdminAccessLevels();
+
+// Initialise list of juped numerics
+initialiseJupeNumerics();
 
 }
 
@@ -303,16 +314,16 @@ switch( theEvent )
 		}
 	case EVT_LOGGEDIN:
 	  {
-	    // Data1 = iClient*, Data2 = string*
-	    iClient* theClient = static_cast< iClient* >( Data1);
-	    string* authNick = static_cast< string* >( Data2);
-	    authUser(theClient, *authNick);
-	    if(string_lower(theClient->getNickName()) == string_lower(*authNick))
-	      {
-		removeFromQueue(theClient);
-	      }
-	    break;
-	  }
+	  // Data1 = iClient*, Data2 = string*
+	  iClient* theClient = static_cast< iClient* >( Data1);
+	  string* authNick = static_cast< string* >( Data2);
+	  authUser(theClient, *authNick);
+	  if(string_lower(theClient->getNickName()) == string_lower(*authNick))
+	    {	removeFromQueue(theClient); }
+		if(string_lower(theClient->getNickName()) != string_lower(*authNick))
+			{ removeJupeNick(*authNick, "User Logged In"); }
+	  break;
+	  } // case EVT_LOGGEDIN
 	case EVT_QUIT:
 	case EVT_KILL:
 		{
@@ -459,12 +470,14 @@ int nickserv::OnTimer(xServer::timerID timer_id, void* data)
 					Write(s.str());
 					delete[] s.str();
 					
-					MyUplink->PostEvent(gnuworld::EVT_NSKILL, static_cast<void*>(tmpClient));
-					
 					// Remove GNUworld data about user
 					nsUser *tmpData = static_cast< nsUser* >( tmpClient->getCustomData(this) );
 					delete tmpData;
 					tmpClient->removeCustomData(this);
+					
+					jupeNick(tmpClient->getNickName());
+
+					MyUplink->PostEvent(gnuworld::EVT_NSKILL, static_cast<void*>(tmpClient));
 #endif
 					
 					KillingQueue.erase(pos++);
@@ -670,6 +683,86 @@ short int nickserv::getAdminAccessLevel( string theNick )
     {
       return pos->second;
     }
+}
+
+void nickserv::initialiseJupeNumerics( void )
+{
+	elog << "nickserv::iJN> Initialising jupedNicks map" << endl;
+	char clientNumeric[4];
+	for(unsigned int i = jupeNumericStart; i < (jupeNumericStart + jupeNumericCount); i++)
+		{
+		inttobase64(clientNumeric, i, 3);
+		jupedNickList[string(clientNumeric)] = NULL;
+		}
+}
+
+bool nickserv::jupeNick( string theNick, string theReason = "Juped Nick" )
+{
+	elog << "nickserv::jupeNick> Juping nick " << theNick << endl;
+	
+	// Check this user does not already exist here
+	for(jupeIteratorType pos = jupedNickList.begin(); pos != jupedNickList.end(); ++pos)
+		{
+		juUser* theUser = pos->second;
+		if(theUser && string_lower(theUser->getNickName()) == string_lower(theNick))
+			{ return false; }
+		}
+	
+	for(jupeIteratorType pos = jupedNickList.begin(); pos != jupedNickList.end(); ++pos)
+		{
+		if(NULL == pos->second)
+			{ // We have found a free numeric!
+			juUser* theUser = new juUser(theNick, pos->first, ::time(NULL)+(60*15), theReason);
+			pos->second = theUser;
+			
+			strstream outNick;
+			outNick << charYY << " N " << theNick
+							<< " 1 31337 juped " << theNick << ".nick.name +id B]AAAB "
+							<< charYY << pos->first
+							<< " :" << theReason << ends;
+			Write(outNick.str());
+			delete[] outNick.str();
+			
+			/*strstream outMode;
+			outMode << charYY << pos->first << " M "
+							<< theNick << " :+id" << ends;
+			Write(outMode.str());
+			delete[] outMode.str();*/
+			
+			Channel* theChan = Network->findChannel(debugChan);
+			if(theChan)
+				{
+				strstream outJoin;
+				outJoin << charYY << pos->first << " J "
+								<< debugChan << ends;
+				Write(outJoin.str());
+				delete[] outJoin.str();
+				} // Debugchan exists
+			return true;
+			} // Empty numeric
+		} // Iteration
+	return false;
+}
+
+bool nickserv::removeJupeNick( string theNick, string theReason = "End Of Jupe" )
+{
+	elog << "nickserv::removeJupeNick> Removing jupe for " << theNick << endl;
+	for(jupeIteratorType pos = jupedNickList.begin(); pos != jupedNickList.end(); ++pos)
+		{
+		juUser* theUser = pos->second;
+		if(theUser && string_lower(theUser->getNickName()) == string_lower(theNick))
+			{ // This is our nick
+			strstream outQuit;
+			outQuit << charYY << pos->first << " Q :" << theReason << ends;
+			Write(outQuit.str());
+			delete[] outQuit.str();
+			
+			delete theUser;
+			pos->second = NULL;
+			return true;
+			} // Right nick?
+		} // Iteration
+	return false;
 }
 
 void nickserv::checkDBConnectionStatus( void )

@@ -1,7 +1,7 @@
 /* levels.h - Contains access requirements for various commands */
 
 #ifndef _LEVELS_H
-#define _LEVELS_H "$Id: levels.h,v 1.2 2002-01-30 21:57:54 jeekay Exp $"
+#define _LEVELS_H "$Id: levels.h,v 1.3 2002-02-04 04:45:34 jeekay Exp $"
 
 namespace gnuworld
 {
@@ -9,12 +9,15 @@ namespace gnuworld
 namespace level
 {
 
-  const int say = 499;
+  const int jupeadd = 100;
+  const int jupedel = 100;
+  const int jupeforce = 400;
+  const int say = 450;
 
 namespace stats
 {
 
-  const int all = 400;
+  const int all = 25;
 
 } // Namespace stats
 
