@@ -13,18 +13,19 @@
  * Shouldn't really happen, as trying to MODINFO a forced access doesn't
  * make sense - adduser and then MODINFO that :)
  *
- * $Id: MODINFOCommand.cc,v 1.8 2003-02-18 21:33:33 jeekay Exp $
+ * $Id: MODINFOCommand.cc,v 1.9 2003-03-30 00:35:34 jeekay Exp $
  */
 
 #include	<string>
 
+#include	"Network.h"
 #include	"StringTokenizer.h"
 
 #include	"cservice.h"
 #include	"levels.h"
 #include	"responses.h"
 
-const char MODINFOCommand_cc_rcsId[] = "$Id: MODINFOCommand.cc,v 1.8 2003-02-18 21:33:33 jeekay Exp $" ;
+const char MODINFOCommand_cc_rcsId[] = "$Id: MODINFOCommand.cc,v 1.9 2003-03-30 00:35:34 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -149,8 +150,7 @@ if (targetLevel == 0)
  *  Figure out what they're doing - ACCESS or AUTOMODE
  */
 
-if (command == "ACCESS")
-	{
+if (command == "ACCESS") {
 	/*
 	 * Check we aren't trying to change someone with access
 	 * higher (or equal) than ours.
@@ -172,25 +172,23 @@ if (command == "ACCESS")
 			}
 		}
 
-	/*
-	 * Check we aren't trying to set someone's access higher
-	 * than ours.
-	 */
 	int newAccess = atoi(st[4].c_str());
 
-	if ((newAccess <= 0) || (newAccess > 999))
-		{
+	if ((newAccess <= 0) || (newAccess > 999)) {
 		bot->Notice(theClient,
 			bot->getResponse(theUser,
 				language::inval_access,
 				string("Invalid access level.")));
 		return false;
-		}
+	}
 
-  if((theChan->getName() != "*") && (newAccess >= 499) && (!bot->isForced(theChan, theUser))) {
-    bot->Notice(theClient, "Only CService may modify users with 499+ access.");
-    return false;
-  }
+	if( (theChan->getName() != "*") &&
+	    (newAccess >= 499) &&
+	    (!bot->isForced(theChan, theUser))) {
+		bot->Notice(theClient, "Only CService may modify users with"
+			" 499+ access.");
+		return false;
+	}
 
 	/*
 	 * And finally, check they aren't trying to give someone
@@ -199,35 +197,72 @@ if (command == "ACCESS")
 
 	if (level <= newAccess)
 		{
-		bot->Notice(theClient,
-			bot->getResponse(theUser,
-				language::cant_give_higher,
-				string("Cannot give a user higher or equal access to your own.")));
+		bot->Notice(theClient, "Cannot give a user higher or equal"
+			" access to your own.");
 		return false;
 		}
 
 	sqlLevel* aLevel = bot->getLevelRecord(targetUser, theChan);
 
-  /* Check we arent trying to lower a 499 */
-  if(theChan->getName() != "*" && aLevel->getAccess()==499 && !bot->isForced(theChan, theUser)) {
-    bot->Notice(theClient, "Only CService may modify users with 499+ access.");
-    return false;
-  }
+	/* Check we arent trying to lower a 499 */
+	if( theChan->getName() != "*" &&
+	    aLevel->getAccess()==499 &&
+	    !bot->isForced(theChan, theUser)) {
+		bot->Notice(theClient, "Only CService may modify users with"
+			" 499+ access.");
+		return false;
+	}
+	
+	/* If the new level is below 100 or 25 as appropriate and
+	 * STRICTOP or STRICTVOICE is set, deop or devoice.
+	 */
+	
+	/* Does the channel exist on the network? */
+	Channel *tmpChan = Network->findChannel(theChan->getName());
+	if(tmpChan) {
+		/* Iterate over the logged in clients of the user */
+		sqlUser::networkClientListType::const_iterator itr =
+			targetUser->networkClientList.begin();
+		for( ; itr != targetUser->networkClientList.end() ; ++itr) {
+			/* Is the user in the channel? */
+			ChannelUser *tmpChanUser = tmpChan->findUser(*itr);
+			if(tmpChanUser) {
+				/* Do we need to deop the user? */
+				if( theChan->getFlag(sqlChannel::F_STRICTOP) &&
+				    newAccess < level::op &&
+				    tmpChanUser->isModeO()) {
+				    	bot->Notice(*itr, "You are not"
+						" allowed to be opped in %s.",
+						theChan->getName().c_str());
+					bot->DeOp(tmpChan, *itr);
+				}
+			
+				/* Do we need to devoice the user? */
+				if( theChan->getFlag(sqlChannel::F_STRICTVOICE) &&
+				    newAccess < level::voice &&
+				    tmpChanUser->isModeV()) {
+					bot->Notice(*itr, "You are not"
+						" allowed to be voiced in %s.",
+						theChan->getName().c_str());
+					bot->DeVoice(tmpChan, *itr);
+				}
+			} /* if(tmpChanUser) */
+		} // iterate over targetUser's clients
+	} /* if(tmpChan) */
 
 	aLevel->setAccess(newAccess);
 	aLevel->setLastModif(bot->currentTime());
-	aLevel->setLastModifBy( string( "(" + theUser->getUserName() + ") " +theClient->getNickUserHost() ) );
-	if (newAccess < level::set::autoinvite) aLevel->removeFlag(sqlLevel::F_AUTOINVITE);
+	aLevel->setLastModifBy( string( "(" + theUser->getUserName() + ") " +
+		theClient->getNickUserHost() ) );
+	if (newAccess < level::set::autoinvite)
+		aLevel->removeFlag(sqlLevel::F_AUTOINVITE);
 	aLevel->commit();
 
-	bot->Notice(theClient,
-		bot->getResponse(theUser,
-			language::mod_access_to,
-			string("Modified %s's access level on channel %s to %i")).c_str(),
+	bot->Notice(theClient, "Modified %s's access level on channel %s to %i",
 		targetUser->getUserName().c_str(),
 		theChan->getName().c_str(),
 		newAccess);
-	} // if( command == "ACCESS" )
+} // if( command == "ACCESS" )
 
 if (command == "AUTOMODE")
 	{

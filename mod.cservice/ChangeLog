@@ -1,6 +1,8 @@
 2003-03-29 1.2.07 Jeekay
 * Added logging of admin login/logouts and login failures
 * Fixed inconsistancy for level 1 in ADMINCMDS
+* We now deop/devoice as appropriate if a user is MODINFO'd or REMUSER'd in a
+  channel that has STRICTOP or STRICTVOICE set.
 * Bumped version to 1.2.07
 
 2003-02-21 1.2.06 Jeekay

@@ -9,20 +9,21 @@
  * Caveats: None
  *
  *
- * $Id: REMUSERCommand.cc,v 1.8 2003-02-18 21:33:33 jeekay Exp $
+ * $Id: REMUSERCommand.cc,v 1.9 2003-03-30 00:35:34 jeekay Exp $
  */
 
 #include	<string>
 
 #include	"ELog.h"
 #include	"libpq++.h"
+#include	"Network.h"
 #include	"StringTokenizer.h"
 
 #include	"cservice.h"
 #include	"levels.h"
 #include	"responses.h"
 
-const char REMUSERCommand_cc_rcsId[] = "$Id: REMUSERCommand.cc,v 1.8 2003-02-18 21:33:33 jeekay Exp $" ;
+const char REMUSERCommand_cc_rcsId[] = "$Id: REMUSERCommand.cc,v 1.9 2003-03-30 00:35:34 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -152,20 +153,14 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 
 	if ((level <= targetLevel) && (targetUser != theUser))
 	{
-		bot->Notice(theClient,
-			bot->getResponse(theUser,
-				language::cant_rem_higher,
-				string("Cannot remove a user with equal or higher access than your own")));
+		bot->Notice(theClient, "Cannot remove a user with equal or higher access than your own.");
 		return false;
 	}
 
 
 	if ((theChan->getName() == "*") && (targetUser == theUser))
 	{
-		bot->Notice(theClient,
-                        bot->getResponse(theUser,
-                                language::cant_rem_higher,
-                                string("CSC has your soul! YOU CAN NEVER ESCAPE!")));
+		bot->Notice(theClient, "CSC has your soul! YOU CAN NEVER ESCAPE!");
                 return false;
 	}
 
@@ -174,10 +169,43 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 		bot->Notice(theClient,
 			bot->getResponse(theUser,
 				language::cant_rem_owner_self,
-				string("You can't remove yourself from a channel you own")));
+				string("You can't remove yourself from a channel you own.")));
 		return false;
 	}
 
+	/* If we have been removed from a channel with STRICTOP or STRICTVOICE
+	 * set, we may need to deop or devoice the user.
+	 */
+	Channel *tmpChan = Network->findChannel(theChan->getName());
+	if(tmpChan) {
+		/* Iterate over the logged in clients of the user */
+		sqlUser::networkClientListType::const_iterator itr =
+			targetUser->networkClientList.begin();
+		
+		for( ; itr != targetUser->networkClientList.end() ; ++itr ) {
+			/* Is this client in the channel? */
+			ChannelUser *tmpChanUser = tmpChan->findUser(*itr);
+			if(tmpChanUser) {
+				/* Do we need to deop the user? */
+				if( theChan->getFlag(sqlChannel::F_STRICTOP) &&
+				    tmpChanUser->isModeO()) {
+					bot->Notice(*itr, "You are not"
+						" allowed to be opped in %s.",
+						theChan->getName().c_str());
+					bot->DeOp(tmpChan, *itr);
+				}
+				
+				/* Do we need to devoice the user? */
+				if( theChan->getFlag(sqlChannel::F_STRICTVOICE) &&
+				    tmpChanUser->isModeV()) {
+					bot->Notice(*itr, "You are not"
+						" allowed to be voiced in %s.",
+						theChan->getName().c_str());
+					bot->DeVoice(tmpChan, *itr);
+				}
+			} /* if(tmpChanUser) */
+		} /* iterate over logged in clients */
+	} // if(tmpChan)
 
 	/*
 	 *  Now, build up the SQL query & execute it!
