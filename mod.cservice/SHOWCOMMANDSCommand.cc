@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.16 2002-03-19 20:06:49 jeekay Exp $" ;
+const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.17 2002-03-19 20:48:50 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -42,7 +42,6 @@ static const char* lvl_oper_cmds = "\002Level Oper\002: operjoin operpart";
 
 static const char* lvl_900_set_cmds = "\002Level 900\002: noforce";
 static const char* lvl_800_set_cmds = "\002Level 800\002: caution neverreg nopurge noreg special tempman vacation";
-static const char* lvl_600_set_cmds = "\002Level 600\002: suspend";
 static const char* lvl_501_set_cmds = "\002Level 501\002: locked";
 static const char* lvl_500_set_cmds = "\002Level 500\002: autojoin";
 static const char* lvl_499_set_cmds = "\002Level 499\002: lang massdeoppro noop strictop strictvoice";
@@ -97,7 +96,6 @@ if(string_upper(st[1]) == "SET") {
  	/* levels 0,25,450,500,501,600,800,900 */
  	if (level >= 900) bot->Notice(theClient, lvl_900_set_cmds);
  	if (level >= 800) bot->Notice(theClient, lvl_800_set_cmds);
- 	if (level >= 600) bot->Notice(theClient, lvl_600_set_cmds);
  	if (level >= 501) bot->Notice(theClient, lvl_501_set_cmds);
  	if (level >= 500) bot->Notice(theClient, lvl_500_set_cmds);
  	if (level >= 499) bot->Notice(theClient, lvl_499_set_cmds);
