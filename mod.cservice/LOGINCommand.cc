@@ -12,7 +12,7 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 #include	"events.h"
-const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.7 2002-01-25 01:01:51 jeekay Exp $" ;
+const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.8 2002-02-01 03:31:53 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -162,6 +162,8 @@ if (authTestUser)
 
 	// Remove the pointer from the iClient to the sqlUser.
 	tmpData->currentUser = NULL;
+	server->PostEvent(gnuworld::EVT_FORCEDEAUTH, 
+										static_cast< void* >( authTestUser));
 	}
 
 string uname = theUser->getUserName();
