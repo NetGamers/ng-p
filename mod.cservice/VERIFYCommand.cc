@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.7 2002-02-15 03:11:59 jeekay Exp $" ;
+const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.8 2002-02-17 07:20:09 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -231,6 +231,12 @@ if(2 == oLevel)
 if(3 == oLevel)
 	{
 	bot->Notice(theClient, "%s is an Official Planetarion Virusfix Member%s and logged in as %s", target->getNickUserHost().c_str(), extra.c_str(), theUser->getUserName().c_str());
+	return true;
+	}
+
+if(50 == oLevel)
+	{
+	bot->Notice(theClient, "%s is an Official CSC Helper%s and logged in as %s", target->getNickUserHost().c_str(), extra.c_str(), theUser->getUserName().c_str());
 	return true;
 	}
 
