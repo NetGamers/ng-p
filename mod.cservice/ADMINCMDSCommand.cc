@@ -4,7 +4,7 @@
  * (c) Copyright 2002 Rasmus Hansen (GK@panet)
  * Distributed under the GNU Public License
  *
- * $Id: ADMINCMDSCommand.cc,v 1.22 2004-11-20 19:58:54 jeekay Exp $
+ * $Id: ADMINCMDSCommand.cc,v 1.23 2004-11-20 20:00:59 jeekay Exp $
  */
 
 #include	<string>
@@ -65,8 +65,6 @@ if(aLevel >= 850)
 	bot->Notice(theClient, "ADDUSER * (nick) (level)");
 	bot->Notice(theClient, "REMUSER * (nick)");
 	bot->Notice(theClient, "MODINFO * ACCESS (nick) (level)");
-	bot->Notice(theClient, "SET (chan) NOPURGE (on/off)");
-	bot->Notice(theClient, "SET (chan) SPECIAL (on/off)");
 	bot->Notice(theClient, "\002");
 	}
 
@@ -77,7 +75,9 @@ if(aLevel >= 800)
 	bot->Notice(theClient, "OFFICIAL (CHECK <user>) (CLEAR <user>) (LIST) (SET <user> <level>");
 	bot->Notice(theClient, "SUSPEND * (nick) (duration) (reason)");
 	bot->Notice(theClient, "UNSUSPEND * (nick) (reason)");
+	bot->Notice(theClient, "SET (chan) NOPURGE (on/off)");
 	bot->Notice(theClient, "SET (chan) PARTNER (on/off)");
+	bot->Notice(theClient, "SET (chan) SPECIAL (on/off)");
 	bot->Notice(theClient, "\002");
 
 	}
