@@ -9,7 +9,7 @@
 
 #define LOG_SQL
 
-const char NOTECommand_cc_rcsId[] = "$Id: NOTECommand.cc,v 1.3 2002-01-17 01:02:37 jeekay Exp $" ;
+const char NOTECommand_cc_rcsId[] = "$Id: NOTECommand.cc,v 1.4 2002-01-17 01:24:25 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -67,7 +67,7 @@ bool NOTECommand::Exec(iClient* theClient, const string& Message)
 		
 		if ( count >= 15 )
 		{
-			bot->Notice(theClient, "The recievers memobox is full");
+			bot->Notice(theClient, "The receivers notebox is full. A user is allowed to have max 15 notes.");
 		} else {
 
 		strstream theQuery;

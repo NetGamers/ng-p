@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.1 2002-01-14 23:14:21 morpheus Exp $" ;
+const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.2 2002-01-17 01:24:25 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -28,11 +28,11 @@ static const char* lvl_400_cmds = "\002Level  400\002: adduser%s clearmode modin
 static const char* lvl_100_cmds = "\002Level  100\002: op deop suspend%s unsuspend%s";
 static const char* lvl_75_cmds = "\002Level   75\002: ban unban";
 static const char* lvl_50_cmds = "\002Level   50\002: kick%s topic";
-//static const char* lvl_42_cmds = "\002Level   42\002: PANIC";
-static const char* lvl_25_cmds = "\002Level   25\002: voice devoice invite";
+static const char* lvl_25_cmds = "\002Level   25\002: voice devoice";
+static const char* lvl_24_cmds = "\002Level   24\002: invite";
 static const char* lvl_1_cmds = "\002Level    1\002: status%s";
 static const char* lvl_adm_cmds = "\002Level    *\002: force unforce";
-static const char* lvl_0_cmds = "\002Level    0\002: access banlist chaninfo info help lbanlist login motd newpass showcommands showignore verify killghost recover";
+static const char* lvl_0_cmds = "\002Level    0\002: access banlist chaninfo info help lbanlist login motd newpass showcommands showignore verify recover note";
 static const char* lvl_oper_cmds = "\002Level Oper\002: operjoin operpart settime opersuspend";
 
 bool SHOWCOMMANDSCommand::Exec( iClient* theClient, const string& Message )
@@ -106,8 +106,8 @@ if (level >= 100) bot->Notice(theClient, lvl_100_cmds,
 if (level >= 75) bot->Notice(theClient,  lvl_75_cmds); 
 if (level >= 50) bot->Notice(theClient,  lvl_50_cmds,
 		(level>=200) ? "+" : "");
-//if (level == 42) bot->Notice(theClient,  lvl_42_cmds);
 if (level >= 25) bot->Notice(theClient,  lvl_25_cmds);
+if (level >= 24) bot->Notice(theClient,  lvl_24_cmds);
 if (level >= 1) bot->Notice(theClient,   lvl_1_cmds,
 		(level>=200||admin>0||theClient->isOper()) ? "+" : ""); 
 
