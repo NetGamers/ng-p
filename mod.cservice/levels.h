@@ -1,5 +1,5 @@
 #ifndef __LEVELS_H
-#define __LEVELS_H "$Id: levels.h,v 1.35 2002-10-19 20:53:18 jeekay Exp $"
+#define __LEVELS_H "$Id: levels.h,v 1.36 2002-10-19 20:53:51 jeekay Exp $"
 
 /* 
  * levels.h
@@ -9,7 +9,7 @@
  * 
  * Defines access level constants for use in command handlers. 
  *
- * $Id: levels.h,v 1.35 2002-10-19 20:53:18 jeekay Exp $
+ * $Id: levels.h,v 1.36 2002-10-19 20:53:51 jeekay Exp $
  */
 
 namespace gnuworld {
@@ -58,13 +58,13 @@ namespace gnuworld {
 
 // Admin commands
 
+  const int chancomment = 1;
   const int invme = 1;
+  const int usercomment = 1;
 
   const int remignore = 100;
 
   const int force = 400; // And by definition, unforce.
-  const int chancomment = 400;
-  const int usercomment = 400;
 
   const int logs = 501; // Level that logs are visible at 
 
