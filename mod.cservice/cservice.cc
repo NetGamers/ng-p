@@ -215,6 +215,7 @@ RegisterCommand(new COMMENTCommand(this, "COMMENT", "<username/channel> <comment
 RegisterCommand(new ADMINCMDSCommand(this, "ADMINCMDS", "", 2));
 RegisterCommand(new SCANCommand(this, "SCAN", "[email|hostmask|nick] string", 10));
 RegisterCommand(new CHINFOCommand(this, "CHINFO", "[email|nick|verification] nick newvalue", 10));
+RegisterCommand(new DEBUGCommand(this, "DEBUG", "(lock [add|list|remove]) (servers)", 10));
 
 cserviceConfig = new (std::nothrow) EConfig( args ) ;
 assert( cserviceConfig != 0 ) ;
@@ -679,6 +680,17 @@ if( st.empty() )
  * N.B: Only check that *after* someone has flooded ;)
  */
 const string Command = string_upper( st[ 0 ] ) ;
+
+/*
+ * If this command is administratively disabled, tell the user
+ */
+
+lockedCommandsType::const_iterator myCommand = lockedCommands.find(Command);
+if(myCommand != lockedCommands.end())
+	{
+	Notice(theClient, "Sorry, this command has been disabled by an admin.");
+	return false;
+	}
 
 /*
  *  Just quickly, abort if someone tries to LOGIN or NEWPASS

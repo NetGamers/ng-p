@@ -1,5 +1,5 @@
 #ifndef __CSERVICECLASS_H
-#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.3 2002-03-19 19:49:36 jeekay Exp $"
+#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.4 2002-03-25 03:35:36 jeekay Exp $"
 
 #include	"EConfig.h"
 #include	"sqlChannel.h"
@@ -292,6 +292,10 @@ public:
 	translationTableType translationTable;
 
 	void loadTranslationTable();
+
+	// Locked commands table (dynamic, reset on restart)
+	typedef map <string, string> lockedCommandsType; // command, reason
+	lockedCommandsType lockedCommands;
 
 	// Method to retrieve a translation string.
 	const string getResponse( sqlUser*, int , string = string() );

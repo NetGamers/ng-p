@@ -11,7 +11,7 @@
 #include	"cservice_config.h"
 #include  "libpq-int.h"
 
-const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.8 2002-03-24 02:00:56 jeekay Exp $" ;
+const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.9 2002-03-25 03:35:36 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -143,22 +143,6 @@ if (st[1] == "*")
 			string("\002Uptime:\002 %s")).c_str(),
 		bot->prettyDuration(bot->getUplink()->getStartTime()
 			+ bot->dbTimeOffset).c_str());
-
-	if(bot->getAdminAccessLevel(theUser) >= 950)
-		{
-		xNetwork::serverVectorType::const_iterator netServers;
-		netServers = Network->server_begin();
-		while(netServers != Network->server_end())
-			{
-			if(*netServers != 0)
-				{
-				bot->Notice(theClient, "%s: %d",
-					(*netServers)->getName().c_str(),
-					(*netServers)->isBursting());
-				}
-			++netServers;
-			}
-		} // Person is coder
 
 	return true;
 	} /// Channel query = *
