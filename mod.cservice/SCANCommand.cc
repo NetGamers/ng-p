@@ -4,7 +4,7 @@
  *
  * Distributed under the GNU Public Licence
  *
- * $Id: SCANCommand.cc,v 1.2 2002-03-25 01:20:16 jeekay Exp $
+ * $Id: SCANCommand.cc,v 1.3 2002-03-28 21:59:25 jeekay Exp $
  */
 
 #include	<string>
@@ -86,7 +86,7 @@ if("HOSTMASK" == option)
 	{
 	strstream hostmaskQuery;
 	hostmaskQuery << "SELECT user_name,last_hostmask FROM users,users_lastseen"
-		<< " WHERE id = user_id AND last_hostmask LIKE '%"
+		<< " WHERE id = user_id AND lower(last_hostmask) LIKE '%"
 		<< escapeSQLChars(search) << "%'"
 		<< " LIMIT 10"
 		<< ends;
