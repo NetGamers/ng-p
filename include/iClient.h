@@ -17,11 +17,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: iClient.h,v 1.3 2002-07-27 14:54:07 jeekay Exp $
+ * $Id: iClient.h,v 1.4 2002-10-19 19:25:57 jeekay Exp $
  */
 
 #ifndef __ICLIENT_H
-#define __ICLIENT_H "$Id: iClient.h,v 1.3 2002-07-27 14:54:07 jeekay Exp $"
+#define __ICLIENT_H "$Id: iClient.h,v 1.4 2002-10-19 19:25:57 jeekay Exp $"
 
 #include	<string>
 #include	<list>
@@ -151,6 +151,12 @@ public:
 	 */
 	inline const string getNickUserHost() const
 		{ return (nickName + '!' + userName + '@' + insecureHost) ; }
+
+	/**
+	 * Retrieve a string of the form: nick!user@real-host for this user.
+	 */
+	inline const string getRealNickUserHost() const
+		{ return (nickName + '!' + userName + '@' + realInsecureHost) ; }
 
 	/**
 	 * Retrieve client's 'real-name' field.
