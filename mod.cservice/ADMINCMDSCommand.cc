@@ -4,7 +4,7 @@
  * (c) Copyright 2002 Rasmus Hansen (GK@panet)
  * Distributed under the GNU Public License
  *
- * $Id: ADMINCMDSCommand.cc,v 1.1 2002-03-22 15:34:45 jeekay Exp $
+ * $Id: ADMINCMDSCommand.cc,v 1.2 2002-03-22 16:06:53 jeekay Exp $
  */
 
 #include	<string>
@@ -14,7 +14,7 @@
 #include	"cservice.h"
 #include  "levels.h"
 
-const char ADMINCMDSCommand_cc_rcsId[] = "$Id: ADMINCMDSCommand.cc,v 1.1 2002-03-22 15:34:45 jeekay Exp $" ;
+const char ADMINCMDSCommand_cc_rcsId[] = "$Id: ADMINCMDSCommand.cc,v 1.2 2002-03-22 16:06:53 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -46,6 +46,7 @@ if(aLevel >= 950)
 	{
 	bot->Notice(theClient, "\002Level  950 - CSC Coder");
 	bot->Notice(theClient, "QUOTE");
+	bot->Notice(theClient, "\002");
 	}
 
 if(aLevel >= 900)
@@ -56,6 +57,7 @@ if(aLevel >= 900)
 	bot->Notice(theClient, "SERVNOTICE (message)");
 	bot->Notice(theClient, "SET (chan) NOFORCE (on/off)");
 	bot->Notice(theClient, "SHUTDOWN (message)");
+	bot->Notice(theClient, "\002");
 	}
 
 if(aLevel >= 850)
@@ -65,6 +67,7 @@ if(aLevel >= 850)
 	bot->Notice(theClient, "ADDUSER * (nick) (level)");
 	bot->Notice(theClient, "REMUSER * (nick)");
 	bot->Notice(theClient, "MODINFO * access (nick) (level)");
+	bot->Notice(theClient, "\002");
 	}
 
 if(aLevel >= 800)
@@ -79,6 +82,7 @@ if(aLevel >= 800)
 	bot->Notice(theClient, "SET (chan) SPECIAL (on/off)");
 	bot->Notice(theClient, "SET (chan) TEMPMAN (on/off)");
 	bot->Notice(theClient, "SET (chan) VACATION (on/off)");
+	bot->Notice(theClient, "\002");
 	}
 
 if(aLevel >= 750)
@@ -88,6 +92,7 @@ if(aLevel >= 750)
 	bot->Notice(theClient, "GSUSPEND (nick) (duration) (reason)");
 	bot->Notice(theClient, "GUNSUSPEND (nick) (duration) (reason)");
 	bot->Notice(theClient, "REMUSERID (nick) (reason)");
+	bot->Notice(theClient, "\002");
 	}
 
 if(aLevel >= 700)
@@ -96,6 +101,7 @@ if(aLevel >= 700)
 	bot->Notice(theClient, "GSUSPEND (chan) (dur) (reason)");
 	bot->Notice(theClient, "GUNSUSPEND (chan) (dur) (reason)");
 	bot->Notice(theClient, "PURGE (chan) (reason)");
+	bot->Notice(theClient, "\002");
 	}
 
 if(aLevel >= 650)
@@ -104,6 +110,7 @@ if(aLevel >= 650)
 	bot->Notice(theClient, "COMMENT (chan) (comment)");
 	bot->Notice(theClient, "REGISTER (chan) (nick)");
 	bot->Notice(theClient, "SET (chan) LOCKED (on/off)");
+	bot->Notice(theClient, "\002");
 	}
 
 if(aLevel >= 600)
@@ -112,6 +119,7 @@ if(aLevel >= 600)
 	bot->Notice(theClient, "INVME");
 	bot->Notice(theClient, "REMIGNORE (hostmask)");
 	bot->Notice(theClient, "REMOVEALL (chan)");
+	bot->Notice(theClient, "\002");
 	}
 
 if(aLevel >= 1)
