@@ -3,7 +3,7 @@
  *
  * 20020308 GK@PAnet - Initial Writing
  *
- * $Id: REMUSERIDCommand.cc,v 1.6 2002-03-25 01:20:16 jeekay Exp $
+ * $Id: REMUSERIDCommand.cc,v 1.7 2002-03-26 00:51:39 jeekay Exp $
  */
 
 #include	<string>
@@ -12,8 +12,9 @@
 #include "ELog.h"
 #include "cservice.h"
 #include "levels.h"
+#include "networkData.h"
 
-const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.6 2002-03-25 01:20:16 jeekay Exp $" ;
+const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.7 2002-03-26 00:51:39 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -66,6 +67,25 @@ if(targetUser->getFlag(sqlUser::F_NOPURGE))
 	{
 	bot->Notice(theClient, "%s has NOPURGE set. Purge not allowed.", targetUser->getUserName().c_str());
 	return true;
+	}
+
+/* Very first things first - is the user currently logged in? */
+iClient* authTestUser = targetUser->isAuthed();
+if(authTestUser)
+	{
+	bot->Notice(authTestUser, "Your registered nick has been purged. You are no longer authenticated.");
+	
+	
+	networkData* tmpData = static_cast< networkData* >( authTestUser->getCustomData(bot) );
+	if(!tmpData)
+		{
+		bot->Notice(theClient, "Wierd internal error.");
+		elog << "REMUSERID> tmpData null this user" << endl;
+		return false;
+		}
+	
+	tmpData->currentUser = NULL;
+	server->PostEvent(gnuworld::EVT_FORCEDEAUTH, static_cast< void* >( authTestUser));
 	}
 
 /* First things first -
