@@ -1,0 +1,238 @@
+dnl $Id: configure.in,v 1.1 2002-01-14 23:19:12 morpheus Exp $
+dnl ----------------------------------------------------------
+
+echo Configuring GNUWorld...
+echo
+
+AC_REVISION($Revision: 1.1 $)
+AC_INIT(src/main.cc)
+AM_INIT_AUTOMAKE(gnuworld,0.0)
+AM_CONFIG_HEADER(include/defs.h)
+
+dnl Enable building of the convenience library
+dnl and set LIBLTDL accordingly
+AC_LIBLTDL_CONVENIENCE
+
+dnl Substitute INCLTDL and LIBLTDL in the Makefiles
+dnl For some reason, INCLTDL and LIBLTDL aren't set
+dnl properly on OpenBSD
+INCLTDL="-I../libltdl"
+LIBLTDL="../libltdl/libltdlc.la"
+AC_SUBST(INCLTDL)
+AC_SUBST(LIBLTDL)
+
+AC_ISC_POSIX
+
+dnl Check for dlopen support
+AC_LIBTOOL_DLOPEN
+
+dnl Configure libtool
+AM_PROG_LIBTOOL
+
+dnl Configure libltdl
+AC_CONFIG_SUBDIRS(libltdl)
+
+CFLAGS="-Wall -pipe"
+CXXFLAGS="-Wall -pipe"
+CXX="g++"
+LIBS=""
+
+libdir="`pwd`/bin"
+bindir="`pwd`/bin"
+glibdir="`pwd`/lib"
+
+AC_SUBST(glibdir)
+AC_PROG_CC
+AC_PROG_CXX
+AC_PROG_CPP
+AC_LANG_CPLUSPLUS
+
+AC_PROG_MAKE_SET(gmake)
+AC_SUBST(LIBTOOL_DEPS)
+
+dnl ----------------------------------------------------------
+dnl ----------------------------------------------------------
+dnl
+dnl System specific checks
+dnl
+dnl ----------------------------------------------------------
+dnl ----------------------------------------------------------
+
+AC_CHECK_LIB(socket,socket)
+AC_CHECK_LIB(nsl,gethostbyname)
+dnl AC_CHECK_LIB(pthread,pthread_create)
+dnl AC_CHECK_LIB(posix4,sem_init)
+
+dnl ----------------------------------------------------------
+dnl
+dnl Checking for headers, functions, and a type declarations
+dnl
+
+AC_CHECK_HEADERS(sys/file.h unistd.h sys/stat.h sys/ioctl.h sys/resource.h )
+AC_CHECK_HEADERS(sys/time.h asm/ioctls.h xti_inet.h sys/filio.h)
+AC_CHECK_HEADERS(sys/types.h sys/socket.h netinet/in.h sys/un.h pthread.h)
+
+AC_HEADER_STDC
+AC_HEADER_TIME
+AC_TYPE_SIGNAL
+AC_TYPE_MODE_T
+AC_TYPE_PID_T
+AC_TYPE_SIZE_T
+AC_TYPE_UID_T
+
+found_socklen_t=no
+AC_EGREP_HEADER(socklen_t,sys/socket.h, AC_DEFINE(HAVE_SOCKLEN_T) found_socklen_t=yes)
+
+if test $found_socklen_t = yes; then
+  AC_EGREP_HEADER(socklen_t,bits/socket.h,AC_DEFINE(HAVE_SOCKLEN_T))
+fi
+
+if test $found_socklen_t = yes; then
+  AC_MSG_CHECKING(for socklen_t)
+  AC_MSG_RESULT(yes)
+else
+  AC_CHECK_TYPE(socklen_t,int)
+fi
+
+useDebug=yes
+AC_ARG_WITH(debug, \
+[  --without-debug          Disable debugging in the executables],
+[useDebug=no]
+)
+
+if test $useDebug = yes ; then
+	CXXFLAGS="$CXXFLAGS -g"
+fi
+
+useOptimization=no
+AC_ARG_WITH(optimization, \
+[  --with-optimization      Optimize the executables],
+[useOptimization=yes]
+)
+
+if test $useOptimization = yes ; then
+	CXXFLAGS="$CXXFLAGS -O"
+else
+	CXXFLAGS="$CXXFLAGS -O0"
+fi
+
+PGSQL_PREFIX=/usr/local/pgsql
+
+AC_ARG_WITH(pgsql, \
+[  --with-pgsql=PGSQLDIR   Specify location to find pgsql
+                          Default path is \"/usr/local/pgsql\"],
+[PGSQL_PREFIX=$withval]
+)
+
+AC_MSG_CHECKING(for libpq++.h)
+if test -f "/usr/local/include/pgsql/libpq++.h"; then
+	PGSQL_INCLUDE="/usr/local/include/pgsql"
+	PGSQL_LIB="/usr/local/lib"
+elif test -f "$PGSQL_PREFIX/include/libpq++.h"; then
+	PGSQL_INCLUDE="$PGSQL_PREFIX/include"
+	PGSQL_LIB="$PGSQL_PREFIX/lib"
+elif test -f "/usr/local/include/libpq++.h"; then
+	PGSQL_INCLUDE=/usr/local/include
+	PGSQL_LIB=/usr/local/lib
+elif test -f "/usr/include/postgresql/libpq++.h"; then
+	PGSQL_INCLUDE=/usr/include/postgresql
+	PGSQL_LIB=/usr/lib/pgsql
+elif test -f "/usr/include/pgsql/libpq++.h"; then
+	PGSQL_INCLUDE=/usr/include/pgsql
+	PGSQL_LIB=/usr/lib/pgsql
+elif test -f "/usr/local/include/pgsql/libpq++.h"; then
+	PGSQL_INCLUDE=/usr/local/include/pgsql
+	PGSQL_LIB=/usr/local/lib
+else
+        AC_MSG_ERROR( Unable to find PostGreSQL )
+fi
+AC_MSG_RESULT(yes)
+
+AC_SUBST(PGSQL_INCLUDE)
+AC_SUBST(PGSQL_LIB)
+
+dnl echo "PGSQL_PREFIX: $PGSQL_PREFIX"
+dnl echo "PGSQL_INCLUDE: $PGSQL_INCLUDE"
+dnl echo "PGSQL_LIB: $PGSQL_LIB"
+dnl exit
+
+AC_SUBST(LDFLAGS)
+AC_SUBST(bindir)
+
+CXXFLAGS="$CXXFLAGS -I`pwd`/include -I`pwd`/lib"
+
+if test -d "/usr/local/include/g++/ext"; then
+	CXXFLAGS="$CXXFLAGS -I/usr/local/include/g++/ext"
+fi
+
+if test -d "/usr/local/include/g++/backward"; then
+	CXXFLAGS="$CXXFLAGS -I/usr/local/include/g++/backward"
+fi
+
+AC_SUBST(CXXFLAGS)
+AC_SUBST(LIB_PATH)
+AC_SUBST(BIN_PATH)
+AC_SUBST(SRC_PATH)
+
+echo
+echo "Detecting modules..."
+echo
+
+MOD_DIRS=""
+searchForMods=yes
+
+AC_ARG_ENABLE(modules, \
+[  --enable-modules=[mods] Enable one or more modules; all modules
+                          found in the current directory are enabled
+                          by default.  Specify \"no\" (without quotes)
+                          to build server only],
+[
+dnl echo "enableval: $enableval"
+if test $enableval = "yes" ; then
+	searchForMods=yes
+elif test $enableval = "no" ; then
+	searchForMods=no
+else
+	tmp="mod.$enableval"
+dnl 	echo "tmp: $tmp"
+	tmp=`echo $tmp | sed 's/,/ mod./g'`
+dnl	echo "tmp: $tmp"
+	MOD_DIRS="$MOD_DIRS $tmp"
+	searchForMods=no
+fi
+],
+[
+dnl echo "running later"
+searchForMods=yes
+]) dnl AC_ARG_ENABLE
+
+dnl echo "searchForMods: $searchForMods"
+if test $searchForMods = yes ; then
+	mod_list=`\ls | \grep "mod."`
+dnl	echo "mod_list: $mod_list"
+
+	for file in $mod_list; do
+		if [ ! test -d $file ]; then
+			echo "$file is not a directory!"
+			continue
+		fi
+
+		if [ test -f $file/Makefile.in ]; then
+			echo Adding module `echo $file | \cut -f2 -d"."`
+			MOD_DIRS="$MOD_DIRS $file"
+		fi
+	 done
+fi
+
+dnl echo "MOD_DIRS = $MOD_DIRS"
+AC_SUBST(MOD_DIRS)
+
+AC_OUTPUT(Makefile db/Makefile lib/Makefile src/Makefile \
+mod.cservice/Makefile \
+mod.nickserv/Makefile)
+
+echo
+echo Configuration has been finished, and everything seems to be allright
+echo Now you have the chance to modify include/config.h to set your
+echo preferred options...
+echo
