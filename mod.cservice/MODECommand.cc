@@ -3,7 +3,7 @@
  *
  * 20020201 - Jeekay - Initial Version
  *
- * $Id: MODECommand.cc,v 1.2 2002-02-02 05:22:05 jeekay Exp $
+ * $Id: MODECommand.cc,v 1.3 2002-02-03 01:13:06 jeekay Exp $
  */
 
 #include <string>
@@ -17,13 +17,12 @@
 #define CF_I 0x01
 #define CF_M 0x02
 #define CF_N 0x04
-#define CF_S 0x08
+#define CF_SP 0x08
 #define CF_T 0x10
 #define CF_L 0x20
 #define CF_K 0x40
-#define CF_P 0x80
 
-const char MODECommand_cc_rcsId[] = "$Id: MODECommand.cc,v 1.2 2002-02-02 05:22:05 jeekay Exp $";
+const char MODECommand_cc_rcsId[] = "$Id: MODECommand.cc,v 1.3 2002-02-03 01:13:06 jeekay Exp $";
 
 namespace gnuworld
 {
@@ -140,8 +139,9 @@ for(string::iterator ptr = modeString.begin(); ptr != modeString.end(); ++ptr)
 			} // case n
 		case 'p':
 			{
-			if(curFlags & CF_P) { break; }
+			if(curFlags & CF_SP) { break; }
 			chanSet = theChan->getMode(Channel::MODE_P);
+			bool chanSetS = theChan->getMode(Channel::MODE_S);
 			if(chanSet && !polarity)
 				{
 				negative += "p";
@@ -151,14 +151,20 @@ for(string::iterator ptr = modeString.begin(); ptr != modeString.end(); ++ptr)
 				{
 				positive += "p";
 				theChan->setMode(Channel::MODE_P);
+				if(chanSetS)
+					{ // S and P are mutually exclusive
+					negative += "s";
+					theChan->removeMode(Channel::MODE_S);
+					}
 				} // !chanSet && polarity
-			curFlags |= CF_P;
+			curFlags |= CF_SP;
 			break;
 			} // case p
 		case 's':
 			{
-			if(curFlags & CF_S) { break; }
+			if(curFlags & CF_SP) { break; }
 			chanSet = theChan->getMode(Channel::MODE_S);
+			bool chanSetP = theChan->getMode(Channel::MODE_P);
 			if(chanSet && !polarity)
 				{
 				negative += "s";
@@ -168,8 +174,13 @@ for(string::iterator ptr = modeString.begin(); ptr != modeString.end(); ++ptr)
 				{
 				positive += "s";
 				theChan->setMode(Channel::MODE_S);
+				if(chanSetP)
+					{ // S and P are mutually exclusive
+					negative += "p";
+					theChan->removeMode(Channel::MODE_P);
+					}
 				} // !chanSet && polarity
-			curFlags |= CF_S;
+			curFlags |= CF_SP;
 			break;
 			} // case s
 		case 't':
@@ -198,7 +209,7 @@ for(string::iterator ptr = modeString.begin(); ptr != modeString.end(); ++ptr)
 				negative += "l";
 				theChan->removeMode(Channel::MODE_L);
 				}
-			if(!chanSet && polarity && (numArgs >= curArg) && IsNumeric(st[curArg]))
+			if(polarity && (numArgs >= curArg) && IsNumeric(st[curArg]) && (st[curArg].size() <= 9))
 				{
 				positive += "l";
 				posarg += st[curArg] + string(" ");
@@ -220,7 +231,7 @@ for(string::iterator ptr = modeString.begin(); ptr != modeString.end(); ++ptr)
 				theChan->removeMode(Channel::MODE_K);
 				++curArg;
 				} // Unset +k
-			if(!chanSet && polarity && (numArgs >= curArg))
+			if(!chanSet && polarity && (numArgs >= curArg) && (st[curArg].size() <= 20))
 				{
 				positive += "k";
 				posarg += st[curArg] + string(" ");
