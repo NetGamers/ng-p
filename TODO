@@ -3,4 +3,5 @@ Possible TODO list
 Make core to handle client auth across modules
 Level  850: addadmin remadmin modadmin
 msg bot comment nick/channel comment
+Expire on suspend. Has to put the expire in, but it doesn't do anything
 
