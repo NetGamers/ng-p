@@ -1,5 +1,5 @@
 #ifndef __NICKSERVCOMMANDS_H
-#define __NICKSERVCOMMANDS_H "$Id: nickservCommands.h,v 1.1 2002-01-14 23:33:40 jeekay Exp $"
+#define __NICKSERVCOMMANDS_H "$Id: nickservCommands.h,v 1.2 2002-01-16 18:33:12 jeekay Exp $"
 
 #include	<string>
 #include	"iClient.h"
@@ -67,6 +67,7 @@ public: \
 } ;
 
 DECLARE_COMMAND( LOGIN );
+DECLARE_COMMAND( RECOVER );
 
 } // namespace gnuworld
 

@@ -22,7 +22,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.2 2002-01-15 18:36:13 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.3 2002-01-16 18:33:12 jeekay Exp $" ;
 
 // If DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -116,8 +116,8 @@ authLen = atoi(conf.Require("authLen")->second.c_str());
 
 // Be sure to use all capital letters for the command name
 
-RegisterCommand( new LOGINCommand( this, "LOGIN", "<password>"
-	"\t\tAuthenticate you with the bot")) ;
+RegisterCommand(new LOGINCommand( this, "LOGIN", "<password>")) ;
+RegisterCommand(new RECOVERCommand( this, "RECOVER", "<username> <password>"));
 
 // Load all the admin names and levels
 refreshAdminAccessLevels();
@@ -213,7 +213,7 @@ xClient::ImplementServer( theServer ) ;
 }
 
 int nickserv::OnPrivateMessage( iClient* theClient, const string& Message,
-	bool )
+	bool secure)
 {
 
 
@@ -230,6 +230,14 @@ if( st.empty() )
 // This is no longer necessary, but oh well *shrug*
 const string Command = string_upper( st[ 0 ] ) ;
 
+// Abort if someone tries to do something password related
+// without doing full nick@server
+ if(!secure && ((Command == "LOGIN") || (Command == "RECOVER")))
+   {
+     Notice(theClient, "To use %s, you must use /msg %s@%s",
+	    Command.c_str(), getNickName().c_str(), getUplinkName().c_str());
+     return false;
+   }
 
 // Attempt to find a handler for this method.
 commandIterator commHandler = findCommand( Command ) ;
@@ -286,7 +294,7 @@ switch( theEvent )
 		if(theEvent == EVT_QUIT)
 		  { NewUser = static_cast< iClient* >( Data1); }
 		else
-		  { NewUser = static_cast< iClient* >( Data2); logDebugMessage("Got Kill of " + NewUser->getNickName()); }
+		  { NewUser = static_cast< iClient* >( Data2); }
 		removeFromQueue(NewUser);
 		nsUser* tmpUser = static_cast< nsUser* >( NewUser->getCustomData(this));
 		delete tmpUser;
@@ -411,9 +419,9 @@ int nickserv::OnTimer(xServer::timerID timer_id, void* data)
 					Notice(tmpClient, "You have not logged into NickServ. You will now be autokilled.");
 					strstream s;
 					s << getCharYY()
-						<< " D "
-						<< tmpClient->getCharYYXXX()
-					  << " :" << MyUplink->getName() << "!NickServ (AutoKill)" << ends;
+					  << " D "
+					  << tmpClient->getCharYYXXX()
+					  << " :" << getNickName() << " [NickServ] AutoKill" << ends;
 					Write(s.str());
 					delete[] s.str();
 					
