@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.19 2002-06-09 08:40:39 jeekay Exp $
+ * $Id: SETCommand.cc,v 1.20 2002-07-01 00:33:07 jeekay Exp $
  */
 
 #include	<string>
@@ -30,7 +30,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.19 2002-06-09 08:40:39 jeekay Exp $" ;
+const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.20 2002-07-01 00:33:07 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -165,28 +165,6 @@ if( st[1][0] != '#' ) // Didn't find a hash?
 		return true;
 	}
 
-/*	if (option == "NOPURGE")
-	{
-
-		sqlUser* targetUser = bot->getUserRecord(st[2]);
-                if (!targetUser) {
-                        bot->Notice(theClient, bot->getResponse(theUser,
-                                language::not_registered).c_str(), st[2].c_str());
-                        return false;
-                }
-
-strstream queryString ;
-queryString     << "SELECT id"
-                <<
-                << " FROM users WHERE "
-                << "lower(user_name) = '"
-                << escapeSQLChars(string_lower(channelName))
-                << "'"
-                << ends ;
-
-		return true;
-	}
-*/
 	if (option == "NS" || option == "NICKSERV" || option == "AUTOKILL")
 	{
 		if (value == "ON")

@@ -9,7 +9,7 @@
  * Caveats: None
  *
  *
- * $Id: REMUSERCommand.cc,v 1.3 2002-02-08 23:08:45 ultimate Exp $
+ * $Id: REMUSERCommand.cc,v 1.4 2002-07-01 00:33:07 jeekay Exp $
  */
 
 #include	<string>
@@ -21,7 +21,7 @@
 #include	"libpq++.h"
 #include	"responses.h"
 
-const char REMUSERCommand_cc_rcsId[] = "$Id: REMUSERCommand.cc,v 1.3 2002-02-08 23:08:45 ultimate Exp $" ;
+const char REMUSERCommand_cc_rcsId[] = "$Id: REMUSERCommand.cc,v 1.4 2002-07-01 00:33:07 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -40,7 +40,7 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 
 	static const char* queryHeader = "DELETE FROM levels WHERE ";
 
-	strstream theQuery;
+	stringstream theQuery;
 	ExecStatusType status;
 
 	/*
@@ -180,9 +180,11 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 	<< " AND user_id = " << targetUser->getID()
 	<< ";" << ends;
 
-	elog << "sqlQuery> " << theQuery.str() << endl;
+#ifdef LOG_SQL
+	elog << "sqlQuery> " << theQuery.str().c_str() << endl;
+#endif
 
-	if ((status = bot->SQLDb->Exec(theQuery.str())) == PGRES_COMMAND_OK)
+	if ((status = bot->SQLDb->Exec(theQuery.str().c_str())) == PGRES_COMMAND_OK)
 	{
 		bot->Notice(theClient,
 			bot->getResponse(theUser,

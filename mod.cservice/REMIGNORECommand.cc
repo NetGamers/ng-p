@@ -9,7 +9,7 @@
 #include	"responses.h"
 #include	"Network.h"
 
-const char REMIGNORECommand_cc_rcsId[] = "$Id: REMIGNORECommand.cc,v 1.2 2002-03-25 01:20:16 jeekay Exp $" ;
+const char REMIGNORECommand_cc_rcsId[] = "$Id: REMIGNORECommand.cc,v 1.3 2002-07-01 00:33:06 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -52,13 +52,12 @@ for( cservice::silenceListType::iterator ptr = bot->silenceList.begin() ;
 	{
 	if ( string_lower(st[1]) == string_lower(ptr->first.c_str()) )
 		{
-		strstream s;
+		stringstream s;
 		s	<< bot->getCharYYXXX()
 			<< " SILENCE * -"
 			<< ptr->first.c_str()
 			<< ends;
 		bot->Write( s );
-		delete[] s.str();
 
 		/*
 		 * Locate this user by numeric.

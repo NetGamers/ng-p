@@ -1,8 +1,9 @@
 /* sqlChannel.h */
 
 #ifndef __SQLCHANNEL_H
-#define __SQLCHANNEL_H "$Id: sqlChannel.h,v 1.5 2002-02-16 21:40:02 jeekay Exp $"
+#define __SQLCHANNEL_H "$Id: sqlChannel.h,v 1.6 2002-07-01 00:33:08 jeekay Exp $"
 
+#include	<vector>
 #include	<string>
 #include	<map>
 #include	<ctime>

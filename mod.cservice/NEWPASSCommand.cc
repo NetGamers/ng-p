@@ -10,7 +10,7 @@
 #include	"responses.h"
 #include	"networkData.h"
 
-const char NEWPASSCommand_cc_rcsId[] = "$Id: NEWPASSCommand.cc,v 1.1 2002-01-14 23:14:19 morpheus Exp $" ;
+const char NEWPASSCommand_cc_rcsId[] = "$Id: NEWPASSCommand.cc,v 1.2 2002-07-01 00:33:06 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -97,7 +97,7 @@ for( size_t i = 0 ; i < MD5_DIGEST_LENGTH ; ++i )
 	data[ i ] = digest[ i ] ;
 	}
 
-strstream output;
+stringstream output;
 output << hex;
 output.fill('0');
 for( size_t ii = 0; ii < MD5_DIGEST_LENGTH; ii++ )
@@ -124,7 +124,6 @@ else
 		"NEWPASS: Unable to commit to database" ) ;
 	}
 
-delete[] output.str() ;
 return true;
 }
 

@@ -4,7 +4,7 @@
  *
  * Distributed under the GNU Public Licence
  *
- * $Id: DEBUGCommand.cc,v 1.3 2002-03-31 22:11:30 jeekay Exp $
+ * $Id: DEBUGCommand.cc,v 1.4 2002-07-01 00:33:05 jeekay Exp $
  */
 
 #include	<string>
@@ -15,7 +15,7 @@
 #include "cservice.h"
 #include "levels.h"
 
-const char DEBUGCommand_cc_rcsId[] = "$Id: DEBUGCommand.cc,v 1.3 2002-03-31 22:11:30 jeekay Exp $" ;
+const char DEBUGCommand_cc_rcsId[] = "$Id: DEBUGCommand.cc,v 1.4 2002-07-01 00:33:05 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -59,15 +59,16 @@ if("SERVERS" == command)
 	netServers = Network->server_begin();
 	while(netServers != Network->server_end())
 		{
-		if(*netServers != 0)
+		iServer* tempServer = (*netServers).second;
+		if(tempServer != 0)
 			{
 			char uplinkYY[3];
-			inttobase64(uplinkYY, (*netServers)->getUplinkIntYY(), 2);
+			inttobase64(uplinkYY, tempServer->getUplinkIntYY(), 2);
 			bot->Notice(theClient, "%s:%s->%s:%d",
-				(*netServers)->getCharYY(),
-				(*netServers)->getName().c_str(),
+				tempServer->getCharYY(),
+				tempServer->getName().c_str(),
 				uplinkYY,
-				(*netServers)->isBursting());
+				tempServer->isBursting());
 			}
 		++netServers;
 		}

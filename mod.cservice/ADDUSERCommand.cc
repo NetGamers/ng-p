@@ -11,7 +11,7 @@
  *
  * Caveats: None
  *
- * $Id: ADDUSERCommand.cc,v 1.4 2002-02-08 23:08:45 ultimate Exp $
+ * $Id: ADDUSERCommand.cc,v 1.5 2002-07-01 00:33:05 jeekay Exp $
  */
 
 #include	<string>
@@ -24,7 +24,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char ADDUSERCommand_cc_rcsId[] = "$Id: ADDUSERCommand.cc,v 1.4 2002-02-08 23:08:45 ultimate Exp $" ;
+const char ADDUSERCommand_cc_rcsId[] = "$Id: ADDUSERCommand.cc,v 1.5 2002-07-01 00:33:05 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -197,7 +197,7 @@ for(StringTokenizer::size_type counter = 0; counter < st2.size(); ++counter)
 	 *  Now, build up the SQL query & execute it!
 	 */
 
-	strstream theQuery;
+	stringstream theQuery;
 	theQuery	<< queryHeader
 			<< "VALUES ("
 			<< theChan->getID() << ","
@@ -216,12 +216,11 @@ for(StringTokenizer::size_type counter = 0; counter < st2.size(); ++counter)
 
 #ifdef LOG_SQL
 		elog	<< "ADDUSER::sqlQuery> "
-					<< theQuery.str()
+					<< theQuery.str().c_str()
 					<< endl;
 #endif
 
-	ExecStatusType status = bot->SQLDb->Exec(theQuery.str()) ;
-	delete[] theQuery.str() ;
+	ExecStatusType status = bot->SQLDb->Exec(theQuery.str().c_str()) ;
 
 	if( PGRES_COMMAND_OK == status )
 		{

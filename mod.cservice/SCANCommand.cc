@@ -4,7 +4,7 @@
  *
  * Distributed under the GNU Public Licence
  *
- * $Id: SCANCommand.cc,v 1.3 2002-03-28 21:59:25 jeekay Exp $
+ * $Id: SCANCommand.cc,v 1.4 2002-07-01 00:33:07 jeekay Exp $
  */
 
 #include	<string>
@@ -48,16 +48,15 @@ string search = string_lower(st[2]);
 
 if("EMAIL" == option)
 	{
-	strstream emailQuery;
+	stringstream emailQuery;
 	emailQuery << "SELECT user_name,email FROM users WHERE"
 		<< " lower(email) LIKE '%" << escapeSQLChars(search) << "%'"
 		<< " LIMIT 10"
 		<< ends;
 #ifdef LOG_SQL
-	elog << "SCAN:SQL> " << emailQuery.str() << endl;
+	elog << "SCAN:SQL> " << emailQuery.str().c_str() << endl;
 #endif
-	ExecStatusType status = bot->SQLDb->Exec(emailQuery.str());
-	delete[] emailQuery.str();
+	ExecStatusType status = bot->SQLDb->Exec(emailQuery.str().c_str());
 
 	if(PGRES_TUPLES_OK != status)
 		{
@@ -84,17 +83,16 @@ if("EMAIL" == option)
 
 if("HOSTMASK" == option)
 	{
-	strstream hostmaskQuery;
+	stringstream hostmaskQuery;
 	hostmaskQuery << "SELECT user_name,last_hostmask FROM users,users_lastseen"
 		<< " WHERE id = user_id AND lower(last_hostmask) LIKE '%"
 		<< escapeSQLChars(search) << "%'"
 		<< " LIMIT 10"
 		<< ends;
 #ifdef LOG_SQL
-	elog << "SCAN:SQL> " << hostmaskQuery.str() << endl;
+	elog << "SCAN:SQL> " << hostmaskQuery.str().c_str() << endl;
 #endif
-	ExecStatusType status = bot->SQLDb->Exec(hostmaskQuery.str());
-	delete[] hostmaskQuery.str();
+	ExecStatusType status = bot->SQLDb->Exec(hostmaskQuery.str().c_str());
 	
 	if(PGRES_TUPLES_OK != status)
 		{
@@ -121,15 +119,15 @@ if("HOSTMASK" == option)
 
 if("NICK" == option)
 	{
-	strstream nickQuery;
+	stringstream nickQuery;
 	nickQuery << "SELECT user_name FROM users WHERE"
 		<< " lower(user_name) LIKE '%" << escapeSQLChars(search) << "%'"
 		<< " LIMIT 10"
 		<< ends;
 #ifdef LOG_SQL
-	elog << "SCAN:SQL> " << nickQuery.str() << endl;
+	elog << "SCAN:SQL> " << nickQuery.str().c_str() << endl;
 #endif
-	ExecStatusType status = bot->SQLDb->Exec(nickQuery.str());
+	ExecStatusType status = bot->SQLDb->Exec(nickQuery.str().c_str());
 	
 	if(PGRES_TUPLES_OK != status)
 		{

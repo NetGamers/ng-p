@@ -8,7 +8,7 @@
  *
  * Caveats: None.
  *
- * $Id: UNBANCommand.cc,v 1.2 2002-01-23 17:17:25 ultimate Exp $
+ * $Id: UNBANCommand.cc,v 1.3 2002-07-01 00:33:07 jeekay Exp $
  */
 
 #include	<string>
@@ -21,7 +21,7 @@
 #include	"responses.h"
 #include	"match.h"
 
-const char UNBANCommand_cc_rcsId[] = "$Id: UNBANCommand.cc,v 1.2 2002-01-23 17:17:25 ultimate Exp $" ;
+const char UNBANCommand_cc_rcsId[] = "$Id: UNBANCommand.cc,v 1.3 2002-07-01 00:33:07 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -209,13 +209,12 @@ while (cPtr != theChannel->banList_end())
 		{
 		// Can't call xClient::UnBan inside the loop it will modify without
 		// a return value.
-		strstream s;
+		stringstream s;
 		s	<< bot->getCharYYXXX()
 			<< " M " << theChannel->getName()
 			<< " -b " << (*cPtr)
 			<< ends;
 		bot->Write( s );
-		delete[] s.str();
 
 		theChannel->removeBan(*cPtr);
 		cPtr = theChannel->banList_begin();

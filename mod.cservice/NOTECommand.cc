@@ -9,7 +9,7 @@
 
 #define LOG_SQL
 
-const char NOTECommand_cc_rcsId[] = "$Id: NOTECommand.cc,v 1.9 2002-05-29 19:33:02 jeekay Exp $" ;
+const char NOTECommand_cc_rcsId[] = "$Id: NOTECommand.cc,v 1.10 2002-07-01 00:33:06 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -67,11 +67,10 @@ if (cmd == "SEND")
 		 *   No->Reject with 'You are not on %s's note allow list'
 		 *  Send note */
 			
-		strstream theAllowedCount;
+		stringstream theAllowedCount;
 		theAllowedCount << "SELECT COUNT(*) as count FROM note_allow WHERE"
 			<< " user_id = " << targetUser->getID() << ends;
-		ExecStatusType allowedCountStatus = bot->SQLDb->Exec(theAllowedCount.str());
-		delete[] theAllowedCount.str();
+		ExecStatusType allowedCountStatus = bot->SQLDb->Exec(theAllowedCount.str().c_str());
 		
 		if(allowedCountStatus != PGRES_TUPLES_OK)
 			{
@@ -94,16 +93,15 @@ if (cmd == "SEND")
 		/* The targets allow list is NOT empty */
 		
 		/* Is this user allowed to send mail to the target? */
-		strstream theAllowed;
+		stringstream theAllowed;
 		theAllowed << "SELECT user_id FROM note_allow WHERE"
 			<< " user_id = " << targetUser->getID()
 			<< " AND user_from_id = " << theUser->getID()
 			<< ends;
-		ExecStatusType allowStatus = bot->SQLDb->Exec(theAllowed.str());
+		ExecStatusType allowStatus = bot->SQLDb->Exec(theAllowed.str().c_str());
 #ifdef LOG_SQL
-		elog << "NOTECommand:SQL> " << theAllowed.str() << endl;
+		elog << "NOTECommand:SQL> " << theAllowed.str().c_str() << endl;
 #endif		
-		delete[] theAllowed.str();
 		if(PGRES_TUPLES_OK != allowStatus)
 			{
 			elog << "NOTECommand> SQL Error: "
@@ -125,14 +123,13 @@ if (cmd == "SEND")
 		 * Now we run the other checks before sending the note
 		 */
 		
-		strstream thecount;
+		stringstream thecount;
 		thecount	<< "SELECT COUNT(*) as count "
 				<< "FROM memo where to_id="
 				<< targetUser->getID()
 				<< ends;
 		
-		ExecStatusType status = bot->SQLDb->Exec( thecount.str() );
-		delete[] thecount.str() ;
+		ExecStatusType status = bot->SQLDb->Exec( thecount.str().c_str() );
 
 		if( PGRES_TUPLES_OK != status )
 			{
@@ -151,7 +148,7 @@ if (cmd == "SEND")
 		else
 			{ // count < 15
 
-			strstream theQuery;
+			stringstream theQuery;
 			theQuery	<< "INSERT INTO memo "
 				<< "(from_id, to_id, content, ts) "
 				<< "VALUES ("
@@ -162,11 +159,10 @@ if (cmd == "SEND")
 				<< ends;
 #ifdef LOG_SQL
 			elog	<< "NOTE:SEND::sqlQuery> "
-				<< theQuery.str()
+				<< theQuery.str().c_str()
 				<< endl;
 #endif
-			ExecStatusType status = bot->SQLDb->Exec(theQuery.str());
-			delete[] theQuery.str();
+			ExecStatusType status = bot->SQLDb->Exec(theQuery.str().c_str());
 			if (PGRES_COMMAND_OK != status)
 				{
 				bot->dbErrorMessage(theClient);
@@ -191,7 +187,7 @@ if (cmd == "SEND")
 
 if (cmd == "READ")
 	{
-	strstream theQuery;
+	stringstream theQuery;
 	theQuery	<< "SELECT memo.id, memo.ts, memo.content, users.user_name "
 		<< "FROM memo, users "
 		<< "WHERE users.id = memo.from_id "
@@ -200,11 +196,10 @@ if (cmd == "READ")
 		<< ends;
 #ifdef LOG_SQL
 	elog	<< "NOTE:READ::sqlQuery> "
-		<< theQuery.str()
+		<< theQuery.str().c_str()
 		<< endl;
 #endif
-	ExecStatusType status = bot->SQLDb->Exec(theQuery.str());
-	delete[] theQuery.str();
+	ExecStatusType status = bot->SQLDb->Exec(theQuery.str().c_str());
 	if (PGRES_TUPLES_OK != status)
 		{
 		bot->dbErrorMessage(theClient);
@@ -244,7 +239,7 @@ if (cmd == "ERASE")
 		return false;
 		}
 		
-	strstream theQuery;
+	stringstream theQuery;
 	theQuery	<< "DELETE FROM memo "
 		<< "WHERE to_id = " << theUser->getID();
 		
@@ -255,12 +250,11 @@ if (cmd == "ERASE")
 	
 #ifdef LOG_SQL
 	elog	<< "NOTE:ERASE::sqlQuery> "
-		<< theQuery.str()
+		<< theQuery.str().c_str()
 		<< endl;
 #endif
 
-	ExecStatusType status = bot->SQLDb->Exec(theQuery.str());
-	delete[] theQuery.str();
+	ExecStatusType status = bot->SQLDb->Exec(theQuery.str().c_str());
 	if (PGRES_COMMAND_OK != status)
 		{
 		bot->dbErrorMessage(theClient);
@@ -290,15 +284,14 @@ if (cmd == "ALLOW")
 	if(option == "CLEAR")
 		{
 		/* User wants his allow list cleared */
-		strstream clearQuery;
+		stringstream clearQuery;
 		clearQuery << "SELECT COUNT(*) as count FROM note_allow WHERE"
 			<< " user_id = " << theUser->getID() << ends;
-		ExecStatusType statusClearQuery = bot->SQLDb->Exec(clearQuery.str());
+		ExecStatusType statusClearQuery = bot->SQLDb->Exec(clearQuery.str().c_str());
 #ifdef LOG_SQL
 		elog << "NOTE:CLEAR:SQL> "
-			<< clearQuery.str() << endl;
+			<< clearQuery.str().c_str() << endl;
 #endif
-		delete[] clearQuery.str();
 		
 		if(PGRES_TUPLES_OK != statusClearQuery)
 			{
@@ -311,15 +304,14 @@ if (cmd == "ALLOW")
 		int clearCount = atoi(bot->SQLDb->GetValue(0,0));
 		bot->Notice(theClient, "Clearing %d users from your allow list.", clearCount);
 		
-		strstream clearDelete;
+		stringstream clearDelete;
 		clearDelete << "DELETE FROM note_allow WHERE"
 			" user_id = " << theUser->getID() << ends;
-		ExecStatusType statusClearDelete = bot->SQLDb->Exec(clearDelete.str());
+		ExecStatusType statusClearDelete = bot->SQLDb->Exec(clearDelete.str().c_str());
 #ifdef LOG_SQL
 		elog << "NOTE:CLEAR:SQL> "
-			<< clearDelete.str() << endl;
+			<< clearDelete.str().c_str() << endl;
 #endif
-		delete[] clearDelete.str();
 		
 		if(PGRES_COMMAND_OK != statusClearDelete)
 			{
@@ -335,15 +327,14 @@ if (cmd == "ALLOW")
 	
 	if("LIST" == option)
 		{
-		strstream listSelect;
+		stringstream listSelect;
 		listSelect << "SELECT user_name FROM users,note_allow WHERE users.id=user_from_id"
 			<< " AND user_id = " << theUser->getID()
 			<< " ORDER BY user_name"<< ends;
 #ifdef LOG_SQL
-		elog << "NOTE:LIST:SQL> " << listSelect.str() << endl;
+		elog << "NOTE:LIST:SQL> " << listSelect.str().c_str() << endl;
 #endif
-		ExecStatusType statusListSelect = bot->SQLDb->Exec(listSelect.str());
-		delete[] listSelect.str();
+		ExecStatusType statusListSelect = bot->SQLDb->Exec(listSelect.str().c_str());
 		
 		if(PGRES_TUPLES_OK != statusListSelect)
 			{
@@ -385,15 +376,14 @@ if (cmd == "ALLOW")
 		userID = theUser->getID();
 		targetID = targetUser->getID();
 		
-		strstream addSelect;
+		stringstream addSelect;
 		addSelect << "SELECT COUNT(*) AS count FROM note_allow WHERE"
 			<< " user_id = " << userID << " AND user_from_id = " << targetID
 			<< ends;
 #ifdef LOG_SQL
-		elog << "NOTE:ADD:SQL> " << addSelect.str() << endl;
+		elog << "NOTE:ADD:SQL> " << addSelect.str().c_str() << endl;
 #endif
-		ExecStatusType statusAddSelect = bot->SQLDb->Exec(addSelect.str());
-		delete[] addSelect.str();
+		ExecStatusType statusAddSelect = bot->SQLDb->Exec(addSelect.str().c_str());
 		
 		if(PGRES_TUPLES_OK != statusAddSelect)
 			{
@@ -412,15 +402,14 @@ if (cmd == "ALLOW")
 			return false;
 			}
 		
-		strstream addInsert;
+		stringstream addInsert;
 		addInsert << "INSERT INTO note_allow (user_id,user_from_id,last_updated)"
 			<< " VALUES (" << userID << "," << targetID
 			<< ",now()::abstime::int4)" << ends;
 #ifdef LOG_SQL
-		elog << "NOTE:ADD:SQL> " << addInsert.str() << endl;
+		elog << "NOTE:ADD:SQL> " << addInsert.str().c_str() << endl;
 #endif
-		ExecStatusType statusAddInsert = bot->SQLDb->Exec(addInsert.str());
-		delete[] addInsert.str();
+		ExecStatusType statusAddInsert = bot->SQLDb->Exec(addInsert.str().c_str());
 		
 		if(PGRES_COMMAND_OK != statusAddInsert)
 			{
@@ -443,15 +432,14 @@ if (cmd == "ALLOW")
 		userID = theUser->getID();
 		targetID = targetUser->getID();
 		
-		strstream remSelect;
+		stringstream remSelect;
 		remSelect << "SELECT COUNT(*) AS count FROM note_allow WHERE"
 			<< " user_id = " << userID << " AND user_from_id = " << targetID
 			<< ends;
 #ifdef LOG_SQL
-		elog << "NOTE:REM:SQL> " << remSelect.str() << endl;
+		elog << "NOTE:REM:SQL> " << remSelect.str().c_str() << endl;
 #endif
-		ExecStatusType statusRemSelect = bot->SQLDb->Exec(remSelect.str());
-		delete[] remSelect.str();
+		ExecStatusType statusRemSelect = bot->SQLDb->Exec(remSelect.str().c_str());
 		
 		if(PGRES_TUPLES_OK != statusRemSelect)
 			{
@@ -468,15 +456,15 @@ if (cmd == "ALLOW")
 			return false;
 			}
 		
-		strstream remDelete;
+		stringstream remDelete;
 		remDelete << "DELETE FROM note_allow WHERE"
 			<< " user_id = " << userID << " AND"
 			<< " user_from_id = " << targetID
 			<< ends;
 #ifdef LOG_SQL
-		elog << "NOTE:REM:SQL> " << remDelete.str() << endl;
+		elog << "NOTE:REM:SQL> " << remDelete.str().c_str() << endl;
 #endif
-		ExecStatusType statusRemDelete = bot->SQLDb->Exec(remDelete.str());
+		ExecStatusType statusRemDelete = bot->SQLDb->Exec(remDelete.str().c_str());
 		if(PGRES_COMMAND_OK != statusRemDelete)
 			{
 			bot->Notice(theClient, "Internal database error removing from your allow list.");
@@ -488,30 +476,6 @@ if (cmd == "ALLOW")
 			targetUser->getUserName().c_str());
 		return true;
 		}
-	
-/*	string value = string_upper(st[3]);
-	if (option == "ALLOW")
-		{
-		if ( value == "ON")
-			{
-
-			} else if (value == "OFF") {
-
-			} else {
-				// Show on/off thingie here
-			}
-		} else if (option == "BLOCK") {
-			if ( value == "ON") {
-                        
-                        } else if (value == "OFF") {
-                        
-                        } else {
-                                // Show on/off thingie here
-                        }
-		} else {
-			bot->Notice(theClient, "No such config option");
-			return true;
-		} */
 	return true;
 	}
 

@@ -10,7 +10,7 @@
 #include	"Network.h"
 #include	"cservice_config.h"
 
-const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.11 2002-06-30 16:19:29 jeekay Exp $" ;
+const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.12 2002-07-01 00:33:07 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -239,7 +239,7 @@ if (theChan->getFlag(sqlChannel::F_NOFORCE)) flagsSet += "NOFORCE ";
 if (theChan->getFlag(sqlChannel::F_STRICTVOICE)) flagsSet += "STRICTVOICE ";
 if (theChan->getFlag(sqlChannel::F_FLOATLIM)) 
            { 
-           strstream floatLim; 
+           stringstream floatLim; 
            floatLim 
            << "FLOATLIM (" 
            << theChan->getLimitOffset() 
@@ -258,7 +258,7 @@ bot->Notice(theClient,
  *  Get a list of authenticated users on this channel.
  */
 
-strstream authQuery;
+stringstream authQuery;
 authQuery	<< "SELECT users.user_name,levels.access FROM "
 		<< "users,levels WHERE users.id = levels.user_id "
 		<< "AND levels.channel_id = "
@@ -268,12 +268,11 @@ authQuery	<< "SELECT users.user_name,levels.access FROM "
 
 #ifdef LOG_SQL
 	elog	<< "sqlQuery> "
-		<< authQuery.str()
+		<< authQuery.str().c_str()
 		<< endl;
 #endif
 
-ExecStatusType status = bot->SQLDb->Exec( authQuery.str() ) ;
-delete[] authQuery.str();
+ExecStatusType status = bot->SQLDb->Exec( authQuery.str().c_str() ) ;
 
 if( PGRES_TUPLES_OK != status )
 	{

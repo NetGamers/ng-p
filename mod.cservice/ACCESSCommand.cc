@@ -12,7 +12,7 @@
  * Displays all "Level" records for a specified channel.
  * Can optionally narrow down selection using a number of switches.
  *
- * $Id: ACCESSCommand.cc,v 1.2 2002-02-27 20:59:49 jeekay Exp $
+ * $Id: ACCESSCommand.cc,v 1.3 2002-07-01 00:33:05 jeekay Exp $
  */
 
 #include	<string>
@@ -26,7 +26,7 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 
-const char ACCESSCommand_cc_rcsId[] = "$Id: ACCESSCommand.cc,v 1.2 2002-02-27 20:59:49 jeekay Exp $" ;
+const char ACCESSCommand_cc_rcsId[] = "$Id: ACCESSCommand.cc,v 1.3 2002-07-01 00:33:05 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -229,7 +229,7 @@ for( StringTokenizer::const_iterator ptr = st.begin() ; ptr != st.end() ;
 
 /* Sort out the additional conditions */
 
-strstream extraCond;
+stringstream extraCond;
 if (minAmount)
 	{
 	extraCond << "AND levels.access >= " << minAmount << " ";
@@ -240,10 +240,10 @@ if (maxAmount)
 	}
 extraCond << ends;
 
-strstream theQuery;
+stringstream theQuery;
 theQuery	<< queryHeader
 		<< queryCondition
-		<< extraCond.str()
+		<< extraCond.str().c_str()
 		<< "AND levels.channel_id = "
 		<< theChan->getID()
 		<< " "
@@ -252,7 +252,7 @@ theQuery	<< queryHeader
 
 #ifdef LOG_SQL
 	elog	<< "ACCESS::sqlQuery> "
-		<< theQuery.str()
+		<< theQuery.str().c_str()
 		<< endl;
 #endif
 
@@ -260,9 +260,7 @@ theQuery	<< queryHeader
  *  All done, display the output. (Only fetch 15 results).
  */
 
-ExecStatusType status = bot->SQLDb->Exec( theQuery.str() ) ;
-delete[] theQuery.str() ;
-delete[] extraCond.str() ;
+ExecStatusType status = bot->SQLDb->Exec( theQuery.str().c_str() ) ;
 
 if( PGRES_TUPLES_OK != status )
 	{

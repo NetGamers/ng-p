@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: REGISTERCommand.cc,v 1.3 2002-03-25 01:20:16 jeekay Exp $
+ * $Id: REGISTERCommand.cc,v 1.4 2002-07-01 00:33:06 jeekay Exp $
  */
 
 #include	<string>
@@ -21,7 +21,7 @@
 #include	"Network.h"
 #include	"responses.h"
 
-const char REGISTERCommand_cc_rcsId[] = "$Id: REGISTERCommand.cc,v 1.3 2002-03-25 01:20:16 jeekay Exp $" ;
+const char REGISTERCommand_cc_rcsId[] = "$Id: REGISTERCommand.cc,v 1.4 2002-07-01 00:33:06 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -48,14 +48,13 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 	if (!theUser) return false;
 	
 	// Check the channel is not currently in the database either
-	strstream chanQuery;
+	stringstream chanQuery;
 	chanQuery << "SELECT id FROM channels WHERE lower(name) = '"
 						<< escapeSQLChars(st[1]) << "'" << ends;
 #ifdef LOG_SQL
 	elog << "REGISTER::sqlQuery> " << chanQuery.str() << endl;
 #endif
-	ExecStatusType status = bot->SQLDb->Exec(chanQuery.str());
-	delete[] chanQuery.str();
+	ExecStatusType status = bot->SQLDb->Exec(chanQuery.str().c_str());
 	
 	if( PGRES_TUPLES_OK != status )
 		{
@@ -148,7 +147,7 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 	 *  update the timestamp, and proceed to adduser.
 	 */
 
-	strstream checkQuery;
+	stringstream checkQuery;
 
 	checkQuery 	<< "SELECT id FROM channels WHERE "
 				<< "registered_ts = 0 AND lower(name) = '"
@@ -156,15 +155,15 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 				<< "'"
 				<< ends;
 
-	elog << "sqlQuery> " << checkQuery.str() << endl;
+#ifdef LOG_SQL
+	elog << "sqlQuery> " << checkQuery.str().c_str() << endl;
+#endif
 
 	bool isUnclaimed = false;
-	if ((status = bot->SQLDb->Exec(checkQuery.str())) == PGRES_TUPLES_OK)
+	if ((status = bot->SQLDb->Exec(checkQuery.str().c_str())) == PGRES_TUPLES_OK)
 	{
 		if (bot->SQLDb->Tuples() > 0) isUnclaimed = true;
 	}
-
-	delete[] checkQuery.str();
 
 	if (isUnclaimed)
 	{
@@ -172,7 +171,7 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 		 *  Quick query to set registered_ts back for this chan.
 		 */
 
-		strstream reclaimQuery;
+		stringstream reclaimQuery;
 
 		reclaimQuery<< "UPDATE channels SET registered_ts = now()::abstime::int4,"
 					<< " last_updated = now()::abstime::int4, "
@@ -182,9 +181,11 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 					<< "'"
 					<< ends;
 
-		elog << "sqlQuery> " << reclaimQuery.str() << endl;
+#ifdef LOG_SQL
+		elog << "sqlQuery> " << reclaimQuery.str().c_str() << endl;
+#endif
 
-		if ((status = bot->SQLDb->Exec(reclaimQuery.str())) == PGRES_COMMAND_OK)
+		if ((status = bot->SQLDb->Exec(reclaimQuery.str().c_str())) == PGRES_COMMAND_OK)
 		{
 			bot->logAdminMessage("%s (%s) has registered %s to %s", theClient->getNickName().c_str(),
 				theUser->getUserName().c_str(), st[1].c_str(), tmpUser->getUserName().c_str());
@@ -198,8 +199,6 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 			bot->Notice(theClient, "Unable to update the channel in the database!");
 			return false;
 		}
-
-		delete[] reclaimQuery.str();
 
 	}
 		else /* We perform a normal registration. */
@@ -219,7 +218,7 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 	 *  Now add the target chap at 500 in the new channel. To do this, we need to know
 	 *  the db assigned channel id of the newly created channel :/
 	 */
-	strstream idQuery;
+	stringstream idQuery;
 
 	idQuery 	<< "SELECT id FROM channels WHERE "
 				<< "lower(name) = '"
@@ -227,11 +226,13 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 				<< "'"
 				<< ends;
 
-	elog << "sqlQuery> " << idQuery.str() << endl;
+#ifdef LOG_SQL
+	elog << "sqlQuery> " << idQuery.str().c_str() << endl;
+#endif
 
 	unsigned int theId = 0;
 
-	if ((status = bot->SQLDb->Exec(idQuery.str())) == PGRES_TUPLES_OK)
+	if ((status = bot->SQLDb->Exec(idQuery.str().c_str())) == PGRES_TUPLES_OK)
 	{
 		if (bot->SQLDb->Tuples() > 0)
 		{

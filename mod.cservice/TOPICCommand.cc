@@ -11,7 +11,7 @@
  *
  * Caveats: None
  *
- * $Id: TOPICCommand.cc,v 1.2 2002-01-23 17:17:25 ultimate Exp $
+ * $Id: TOPICCommand.cc,v 1.3 2002-07-01 00:33:07 jeekay Exp $
  */
 
 #include	<string>
@@ -23,7 +23,7 @@
 #include	"responses.h"
 #include	"Network.h"
 
-const char TOPICCommand_cc_rcsId[] = "$Id: TOPICCommand.cc,v 1.2 2002-01-23 17:17:25 ultimate Exp $" ;
+const char TOPICCommand_cc_rcsId[] = "$Id: TOPICCommand.cc,v 1.3 2002-07-01 00:33:07 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -109,7 +109,7 @@ if( topic.size() > 145 )
 	return false;
         }
 
-strstream s;
+stringstream s;
 s	<< bot->getCharYYXXX()
 	<< " T "
 	<< st[1]
@@ -120,7 +120,6 @@ s	<< bot->getCharYYXXX()
 	<< ends;
 
 bot->Write( s );
-delete[] s.str();
 
 return true ;
 }

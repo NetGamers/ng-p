@@ -3,7 +3,7 @@
  *
  * 20020201 - Jeekay - Initial Version
  *
- * $Id: MODECommand.cc,v 1.3 2002-02-03 01:13:06 jeekay Exp $
+ * $Id: MODECommand.cc,v 1.4 2002-07-01 00:33:05 jeekay Exp $
  */
 
 #include <string>
@@ -22,7 +22,7 @@
 #define CF_L 0x20
 #define CF_K 0x40
 
-const char MODECommand_cc_rcsId[] = "$Id: MODECommand.cc,v 1.3 2002-02-03 01:13:06 jeekay Exp $";
+const char MODECommand_cc_rcsId[] = "$Id: MODECommand.cc,v 1.4 2002-07-01 00:33:05 jeekay Exp $";
 
 namespace gnuworld
 {
@@ -262,10 +262,9 @@ if(outString.size() && negarg.size()) outString += string(" ") + negarg;
 
 if(outString.size())
 	{
-	strstream quoteStream;
+	stringstream quoteStream;
 	quoteStream << bot->getCharYYXXX() << " M " << st[1] << " " << outString << ends;
-	bot->Write(quoteStream.str());
-	delete[] quoteStream.str();
+	bot->Write(quoteStream.str().c_str());
 	}
 
 return true;

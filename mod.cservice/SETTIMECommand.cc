@@ -17,12 +17,11 @@ if(!theClient->isOper())
         return true;
         }
 								
-strstream s;
+stringstream s;
 s	<< server->getCharYY() << " SE " << time(NULL) << ":" << server->getName()
 	<< ends;
 
 bot->Write( s ) ; 
-delete[] s.str() ;
 
 return true;
 } 

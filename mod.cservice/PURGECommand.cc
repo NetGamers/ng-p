@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: PURGECommand.cc,v 1.9 2002-04-20 19:51:28 jeekay Exp $
+ * $Id: PURGECommand.cc,v 1.10 2002-07-01 00:33:06 jeekay Exp $
  */
 
 #include	<string>
@@ -22,7 +22,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.9 2002-04-20 19:51:28 jeekay Exp $" ;
+const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.10 2002-07-01 00:33:06 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -92,14 +92,14 @@ if("FORCE" == string_upper(st[1]))
 	
 	string targetChan = string_lower(st[2]);
 	
-	strstream queryChan;
+	stringstream queryChan;
 	queryChan << "SELECT id FROM channels WHERE lower(name) = '"
 		<< escapeSQLChars(targetChan) << "'"
 		<< ends;
 #ifdef LOG_SQL
-	elog << "PURGEFORCE:SQL> " << queryChan.str() << endl;
+	elog << "PURGEFORCE:SQL> " << queryChan.str().c_str() << endl;
 #endif
-	ExecStatusType statusQueryChan = bot->SQLDb->Exec(queryChan.str());
+	ExecStatusType statusQueryChan = bot->SQLDb->Exec(queryChan.str().c_str());
 	
 	if(PGRES_TUPLES_OK != statusQueryChan)
 		{
@@ -119,13 +119,13 @@ if("FORCE" == string_upper(st[1]))
 	int chanID = atoi(bot->SQLDb->GetValue(0,0));
 	
 	/* Now clear channellog */
-	strstream delChanLog;
+	stringstream delChanLog;
 	delChanLog << "DELETE FROM channellog WHERE channelid = " << chanID
 		<< ends;
 #ifdef LOG_SQL
-	elog << "PURGEFORCE:SQL> " << delChanLog.str() << endl;
+	elog << "PURGEFORCE:SQL> " << delChanLog.str().c_str() << endl;
 #endif
-	ExecStatusType statusDelChanLog = bot->SQLDb->Exec(delChanLog.str());
+	ExecStatusType statusDelChanLog = bot->SQLDb->Exec(delChanLog.str().c_str());
 	
 	if(PGRES_COMMAND_OK != statusDelChanLog)
 		{
@@ -136,13 +136,13 @@ if("FORCE" == string_upper(st[1]))
 
 	/* Now delete the channel proper */
 	
-	strstream delChan;
+	stringstream delChan;
 	delChan << "DELETE FROM channels WHERE id = " << chanID
 		<< ends;
 #ifdef LOG_SQL
-	elog << "PURGEFORCE:SQL> " << delChan.str() << endl;
+	elog << "PURGEFORCE:SQL> " << delChan.str().c_str() << endl;
 #endif
-	ExecStatusType statusDelChan = bot->SQLDb->Exec(delChan.str());
+	ExecStatusType statusDelChan = bot->SQLDb->Exec(delChan.str().c_str());
 	
 	if(PGRES_COMMAND_OK != statusDelChan)
 		{
@@ -189,7 +189,7 @@ if(theChan->getFlag(sqlChannel::F_NOPURGE))
  * 'freeze' it for future investigation in the log.
  */
 
-strstream managerQuery;
+stringstream managerQuery;
 managerQuery	<< "SELECT users.user_name,users.email "
 		<< "FROM users,levels "
 		<< "WHERE levels.user_id = users.id "
@@ -201,12 +201,11 @@ managerQuery	<< "SELECT users.user_name,users.email "
 
 #ifdef LOG_SQL
 	elog	<< "sqlQuery> "
-		<< managerQuery.str()
+		<< managerQuery.str().c_str()
 		<< endl;
 #endif
 
-ExecStatusType status = bot->SQLDb->Exec(managerQuery.str()) ;
-delete[] managerQuery.str() ;
+ExecStatusType status = bot->SQLDb->Exec(managerQuery.str().c_str()) ;
 
 string manager = "No Manager";
 string managerEmail = "No Email Address";
@@ -244,19 +243,18 @@ theChan->setChannelMode("+tn");
 theChan->commit(); 
 
 
-strstream theQuery ;
+stringstream theQuery ;
 theQuery	<< "DELETE FROM levels WHERE channel_id = "
 		<< theChan->getID()
 		<< ends;
 
 #ifdef LOG_SQL
 	elog	<< "sqlQuery> "
-		<< theQuery.str()
+		<< theQuery.str().c_str()
 		<< endl;
 #endif
 
-status = bot->SQLDb->Exec(theQuery.str()) ;
-delete[] theQuery.str() ;
+status = bot->SQLDb->Exec(theQuery.str().c_str()) ;
 
 if( status != PGRES_COMMAND_OK )
 	{
@@ -265,31 +263,6 @@ if( status != PGRES_COMMAND_OK )
 		<< endl ;
 	return false ;
 	}
-
-/*
- * No longer needed as we do not kill forcelog entries on purge
-strstream theQuery2 ;
-theQuery2        << "DELETE FROM forcelog WHERE channel_id = "
-                << theChan->getID()
-                << ends;
-
-#ifdef LOG_SQL
-        elog    << "sqlQuery2> "
-                << theQuery2.str()
-                << endl;
-#endif
-        
-status = bot->SQLDb->Exec(theQuery2.str()) ;
-delete[] theQuery2.str() ;
-        
-if( status != PGRES_COMMAND_OK )
-        {
-        elog    << "PURGE> SQL Error: "
-                << bot->SQLDb->ErrorMessage()
-                << endl ;
-        return false ;
-        }
-*/
 
 /* 
  * Bin 'em all. 

@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: OPERJOINCommand.cc,v 1.1 2002-01-14 23:14:19 morpheus Exp $
+ * $Id: OPERJOINCommand.cc,v 1.2 2002-07-01 00:33:06 jeekay Exp $
  */
 
 
@@ -21,7 +21,7 @@
 #include	"responses.h"
 #include	"Network.h"
 
-const char OPERJOINCommand_cc_rcsId[] = "$Id: OPERJOINCommand.cc,v 1.1 2002-01-14 23:14:19 morpheus Exp $" ;
+const char OPERJOINCommand_cc_rcsId[] = "$Id: OPERJOINCommand.cc,v 1.2 2002-07-01 00:33:06 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -77,7 +77,7 @@ if (theChan->getInChan())
 
 // Tell the world.
 
-strstream s;
+stringstream s;
 s	<< server->getCharYY()
 	<< " WA :"
 	<< "An IRC Operator is asking me to join channel "
@@ -85,7 +85,6 @@ s	<< server->getCharYY()
 	<< ends;
 
 bot->Write(s);
-delete[] s.str();
 
 bot->logAdminMessage("%s is asking me to join channel %s",
 		theClient->getNickUserHost().c_str(),

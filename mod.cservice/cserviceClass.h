@@ -1,5 +1,7 @@
 #ifndef __CSERVICECLASS_H
-#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.8 2002-06-30 16:19:29 jeekay Exp $"
+#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.9 2002-07-01 00:33:08 jeekay Exp $"
+
+#include <hash_map>
 
 #include	"EConfig.h"
 #include	"sqlChannel.h"
@@ -346,6 +348,9 @@ public:
 	/* List of channels in 'pending' registration state. */
 	typedef hash_map < string, sqlPendingChannel*, eHash, eqstr > pendingChannelListType;
 	pendingChannelListType pendingChannelList;
+
+	/* Check for a correct user password */
+	bool isPasswordRight(sqlUser* theUser, const string& password);
 
 	/*
 	 *  Load the pendingChannelList from the database.

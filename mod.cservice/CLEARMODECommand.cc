@@ -10,7 +10,7 @@
  *
  * Todo: Support ircu2.10.11's CLEARMODE feature.
  *
- * $Id: CLEARMODECommand.cc,v 1.2 2002-01-23 17:17:23 ultimate Exp $
+ * $Id: CLEARMODECommand.cc,v 1.3 2002-07-01 00:33:05 jeekay Exp $
  */
 
 #include	<string>
@@ -21,7 +21,7 @@
 #include	"responses.h"
 #include	"Network.h"
 
-const char CLEARMODECommand_cc_rcsId[] = "$Id: CLEARMODECommand.cc,v 1.2 2002-01-23 17:17:23 ultimate Exp $" ;
+const char CLEARMODECommand_cc_rcsId[] = "$Id: CLEARMODECommand.cc,v 1.3 2002-07-01 00:33:05 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -91,7 +91,7 @@ if(!tmpChan)
 	return false;
 	}
 
-strstream s;
+stringstream s;
 s	<< bot->getCharYYXXX()
 	<< " M "
 	<< st[1]
@@ -110,7 +110,6 @@ tmpChan->setLimit( 0 );
 tmpChan->setKey( "" );
 
 bot->Write( s );
-delete[] s.str();
 
 bot->Notice(theClient,
     bot->getResponse(theUser,

@@ -6,7 +6,7 @@
 #include	"ELog.h"
 #include	"cservice.h"
 
-const char SUPPORTCommand_cc_rcsId[] = "$Id: SUPPORTCommand.cc,v 1.1 2002-01-14 23:14:22 morpheus Exp $" ;
+const char SUPPORTCommand_cc_rcsId[] = "$Id: SUPPORTCommand.cc,v 1.2 2002-07-01 00:33:07 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -55,7 +55,7 @@ if (string_lower(support) == "no")
 
 string channelName = st[1];
 
-strstream theQuery;
+stringstream theQuery;
 
 theQuery	<< "SELECT channels.id FROM pending,channels"
 			<< " WHERE lower(channels.name) = '"
@@ -65,12 +65,13 @@ theQuery	<< "SELECT channels.id FROM pending,channels"
 			<< " AND pending.status = 0"
 			<< ends;
 
+#ifdef LOG_SQL
 elog	<< "SUPPORTCommand::sqlQuery> "
-		<< theQuery.str()
+		<< theQuery.str().c_str()
 		<< endl;
+#endif
 
-ExecStatusType status = bot->SQLDb->Exec( theQuery.str() ) ;
-delete[] theQuery.str() ;
+ExecStatusType status = bot->SQLDb->Exec( theQuery.str().c_str() ) ;
 
 if( PGRES_TUPLES_OK != status )
 	{
@@ -94,7 +95,7 @@ if (bot->SQLDb->Tuples() <= 0)
 
 unsigned int channel_id = atoi(bot->SQLDb->GetValue(0, 0));
 
-strstream supQuery;
+stringstream supQuery;
 supQuery 	<< "SELECT support FROM supporters"
 			<< " WHERE channel_id = "
 			<< channel_id
@@ -102,12 +103,13 @@ supQuery 	<< "SELECT support FROM supporters"
 			<< theUser->getID()
 			<< ends;
 
+#ifdef LOG_SQL
 elog	<< "SUPPORTCommand::sqlQuery> "
-		<< supQuery.str()
+		<< supQuery.str().c_str()
 		<< endl;
+#endif
 
-status = bot->SQLDb->Exec( supQuery.str() ) ;
-delete[] supQuery.str() ;
+status = bot->SQLDb->Exec( supQuery.str().c_str() ) ;
 
 if( PGRES_TUPLES_OK != status )
 	{
@@ -139,7 +141,7 @@ if ((currentSupport == "Y") || (currentSupport == "N"))
  * Save the changes.
  */
 
-strstream updateQuery;
+stringstream updateQuery;
 updateQuery	<< "UPDATE supporters SET support = '"
 			<< supportChar
 			<< "'"
@@ -150,12 +152,13 @@ updateQuery	<< "UPDATE supporters SET support = '"
 			<< theUser->getID()
 			<< ends;
 
+#ifdef LOG_SQL
 elog	<< "SUPPORTCommand::sqlQuery> "
-		<< updateQuery.str()
+		<< updateQuery.str().c_str()
 		<< endl;
+#endif
 
-status = bot->SQLDb->Exec( updateQuery.str() ) ;
-delete[] updateQuery.str() ;
+status = bot->SQLDb->Exec( updateQuery.str().c_str() ) ;
 
 if( PGRES_COMMAND_OK != status )
 	{
@@ -184,19 +187,20 @@ if (supportChar == 'Y')
 	 * Check to see if 10 people have said Yes.
 	 */
 
-	strstream tenQuery;
+	stringstream tenQuery;
 	tenQuery 	<< "SELECT count(*) FROM supporters"
 				<< " WHERE channel_id = "
 				<< channel_id
 				<< " AND support = 'Y'"
 				<< ends;
 
+#ifdef LOG_SQL
 	elog	<< "SUPPORTCommand::sqlQuery> "
-			<< tenQuery.str()
+			<< tenQuery.str().c_str()
 			<< endl;
+#endif
 
-	status = bot->SQLDb->Exec( tenQuery.str() ) ;
-	delete[] tenQuery.str() ;
+	status = bot->SQLDb->Exec( tenQuery.str().c_str() ) ;
 
 	if( PGRES_TUPLES_OK != status )
 		{
@@ -210,7 +214,7 @@ if (supportChar == 'Y')
 
 	if (count >= 4)
 	{
-		strstream updatePendingQuery;
+		stringstream updatePendingQuery;
 		updatePendingQuery	<< "UPDATE pending SET status = '1',"
 							<< " last_updated = now()::abstime::int4,"
 							<< " check_start_ts = now()::abstime::int4"
@@ -219,12 +223,13 @@ if (supportChar == 'Y')
 							<< " AND status = '0'"
 							<< ends;
 
+#ifdef LOG_SQL
 		elog	<< "SUPPORTCommand::sqlQuery> "
-				<< updatePendingQuery.str()
+				<< updatePendingQuery.str().c_str()
 				<< endl;
+#endif
 
-		bot->SQLDb->Exec( updatePendingQuery.str() ) ;
-		delete[] updatePendingQuery.str() ;
+		bot->SQLDb->Exec( updatePendingQuery.str().c_str() ) ;
 		bot->logDebugMessage("%s has just made it to traffic check phase.",
 			channelName.c_str());
 	}
@@ -243,7 +248,7 @@ if (supportChar == 'N')
 	 * Reject the application.
 	 */
 
-	strstream updatePendingQuery;
+	stringstream updatePendingQuery;
 	updatePendingQuery	<< "UPDATE pending SET status = '9',"
 						<< " last_updated = now()::abstime::int4,"
 						<< " decision_ts = now()::abstime::int4,"
@@ -253,12 +258,14 @@ if (supportChar == 'N')
 						<< " AND status = '0'"
 						<< ends;
 
+#ifdef LOG_SQL
 	elog	<< "SUPPORTCommand::sqlQuery> "
-			<< updatePendingQuery.str()
+			<< updatePendingQuery.str().c_str()
 			<< endl;
+#endif
 
-	bot->SQLDb->Exec( updatePendingQuery.str() ) ;
-	delete[] updatePendingQuery.str() ;
+	bot->SQLDb->Exec( updatePendingQuery.str().c_str() ) ;
+
 	bot->logDebugMessage("%s has just been declined due to non-support.",
 		channelName.c_str());
 
@@ -267,7 +274,7 @@ if (supportChar == 'N')
 	 * First, get the username and email address of the channel manager.
 	 */
 
-	strstream mgrQuery;
+	stringstream mgrQuery;
 	mgrQuery 	<< "SELECT user_name,email FROM users,pending"
 				<< " WHERE pending.manager_id = users.id "
 				<< " AND pending.channel_id = "
@@ -275,12 +282,13 @@ if (supportChar == 'N')
 				<< " AND pending.status = '9'"
 				<< ends;
 
+#ifdef LOG_SQL
 	elog	<< "SUPPORTCommand::sqlQuery> "
-			<< mgrQuery.str()
+			<< mgrQuery.str().c_str()
 			<< endl;
+#endif
 
-	status = bot->SQLDb->Exec( mgrQuery.str() ) ;
-	delete[] mgrQuery.str() ;
+	status = bot->SQLDb->Exec( mgrQuery.str().c_str() ) ;
 
 	if( PGRES_TUPLES_OK != status )
 	{
@@ -296,25 +304,26 @@ if (supportChar == 'N')
 		string managerEmail = bot->SQLDb->GetValue(0,1);
 		static const char* cmdHeader = "INSERT INTO noreg (user_name,email,channel_name,type,expire_time,created_ts,set_by,reason) VALUES ";
 
-		strstream noregQuery;
+		stringstream noregQuery;
 		noregQuery	<< cmdHeader
 					<< "('', '','"
 					<< escapeSQLChars(channelName) << "',"
 					<< "1, (now()::abstime::int4 + (86400*3)), now()::abstime::int4, '* REGPROC', '-NON SUPPORT-'"
 					<< ")" << ends;
 
+#ifdef LOG_SQL
 		elog	<< "SUPPORTCommand::sqlQuery> "
-				<< noregQuery.str()
+				<< noregQuery.str().c_str()
 				<< endl;
+#endif
 
-		bot->SQLDb->Exec( noregQuery.str() ) ;
-		delete[] noregQuery.str() ;
+		bot->SQLDb->Exec( noregQuery.str().c_str() ) ;
 
 		/*
 	  	 * Add a user-based noreg entry too.
 		 */
 
-		strstream usernoregQuery;
+		stringstream usernoregQuery;
 		usernoregQuery	<< cmdHeader
 					<< "('"
 					<< escapeSQLChars(managerName) << "', '"
@@ -323,18 +332,19 @@ if (supportChar == 'N')
 					<< "1, (now()::abstime::int4 + (86400*30)), now()::abstime::int4, '* REGPROC', '-NON SUPPORT-'"
 					<< ")" << ends;
 
+#ifdef LOG_SQL
 		elog	<< "SUPPORTCommand::sqlQuery> "
-				<< usernoregQuery.str()
+				<< usernoregQuery.str().c_str()
 				<< endl;
+#endif
 
-		bot->SQLDb->Exec( usernoregQuery.str() ) ;
-		delete[] usernoregQuery.str() ;
+		bot->SQLDb->Exec( usernoregQuery.str().c_str() ) ;
 
 		/*
 		 * Sigh, and a channel-log entry!
 		 */
 
-		strstream clogQuery;
+		stringstream clogQuery;
 		clogQuery	<< "INSERT INTO channellog (ts, channelid, event, message, last_updated) VALUES ("
 					<< "now()::abstime::int4, "
 					<< channel_id << ", "
@@ -343,12 +353,13 @@ if (supportChar == 'N')
 					<< "now()::abstime::int4)"
 					<< ends;
 
+#ifdef LOG_SQL
 		elog	<< "SUPPORTCommand::sqlQuery> "
-				<< clogQuery.str()
+				<< clogQuery.str().c_str()
 				<< endl;
+#endif
 
-		bot->SQLDb->Exec( clogQuery.str() ) ;
-		delete[] clogQuery.str() ;
+		bot->SQLDb->Exec( clogQuery.str().c_str() ) ;
 	}
 
 }

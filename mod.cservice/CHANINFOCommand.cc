@@ -13,7 +13,7 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.13 2002-03-26 02:00:51 jeekay Exp $
+ * $Id: CHANINFOCommand.cc,v 1.14 2002-07-01 00:33:05 jeekay Exp $
  */
 
 #include	<string>
@@ -26,7 +26,7 @@
 #include	"libpq++.h"
 #include	"cservice_config.h"
 
-const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.13 2002-03-26 02:00:51 jeekay Exp $" ;
+const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.14 2002-07-01 00:33:05 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -243,7 +243,7 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 				}
 			}
 		
-		strstream channelsQuery;
+		stringstream channelsQuery;
 		string channelList ;
 
 		channelsQuery	<< "SELECT channels.name,levels.access FROM levels,channels "
@@ -254,7 +254,7 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 
 		#ifdef LOG_SQL
 			elog	<< "CHANINFO::sqlQuery> "
-				<< channelsQuery.str()
+				<< channelsQuery.str().c_str()
 				<< endl;
 		#endif
 
@@ -262,8 +262,7 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 		string chanAccess ;
 
 		ExecStatusType status =
-			bot->SQLDb->Exec(channelsQuery.str()) ;
-		delete[] channelsQuery.str() ;
+			bot->SQLDb->Exec(channelsQuery.str().c_str()) ;
 
 		if( PGRES_TUPLES_OK != status )
 			{
@@ -356,7 +355,7 @@ if( !theChan )
  * The description and url, are received from the cache. --Plexus
  */
 
-strstream theQuery;
+stringstream theQuery;
 theQuery	<< queryHeader
 		<< queryString
 		<< "AND levels.channel_id = "
@@ -365,7 +364,7 @@ theQuery	<< queryHeader
 
 #ifdef LOG_SQL
 	elog	<< "CHANINFO::sqlQuery> "
-		<< theQuery.str()
+		<< theQuery.str().c_str()
 		<< endl;
 #endif
 
@@ -375,8 +374,7 @@ bot->Notice(theClient,
 		string("%s is registered by:")).c_str(),
 	st[1].c_str());
 
-ExecStatusType status = bot->SQLDb->Exec(theQuery.str()) ;
-delete[] theQuery.str() ;
+ExecStatusType status = bot->SQLDb->Exec(theQuery.str().c_str()) ;
 
 if( PGRES_TUPLES_OK == status )
 	{

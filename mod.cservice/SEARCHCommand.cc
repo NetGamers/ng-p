@@ -9,7 +9,7 @@
  *
  * Caveats: None.
  *
- * $Id: SEARCHCommand.cc,v 1.1 2002-01-14 23:14:21 morpheus Exp $
+ * $Id: SEARCHCommand.cc,v 1.2 2002-07-01 00:33:07 jeekay Exp $
  */
 
 #include	<string>
@@ -21,7 +21,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char SEARCHCommand_cc_rcsId[] = "$Id: SEARCHCommand.cc,v 1.1 2002-01-14 23:14:21 morpheus Exp $" ;
+const char SEARCHCommand_cc_rcsId[] = "$Id: SEARCHCommand.cc,v 1.2 2002-07-01 00:33:07 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -48,13 +48,13 @@ sqlUser* theUser = bot->isAuthed(theClient, false);
 string matchString = st.assemble(1);
 size_t results = 0;
 
-strstream extraCond;
+stringstream extraCond;
 extraCond	<< "'"
 		<< escapeSQLChars(matchString)
 		<< "' "
 		<< ends;
 
-strstream theQuery;
+stringstream theQuery;
 theQuery	<< queryHeader
 		<< queryCondition
 		<< extraCond.str()
@@ -63,13 +63,11 @@ theQuery	<< queryHeader
 
 #ifdef LOG_SQL
 	elog	<< "SEARCH::sqlQuery> "
-		<< theQuery.str()
+		<< theQuery.str().c_str()
 		<< endl;
 #endif
 
-ExecStatusType status = bot->SQLDb->Exec(theQuery.str());
-delete[] theQuery.str() ;
-delete[] extraCond.str() ;
+ExecStatusType status = bot->SQLDb->Exec(theQuery.str().c_str());
 
 if( PGRES_TUPLES_OK != status )
 	{
