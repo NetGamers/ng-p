@@ -9,7 +9,7 @@
 
 #define LOG_SQL
 
-const char NOTECommand_cc_rcsId[] = "$Id: NOTECommand.cc,v 1.4 2002-01-17 01:24:25 jeekay Exp $" ;
+const char NOTECommand_cc_rcsId[] = "$Id: NOTECommand.cc,v 1.5 2002-01-21 14:42:16 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -46,6 +46,12 @@ bool NOTECommand::Exec(iClient* theClient, const string& Message)
 				language::not_registered).c_str(), st[2].c_str());
 			return false;
 		}
+		
+		if(targetUser->getFlag(sqlUser::F_NOTE))
+        	{
+                	bot->Notice(theClient, "User disabled NOTE");
+                	return false;
+        	}
 		strstream thecount;
 		thecount	<< "SELECT COUNT(*) as count "
 				<< "FROM memo where to_id="
@@ -158,6 +164,29 @@ bool NOTECommand::Exec(iClient* theClient, const string& Message)
 		}
 		// TODO: i18n
 		bot->Notice(theClient, "Deleted %d memo(s).", bot->SQLDb->CmdTuples());
+	} else if (cmd == "CONFIG") {
+		string option = string_upper(st[2]);
+		string value = string_upper(st[3]);
+		if (option == "ALLOW") {
+			if ( value == "ON") {
+
+			} else if (value == "OFF") {
+
+			} else {
+				// Show on/off thingie here
+			}
+		} else if (option == "BLOCK") {
+			if ( value == "ON") {
+                        
+                        } else if (value == "OFF") {
+                        
+                        } else {
+                                // Show on/off thingie here
+                        }
+		} else {
+			bot->Notice(theClient, "No such config option");
+			return true;
+		}
 	} else {
 		Usage(theClient);
 		return true;

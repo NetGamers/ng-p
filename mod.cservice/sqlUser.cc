@@ -4,7 +4,7 @@
  * Storage class for accessing user information either from the backend
  * or internal storage.
  *
- * $Id: sqlUser.cc,v 1.2 2002-01-17 21:51:28 morpheus Exp $
+ * $Id: sqlUser.cc,v 1.3 2002-01-21 14:42:16 morpheus Exp $
  */
 
 #include	<strstream.h>
@@ -29,6 +29,7 @@ const sqlUser::flagType sqlUser::F_GLOBAL_SUSPEND =	0x01 ;
 const sqlUser::flagType sqlUser::F_LOGGEDIN =		0x02 ;
 const sqlUser::flagType sqlUser::F_INVIS =		0x04 ;
 const sqlUser::flagType sqlUser::F_AUTOKILL =		0x08 ;
+const sqlUser::flagType sqlUser::F_NOTE =		0x16 ;
 
 const unsigned int sqlUser::EV_SUSPEND 		= 1;
 const unsigned int sqlUser::EV_UNSUSPEND	= 2;
