@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.33 2004-08-25 20:33:02 jeekay Exp $
+ * $Id: SETCommand.cc,v 1.34 2004-11-20 19:58:54 jeekay Exp $
  */
 
 #include  <string>
@@ -354,6 +354,41 @@ else
 
             return ;
 
+  }
+  
+  if(option == "PARTNER") {
+	// Check for admin access
+	sqlChannel *admChan = bot->getChannelRecord("*");
+	int admLevel = bot->getAccessLevel(theUser, admChan);
+	if(admLevel < level::set::partner) {
+		Usage(theClient);
+		return ;
+	}
+	
+	if("ON" == value) theChan->setFlag(sqlChannel::F_PARTNER);
+	else if("OFF" == value) theChan->removeFlag(sqlChannel::F_PARTNER);
+	else {
+		bot->Notice(theClient, "Value of %s must be ON or OFF",
+			option.c_str()
+			);
+		return ;
+	}
+	
+	theChan->commit();
+	
+	bot->logAdminMessage("%s (%s) - SET - SPECIAL - %s %s",
+		theClient->getNickName().c_str(),
+		theUser->getUserName().c_str(),
+		theChan->getName().c_str(),
+		value.c_str()
+		);
+	bot->Notice(theClient, "%s for %s set to %s",
+		option.c_str(),
+		theChan->getName().c_str(),
+		value.c_str()
+		);
+	
+	return;
   }
 
   if(option == "SPECIAL")

@@ -1,7 +1,7 @@
 /* sqlChannel.h */
 
 #ifndef __SQLCHANNEL_H
-#define __SQLCHANNEL_H "$Id: sqlChannel.h,v 1.9 2003-10-11 15:24:55 jeekay Exp $"
+#define __SQLCHANNEL_H "$Id: sqlChannel.h,v 1.10 2004-11-20 19:58:54 jeekay Exp $"
 
 #include	<vector>
 #include	<string>
@@ -32,6 +32,7 @@ public:
 	static const flagType F_NOPURGE;
 	static const flagType F_SPECIAL;
 	static const flagType F_IDLE;
+	static const flagType F_PARTNER;
 	static const flagType F_SUSPEND;
 	static const flagType F_TEMP;
 	static const flagType F_CAUTION;

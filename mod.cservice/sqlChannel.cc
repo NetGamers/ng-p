@@ -9,7 +9,7 @@
  * 30/12/2000: Moved static SQL data to constants.h --Gte
  * Set loadData up to take data from rows other than 0.
  *
- * $Id: sqlChannel.cc,v 1.10 2004-08-25 20:33:14 jeekay Exp $
+ * $Id: sqlChannel.cc,v 1.11 2004-11-20 19:58:54 jeekay Exp $
  */
 
 #include	<string>
@@ -24,7 +24,7 @@
 #include	"cservice_config.h"
 
 const char sqlChannel_h_rcsId[] = __SQLCHANNEL_H ;
-const char sqlChannel_cc_rcsId[] = "$Id: sqlChannel.cc,v 1.10 2004-08-25 20:33:14 jeekay Exp $" ;
+const char sqlChannel_cc_rcsId[] = "$Id: sqlChannel.cc,v 1.11 2004-11-20 19:58:54 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -35,6 +35,7 @@ using std::endl ;
 const sqlChannel::flagType sqlChannel::F_NOPURGE     = 0x00000001 ;
 const sqlChannel::flagType sqlChannel::F_SPECIAL     = 0x00000002 ;
 const sqlChannel::flagType sqlChannel::F_IDLE        = 0x00000004 ;
+const sqlChannel::flagType sqlChannel::F_PARTNER     = 0x00000008 ;
 
 const sqlChannel::flagType sqlChannel::F_SUSPEND     = 0x00000010 ;
 const sqlChannel::flagType sqlChannel::F_TEMP        = 0x00000020 ;
@@ -55,7 +56,7 @@ const sqlChannel::flagType sqlChannel::F_STRICTVOICE = 0x00800000 ;
 
 const sqlChannel::flagType sqlChannel::F_INVISIBLE   = 0x01000000 ;
 
-/* Current mask for channel flags                      0x01EE07F7 */
+/* Current mask for channel flags                      0x01EE07FF */
 
 const int sqlChannel::EV_MISC     = 1 ;
 const int sqlChannel::EV_JOIN     = 2 ;
