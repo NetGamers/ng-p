@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.3 2002-01-23 22:07:25 jeekay Exp $" ;
+const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.4 2002-01-23 22:25:53 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -299,7 +299,7 @@ if (cLevel > level::coder::devel)
  * Member and logged in as Icewatcher
  */
 
-if(vLevel => level::virusfix::base)
+if(vLevel >= level::virusfix::base)
 	{
 	bot->Notice(theClient, "%s is an Official Virusfix Member%s and logged in as %s",
 		target->getNickUserHost().c_str(), extra.c_str(), theUser->getUserName().c_str());
