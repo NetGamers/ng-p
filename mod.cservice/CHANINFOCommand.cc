@@ -13,20 +13,21 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.16 2002-09-24 20:06:17 jeekay Exp $
+ * $Id: CHANINFOCommand.cc,v 1.17 2002-10-20 02:12:06 jeekay Exp $
  */
 
 #include	<string>
 
 #include	"StringTokenizer.h"
 #include	"ELog.h"
+#include	"libpq++.h"
+
 #include	"cservice.h"
+#include	"cservice_config.h"
 #include	"levels.h"
 #include	"responses.h"
-#include	"libpq++.h"
-#include	"cservice_config.h"
 
-const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.16 2002-09-24 20:06:17 jeekay Exp $" ;
+const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.17 2002-10-20 02:12:06 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -230,7 +231,9 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
     bot->Notice(theClient, "Max Logins: %i",
       targetUser->getMaxLogins());
 
-		if(adminAccess && (!targetAdmin || (adminAccess >= level::chgadmin)))
+    sqlCommandLevel* theCommandLevel = bot->getLevelRequired("CHGADMIN", "ADMIN");
+
+		if(adminAccess && (!targetAdmin || (adminAccess >= theCommandLevel->getLevel())))
 			{
 			int myQuestion = targetUser->getQuestionID();
 			if(myQuestion >= 1 && myQuestion <= 4)

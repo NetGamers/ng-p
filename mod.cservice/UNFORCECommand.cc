@@ -2,13 +2,13 @@
 
 #include	<string>
 
-#include	"StringTokenizer.h"
 #include	"ELog.h"
+#include	"StringTokenizer.h"
+
 #include	"cservice.h"
-#include	"levels.h"
 #include	"responses.h"
 
-const char UNFORCECommand_cc_rcsId[] = "$Id: UNFORCECommand.cc,v 1.2 2002-03-25 01:20:17 jeekay Exp $" ;
+const char UNFORCECommand_cc_rcsId[] = "$Id: UNFORCECommand.cc,v 1.3 2002-10-20 02:12:09 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -39,7 +39,9 @@ if (!theUser)
 sqlChannel* admChan = bot->getChannelRecord("*");
 
 int admLevel = bot->getAccessLevel(theUser, admChan);
-if (admLevel < level::force)
+sqlCommandLevel* forceLevel = bot->getLevelRequired("FORCE", "ADMIN");
+
+if (admLevel < forceLevel->getLevel())
 	{
 	bot->Notice(theClient,
 		bot->getResponse(theUser,

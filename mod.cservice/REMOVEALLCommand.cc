@@ -6,14 +6,14 @@
 
 #include	<string>
 
-#include	"StringTokenizer.h"
 #include	"ELog.h"
+#include	"StringTokenizer.h"
+
 #include	"cservice.h"
 #include 	"responses.h"
-#include	"levels.h"
 #include	"cservice_config.h"
 
-const char REMOVEALLCommand_cc_rcsId[] = "$Id: REMOVEALLCommand.cc,v 1.6 2002-09-14 14:56:00 jeekay Exp $" ;
+const char REMOVEALLCommand_cc_rcsId[] = "$Id: REMOVEALLCommand.cc,v 1.7 2002-10-20 02:12:08 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -63,7 +63,9 @@ if ((!theChan) || (st[1] == "*"))
  */
 
 int level = bot->getAdminAccessLevel(theUser);
-if (level < level::removeall)
+sqlCommandLevel* removeAllLevel = bot->getLevelRequired("REMOVEALL", "ADMIN");
+
+if (level < removeAllLevel->getLevel())
 	{
 	bot->Notice(theClient,
 		bot->getResponse(theUser,

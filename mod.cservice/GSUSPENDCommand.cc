@@ -3,16 +3,16 @@
  *
  * Allow global suspending of nicks/channels
  *
- * $Id: GSUSPENDCommand.cc,v 1.5 2002-07-20 15:45:06 jeekay Exp $
+ * $Id: GSUSPENDCommand.cc,v 1.6 2002-10-20 02:12:07 jeekay Exp $
  */
 
 #include <string>
 
 #include "StringTokenizer.h"
-#include "cservice.h"
-#include "levels.h"
 
-const char GSUSPENDCommand_cc_rcsId[] = "$Id: GSUSPENDCommand.cc,v 1.5 2002-07-20 15:45:06 jeekay Exp $";
+#include "cservice.h"
+
+const char GSUSPENDCommand_cc_rcsId[] = "$Id: GSUSPENDCommand.cc,v 1.6 2002-10-20 02:12:07 jeekay Exp $";
 
 namespace gnuworld
 {
@@ -37,6 +37,8 @@ sqlUser* theUser = bot->isAuthed(theClient, false);
 if(!theUser) { return false; }
 
 int admLevel = bot->getAdminAccessLevel(theUser);
+sqlCommandLevel* channelSuspendLevel = bot->getLevelRequired("CSUSPEND", "ADMIN");
+sqlCommandLevel* nickSuspendLevel = bot->getLevelRequired("NSUSPEND", "ADMIN");
 
 string target = st[1];
 
@@ -65,7 +67,7 @@ int maxduration = 168;
  *			Is the channel suspended?
  */
 
-if((target[0] == '#') && (admLevel >= level::csuspend))
+if((target[0] == '#') && (admLevel >= channelSuspendLevel->getLevel()))
 	{ // We are suspending a channel
   /* Establish max allowable suspend */
   if(admLevel >= 600) maxduration = 72; // 3 days
@@ -105,7 +107,7 @@ if((target[0] == '#') && (admLevel >= level::csuspend))
 	}
 
 // We are suspending a nick
-if(admLevel >= level::nsuspend)
+if(admLevel >= nickSuspendLevel->getLevel())
 	{
   /* Establish max allowable suspend */
   if(admLevel >= 700) maxduration = 72; // 3 days

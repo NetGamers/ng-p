@@ -8,22 +8,21 @@
  *
  * Caveats: None.
  *
- * $Id: SAYCommand.cc,v 1.1 2002-01-14 23:14:21 morpheus Exp $
+ * $Id: SAYCommand.cc,v 1.2 2002-10-20 02:12:08 jeekay Exp $
  */
 
 #include	<string>
 
 #include	"StringTokenizer.h"
+
 #include	"cservice.h"
-#include	"levels.h"
 #include	"responses.h"
 
-const char SAYCommand_cc_rcsId[] = "$Id: SAYCommand.cc,v 1.1 2002-01-14 23:14:21 morpheus Exp $" ;
+const char SAYCommand_cc_rcsId[] = "$Id: SAYCommand.cc,v 1.2 2002-10-20 02:12:08 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::string ;
-using namespace level;
 
 bool SAYCommand::Exec( iClient* theClient, const string& Message )
 {
@@ -48,7 +47,9 @@ if (!theUser)
 	}
 
 int admLevel = bot->getAdminAccessLevel(theUser);
-if (admLevel < level::say)
+sqlCommandLevel* sayLevel = bot->getLevelRequired("SAY", "ADMIN");
+
+if (admLevel < sayLevel->getLevel())
 	{
 /* CSC get far too many questions as to how to use these commands
  * so they prefer it kept quiet about 'em.  Fair enough too.

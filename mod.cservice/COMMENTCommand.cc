@@ -8,11 +8,11 @@
 
 #include	"StringTokenizer.h"
 #include	"ELog.h"
+
 #include	"cservice.h"
-#include	"levels.h"
 #include	"responses.h"
 
-const char COMMENTCommand_cc_rcsId[] = "$Id: COMMENTCommand.cc,v 1.7 2002-09-14 15:04:11 jeekay Exp $" ;
+const char COMMENTCommand_cc_rcsId[] = "$Id: COMMENTCommand.cc,v 1.8 2002-10-20 02:12:06 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -37,6 +37,8 @@ if (!theUser)
 	}
 
 int admLevel = bot->getAdminAccessLevel(theUser);
+sqlCommandLevel* chanCommentLevel = bot->getLevelRequired("CHANCOMMENT", "ADMIN");
+sqlCommandLevel* userCommentLevel = bot->getLevelRequired("USERCOMMENT", "ADMIN");
 
 /*
  *  Check if we wanna comment a channel or a user!
@@ -44,7 +46,7 @@ int admLevel = bot->getAdminAccessLevel(theUser);
 
 if(st[1][0] == '#') // we HAVE a channel!!
 {
-	if (admLevel < level::chancomment) return false;
+	if (admLevel < chanCommentLevel->getLevel()) return false;
 
 	sqlChannel* targetChan = bot->getChannelRecord(st[1]);
 	if(!targetChan)
@@ -92,7 +94,7 @@ return true;
  *  Check the person we're trying to add is actually registered.
  */
 
-if (admLevel < level::usercomment) return false;
+if (admLevel < userCommentLevel->getLevel()) return false;
 
 sqlUser* targetUser = bot->getUserRecord(st[1]);
 if (!targetUser)

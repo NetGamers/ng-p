@@ -12,7 +12,7 @@
  * Displays all "Level" records for a specified channel.
  * Can optionally narrow down selection using a number of switches.
  *
- * $Id: ACCESSCommand.cc,v 1.4 2002-09-13 21:30:37 jeekay Exp $
+ * $Id: ACCESSCommand.cc,v 1.5 2002-10-20 02:12:06 jeekay Exp $
  */
 
 #include	<string>
@@ -26,7 +26,7 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 
-const char ACCESSCommand_cc_rcsId[] = "$Id: ACCESSCommand.cc,v 1.4 2002-09-13 21:30:37 jeekay Exp $" ;
+const char ACCESSCommand_cc_rcsId[] = "$Id: ACCESSCommand.cc,v 1.5 2002-10-20 02:12:06 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -89,6 +89,12 @@ if (theChan->getName() == "*")
 		return false;
 		}
 	}
+
+if(!theUser || (!bot->getAccessLevel(theUser, theChan) && !bot->getAdminAccessLevel(theUser))) {
+  bot->Notice(theClient, "Sorry, you do have insufficient access to list the users in %s.",
+    theChan->getName().c_str());
+  return true;
+}
 
 /*
  *  Figure out the switches and append to the SQL statement accordingly.

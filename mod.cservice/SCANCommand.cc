@@ -4,15 +4,15 @@
  *
  * Distributed under the GNU Public Licence
  *
- * $Id: SCANCommand.cc,v 1.5 2002-09-13 21:30:40 jeekay Exp $
+ * $Id: SCANCommand.cc,v 1.6 2002-10-20 02:12:09 jeekay Exp $
  */
 
 #include	<string>
 
-#include	"StringTokenizer.h"
 #include	"ELog.h"
+#include	"StringTokenizer.h"
+
 #include	"cservice.h"
-#include  "levels.h"
 
 const char SCANCommand_cc_rcsId[] = "$Id" ;
 
@@ -38,8 +38,9 @@ sqlUser* theUser = bot->isAuthed(theClient, true);
 if(!theUser) { return false; }
 
 int aLevel = bot->getAdminAccessLevel(theUser);
+sqlCommandLevel* scanLevel = bot->getLevelRequired("SCAN", "ADMIN");
 
-if(aLevel < level::scan)
+if(aLevel < scanLevel->getLevel())
 	{
 	bot->Notice(theClient, "Sorry, you have insufficient access to perform that command.");
 	return false;

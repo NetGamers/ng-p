@@ -4,11 +4,11 @@
  
 #include	"StringTokenizer.h"
 #include	"ELog.h" 
+
 #include	"cservice.h" 
-#include	"levels.h"
 #include	"responses.h"
 
-const char INVMECommand_cc_rcsId[] = "$Id: INVMECommand.cc,v 1.3 2002-09-13 21:30:38 jeekay Exp $" ;
+const char INVMECommand_cc_rcsId[] = "$Id: INVMECommand.cc,v 1.4 2002-10-20 02:12:07 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -21,7 +21,9 @@ bool INVMECommand::Exec( iClient* theClient, const string& Message )
 	if (!theUser) return false;
 
 	int admLevel = bot->getAdminAccessLevel(theUser);
-	if (admLevel < level::invme)
+  sqlCommandLevel* invMeLevel = bot->getLevelRequired("INVME", "ADMIN");
+  
+	if (admLevel < invMeLevel->getLevel())
 		{
 		bot->Notice(theClient, "Sorry, you have insufficient access to perform that command.");
 		return false;

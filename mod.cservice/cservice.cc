@@ -15,21 +15,22 @@
 #include  <stdarg.h>
 
 #include	"client.h"
-#include  "cservice.h"
 #include	"EConfig.h"
+#include	"ELog.h"
 #include	"events.h"
 #include	"ip.h"
-#include	"Network.h"
-#include	"StringTokenizer.h"
-#include	"misc.h"
-#include	"ELog.h"
 #include	"libpq++.h"
-#include	"constants.h"
-#include	"networkData.h"
-#include	"levels.h"
-#include	"cservice_config.h"
 #include	"match.h"
 #include	"md5hash.h"
+#include	"misc.h"
+#include	"Network.h"
+#include	"StringTokenizer.h"
+
+#include  "cservice.h"
+#include	"cservice_config.h"
+#include	"constants.h"
+#include	"levels.h"
+#include	"networkData.h"
 
 namespace gnuworld
 {
@@ -221,6 +222,7 @@ RegisterCommand(new ADMINCMDSCommand(this, "ADMINCMDS", "", 2));
 RegisterCommand(new SCANCommand(this, "SCAN", "[email|hostmask|nick] string", 10));
 RegisterCommand(new CHINFOCommand(this, "CHINFO", "[email|nick|verification] nick newvalue", 10));
 RegisterCommand(new DEBUGCommand(this, "DEBUG", "(lock [add|list|remove]) (servers)", 10));
+RegisterCommand(new GETLEVELCommand(this, "GETLEVEL", "command domain", 2));
 
 cserviceConfig = new (std::nothrow) EConfig( args ) ;
 assert( cserviceConfig != 0 ) ;
@@ -304,6 +306,9 @@ preloadBanCache();
 
 /* Preload the Level cache */
 preloadLevelsCache();
+
+/* Preload the CommandLevel cache */
+preloadCommandLevelsCache();
 
 /* Preload any user accounts we want to */
 preloadUserCache();
@@ -3986,6 +3991,42 @@ elog	<< "*** [CMaster::preloadBanCache]: Done. Loaded "
 		<< endl;
 }
 
+int cservice::preloadCommandLevelsCache()
+{
+stringstream theQuery;
+theQuery << "SELECT "
+  << sql::command_fields
+  << " FROM commands"
+  << ends;
+
+elog << "*** [CMaster::preloadCommandLevelsCache] Precaching Commands table: "
+  << endl;
+
+ExecStatusType status = SQLDb->Exec(theQuery.str().c_str());
+if(PGRES_TUPLES_OK != status) {
+  elog << "[CMaster::preloadCommandLevelsCache] Error precaching commands."
+    << endl;
+  ::exit(0);
+} // if(PGRES_TUPLES_OK != status)
+
+sqlCommandLevels.clear();
+
+for(int i = 0; i < SQLDb->Tuples(); i++) {
+  sqlCommandLevel* newCommandLevel = new (std::nothrow) sqlCommandLevel(SQLDb);
+  newCommandLevel->setAllMembers(i);
+  
+  pair< string, string > thePair(newCommandLevel->getCommandName(), newCommandLevel->getDomain());
+  sqlCommandLevels.insert( sqlCommandLevelsType::value_type(thePair, newCommandLevel) );
+}
+
+elog << "*** [CMaster:preloadCommandLevelsCache] Done. Loaded "
+     << SQLDb->Tuples() << " command levels."
+     << endl;
+
+return sqlCommandLevels.size();
+
+}
+
 void cservice::preloadLevelsCache()
 {
 /*
@@ -4216,7 +4257,6 @@ if(md5Part != output.str().c_str() ) /* Do the hashes match? */
 	{
 	return false;
 	}
-
 return true;
 } // cservice::isPasswordRight
 
@@ -4244,6 +4284,24 @@ void cservice::noticeAllAuthedClients(sqlUser* theUser, const char* Message, ...
       Notice(Target, buffer);
     } // Iteration over authed users
   } // if(Connected && MyUplink && Message && Message[0] != 0)
+}
+
+/** Returns what access is required for a given command */
+sqlCommandLevel* cservice::getLevelRequired(string command, string domain, bool notify)
+{
+  pair< string, string > thePair(command, domain);
+  sqlCommandLevelsType::iterator theLevel = sqlCommandLevels.find(thePair);
+  if(theLevel == sqlCommandLevels.end()) {
+    if(notify) {
+      elog << "*** [CMaster:getLevelRequired] Unable to find level record for "
+           << domain << ":" << command
+           << endl;
+      logAdminMessage("\002ERROR\002: Unable to find level for requested command %s:%s.",
+        domain.c_str(), command.c_str());
+    }
+    return 0;
+  }
+  return theLevel->second;
 }
 
 } // namespace gnuworld

@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# "$Id: Makefile.in,v 1.10 2002-09-13 21:30:39 jeekay Exp $"
+# "$Id: Makefile.in,v 1.11 2002-10-20 02:12:07 jeekay Exp $"
 SHELL = @SHELL@
 
 srcdir = @srcdir@
@@ -103,6 +103,7 @@ libcservice_la_LDFLAGS = -module -export-dynamic -L@PGSQL_LIB@ \
 libcservice_la_SOURCES = cservice.cc \
 	networkData.cc \
 	sqlChannel.cc \
+	sqlCommandLevel.cc \
 	sqlUser.cc \
 	sqlLevel.cc \
 	sqlBan.cc \
@@ -121,6 +122,7 @@ libcservice_la_SOURCES = cservice.cc \
 	DEOPCommand.cc \
 	DEVOICECommand.cc \
 	FORCECommand.cc \
+	GETLEVELCommand.cc \
 	GLOBNOTICECommand.cc \
 	GSUSPENDCommand.cc \
 	GUNSUSPENDCommand.cc \
@@ -184,19 +186,20 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 
 libcservice_la_LIBADD =
 am_libcservice_la_OBJECTS = cservice.lo networkData.lo sqlChannel.lo \
-	sqlUser.lo sqlLevel.lo sqlBan.lo sqlPendingChannel.lo \
-	sqlPendingTraffic.lo ACCESSCommand.lo ADDUSERCommand.lo \
-	ADMINCMDSCommand.lo BANCommand.lo BANLISTCommand.lo \
-	CHANINFOCommand.lo CHINFOCommand.lo CLEARMODECommand.lo \
-	COMMENTCommand.lo DEBUGCommand.lo DEOPCommand.lo \
-	DEVOICECommand.lo FORCECommand.lo GLOBNOTICECommand.lo \
-	GSUSPENDCommand.lo GUNSUSPENDCommand.lo HELPCommand.lo \
-	INVITECommand.lo INVMECommand.lo ISREGCommand.lo JOINCommand.lo \
-	KICKCommand.lo LBANLISTCommand.lo LOGINCommand.lo \
-	MODECommand.lo MODINFOCommand.lo MOTDCommand.lo \
-	NEWPASSCommand.lo NOTECommand.lo OPCommand.lo \
-	OPERJOINCommand.lo OPERPARTCommand.lo OPERSUSPENDCommand.lo \
-	PARTCommand.lo PURGECommand.lo QUOTECommand.lo RANDOMCommand.lo \
+	sqlCommandLevel.lo sqlUser.lo sqlLevel.lo sqlBan.lo \
+	sqlPendingChannel.lo sqlPendingTraffic.lo ACCESSCommand.lo \
+	ADDUSERCommand.lo ADMINCMDSCommand.lo BANCommand.lo \
+	BANLISTCommand.lo CHANINFOCommand.lo CHINFOCommand.lo \
+	CLEARMODECommand.lo COMMENTCommand.lo DEBUGCommand.lo \
+	DEOPCommand.lo DEVOICECommand.lo FORCECommand.lo \
+	GETLEVELCommand.lo GLOBNOTICECommand.lo GSUSPENDCommand.lo \
+	GUNSUSPENDCommand.lo HELPCommand.lo INVITECommand.lo \
+	INVMECommand.lo ISREGCommand.lo JOINCommand.lo KICKCommand.lo \
+	LBANLISTCommand.lo LOGINCommand.lo MODECommand.lo \
+	MODINFOCommand.lo MOTDCommand.lo NEWPASSCommand.lo \
+	NOTECommand.lo OPCommand.lo OPERJOINCommand.lo \
+	OPERPARTCommand.lo OPERSUSPENDCommand.lo PARTCommand.lo \
+	PURGECommand.lo QUOTECommand.lo RANDOMCommand.lo \
 	RECOVERCommand.lo REGISTERCommand.lo REHASHCommand.lo \
 	RELEASECommand.lo REMIGNORECommand.lo REMOVEALLCommand.lo \
 	REMUSERCommand.lo REMUSERIDCommand.lo SAYCommand.lo \
@@ -229,6 +232,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/DEOPCommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/DEVOICECommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/FORCECommand.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/GETLEVELCommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/GLOBNOTICECommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/GSUSPENDCommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/GUNSUSPENDCommand.Plo \
@@ -283,7 +287,9 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/VOICECommand.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/cservice.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/networkData.Plo ./$(DEPDIR)/sqlBan.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/sqlChannel.Plo ./$(DEPDIR)/sqlLevel.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/sqlChannel.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/sqlCommandLevel.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/sqlLevel.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/sqlPendingChannel.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/sqlPendingTraffic.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/sqlUser.Plo
@@ -352,6 +358,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DEOPCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DEVOICECommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/FORCECommand.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GETLEVELCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GLOBNOTICECommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GSUSPENDCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GUNSUSPENDCommand.Plo@am__quote@
@@ -408,6 +415,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/networkData.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sqlBan.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sqlChannel.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sqlCommandLevel.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sqlLevel.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sqlPendingChannel.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sqlPendingTraffic.Plo@am__quote@

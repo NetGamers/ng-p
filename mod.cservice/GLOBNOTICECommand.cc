@@ -4,16 +4,16 @@
  *
  * Sends a notice to all users as 'CService'
  *
- * $Id: GLOBNOTICECommand.cc,v 1.3 2002-04-07 21:41:20 jeekay Exp $
+ * $Id: GLOBNOTICECommand.cc,v 1.4 2002-10-20 02:12:07 jeekay Exp $
  */
 
 #include <string>
 
 #include "StringTokenizer.h"
-#include "cservice.h"
-#include "levels.h"
 
-const char GLOBNOTICECommand_cc_rcsId[] = "$Id: GLOBNOTICECommand.cc,v 1.3 2002-04-07 21:41:20 jeekay Exp $";
+#include "cservice.h"
+
+const char GLOBNOTICECommand_cc_rcsId[] = "$Id: GLOBNOTICECommand.cc,v 1.4 2002-10-20 02:12:07 jeekay Exp $";
 
 namespace gnuworld
 {
@@ -35,7 +35,9 @@ int admLevel;
 if(theUser) admLevel = bot->getAdminAccessLevel(theUser);
 else admLevel = 0;
 
-if((admLevel < level::globnotice) && !(theClient->isOper())) { return false; }
+sqlCommandLevel* globalNoticeLevel = bot->getLevelRequired("GLOBNOTICE", "ADMIN");
+
+if((admLevel < globalNoticeLevel->getLevel()) && !(theClient->isOper())) { return false; }
 
 // Lets actually get on with the command now ;)
 
@@ -56,7 +58,7 @@ else { sourceNick = "CService"; }
 
 if(st[1][0] != '$')
 	{
-	bot->Notice(theClient, "Target should be of the form $*.com");
+	bot->Notice(theClient, "Target should be of the form $*.org");
 	return false;
 	}
 
@@ -66,7 +68,7 @@ string outTarget = st[1];
 // Lets introduce the nick
 
 const char* charYY = bot->getCharYY();
-bot->Write("%s N %s 1 31337 global notice.pa +iodk B]AAAB %sAAC :CService Global Notice",
+bot->Write("%s N %s 1 31337 global notice.ng +iodk B]AAAB %sAAC :Global Notice",
 					 charYY, sourceNick.c_str(), charYY);
 bot->Write("%sAAC O %s :%s", charYY, outTarget.c_str(), outString.c_str());
 bot->Write("%sAAC Q :Done", charYY);

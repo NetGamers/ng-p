@@ -4,7 +4,7 @@
  *
  * Distributed under the GNU Public Licence
  *
- * $Id: DEBUGCommand.cc,v 1.4 2002-07-01 00:33:05 jeekay Exp $
+ * $Id: DEBUGCommand.cc,v 1.5 2002-10-20 02:12:06 jeekay Exp $
  */
 
 #include	<string>
@@ -12,10 +12,10 @@
 #include "StringTokenizer.h"
 #include "ELog.h"
 #include "Network.h"
-#include "cservice.h"
-#include "levels.h"
 
-const char DEBUGCommand_cc_rcsId[] = "$Id: DEBUGCommand.cc,v 1.4 2002-07-01 00:33:05 jeekay Exp $" ;
+#include "cservice.h"
+
+const char DEBUGCommand_cc_rcsId[] = "$Id: DEBUGCommand.cc,v 1.5 2002-10-20 02:12:06 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -39,7 +39,9 @@ sqlUser* theUser = bot->isAuthed(theClient, true);
 if(!theUser) { return false; }
 
 int aLevel = bot->getAdminAccessLevel(theUser);
-if(aLevel < level::debug)
+sqlCommandLevel* debugCommandLevel = bot->getLevelRequired("DEBUG", "ADMIN");
+
+if(aLevel < debugCommandLevel->getLevel())
 	{
 	bot->Notice(theClient, "Sorry, you have insufficient access to perform that command.");
 	return false;

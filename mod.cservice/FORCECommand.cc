@@ -4,11 +4,11 @@
 
 #include	"StringTokenizer.h"
 #include	"ELog.h"
+
 #include	"cservice.h"
-#include	"levels.h"
 #include	"responses.h"
 
-const char FORCECommand_cc_rcsId[] = "$Id: FORCECommand.cc,v 1.10 2002-09-13 21:30:38 jeekay Exp $" ;
+const char FORCECommand_cc_rcsId[] = "$Id: FORCECommand.cc,v 1.11 2002-10-20 02:12:07 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -35,7 +35,10 @@ bool FORCECommand::Exec( iClient* theClient, const string& Message )
 	sqlChannel* admChan = bot->getChannelRecord("*");
 
 	int admLevel = bot->getAccessLevel(theUser, admChan);
-	if (admLevel < level::force)
+  sqlCommandLevel* forceCommandLevel = bot->getLevelRequired("FORCE", "ADMIN");
+  sqlCommandLevel* force2CommandLevel = bot->getLevelRequired("FORCE2", "ADMIN");
+  
+	if (admLevel < forceCommandLevel->getLevel())
 	{
 		bot->Notice(theClient,
 			bot->getResponse(theUser,
@@ -68,7 +71,7 @@ bool FORCECommand::Exec( iClient* theClient, const string& Message )
 		return false;
 	}
 
-	if((theChan->getFlag(sqlChannel::F_NOFORCE))&&(admLevel < level::force2))
+	if((theChan->getFlag(sqlChannel::F_NOFORCE)) && (admLevel < force2CommandLevel->getLevel()))
 	{
         	bot->Notice(theClient, "%s has NOFORCE set.", theChan->getName().c_str());
         	return false;

@@ -11,20 +11,21 @@
  *
  * Caveats: None
  *
- * $Id: ADDUSERCommand.cc,v 1.8 2002-09-24 20:06:17 jeekay Exp $
+ * $Id: ADDUSERCommand.cc,v 1.9 2002-10-20 02:12:06 jeekay Exp $
  */
 
 #include	<string>
 
 #include	"StringTokenizer.h"
 #include	"ELog.h"
-#include	"cservice.h"
-#include	"levels.h"
 #include	"libpq++.h"
-#include	"responses.h"
-#include	"cservice_config.h"
 
-const char ADDUSERCommand_cc_rcsId[] = "$Id: ADDUSERCommand.cc,v 1.8 2002-09-24 20:06:17 jeekay Exp $" ;
+#include	"cservice.h"
+#include	"cservice_config.h"
+#include	"levels.h"
+#include	"responses.h"
+
+const char ADDUSERCommand_cc_rcsId[] = "$Id: ADDUSERCommand.cc,v 1.9 2002-10-20 02:12:06 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -91,9 +92,11 @@ int level = bot->getEffectiveAccessLevel(theUser, theChan, true);
  * cause adding admins requires high access ;)
  */
 
+sqlCommandLevel* theCommandLevel = bot->getLevelRequired("CHGADMIN", "ADMIN");
+
 if (theChan->getName() == "*")
 	{
-	if (level < level::chgadmin)
+	if (level < theCommandLevel->getLevel())
 		{
 	        bot->Notice(theClient, "Sorry, you have insufficient access to perform that command");
 		return false;

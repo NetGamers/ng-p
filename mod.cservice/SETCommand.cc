@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.21 2002-09-24 20:06:18 jeekay Exp $
+ * $Id: SETCommand.cc,v 1.22 2002-10-20 02:12:09 jeekay Exp $
  */
 
 #include	<string>
@@ -30,7 +30,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.21 2002-09-24 20:06:18 jeekay Exp $" ;
+const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.22 2002-10-20 02:12:09 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -861,7 +861,7 @@ else
 	    	theChan->setFlag(sqlChannel::F_AUTOJOIN);
 			theChan->setInChan(true);
 			bot->getUplink()->RegisterChannelEvent( theChan->getName(), bot ) ;
-			bot->Join(theChan->getName(), theChan->getChannelMode(),
+			bot->Join(theChan->getName(), "",
 				theChan->getChannelTS(), false);
 			bot->joinCount++;
 			bot->reopQ.insert(cservice::reopQType::value_type(theChan->getName(), bot->currentTime() + 15) );

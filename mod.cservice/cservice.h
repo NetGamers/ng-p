@@ -1,5 +1,5 @@
 #ifndef __CSERVICE_H
-#define __CSERVICE_H "$Id: cservice.h,v 1.8 2002-09-13 21:30:40 jeekay Exp $"
+#define __CSERVICE_H "$Id: cservice.h,v 1.9 2002-10-20 02:12:10 jeekay Exp $"
 
 #include	<string>
 #include	<vector>
@@ -13,14 +13,6 @@
 #include "libpq++.h"
 #include "../mod.nickserv/nickservClass.h"
 #include  "cserviceClass.h"
-
-using std::string ;
-
-namespace gnuworld
-{
-
-const string escapeSQLChars(const string& theString);
-
-} // namespace gnuworld
+#include "sql.h"
 
 #endif // __CSERVICE_H

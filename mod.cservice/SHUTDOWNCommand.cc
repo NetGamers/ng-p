@@ -11,15 +11,14 @@
 #include	<string>
 
 #include	"StringTokenizer.h"
+
 #include	"cservice.h"
-#include	"levels.h"
 #include	"responses.h"
 
-const char SHUTDOWNCommand_cc_rcsId[] = "$Id: SHUTDOWNCommand.cc,v 1.2 2002-10-19 20:07:11 jeekay Exp $" ;
+const char SHUTDOWNCommand_cc_rcsId[] = "$Id: SHUTDOWNCommand.cc,v 1.3 2002-10-20 02:12:09 jeekay Exp $" ;
 namespace gnuworld
 {
 using std::string ;
-using namespace level;
 
 bool SHUTDOWNCommand::Exec( iClient* theClient, const string& Message )
 {
@@ -44,7 +43,9 @@ if (!theUser)
 	}
 
 int admLevel = bot->getAdminAccessLevel(theUser);
-if (admLevel < level::shutdown)
+sqlCommandLevel* shutdownLevel = bot->getLevelRequired("SHUTDOWN", "ADMIN");
+
+if (admLevel < shutdownLevel->getLevel())
 	{
 	bot->Notice(theClient,
 		bot->getResponse(theUser,

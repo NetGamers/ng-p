@@ -2,13 +2,13 @@
 
 #include	<string>
 
-#include	"StringTokenizer.h"
 #include	"ELog.h"
+#include	"StringTokenizer.h"
+
 #include	"cservice.h"
-#include	"levels.h"
 #include	"responses.h"
 
-const char REHASHCommand_cc_rcsId[] = "$Id: REHASHCommand.cc,v 1.1 2002-01-14 23:14:20 morpheus Exp $" ;
+const char REHASHCommand_cc_rcsId[] = "$Id: REHASHCommand.cc,v 1.2 2002-10-20 02:12:08 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -29,7 +29,9 @@ sqlUser* theUser = bot->isAuthed(theClient, true);
 if (!theUser) return false;
 
 int level = bot->getAdminAccessLevel(theUser);
-if (level < level::rehash)
+sqlCommandLevel* rehashCommandLevel = bot->getLevelRequired("REHASH", "ADMIN");
+
+if (level < rehashCommandLevel->getLevel())
 {
 	bot->Notice(theClient,
 		bot->getResponse(theUser,
@@ -56,6 +58,12 @@ if (option == "HELP")
 		bot->Notice(theClient, "Done. %i entries in help table.",
 			bot->helpTable.size());
 	}
+
+if ("COMMANDS" == option) {
+  int noLoaded = bot->preloadCommandLevelsCache();
+  bot->Notice(theClient, "Successfully rehashed %d command levels.",
+    noLoaded);
+}
 
 return true ;
 }

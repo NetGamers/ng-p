@@ -2,14 +2,14 @@
 
 #include	<string>
 
-#include	"StringTokenizer.h"
 #include	"ELog.h"
-#include	"cservice.h"
-#include	"levels.h"
-#include	"responses.h"
 #include	"Network.h"
+#include	"StringTokenizer.h"
 
-const char REMIGNORECommand_cc_rcsId[] = "$Id: REMIGNORECommand.cc,v 1.4 2002-09-13 21:30:39 jeekay Exp $" ;
+#include	"cservice.h"
+#include	"responses.h"
+
+const char REMIGNORECommand_cc_rcsId[] = "$Id: REMIGNORECommand.cc,v 1.5 2002-10-20 02:12:08 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -40,7 +40,9 @@ if (!theUser)
  	}
 
 int admLevel = bot->getAdminAccessLevel(theUser);
-if (admLevel < level::remignore)
+sqlCommandLevel* remIgnoreLevel = bot->getLevelRequired("REMIGNORE", "ADMIN");
+
+if (admLevel < remIgnoreLevel->getLevel())
 	{
 	bot->Notice(theClient,
 		bot->getResponse(theUser,

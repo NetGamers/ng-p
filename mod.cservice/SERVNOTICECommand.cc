@@ -8,20 +8,20 @@
  *
  * Caveats: None
  *
- * $Id: SERVNOTICECommand.cc,v 1.1 2002-01-14 23:14:21 morpheus Exp $
+ * $Id: SERVNOTICECommand.cc,v 1.2 2002-10-20 02:12:09 jeekay Exp $
  */
 
 #include	<string>
 #include	<map>
 
-#include	"StringTokenizer.h"
 #include	"ELog.h"
-#include	"cservice.h"
 #include	"Network.h"
-#include	"levels.h"
+#include	"StringTokenizer.h"
+
+#include	"cservice.h"
 #include	"responses.h"
 
-const char SERVNOTICECommand_cc_rcsId[] = "$Id: SERVNOTICECommand.cc,v 1.1 2002-01-14 23:14:21 morpheus Exp $" ;
+const char SERVNOTICECommand_cc_rcsId[] = "$Id: SERVNOTICECommand.cc,v 1.2 2002-10-20 02:12:09 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -54,7 +54,9 @@ if (!theUser)
  */
 
 int admLevel = bot->getAdminAccessLevel(theUser);
-if (admLevel < level::servnotice)
+sqlCommandLevel* servnoticeLevel = bot->getLevelRequired("SERVNOTICE", "ADMIN");
+
+if (admLevel < servnoticeLevel->getLevel())
 	{
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::insuf_access).c_str());

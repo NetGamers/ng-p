@@ -8,21 +8,21 @@
  *
  * Caveats: None
  *
- * $Id: PURGECommand.cc,v 1.11 2002-09-13 21:30:39 jeekay Exp $
+ * $Id: PURGECommand.cc,v 1.12 2002-10-20 02:12:08 jeekay Exp $
  */
 
 #include	<string>
 
-#include	"StringTokenizer.h"
 #include	"ELog.h"
-#include	"cservice.h"
-#include	"levels.h"
-#include	"libpq++.h"
 #include	"Network.h"
-#include	"responses.h"
-#include	"cservice_config.h"
+#include	"libpq++.h"
+#include	"StringTokenizer.h"
 
-const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.11 2002-09-13 21:30:39 jeekay Exp $" ;
+#include	"cservice.h"
+#include	"cservice_config.h"
+#include	"responses.h"
+
+const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.12 2002-10-20 02:12:08 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -58,7 +58,9 @@ if (!theUser)
  */
 
 int level = bot->getAdminAccessLevel(theUser);
-if (level < level::purge)
+sqlCommandLevel* purgeCommandLevel = bot->getLevelRequired("PURGE", "ADMIN");
+
+if (level < purgeCommandLevel->getLevel())
 	{
 	bot->Notice(theClient,
 		bot->getResponse(theUser,

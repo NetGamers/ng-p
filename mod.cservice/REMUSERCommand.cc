@@ -9,19 +9,20 @@
  * Caveats: None
  *
  *
- * $Id: REMUSERCommand.cc,v 1.6 2002-09-13 21:30:40 jeekay Exp $
+ * $Id: REMUSERCommand.cc,v 1.7 2002-10-20 02:12:08 jeekay Exp $
  */
 
 #include	<string>
 
-#include	"StringTokenizer.h"
 #include	"ELog.h"
+#include	"libpq++.h"
+#include	"StringTokenizer.h"
+
 #include	"cservice.h"
 #include	"levels.h"
-#include	"libpq++.h"
 #include	"responses.h"
 
-const char REMUSERCommand_cc_rcsId[] = "$Id: REMUSERCommand.cc,v 1.6 2002-09-13 21:30:40 jeekay Exp $" ;
+const char REMUSERCommand_cc_rcsId[] = "$Id: REMUSERCommand.cc,v 1.7 2002-10-20 02:12:08 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -81,6 +82,7 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 	sqlUser* targetUser = bot->getUserRecord(st[2]);
 
 	int level = bot->getEffectiveAccessLevel(theUser, theChan, true);
+  sqlCommandLevel* chgAdminLevel = bot->getLevelRequired("CHGADMIN", "ADMIN");
 
 	/*
 	 * check if we are removing admins or normal users
@@ -89,7 +91,7 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 
 	if (theChan->getName() == "*")
         	{
-	        if (level < level::chgadmin)
+	        if (level < chgAdminLevel->getLevel())
         	        {
                 	bot->Notice(theClient, "Sorry, you have insufficient access to perform that command");
 	                return false;

@@ -3,18 +3,18 @@
  *
  * 20020308 GK@PAnet - Initial Writing
  *
- * $Id: REMUSERIDCommand.cc,v 1.13 2002-10-11 13:13:06 jeekay Exp $
+ * $Id: REMUSERIDCommand.cc,v 1.14 2002-10-20 02:12:08 jeekay Exp $
  */
 
 #include	<string>
 
-#include "StringTokenizer.h"
 #include "ELog.h"
+#include "StringTokenizer.h"
+
 #include "cservice.h"
-#include "levels.h"
 #include "networkData.h"
 
-const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.13 2002-10-11 13:13:06 jeekay Exp $" ;
+const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.14 2002-10-20 02:12:08 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -39,7 +39,10 @@ if(!theUser)
 	{ return false; }
 
 int aLevel = bot->getAdminAccessLevel(theUser);
-if(aLevel < level::remuserid)
+sqlCommandLevel* remuseridLevel = bot->getLevelRequired("REMUSERID", "ADMIN");
+sqlCommandLevel* chgadminLevel = bot->getLevelRequired("CHGADMIN", "ADMIN");
+
+if(aLevel < remuseridLevel->getLevel())
 	{
 	bot->Notice(theClient, "Sorry, you have insufficient access to perform that command.");
 	return false;
@@ -59,7 +62,7 @@ if(!targetUser->getComment().empty())
   }
 
 int targetALevel = bot->getAdminAccessLevel(targetUser);
-if(targetALevel && (aLevel < level::chgadmin))
+if(targetALevel && (aLevel < chgadminLevel->getLevel()))
 	{
 	bot->Notice(theClient, "Sorry, you cannot purge a user with admin access.");
 	return false;

@@ -2,14 +2,13 @@
 
 #include	<string>
 
-#include	"cservice.h"
-//#include	"sqlUser.h"
-#include	"StringTokenizer.h"
 #include	"ELog.h"
-#include	"levels.h"
+#include	"StringTokenizer.h"
+
+#include	"cservice.h"
 #include	"responses.h"
 
-const char QUOTECommand_cc_rcsId[] = "$Id: QUOTECommand.cc,v 1.1 2002-01-14 23:14:20 morpheus Exp $" ;
+const char QUOTECommand_cc_rcsId[] = "$Id: QUOTECommand.cc,v 1.2 2002-10-20 02:12:08 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -34,7 +33,9 @@ if (!theUser)
  	}
 
 int admLevel = bot->getAdminAccessLevel(theUser);
-if (admLevel < level::quote)
+sqlCommandLevel* quoteCommandLevel = bot->getLevelRequired("QUOTE", "ADMIN");
+
+if (admLevel < quoteCommandLevel->getLevel())
 	{
 	bot->Notice(theClient,
 		bot->getResponse(theUser,

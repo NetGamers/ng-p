@@ -1,10 +1,11 @@
 #ifndef __CSERVICECLASS_H
-#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.13 2002-10-19 20:49:52 jeekay Exp $"
+#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.14 2002-10-20 02:12:10 jeekay Exp $"
 
 #include <map>
 
 #include	"EConfig.h"
 #include	"sqlChannel.h"
+#include  "sqlCommandLevel.h"
 #include	"sqlLevel.h"
 #include	"sqlBan.h"
 #include	"sqlUser.h"
@@ -138,6 +139,9 @@ public:
 
 	/* Returns what access a user has in the coder channel */
 	short getCoderAccessLevel( sqlUser* );
+  
+  /* Returns what access is required for a given command */
+  sqlCommandLevel* getLevelRequired(string, string, bool = true);
 
 	/* Fetch a user record for a user. */
 	sqlUser* getUserRecord( const string& );
@@ -191,6 +195,10 @@ public:
 	// Typedef's for user/channel Hashmaps.
 	// User hash, Key is Username.
 	typedef map< string, sqlUser*, noCaseCompare > sqlUserHashType ;
+
+  // Typedef's for command levels
+  typedef map< pair <string, string>, sqlCommandLevel* > sqlCommandLevelsType;
+  sqlCommandLevelsType sqlCommandLevels;
 
 	// Channel hash, Key is channelname.
 	typedef map< string, sqlChannel*, noCaseCompare > sqlChannelHashType ;
@@ -425,6 +433,7 @@ public:
 
 	void preloadBanCache();
 	void preloadChannelCache();
+  int preloadCommandLevelsCache();
 	void preloadLevelsCache();
 	void preloadUserCache();
 

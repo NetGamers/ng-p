@@ -13,17 +13,18 @@
  * Shouldn't really happen, as trying to MODINFO a forced access doesn't
  * make sense - adduser and then MODINFO that :)
  *
- * $Id: MODINFOCommand.cc,v 1.6 2002-09-13 22:06:30 jeekay Exp $
+ * $Id: MODINFOCommand.cc,v 1.7 2002-10-20 02:12:07 jeekay Exp $
  */
 
 #include	<string>
 
 #include	"StringTokenizer.h"
+
 #include	"cservice.h"
 #include	"levels.h"
 #include	"responses.h"
 
-const char MODINFOCommand_cc_rcsId[] = "$Id: MODINFOCommand.cc,v 1.6 2002-09-13 22:06:30 jeekay Exp $" ;
+const char MODINFOCommand_cc_rcsId[] = "$Id: MODINFOCommand.cc,v 1.7 2002-10-20 02:12:07 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -93,9 +94,11 @@ int level = bot->getEffectiveAccessLevel(theUser, theChan, true);
  * cause modifying admins requires high access ;)
  */
 
+sqlCommandLevel* chgAdminLevel = bot->getLevelRequired("CHGADMIN", "ADMIN");
+
 if (theChan->getName() == "*")
         {
-        if (level < level::chgadmin)
+        if (level < chgAdminLevel->getLevel())
                 {
                 bot->Notice(theClient, "Sorry, you have insufficient access to perform that command");
                 return false;

@@ -8,20 +8,20 @@
  *
  * Caveats: None
  *
- * $Id: REGISTERCommand.cc,v 1.5 2002-09-13 21:30:39 jeekay Exp $
+ * $Id: REGISTERCommand.cc,v 1.6 2002-10-20 02:12:08 jeekay Exp $
  */
 
 #include	<string>
 
-#include	"StringTokenizer.h"
 #include	"ELog.h"
-#include	"cservice.h"
-#include	"levels.h"
 #include	"libpq++.h"
 #include	"Network.h"
+#include	"StringTokenizer.h"
+
+#include	"cservice.h"
 #include	"responses.h"
 
-const char REGISTERCommand_cc_rcsId[] = "$Id: REGISTERCommand.cc,v 1.5 2002-09-13 21:30:39 jeekay Exp $" ;
+const char REGISTERCommand_cc_rcsId[] = "$Id: REGISTERCommand.cc,v 1.6 2002-10-20 02:12:08 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -47,6 +47,22 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 	sqlUser* theUser = bot->isAuthed(theClient, true);
 	if (!theUser) return false;
 	
+	/*
+	 *  Check the user has sufficient access for this command..
+	 */
+
+	int level = bot->getAdminAccessLevel(theUser);
+  sqlCommandLevel* registerCommandLevel = bot->getLevelRequired("REGISTER", "ADMIN");
+  
+	if (level < registerCommandLevel->getLevel())
+	{
+		bot->Notice(theClient,
+			bot->getResponse(theUser,
+				language::insuf_access,
+				string("You have insufficient access to perform that command.")));
+		return false;
+	}
+
 	// Check the channel is not currently in the database either
 	stringstream chanQuery;
 	chanQuery << "SELECT id FROM channels WHERE lower(name) = '"
@@ -95,20 +111,6 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 			st[2].c_str());
 		return true;
 		}
-
-	/*
-	 *  Check the user has sufficient access for this command..
-	 */
-
-	int level = bot->getAdminAccessLevel(theUser);
-	if (level < level::registercmd)
-	{
-		bot->Notice(theClient,
-			bot->getResponse(theUser,
-				language::insuf_access,
-				string("You have insufficient access to perform that command.")));
-		return false;
-	}
 
 	string::size_type pos = st[1].find_first_of( ',' ); /* Don't allow comma's in channel names. :) */
 
