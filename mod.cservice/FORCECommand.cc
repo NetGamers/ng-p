@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char FORCECommand_cc_rcsId[] = "$Id: FORCECommand.cc,v 1.3 2002-01-16 00:00:20 morpheus Exp $" ;
+const char FORCECommand_cc_rcsId[] = "$Id: FORCECommand.cc,v 1.4 2002-01-16 00:49:27 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -69,7 +69,8 @@ bool FORCECommand::Exec( iClient* theClient, const string& Message )
 		return false;
 	}
 
-	if(theChan->getFlag(sqlChannel::F_NOFORCE))
+	int admLevel = bot->getAdminccessLevel(theUser);
+	if((theChan->getFlag(sqlChannel::F_NOFORCE))&&(admLevel < 950))
 	{
         	bot->Notice(theClient, "%s has NOFORCE set.", theChan->getName().c_str());
         	return false;
