@@ -1,3 +1,6 @@
+2003-05-29 1.2.10 Jeekay
+* Bumped version to 1.2.10
+
 2003-04-20 1.2.09 Jeekay
 * Added ability to have dynamic runtime configuration
 * Moved MOTD config from static code to database
