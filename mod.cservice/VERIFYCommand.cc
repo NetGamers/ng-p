@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.12 2002-07-18 11:26:26 jeekay Exp $" ;
+const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.13 2002-07-20 15:45:06 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -106,35 +106,44 @@ if ( (0 == level) && (0 == cLevel) && (0 == oLevel) )
 	return false;
 	}
 
-if ((level >= level::admin::base) && (level < level::admin::supervisor)) 
+if ((level >= level::admin::base) && (level < level::admin::cadmin)) 
 	{
-		bot->Notice(theClient,"%s is a CSC Administrator%s and logged in as %s",
+		bot->Notice(theClient,"%s is a CSC Senior Helper%s and logged in as %s",
 		target->getNickUserHost().c_str(),
 		extra.c_str(),
 		theUser->getUserName().c_str());
 	return true;
 	}
 
-if ((level >= level::admin::supervisor) && (level < level::admin::director)) 
+if ((level >= level::admin::cadmin) && (level < level::admin::nadmin)) 
 	{
-		bot->Notice(theClient,"%s is a CSC Supervisor%s and logged in as %s",
+		bot->Notice(theClient,"%s is a CSC Channel Administrator%s and logged in as %s",
 		target->getNickUserHost().c_str(),
 		extra.c_str(),
 		theUser->getUserName().c_str());
 	return true;
 	}
 
-if((level >= level::admin::director) && (level < level::admin::amanager))
+if((level >= level::admin::nadmin) && (level < level::admin::director))
 	{
-	bot->Notice(theClient, "%s is a CSC Director%s and logged in as %s",
+	bot->Notice(theClient, "%s is a CSC Nick Administrator%s and logged in as %s",
 		target->getNickUserHost().c_str(),
 		extra.c_str(),
 		theUser->getUserName().c_str());
 	}
 
-if ((level >= level::admin::amanager) && (level < level::admin::manager)) 
+if ((level >= level::admin::director) && (level < level::admin::amanager)) 
 	{
-		bot->Notice(theClient,"%s is the CSC Assistant Manager%s and logged in as %s",
+	bot->Notice(theClient,"%s is a CSC Director%s and logged in as %s",
+		target->getNickUserHost().c_str(),
+		extra.c_str(),
+		theUser->getUserName().c_str());
+	return true;
+	}
+
+if ((level >= level::admin::amanager) && (level < level::admin::manager))
+	{
+	bot->Notice(theClient,"%s is a CSC Assistant Manager%s and logged in as %s",
 		target->getNickUserHost().c_str(),
 		extra.c_str(),
 		theUser->getUserName().c_str());
@@ -143,14 +152,14 @@ if ((level >= level::admin::amanager) && (level < level::admin::manager))
 
 if (level == level::admin::manager)
 	{
-		bot->Notice(theClient,"%s is the CSC Manager%s and logged in as %s",
+	bot->Notice(theClient, "%s is a CSC Manager%s and logged in as %s",
 		target->getNickUserHost().c_str(),
 		extra.c_str(),
 		theUser->getUserName().c_str());
 	return true;
 	}
 
-if ((level > level::admin::manager) && (level <= level::admin::coder))
+if (level >= level::admin::coder)
 	{
 	bot->Notice(theClient, "%s is a CSC Developer%s and logged in as %s",
 		target->getNickUserHost().c_str(),

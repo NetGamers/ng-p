@@ -1,5 +1,5 @@
 #ifndef __LEVELS_H
-#define __LEVELS_H "$Id: levels.h,v 1.31 2002-07-18 11:26:26 jeekay Exp $"
+#define __LEVELS_H "$Id: levels.h,v 1.32 2002-07-20 15:45:06 jeekay Exp $"
 
 /* 
  * levels.h
@@ -9,7 +9,7 @@
  * 
  * Defines access level constants for use in command handlers. 
  *
- * $Id: levels.h,v 1.31 2002-07-18 11:26:26 jeekay Exp $
+ * $Id: levels.h,v 1.32 2002-07-20 15:45:06 jeekay Exp $
  */
 
 namespace gnuworld {
@@ -22,7 +22,6 @@ namespace gnuworld {
   const int motd = 0;
   
   const int banlist = 1;
-  const int force = 1; // And by definition, unforce.
   const int globalbanlist = 1;
   const int lbanlist = 1;
   const int status = 1;
@@ -61,6 +60,7 @@ namespace gnuworld {
 
   const int remignore = 100;
 
+  const int force = 400; // And by definition, unforce.
   const int invme = 400;
   const int usercomment = 400;
 
@@ -162,12 +162,13 @@ namespace gnuworld {
   }
  
   namespace admin {
-	const int base = 1;
-	const int supervisor = 800;
-	const int director = 850;
-	const int amanager = 890;
-	const int manager = 900;
-	const int coder = 1000;
+	  const int base = 1;
+    const int cadmin = 400;
+    const int nadmin = 700;
+	  const int director = 800;
+  	const int amanager = 850;
+	  const int manager = 900;
+	  const int coder = 901;
   }
 
   namespace coder {
@@ -176,11 +177,6 @@ namespace gnuworld {
 	const int devel = 400;
 	const int senior = 499;
   }
-
-  namespace virusfix {
-        const int base = 100;
-  }
-
 
  }
 }
