@@ -1,7 +1,7 @@
 /* sqlUser.h */
 
 #ifndef __SQLUSER_H
-#define __SQLUSER_H "$Id: sqlUser.h,v 1.8 2002-03-24 01:06:51 jeekay Exp $"
+#define __SQLUSER_H "$Id: sqlUser.h,v 1.9 2002-07-17 19:10:00 jeekay Exp $"
 
 #include	<string>
 #include	<ctime>
@@ -29,6 +29,7 @@ public:
 	static const flagType F_AUTOKILL;
 	static const flagType F_NOTE;
 	static const flagType F_NOPURGE;
+  static const flagType F_BOT;
 	
 	/*
 	 *   User 'Event' Flags, used in the userlog table.
