@@ -3434,8 +3434,10 @@ void cservice::updateLimits()
     */ 
            unsigned int newLimit = theChan->size() + reggedChan->getLimitOffset(); 
     
-           /* Don't bother if the new limit is the same as the old one. */ 
-           if (newLimit == theChan->getLimit()) return; 
+           /* Don't bother if the new limit is within floatgrace. */
+           if ( newLimit >= (theChan->getLimit() - reggedChan->getLimitGrace()) &&
+                newLimit <= (theChan->getLimit() + reggedChan->getLimitGrace()) )
+               return;
     
            /* 
             * Check we're actually opped first. 

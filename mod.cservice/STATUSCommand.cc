@@ -10,7 +10,7 @@
 #include	"Network.h"
 #include	"cservice_config.h"
 
-const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.17 2002-11-05 00:24:27 jeekay Exp $" ;
+const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.18 2002-11-25 00:14:43 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -205,6 +205,8 @@ if (theChan->getFlag(sqlChannel::F_FLOATLIM))
            << theChan->getLimitOffset() 
            << ":" 
            << theChan->getLimitPeriod() 
+           << ":"
+           << theChan->getLimitGrace()
            << ")" 
            << ends; 
            flagsSet += floatLim.str(); 

@@ -1,6 +1,7 @@
 2002-11-09 1.2.01 Jeekay
 * Added logging to UPDATEDB
 * Made SET INVISIBLE on channels actually check for channel access (duh)
+* Made FLOATGRACE functional again.
 * Bumped version to 1.2.01
 2002-11-05 1.2.00 Jeekay
 * Added USERFLAGS setting '3' to set autovoice for 25-99 and autoop for 100+
