@@ -209,7 +209,7 @@ if (theChan->getFlag(sqlChannel::F_INVISIBLE)) {
 	stringstream invisible;
 	invisible	<< "INVISIBLE("
 			<< theChan->getInvisible()
-			<< ")"
+			<< ") "
 			;
 	flagsSet += invisible.str();
 }
