@@ -9,7 +9,7 @@
 #include "nickserv.h"
 #include "levels.h"
 
-const char JUPECommand_cc_rcsId[] = "$Id: JUPECommand.cc,v 1.4 2002-02-06 01:06:49 jeekay Exp $";
+const char JUPECommand_cc_rcsId[] = "$Id: JUPECommand.cc,v 1.5 2002-03-04 20:32:57 jeekay Exp $";
 
 namespace gnuworld
 {
@@ -72,7 +72,7 @@ if("ADD" == option && (adminAccess >= level::jupe::add))
 		return false;
 		}
 	
-	if(bot->jupeNick(nick, "unknown", reason, duration))
+	if(bot->jupeNick(nick, "unknown", reason, duration*3600))
 		{
 		bot->Notice(theClient, "%s successfully juped.", nick.c_str());
 		}
@@ -101,7 +101,7 @@ if("FORCEADD" == option && (adminAccess >= level::jupe::force))
 	string hostMask;
 	if(targetClient) { hostMask = targetClient->getNickUserHost(); }
 	else { hostMask = "unknown"; }
-	if(bot->jupeNick(nick, hostMask, reason, duration))
+	if(bot->jupeNick(nick, hostMask, reason, duration*3600))
 		{
 		bot->Notice(theClient, "%s successfully juped.", nick.c_str());
 		}
