@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.26 2003-01-15 12:54:50 jeekay Exp $
+ * $Id: SETCommand.cc,v 1.27 2003-02-14 16:11:59 jeekay Exp $
  */
 
 #include  <string>
@@ -30,7 +30,7 @@
 #include  "responses.h"
 #include  "cservice_config.h"
 
-const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.26 2003-01-15 12:54:50 jeekay Exp $" ;
+const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.27 2003-02-14 16:11:59 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -900,10 +900,7 @@ else
       }
       if(strlen(desc.c_str()) > 128)
       {
-      bot->Notice(theClient,
-        bot->getResponse(theUser,
-          language::desc_max_len,
-          string("The DESCRIPTION can be a maximum of 128 chars!")));
+      bot->Notice(theClient, "The DESCRIPTION can be a maximum of 128 chars!");
       return true;
       }
     theChan->setDescription(desc);
@@ -947,10 +944,7 @@ else
       }
       if(strlen(url.c_str()) > 75) // Gator - changed to 75
       {
-      bot->Notice(theClient,
-        bot->getResponse(theUser,
-          language::url_max_len,
-          string("The URL can be a maximum of 75 chars!")));
+      bot->Notice(theClient, "The URL can be a maximum of 75 chars!");
       return true;
       }
     theChan->setURL(url);
