@@ -12,7 +12,7 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 
-const char RECOVERCommand_cc_rcsId[] = "$Id: RECOVERCommand.cc,v 1.1 2002-01-14 23:14:20 morpheus Exp $" ;
+const char RECOVERCommand_cc_rcsId[] = "$Id: RECOVERCommand.cc,v 1.2 2002-01-15 22:51:37 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -58,8 +58,8 @@ if (tmpUser)
 		        strstream s;
         		s       << bot->getCharYY()
                 		<< " D "
-                		<< tmpClient->getCharYYXXX()
-                		<< " :[RECOVER] Ghost removed by " << theClient->getNickName()
+				<< tmpClient->getCharYYXXX() << " :" << bot->getNickName()
+				<< " [RECOVER] Ghost removed by " << theClient->getNickName()
                 		<< ends;
         		bot->Write(s.str());
         		delete[] s.str();
@@ -190,8 +190,8 @@ if(tmpClient != NULL)
 	strstream s; 
 	s       << bot->getCharYY()
 		<< " D "
-		<< tmpClient->getCharYYXXX()
-        	<< " :[RECOVER] Ghost removed by " << theClient->getNickName()
+		<< tmpClient->getCharYYXXX() << " :" << bot->getNickName()
+        	<< " [RECOVER] Ghost removed by " << theClient->getNickName()
         	<< ends;
         bot->Write(s.str());
 	delete[] s.str();
