@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.9 2002-02-22 04:58:12 jeekay Exp $" ;
+const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.10 2002-02-26 13:42:05 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -211,9 +211,11 @@ if (cLevel > level::coder::devel)
 	}
 
 // #official replies
-// 1 = Official Planetarion Bot
-// 2 = Official Planetarion PACrew Member
-// 3 = Official Planetarion Virusfix Member
+//  1 = Official Planetarion Bot
+//  2 = Official Planetarion Virusfix Member
+//  3 = Official Planetarion PATeam Member
+//  4 = Official Planetarion PACrew Member
+// 50 = Official CSC Helper
 // 99 = Planetarion Creator
 
 if(1 == oLevel)
