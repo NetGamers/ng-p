@@ -1,5 +1,5 @@
 #ifndef __LEVELS_H
-#define __LEVELS_H "$Id: levels.h,v 1.21 2002-03-05 20:50:50 jeekay Exp $"
+#define __LEVELS_H "$Id: levels.h,v 1.22 2002-03-08 20:45:46 jeekay Exp $"
 
 /* 
  * levels.h
@@ -9,7 +9,7 @@
  * 
  * Defines access level constants for use in command handlers. 
  *
- * $Id: levels.h,v 1.21 2002-03-05 20:50:50 jeekay Exp $
+ * $Id: levels.h,v 1.22 2002-03-08 20:45:46 jeekay Exp $
  */
 
 namespace gnuworld {
@@ -71,6 +71,7 @@ namespace gnuworld {
 
   const int globalsuspend = 750;
   const int nsuspend = 750; // Level required to suspend a nick
+  const int remuserid = 750;
 
   const int susadmin = 800; // (un)suspending of *
 

@@ -201,6 +201,7 @@ RegisterCommand(new REMIGNORECommand(this, "REMIGNORE", "<mask>", 5));
 RegisterCommand(new REGISTERCommand(this, "REGISTER", "<#channel> <username>", 8));
 RegisterCommand(new REMOVEALLCommand(this, "REMOVEALL", "<#channel>", 15));
 RegisterCommand(new PURGECommand(this, "PURGE", "<#channel> <reason>", 8));
+RegisterCommand(new REMUSERIDCommand(this, "REMUSERID", "<username> <reason>", 8));
 RegisterCommand(new FORCECommand(this, "FORCE", "<#channel>", 8));
 RegisterCommand(new UNFORCECommand(this, "UNFORCE", "<#channel>", 8));
 RegisterCommand(new SERVNOTICECommand(this, "SERVNOTICE", "<#channel> <text>", 5));
