@@ -1,13 +1,31 @@
-/* Socket.h
+/*
+ * Socket.h
+ * Copyright (C) 2002 Daniel Karrels <dan@karrels.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
+ * USA.
+ *
+ * $Id: Socket.h,v 1.2 2002-07-01 00:18:22 jeekay Exp $
  */
 
 #ifndef __SOCKET_H
-#define __SOCKET_H "$Id: Socket.h,v 1.1 2002-01-14 23:19:29 morpheus Exp $"
+#define __SOCKET_H "$Id: Socket.h,v 1.2 2002-07-01 00:18:22 jeekay Exp $"
 
 #include	<new>
 #include	<iostream>
 #include	<fstream>
-#include	<strstream>
 #include	<string>
 #include	<vector>
 
@@ -53,6 +71,16 @@ protected:
 	 */
 	unsigned short int	portNum ;
 
+	/**
+	 * This holds the total number of bytes revceived on the socket
+	 */
+	unsigned long int	totalReceived ;
+	
+	/**
+	 * This holds the total number of bytes sent on the socket
+	 */
+	unsigned long int	totalSent ;
+	
 public:
 
 	/**
@@ -186,7 +214,19 @@ public:
 	 * -1 on error.
 	 */
 	virtual int writable() const ;
- 
+	
+	/**
+	 * Returns the total number of bytes that was received on this socket
+	 */
+	const unsigned long getTotalReceived() const
+		{ return totalReceived; } 
+
+	/**
+	 * Returns the total number of bytes that was sent on this socket
+	 */
+	const unsigned long getTotalSent() const
+		{ return totalSent; } 
+
 protected:
 
 	/**

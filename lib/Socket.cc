@@ -1,8 +1,27 @@
-/* Socket.cc
+/**
+ * Socket.cc
+ * Copyright (C) 2002 Daniel Karrels <dan@karrels.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
+ * USA.
+ *
+ * $Id: Socket.cc,v 1.2 2002-07-01 00:18:22 jeekay Exp $
  */
 
 #include	<new>
-#include	<strstream>
+#include	<sstream>
 #include	<iostream>
 
 #include	<unistd.h>
@@ -35,14 +54,14 @@
 #endif
 
 const char Socket_h_rcsId[] = __SOCKET_H ;
-const char Socket_cc_rcsId[] = "$Id: Socket.cc,v 1.1 2002-01-14 23:19:28 morpheus Exp $" ;
+const char Socket_cc_rcsId[] = "$Id: Socket.cc,v 1.2 2002-07-01 00:18:22 jeekay Exp $" ;
 const char ELog_h_rcsId[] = __ELOG_H ;
 
 namespace gnuworld
 {
 
 using std::endl ;
-using std::strstream ;
+using std::stringstream ;
 using std::ends ;
 
 Socket::Socket()
@@ -50,11 +69,16 @@ Socket::Socket()
 memset( &addr, 0, sizeof( struct sockaddr_in ) ) ;
 fd = -1 ;
 portNum = 0 ;
+totalReceived = 0;
+totalSent = 0;
 }
+
 
 Socket::Socket( const Socket& rhs )
  : fd( rhs.fd ),
-   portNum( rhs.portNum )
+   portNum( rhs.portNum ),
+   totalReceived(rhs.totalReceived),
+   totalSent(rhs.totalReceived)
 {
 memcpy( &addr, &rhs.addr, sizeof( struct sockaddr_in ) ) ;
 }
@@ -146,16 +170,14 @@ return string( ipAddr ) ;
   
 string Socket::description() const
 {
-std::strstream s;
+stringstream s;
 s	<< "socket(file descr. = " << fd
 	<< " ): " << "portNum = "
 	<< addr.sin_port
 	<< " ip= " << inet_ntoa( addr.sin_addr )
 	<< std::ends ;
-string retval( s.str() ) ;
-delete[] s.str() ;
 
-return retval ;
+return string( s.str() ) ;
 }
 
 bool Socket::setSocket()
@@ -426,7 +448,10 @@ do
 	result = ::send( fd,
 		reinterpret_cast< const char* >( buf ), nb, 0 ) ;
 	} while( (--cnt >= 0) && (EINTR == errno) ) ;
-
+if(result > 0)
+	{
+	totalSent += result;
+	}
 return result ;
 }
 
@@ -453,6 +478,10 @@ do
 	} while( (result < 0) &&
 		(--cnt >= 0) &&
 		(EINTR == errno) ) ;
+if(result > 0)
+	{
+	totalSent += result;
+	}
 
 return result ;
 }
@@ -490,6 +519,7 @@ do
 if( nbresult > 0 )
 	{
 	buf[ nbresult ] = 0 ;
+	totalReceived += nbresult;
 	}
 
 return nbresult ;

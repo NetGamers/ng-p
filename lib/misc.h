@@ -1,24 +1,52 @@
-
-/* misc.h
- * This file contains a few miscellaneous methods.
+/*
+ * misc.h
+ * Author: Daniel Karrels (dan@karrels.com
+ * Purpose: This file contains a few miscellaneous methods.
+ * Copyright (C) 2002 Daniel Karrels <dan@karrels.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
+ * USA.
+ *
+ * $Id: misc.h,v 1.2 2002-07-01 00:18:23 jeekay Exp $
  */
 
 #ifndef __MISC_H
-#define __MISC_H "$Id: misc.h,v 1.1 2002-01-14 23:19:30 morpheus Exp $"
+#define __MISC_H "$Id: misc.h,v 1.2 2002-07-01 00:18:23 jeekay Exp $"
 
-#include	<string.h>
-#include	<hash_map.h>
-
-#include	<unistd.h>
+#include	<string>
 
 #include	<cctype>
 #include	<cstring>
 
+#include	"match.h"
+#include	"defs.h"
+
+/*
+#ifdef GNU_EXTENSIONS
+ #include       <ext/hash_map>
+#else
+ #include       <hash_map>
+#endif
+*/
+
 namespace gnuworld
 {
 
+//using HASHMAPNS::hash ;
+//using HASHMAPNS::hash_map ;
 using std::string ;
-using std::hash ;
 
 /**
  * Return 0 if the two strings are equivalent, according to
@@ -69,6 +97,18 @@ inline size_t operator()( const string& s ) const
 		__h = (5 * __h) + tolower( *ptr ) ;
 		}
 	return __h ;
+	}
+} ;
+
+/**
+ * A functor suitable for using in STL style containers which provides
+ * wildcard matching routine.
+ */
+struct Match
+{
+inline bool operator()( const string& lhs, const string& rhs ) const
+	{
+	return (match( lhs, rhs ) < 0) ;
 	}
 } ;
 

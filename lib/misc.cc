@@ -1,7 +1,27 @@
-/* misc.cc
+/**
+ * misc.cc
+ * Copyright (C) 2002 Daniel Karrels <dan@karrels.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
+ * USA.
+ *
+ * $Id: misc.cc,v 1.2 2002-07-01 00:18:23 jeekay Exp $
  */
 
 #include	<string>
+#include	<algorithm>
 
 #include	<cctype>
 #include	<cstdio>
@@ -12,7 +32,7 @@
 #include	"misc.h"
 
 const char Misc_h_rcsId[] = __MISC_H ;
-const char Misc_cc_rcsId[] = "$Id: misc.cc,v 1.1 2002-01-14 23:19:30 morpheus Exp $" ;
+const char Misc_cc_rcsId[] = "$Id: misc.cc,v 1.2 2002-07-01 00:18:23 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -118,6 +138,10 @@ return ::strcasecmp( s1.c_str(), s2.c_str() ) ;
 
 size_t countChar( const string& s, const char& findMe )
 {
+return std::count( s.begin(), s.end(), findMe ) ;
+}
+/*
+
 size_t theCount = 0 ;
 
 for( string::const_iterator ptr = s.begin(), endPtr = s.end() ;
@@ -131,5 +155,5 @@ for( string::const_iterator ptr = s.begin(), endPtr = s.end() ;
 
 return theCount ;
 }
-
+*/
 } // namespace gnuworld
