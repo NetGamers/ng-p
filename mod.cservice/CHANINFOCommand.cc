@@ -13,7 +13,7 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.21 2002-10-29 17:45:50 jeekay Exp $
+ * $Id: CHANINFOCommand.cc,v 1.22 2002-11-01 21:30:22 jeekay Exp $
  */
 
 #include  <string>
@@ -27,7 +27,7 @@
 #include  "levels.h"
 #include  "responses.h"
 
-const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.21 2002-10-29 17:45:50 jeekay Exp $" ;
+const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.22 2002-11-01 21:30:22 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -271,7 +271,7 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) ) {
         string("Channels: %s")).c_str(),
       channelList.c_str());
 
-  } if( adminAccess || (theUser == targetUser) || (theClient->isOper() && ! bot->getAdminAccessLevel(targetUser)))
+  }
 
   return true;
 } // if(is a user)
