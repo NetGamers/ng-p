@@ -240,6 +240,7 @@ confSqlHost = cserviceConfig->Require( "sql_host" )->second;
 confSqlDb = cserviceConfig->Require( "sql_db" )->second;
 confSqlPort = cserviceConfig->Require( "sql_port" )->second;
 confSqlUser = cserviceConfig->Require( "sql_user" )->second;
+confSqlPass = cserviceConfig->Require( "sql_pass" )->second;
 
 string Query = "host=" + confSqlHost + " dbname=" + confSqlDb + " port=" + confSqlPort + " user=" + confSqlUser + " password=" + confSqlPass;
 
