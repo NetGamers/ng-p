@@ -23,7 +23,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.18 2002-02-06 01:06:50 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.19 2002-02-07 02:39:56 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -127,8 +127,6 @@ else
 
 // Be sure to use all capital letters for the command name
 
-//RegisterCommand(new LOGINCommand( this, "LOGIN", "<password>")) ;
-//RegisterCommand(new RECOVERCommand( this, "RECOVER", "<username> <password>"));
 RegisterCommand(new JUPECommand( this, "JUPE", "(ADD|DEL|FORCEADD|INFO) <nick> (duration) (reason)"));
 RegisterCommand(new STATSCommand( this, "STATS", "<stat>"));
 RegisterCommand(new SAYCommand( this, "SAY", "<channel> <text>"));
@@ -251,15 +249,6 @@ if( st.empty() )
 
 // This is no longer necessary, but oh well *shrug*
 const string Command = string_upper( st[ 0 ] ) ;
-
-// Abort if someone tries to do something password related
-// without doing full nick@server
-/* if(!secure && ((Command == "LOGIN") || (Command == "RECOVER")))
-   {
-     Notice(theClient, "To use %s, you must use /msg %s@%s",
-	    Command.c_str(), getNickName().c_str(), getUplinkName().c_str());
-     return false;
-     } */
 
 // Attempt to find a handler for this method.
 commandIterator commHandler = findCommand( Command ) ;
