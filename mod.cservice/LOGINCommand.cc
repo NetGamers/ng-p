@@ -12,7 +12,7 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 
-const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.3 2002-01-16 23:17:39 morpheus Exp $" ;
+const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.4 2002-01-17 00:27:32 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -366,7 +366,7 @@ for (autoOpVectorType::const_iterator resultPtr = autoOpVector.begin();
 
 	}
 
-#ifdef FEATURE_MEMOSEV
+#ifdef FEATURE_MEMOSERV
 	/*
 	 *  Now check if we have any notes
 	 */
