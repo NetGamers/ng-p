@@ -2448,8 +2448,9 @@ for( xServer::voiceVectorType::const_iterator ptr = theTargets.begin();
 				{
 				if(!tmpUser->getClient()->getMode(iClient::MODE_SERVICES))
 					{
-					Notice(theChanUser->getClient(), "%s is not allowed to be voiced in %s due to STRICTVOICE",
-								 tmpUser->getNickName().c_str(), reggedChan->getName().c_str());
+					if(theChanUser)
+						Notice(theChanUser->getClient(), "%s is not allowed to be voiced in %s due to STRICTVOICE",
+							tmpUser->getNickName().c_str(), reggedChan->getName().c_str());
 					Notice(tmpUser->getClient(), "You are not allowed to be voiced in %s",
 								 reggedChan->getName().c_str());
 					devoiceList.push_back(tmpUser->getClient());
@@ -2459,8 +2460,9 @@ for( xServer::voiceVectorType::const_iterator ptr = theTargets.begin();
 				{
 				if(!tmpUser->getClient()->getMode(iClient::MODE_SERVICES))
 					{
-					Notice(theChanUser->getClient(), "%s is not allowed to be voiced in %s due to STRICTVOICE",
-								 tmpUser->getNickName().c_str(), reggedChan->getName().c_str());
+					if(theChanUser)
+						Notice(theChanUser->getClient(), "%s is not allowed to be voiced in %s due to STRICTVOICE",
+							tmpUser->getNickName().c_str(), reggedChan->getName().c_str());
 					Notice(tmpUser->getClient(), "You are not allowed to be voiced in %s",
 								 reggedChan->getName().c_str());
 					devoiceList.push_back(tmpUser->getClient());
