@@ -18,11 +18,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: Network.h,v 1.2 2002-07-01 00:16:13 jeekay Exp $
+ * $Id: Network.h,v 1.3 2002-07-27 14:54:06 jeekay Exp $
  */
 
 #ifndef __NETWORK_H
-#define __NETWORK_H "$Id: Network.h,v 1.2 2002-07-01 00:16:13 jeekay Exp $"
+#define __NETWORK_H "$Id: Network.h,v 1.3 2002-07-27 14:54:06 jeekay Exp $"
 
 #include	<vector>
 #include	<string>
@@ -37,21 +37,10 @@
 #include	"Channel.h"
 #include	"client.h"
 #include	"misc.h" // struct noCaseCompare
-#include	"defs.h"
-
-/**
-#ifdef GNU_EXTENSIONS
- #include	<ext/hash_map>
-#else
- #include	<hash_map>
-#endif
-*/
 
 namespace gnuworld
 {
 
-//using HASHMAPNS::hash_map ;
-//using HASHMAPNS::hash ;
 using std::string ;
 using std::vector ;
 using std::map ;
@@ -84,27 +73,23 @@ private:
 	 * instances.
 	 */
 	typedef map< string, Channel*, noCaseCompare > channelMapType ;
-//	typedef hash_map< string, Channel*, eHash, eqstr > channelMapType ;
 
 	/**
 	 * This is the type used to store the nick name/iClient* pairs.
 	 */
 	typedef map< string, iClient*, noCaseCompare > nickMapType ;
-//	typedef hash_map< string, iClient*, eHash, eqstr > nickMapType ;
 
 	/**
 	 * The type used to store information about iClient's,
 	 * keyed by integer numeric.
 	 */
 	typedef map< unsigned int, iClient* > numericMapType ;
-//	typedef hash_map< unsigned int, iClient* > numericMapType ;
 
 	/**
 	 * The type used to store information about iServer's,
 	 * keyed by integer numeric.
 	 */
 	typedef map< unsigned int, iServer* > serverMapType ;
-//	typedef hash_map< unsigned int, iServer* > serverMapType ;
 
 public:
 

@@ -22,7 +22,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.34 2002-07-01 00:29:59 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.35 2002-07-27 14:54:11 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -660,7 +660,7 @@ void nickserv::checkDBConnectionStatus( void )
 			if(dbConnRetries >= dbConnCheckMax)
 				{
 				logDebugMessage("\002ERROR:\002 Unable to reconnect to database.");
-				MyUplink->flushBuffer();
+				//MyUplink->flushBuffer();
 				::exit(0);
 				} // Max retries exceeded
 			else

@@ -20,11 +20,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: ip.h,v 1.2 2002-07-01 00:16:14 jeekay Exp $
+ * $Id: ip.h,v 1.3 2002-07-27 14:54:07 jeekay Exp $
  */
 
 #ifndef __IP_H
-#define __IP_H "$Id: ip.h,v 1.2 2002-07-01 00:16:14 jeekay Exp $"
+#define __IP_H "$Id: ip.h,v 1.3 2002-07-27 14:54:07 jeekay Exp $"
 
 #include	<string>
 

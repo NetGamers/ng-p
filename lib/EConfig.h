@@ -16,11 +16,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: EConfig.h,v 1.2 2002-07-01 00:18:21 jeekay Exp $
+ * $Id: EConfig.h,v 1.3 2002-07-27 14:54:08 jeekay Exp $
  */
 
 #ifndef __ECONFIG_H
-#define __ECONFIG_H "$Id: EConfig.h,v 1.2 2002-07-01 00:18:21 jeekay Exp $"
+#define __ECONFIG_H "$Id: EConfig.h,v 1.3 2002-07-27 14:54:08 jeekay Exp $"
 
 #include	<iostream>
 #include	<string>
@@ -53,12 +53,12 @@ using std::multimap ;
 class EConfig
 {
 
-public:
-
 	/**
 	 * The type of the map used to store the key/value pairs.
 	 */
 	typedef multimap< string, string, noCaseCompare > mapType ;
+
+public:
 
 	/**
 	 * The pair type for the mapType, it holds the key/value pairs.

@@ -1,7 +1,7 @@
 /* include/defs.h.  Generated automatically by configure.  */
 /* include/defs.h.in.  Generated automatically from configure.in by autoheader.  */
 #ifndef __DEFS_H
-#define __DEFS_H "$Id: defs.h,v 1.1 2002-07-01 00:16:13 jeekay Exp $"
+#define __DEFS_H "$Id: defs.h,v 1.2 2002-07-27 14:54:07 jeekay Exp $"
 
 /* Define to `unsigned int' if <sys/types.h> doesn't define.  */
 /* #undef size_t */

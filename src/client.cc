@@ -1,6 +1,6 @@
 /*
  * client.cc
- * $Id: client.cc,v 1.2 2002-07-01 00:28:26 jeekay Exp $
+ * $Id: client.cc,v 1.3 2002-07-27 14:54:12 jeekay Exp $
  */
 
 #include	<new>
@@ -30,7 +30,7 @@
 #include	"events.h"
 
 const char xClient_h_rcsId[] = __CLIENT_H ;
-const char xClient_cc_rcsId[] = "$Id: client.cc,v 1.2 2002-07-01 00:28:26 jeekay Exp $" ;
+const char xClient_cc_rcsId[] = "$Id: client.cc,v 1.3 2002-07-27 14:54:12 jeekay Exp $" ;
 const char config_h_rcsId[] = __CONFIG_H ;
 const char misc_h_rcsId[] = __MISC_H ;
 const char Numeric_h_rcsId[] = __NUMERIC_H ;

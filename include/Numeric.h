@@ -19,11 +19,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: Numeric.h,v 1.2 2002-07-01 00:16:13 jeekay Exp $
+ * $Id: Numeric.h,v 1.3 2002-07-27 14:54:06 jeekay Exp $
  */
 
 #ifndef __NUMERIC_H
-#define __NUMERIC_H "$Id: Numeric.h,v 1.2 2002-07-01 00:16:13 jeekay Exp $"
+#define __NUMERIC_H "$Id: Numeric.h,v 1.3 2002-07-27 14:54:06 jeekay Exp $"
 
 /*
  * Numeric nicks are new as of version ircu2.10.00beta1.

@@ -23,7 +23,7 @@
  */
 
 #ifndef __BUFFER_H
-#define __BUFFER_H "$Id: Buffer.h,v 1.2 2002-07-01 00:18:20 jeekay Exp $"
+#define __BUFFER_H "$Id: Buffer.h,v 1.3 2002-07-27 14:54:08 jeekay Exp $"
 
 #include	<iostream>
 #include	<string>
@@ -147,6 +147,15 @@ public:
 	 */
 	inline const char*	c_str() const
 		{ return buf.c_str() ; }
+
+	/**
+	 * Return a pointer to the character array representation
+	 * of this buffer.
+	 * Note that conforming to the C++ standard on std::string,
+	 * this data may NOT be null terminated.
+	 */
+	inline const char*	data() const
+		{ return buf.data() ; }
 
 	/**
 	 * Concatenate the given character array onto the end of

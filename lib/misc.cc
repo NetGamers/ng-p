@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: misc.cc,v 1.2 2002-07-01 00:18:23 jeekay Exp $
+ * $Id: misc.cc,v 1.3 2002-07-27 14:54:10 jeekay Exp $
  */
 
 #include	<string>
@@ -32,7 +32,7 @@
 #include	"misc.h"
 
 const char Misc_h_rcsId[] = __MISC_H ;
-const char Misc_cc_rcsId[] = "$Id: misc.cc,v 1.2 2002-07-01 00:18:23 jeekay Exp $" ;
+const char Misc_cc_rcsId[] = "$Id: misc.cc,v 1.3 2002-07-27 14:54:10 jeekay Exp $" ;
 
 namespace gnuworld
 {

@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: ELog.cc,v 1.2 2002-07-01 00:18:21 jeekay Exp $
+ * $Id: ELog.cc,v 1.3 2002-07-27 14:54:09 jeekay Exp $
  */
 
 #include	<iostream>
@@ -30,7 +30,7 @@
 #include	"ELog.h"
 
 const char ELog_h_rcsId[] = __ELOG_H ;
-const char ELog_cc_rcsId[] = "$Id: ELog.cc,v 1.2 2002-07-01 00:18:21 jeekay Exp $" ;
+const char ELog_cc_rcsId[] = "$Id: ELog.cc,v 1.3 2002-07-27 14:54:09 jeekay Exp $" ;
 const char config_h_rcsId[] = __CONFIG_H ;
 
 namespace gnuworld
@@ -176,6 +176,15 @@ ELog& ELog::operator<<( stringstream& s )
   outFile << s.str() ;
 #endif
 if( outStream ) *outStream << s.str() ;
+return *this ;
+}
+
+ELog& ELog::operator<<( const double& var )
+{
+#ifdef EDEBUG
+  outFile << var ;
+#endif
+if( outStream ) *outStream << var ;
 return *this ;
 }
 

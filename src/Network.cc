@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: Network.cc,v 1.2 2002-07-01 00:28:26 jeekay Exp $
+ * $Id: Network.cc,v 1.3 2002-07-27 14:54:11 jeekay Exp $
  */
 
 #include	<new>
@@ -51,7 +51,7 @@
 */
 
 const char xNetwork_h_rcsId[] = __NETWORK_H ;
-const char xNetwork_cc_rcsId[] = "$Id: Network.cc,v 1.2 2002-07-01 00:28:26 jeekay Exp $" ;
+const char xNetwork_cc_rcsId[] = "$Id: Network.cc,v 1.3 2002-07-27 14:54:11 jeekay Exp $" ;
 const char ELog_h_rcsId[] = __ELOG_H ;
 const char iClient_h_rcsId[] = __ICLIENT_H ;
 const char Channel_h_rcsId[] = __CHANNEL_H ;
@@ -369,16 +369,16 @@ while( chanPtr != retMe->channels_end() )
 
 	if( (*chanPtr)->empty() )
 		{
-		elog	<< "xNetwork::removeClient> Removing channel "
-			<< (*chanPtr)->getName()
-			<< endl ;
+//		elog	<< "xNetwork::removeClient> Removing channel "
+//			<< (*chanPtr)->getName()
+//			<< endl ;
 
 		delete removeChannel( (*chanPtr)->getName() ) ;
 		}
 	++chanPtr ;
 	}
-retMe->clearChannels() ;
 
+retMe->clearChannels() ;
 return retMe ;
 }
 

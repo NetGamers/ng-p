@@ -1,4 +1,6 @@
-.deps .libs
 Makefile
-libgnuworld_db.la
-*.lo
+gnuworldDB.o
+gnuworldDB.lo
+gnuworldDB.la
+gnuworldDB.a
+gnuworldDB.so

@@ -16,14 +16,16 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: xparameters.h,v 1.2 2002-07-01 00:18:23 jeekay Exp $
+ * $Id: xparameters.h,v 1.3 2002-07-27 14:54:10 jeekay Exp $
  */
 
 #ifndef __XPARAMETERS_H
-#define __XPARAMETERS_H "$Id: xparameters.h,v 1.2 2002-07-01 00:18:23 jeekay Exp $"
+#define __XPARAMETERS_H "$Id: xparameters.h,v 1.3 2002-07-27 14:54:10 jeekay Exp $"
 
 #include        <vector>
 #include	<cassert>
+
+#include	"ELog.h"
 
 namespace gnuworld
 {
@@ -120,6 +122,30 @@ public:
 	 */
 	inline bool validSubscript( const size_type& i ) const
 		{ return (i < myVector.size()) ; }
+
+	/**
+	 * A simple operator to output an xParameters object to
+	 * an ELog stream.
+	 */
+	friend ELog& operator<<( ELog& out, const xParameters& param )
+		{
+		// Iterate through to each element
+		for( size_type i = 0 ; i < param.size() ; ++i )
+			{
+			// Place this element into the ELog stream
+			out	<< param[ i ] ;
+
+			// If there is at least one more token left,
+			// place a space character into the stream
+			if( (i + 1) < param.size() )
+				{
+				out	<< ' ' ;
+				}
+			}
+		// Return the ELog stream so that it may be used
+		// for further pipelining of output
+		return out ;
+		}
 
 protected:
 

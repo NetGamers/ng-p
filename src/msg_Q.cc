@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: msg_Q.cc,v 1.2 2002-07-01 00:28:30 jeekay Exp $
+ * $Id: msg_Q.cc,v 1.3 2002-07-27 14:54:15 jeekay Exp $
  */
 
 #include	<iostream>
@@ -28,8 +28,9 @@
 #include	"iClient.h"
 #include	"Network.h"
 #include	"ELog.h"
+#include	"ServerCommandHandler.h"
 
-const char msg_Q_cc_rcsId[] = "$Id: msg_Q.cc,v 1.2 2002-07-01 00:28:30 jeekay Exp $" ;
+const char msg_Q_cc_rcsId[] = "$Id: msg_Q.cc,v 1.3 2002-07-27 14:54:15 jeekay Exp $" ;
 const char server_h_rcsId[] = __SERVER_H ;
 const char events_h_rcsId[] = __EVENTS_H ;
 const char Network_h_rcsId[] = __NETWORK_H ;
@@ -42,36 +43,38 @@ namespace gnuworld
 
 using std::endl ;
 
+CREATE_HANDLER(msg_Q)
+
 /**
  * A client has quit.
  * QAE Q :Signed off
  */
-int xServer::MSG_Q( xParameters& Param )
+bool msg_Q::Execute( const xParameters& Param )
 {
 
 if( Param.size() < 1 )
 	{
-	elog	<< "xServer::MSG_Q> Invalid number of parameters"
+	elog	<< "msg_Q> Invalid number of parameters"
 		<< endl ;
-	return -1 ;
+	return false ;
 	}
 
 // xNetwork::removeClient will remove user<->channel associations
 iClient* theClient = Network->removeClient( Param[ 0 ] ) ;
 if( NULL == theClient )
 	{
-	elog	<< "xServer::MSG_Q> Unable to find client: "
+	elog	<< "msg_Q> Unable to find client: "
 		<< Param[ 0 ]
 		<< endl ;
-	return -1 ;
+	return false ;
 	}
 
-PostEvent( EVT_QUIT, static_cast< void* >( theClient ) ) ;
+theServer->PostEvent( EVT_QUIT, static_cast< void* >( theClient ) ) ;
 
 // xNetwork::removeClient() will remove channel->user associations.
 delete theClient ;
 
-return 0 ;
+return true ;
 }
 
 } // namespace gnuworld

@@ -17,25 +17,29 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: msg_JU.cc,v 1.2 2002-07-01 00:28:28 jeekay Exp $
+ * $Id: msg_JU.cc,v 1.3 2002-07-27 14:54:14 jeekay Exp $
  */
 
 #include	"server.h"
 #include	"xparameters.h"
+#include	"ServerCommandHandler.h"
 
 const char server_h_rcsId[] = __SERVER_H ;
 const char xparameters_h_rcsId[] = __XPARAMETERS_H ;
-const char msg_JU_cc_rcsId[] = "$Id: msg_JU.cc,v 1.2 2002-07-01 00:28:28 jeekay Exp $" ;
+const char msg_JU_cc_rcsId[] = "$Id: msg_JU.cc,v 1.3 2002-07-27 14:54:14 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
+CREATE_HANDLER(msg_JU)
+
 /**
  * JUPE message handler.
  */
-int xServer::MSG_JU( xParameters& param )
+bool msg_JU::Execute( const xParameters& Param )
 {
-return 0 ;
+// TODO
+return false ;
 }
 
 } // namespace gnuworld

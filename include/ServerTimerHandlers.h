@@ -17,11 +17,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: ServerTimerHandlers.h,v 1.2 2002-07-01 00:16:13 jeekay Exp $
+ * $Id: ServerTimerHandlers.h,v 1.3 2002-07-27 14:54:06 jeekay Exp $
  */
 
 #ifndef __SERVERTIMERHANDLERS_H
-#define __SERVERTIMERHANDLERS_H "$Id: ServerTimerHandlers.h,v 1.2 2002-07-01 00:16:13 jeekay Exp $"
+#define __SERVERTIMERHANDLERS_H "$Id: ServerTimerHandlers.h,v 1.3 2002-07-27 14:54:06 jeekay Exp $"
 
 #include	"TimerHandler.h"
 

@@ -25,7 +25,7 @@
 #include	"Buffer.h"
 
 const char Buffer_h_rcsId[] = __BUFFER_H ;
-const char Buffer_cc_rcsId[] = "$Id: Buffer.cc,v 1.2 2002-07-01 00:18:20 jeekay Exp $" ;
+const char Buffer_cc_rcsId[] = "$Id: Buffer.cc,v 1.3 2002-07-27 14:54:08 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -72,7 +72,6 @@ retMe = buf.substr( 0, pos + 1 ) ;
 buf.erase( 0, pos + 1 ) ;
 
 return true ;
-
 }
 
 // Delete numBytes bytes from the beginning

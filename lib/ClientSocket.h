@@ -19,7 +19,7 @@
  */
 
 #ifndef __CLIENTSOCKET_H
-#define __CLIENTSOCKET_H "$Id: ClientSocket.h,v 1.2 2002-07-01 00:18:20 jeekay Exp $"
+#define __CLIENTSOCKET_H "$Id: ClientSocket.h,v 1.3 2002-07-27 14:54:08 jeekay Exp $"
 
 #include	<string>
 

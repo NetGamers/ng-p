@@ -18,14 +18,14 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: gnuworldDB.cc,v 1.2 2002-07-01 00:14:22 jeekay Exp $
+ * $Id: gnuworldDB.cc,v 1.3 2002-07-27 14:54:05 jeekay Exp $
  */
 
 #include	<string>
 
 #include	"gnuworldDB.h"
 
-const char gnuworldDB_cc_rcsId[] = "$Id: gnuworldDB.cc,v 1.2 2002-07-01 00:14:22 jeekay Exp $" ;
+const char gnuworldDB_cc_rcsId[] = "$Id: gnuworldDB.cc,v 1.3 2002-07-27 14:54:05 jeekay Exp $" ;
 const char gnuworldDB_h_rcsId[] = __GNUWORLDDB_H ;
 
 namespace gnuworld

@@ -27,7 +27,7 @@
 #include	"ELog.h"
 
 const char ClientSocket_h_rcsId[] = __CLIENTSOCKET_H ;
-const char ClientSocket_cc_rcsId[] = "$Id: ClientSocket.cc,v 1.2 2002-07-01 00:18:20 jeekay Exp $" ;
+const char ClientSocket_cc_rcsId[] = "$Id: ClientSocket.cc,v 1.3 2002-07-27 14:54:08 jeekay Exp $" ;
 const char ELog_h_rcsId[] = __ELOG_H ;
 
 namespace gnuworld

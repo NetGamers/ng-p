@@ -17,25 +17,28 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: msg_DS.cc,v 1.2 2002-07-01 00:28:27 jeekay Exp $
+ * $Id: msg_DS.cc,v 1.3 2002-07-27 14:54:13 jeekay Exp $
  */
 
 #include	"server.h"
 #include	"xparameters.h"
+#include	"ServerCommandHandler.h"
 
 const char server_h_rcsId[] = __SERVER_H ;
 const char xparameters_h_rcsId[] = __XPARAMETERS_H ;
-const char msg_DS_cc_rcsId[] = "$Id: msg_DS.cc,v 1.2 2002-07-01 00:28:27 jeekay Exp $" ;
+const char msg_DS_cc_rcsId[] = "$Id: msg_DS.cc,v 1.3 2002-07-27 14:54:13 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
+CREATE_HANDLER(msg_DS)
+
 // DeSynch handler?
 // 0 DS :HACK: JavaDude MODE #irc.core.com +smtink lamers [957881646]
-int xServer::MSG_DS( xParameters& )
+bool msg_DS::Execute( const xParameters& )
 {
 // TODO
-return 0 ;
+return true ;
 }
 
 } // namespace gnuworld

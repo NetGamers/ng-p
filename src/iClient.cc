@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: iClient.cc,v 1.2 2002-07-01 00:28:26 jeekay Exp $
+ * $Id: iClient.cc,v 1.3 2002-07-27 14:54:12 jeekay Exp $
  */
 
 #include	<new>
@@ -35,7 +35,7 @@
 #include	"ip.h"
 
 const char iClient_h_rcsId[] = __ICLIENT_H ;
-const char iClient_cc_rcsId[] = "$Id: iClient.cc,v 1.2 2002-07-01 00:28:26 jeekay Exp $" ;
+const char iClient_cc_rcsId[] = "$Id: iClient.cc,v 1.3 2002-07-27 14:54:12 jeekay Exp $" ;
 const char client_h_rcsId[] = __CLIENT_H ;
 const char Numeric_h_rcsId[] = __NUMERIC_H ;
 const char ip_h_rcsId[] = __IP_H ;

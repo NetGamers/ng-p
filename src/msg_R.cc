@@ -17,26 +17,28 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: msg_R.cc,v 1.2 2002-07-01 00:28:30 jeekay Exp $
+ * $Id: msg_R.cc,v 1.3 2002-07-27 14:54:15 jeekay Exp $
  */
 
 #include	"server.h"
 #include	"xparameters.h"
+#include	"ServerCommandHandler.h"
 
-const char msg_R_cc_rcsId[] = "$Id: msg_R.cc,v 1.2 2002-07-01 00:28:30 jeekay Exp $" ;
+const char msg_R_cc_rcsId[] = "$Id: msg_R.cc,v 1.3 2002-07-27 14:54:15 jeekay Exp $" ;
 const char server_h_rcsId[] = __SERVER_H ;
 const char xParameters_h_rcsId[] = __XPARAMETERS_H ;
 
 namespace gnuworld
 {
 
+CREATE_HANDLER(msg_R)
+
 // STATS
 // kAB R O :AI
 //
-int xServer::MSG_R( xParameters& )
+bool msg_R::Execute( const xParameters& )
 {
-// TODO: Post message
-return 0 ;
+return false ;
 }
 
 } // namespace gnuworld

@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: Socket.cc,v 1.2 2002-07-01 00:18:22 jeekay Exp $
+ * $Id: Socket.cc,v 1.3 2002-07-27 14:54:09 jeekay Exp $
  */
 
 #include	<new>
@@ -54,7 +54,7 @@
 #endif
 
 const char Socket_h_rcsId[] = __SOCKET_H ;
-const char Socket_cc_rcsId[] = "$Id: Socket.cc,v 1.2 2002-07-01 00:18:22 jeekay Exp $" ;
+const char Socket_cc_rcsId[] = "$Id: Socket.cc,v 1.3 2002-07-27 14:54:09 jeekay Exp $" ;
 const char ELog_h_rcsId[] = __ELOG_H ;
 
 namespace gnuworld
@@ -474,7 +474,7 @@ short int cnt = 10 ;
 do
 	{
 	errno = 0 ;
-	result = ::send( fd, val.c_str(), numBytes, 0 ) ;
+	result = ::send( fd, val.data(), numBytes, 0 ) ;
 	} while( (result < 0) &&
 		(--cnt >= 0) &&
 		(EINTR == errno) ) ;

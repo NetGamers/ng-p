@@ -17,11 +17,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: gnuworldDB.h,v 1.2 2002-07-01 00:14:22 jeekay Exp $
+ * $Id: gnuworldDB.h,v 1.3 2002-07-27 14:54:05 jeekay Exp $
  */
 
 #ifndef __GNUWORLDDB_H
-#define __GNUWORLDDB_H "$Id: gnuworldDB.h,v 1.2 2002-07-01 00:14:22 jeekay Exp $"
+#define __GNUWORLDDB_H "$Id: gnuworldDB.h,v 1.3 2002-07-27 14:54:05 jeekay Exp $"
 
 #include	<string>
 #include	<sstream>

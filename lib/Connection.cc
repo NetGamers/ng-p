@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: Connection.cc,v 1.1 2002-07-01 00:18:21 jeekay Exp $
+ * $Id: Connection.cc,v 1.2 2002-07-27 14:54:08 jeekay Exp $
  */
 
 #include	<sys/types.h>
@@ -33,10 +33,6 @@
 
 #include	"Connection.h"
 #include	"Buffer.h"
-
-const char Connection_h_rcsId[] = __CONNECTION_H ;
-const char Connection_cc_rcsId[] = "$Id: Connection.cc,v 1.1 2002-07-01 00:18:21 jeekay Exp $" ;
-const char Buffer_h_rcsId[] = __BUFFER_H ;
 
 namespace gnuworld
 {

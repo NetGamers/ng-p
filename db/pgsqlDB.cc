@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: pgsqlDB.cc,v 1.1 2002-07-01 00:14:22 jeekay Exp $
+ * $Id: pgsqlDB.cc,v 1.2 2002-07-27 14:54:05 jeekay Exp $
  */
 
 #include	<sys/types.h>
@@ -32,7 +32,7 @@
 #include	"gnuworldDB.h"
 #include	"pgsqlDB.h"
 
-const char pgsqlDB_cc_rcsId[] = "$Id: pgsqlDB.cc,v 1.1 2002-07-01 00:14:22 jeekay Exp $" ;
+const char pgsqlDB_cc_rcsId[] = "$Id: pgsqlDB.cc,v 1.2 2002-07-27 14:54:05 jeekay Exp $" ;
 const char pgsqlDB_h_rcsId[] = __PGSQLDB_H ;
 
 namespace gnuworld

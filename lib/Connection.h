@@ -18,11 +18,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: Connection.h,v 1.1 2002-07-01 00:18:21 jeekay Exp $
+ * $Id: Connection.h,v 1.2 2002-07-27 14:54:08 jeekay Exp $
  */
 
 #ifndef __CONNECTION_H
-#define __CONNECTION_H "$Id: Connection.h,v 1.1 2002-07-01 00:18:21 jeekay Exp $"
+#define __CONNECTION_H "$Id: Connection.h,v 1.2 2002-07-27 14:54:08 jeekay Exp $"
 
 #include	<sys/types.h>
 #include	<netinet/in.h>
@@ -44,13 +44,8 @@ using std::string ;
 using std::ostream ;
 using std::endl ;
 
-using gnuworld::Buffer ;
-
 /// Forward declaration of the manager class
 class ConnectionManager ;
-
-/// Forward declaration of the handler class
-class ConnectionHandler ;
 
 /**
  * This class represents an individual connection to be used with
@@ -63,10 +58,6 @@ class Connection
 	/// Allow the manager class to have access to this class's
 	/// protected members
 	friend class ConnectionManager ;
-
-	/// Allow the handler class to have access to this class's
-	/// protected members (outputBuffer)
-	friend class ConnectionHandler ;
 
 public:
 

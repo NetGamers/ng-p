@@ -17,25 +17,26 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: msg_WA.cc,v 1.2 2002-07-01 00:28:31 jeekay Exp $
+ * $Id: msg_WA.cc,v 1.3 2002-07-27 14:54:16 jeekay Exp $
  */
 
 #include	"server.h"
 #include	"xparameters.h"
+#include	"ServerCommandHandler.h"
 
-const char msg_WA_cc_rcsId[] = "$Id: msg_WA.cc,v 1.2 2002-07-01 00:28:31 jeekay Exp $" ;
+const char msg_WA_cc_rcsId[] = "$Id: msg_WA.cc,v 1.3 2002-07-27 14:54:16 jeekay Exp $" ;
 const char server_h_rcsId[] = __SERVER_H ;
 const char xParameters_h_rcsId[] = __XPARAMETERS_H ;
 
 namespace gnuworld
 {
 
-// WALLOPS
-int xServer::MSG_WA( xParameters& )
-{
-// TODO: Post message
-return 0;
-}
+CREATE_HANDLER(msg_WA)
 
+// WALLOPS
+bool msg_WA::Execute( const xParameters& )
+{
+return false ;
+}
 
 } // namespace gnuworld

@@ -18,11 +18,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: StringTokenizer.h,v 1.2 2002-07-01 00:18:22 jeekay Exp $
+ * $Id: StringTokenizer.h,v 1.3 2002-07-27 14:54:09 jeekay Exp $
  */
 
 #ifndef __STRINGTOKENIZER_H
-#define __STRINGTOKENIZER_H "$Id: StringTokenizer.h,v 1.2 2002-07-01 00:18:22 jeekay Exp $"
+#define __STRINGTOKENIZER_H "$Id: StringTokenizer.h,v 1.3 2002-07-27 14:54:09 jeekay Exp $"
 
 #include	<vector>
 #include	<string>

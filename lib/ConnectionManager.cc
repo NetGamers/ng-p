@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: ConnectionManager.cc,v 1.1 2002-07-01 00:18:21 jeekay Exp $
+ * $Id: ConnectionManager.cc,v 1.2 2002-07-27 14:54:08 jeekay Exp $
  */
 
 #include	<unistd.h>
@@ -31,14 +31,12 @@
 #include	<netinet/in.h>
 #include	<arpa/inet.h>
 #include	<netdb.h>
-#include	<pthread.h>
 
 #include	<new>
 #include	<map>
 #include	<string>
 #include	<sstream>
 #include	<iostream>
-#include	<algorithm>
 
 #include	<ctime>
 #include	<cctype>
@@ -50,15 +48,9 @@
 
 #include	"ConnectionManager.h"
 #include	"Connection.h"
+#include	"ConnectionHandler.h"
 #include	"Buffer.h"
-
-const char ConnectionManager_h_rcsId[] = __CONNECTIONMANAGER_H ;
-const char ConnectionManager_cc_rcsId[] = "$Id: ConnectionManager.cc,v 1.1 2002-07-01 00:18:21 jeekay Exp $" ;
-const char Connection_h_rcsId[] = __CONNECTION_H ;
-const char Buffer_h_rcsId[] = __BUFFER_H ;
-
-namespace gnuworld
-{
+#include	"ELog.h"
 
 using std::cout ;
 using std::endl ;
@@ -66,48 +58,57 @@ using std::string ;
 using std::map ;
 using std::nothrow ;
 using std::stringstream ;
-using gnuworld::Buffer ;
+
+namespace gnuworld
+{
 
 ConnectionManager::ConnectionManager( const time_t defaultTimeoutDuration,
 	const char defaultDelimiter )
 :	timeoutDuration( defaultTimeoutDuration ),
 	delimiter( defaultDelimiter )
-{
-::pthread_cond_init( &condWait, 0 ) ;
-::pthread_mutex_init( &condMutex, 0 ) ;
-}
+{}
 
 ConnectionManager::~ConnectionManager()
 {
-// Just be clean about it and clear the eraseMap now
+// There is no reason to iterate through the eraseMap because
+// that structure simply holds iterators to the connectionMap.
+// Since the below loop invalidates all of those iterators, let's
+// just be clean about it and clear the eraseMap now
 eraseMap.clear() ;
 
 // Iterate through the list of currently active/pending
 // Connections
-for( connectionMapIterator connectionItr = connectionMap.begin() ;
-	connectionItr != connectionMap.end() ; ++connectionItr )
+for( handlerMapIterator handlerItr = handlerMap.begin() ;
+	handlerItr != handlerMap.end() ; ++handlerItr )
 	{
-	// Convenience variable
-	// Obtain a pointer to the Connection object
-	Connection* connectionPtr = *connectionItr ;
+	for( connectionMapIterator connectionItr = 
+		handlerItr->second.begin() ;
+		connectionItr != handlerItr->second.end() ;
+		++connectionItr )
+		{
+		// Convenience variable
+		// Obtain a pointer to the Connection object
+		Connection* connectionPtr = *connectionItr ;
 
-	// Close this Connection's socket
-	closeSocket( connectionPtr->getSockFD() ) ;
+		// Close this Connection's socket
+		closeSocket( connectionPtr->getSockFD() ) ;
 
-	// Deallocate the space for this Connection object
-	delete connectionPtr ;
+		// Deallocate the space for this Connection object
+		delete connectionPtr ;
+		}
 	}
 
 // Clean up, even if not strictly necessary, it's good habit
-connectionMap.clear() ;
-
-// No threads waiting on this condition
-::pthread_cond_destroy( &condWait ) ;
+handlerMap.clear() ;
 }
 
-Connection* ConnectionManager::Connect( const string& host,
+Connection* ConnectionManager::Connect( ConnectionHandler* hPtr,
+	const string& host,
 	const unsigned short int remotePort )
 {
+
+// Handler must be valid
+assert( hPtr != 0 ) ;
 
 // An empty host is invalid
 if( host.empty() )
@@ -151,8 +152,7 @@ else
 		delete newConnection ; newConnection = 0 ;
 
 		cout	<< "ConnectionManager::Connect> Unable "
-			<< "to find valid IP for "
-			<< host
+			<< "to find valid IP"
 			<< endl ;
 
 		return 0 ;
@@ -224,14 +224,34 @@ if( ::connect( sockFD, reinterpret_cast< sockaddr* >( addr ),
 		} // switch()
 	} // if()
 
-if( 0 == newConnection )
+if( newConnection != 0 )
 	{
-	return 0 ;
-	}
-
 //	cout	<< "Connect> Adding new connection attempt: "
 //		<< *newConnection
 //		<< endl ;
+
+	// Connection in progress
+	// Add to the handlerMap
+	bool insertOK = handlerMap[ hPtr ].insert( newConnection ).second ;
+
+	// It's possible the connection could fail (?)
+	// Either way, the container is nice enough to tell us
+	// if it was successful, so let's check.
+	if( !insertOK )
+		{
+		// Insertion failed
+		// Close the socket
+		closeSocket( newConnection->getSockFD() ) ;
+
+		cout	<< "ConnectionManager::Connect> Failed to "
+			<< "add new connection to handlerMap: "
+			<< *newConnection
+			<< endl ;
+
+		// Deallocate and set to 0 for return to caller
+		delete newConnection ; newConnection = 0 ;
+		}
+	}
 
 // Obtain the local machine's port number for this Connection
 struct sockaddr_in sockAddr ;
@@ -250,41 +270,41 @@ if( ::getsockname( newConnection->getSockFD(),
 		<< strerror( errno )
 		<< endl ;
 
-	// Close socket and clean up memory
-	delete newConnection ; newConnection = 0 ;
-
 	// Return failure
-	return 0 ;
+	return false ;
 	}
 
 // Update remote port number for this Connection
 newConnection->setLocalPort( ntohs( sockAddr.sin_port ) ) ;
-
-// Connection in progress
-connectionMap.insert( newConnection ) ;
-
-// Notify the thread, should it be waiting for something to do
-::pthread_cond_signal( &condWait ) ;
 
 // Return a pointer to the Connection object, whether or not
 // it's NULL
 return newConnection ;
 }
 
-bool ConnectionManager::DisconnectByHost( const string& hostname,
+bool ConnectionManager::DisconnectByHost( ConnectionHandler* hPtr,
+	const string& hostname,
 	const unsigned short int remotePort,
 	const unsigned short int localPort )
 {
+// Public method, check method arguments
+assert( hPtr != 0 ) ;
+
 // An empty hostname is ok here, it indicates that a listening
 // Connection is to be removed from the given port
 
-// This variable is used so that a pthread_cond_signal() can be
-// invoked only from a single spot in this method
-bool foundItem = false ;
+// Attempt to find the handler in the handlerMap
+handlerMapIterator handlerItr = handlerMap.find( hPtr ) ;
+if( handlerItr == handlerMap.end() )
+	{
+	// This ConnectionHandler has no Connections registered
+	// *shrug*
+	return false ;
+	}
 
 // Walk the connectionMap, looking for one or more matching Connections
-for( connectionMapIterator connectionItr = connectionMap.begin(),
-	connectionEndItr = connectionMap.end() ;
+for( connectionMapIterator connectionItr = handlerItr->second.begin(),
+	connectionEndItr = handlerItr->second.end() ;
 	connectionItr != connectionEndItr ; ++connectionItr )
 	{
 	// Store the address of the Connection object in cPtr
@@ -302,10 +322,14 @@ for( connectionMapIterator connectionItr = connectionMap.begin(),
 		if( localPort == cPtr->getLocalPort() )
 			{
 			// Found the listener we seek
-			scheduleErasure( connectionItr ) ;
+			scheduleErasure( hPtr, connectionItr ) ;
 
-			foundItem = true ;
-			break ;
+			// Since a machine (in most cases, in this
+			// one at least) may only have a single
+			// listener for a given port, there is no
+			// use in continuing with this loop.
+			// Return success
+			return true ;
 			}
 		}
 
@@ -330,9 +354,8 @@ for( connectionMapIterator connectionItr = connectionMap.begin(),
 		if( 0 == localPort )
 			{
 			// Remove all
-			scheduleErasure( connectionItr ) ;
+			scheduleErasure( hPtr, connectionItr ) ;
 
-			foundItem = true ;
 			// Keep going until end of connectionMap
 			}
 
@@ -340,36 +363,47 @@ for( connectionMapIterator connectionItr = connectionMap.begin(),
 		else if( localPort == cPtr->getLocalPort() )
 			{
 			// Exact match
-			scheduleErasure( connectionItr ) ;
+			scheduleErasure( hPtr, connectionItr ) ;
 
-			foundItem = true ;
-			break ;
+			// Since there can only be a single (by
+			// definition of TCP connections) connection
+			// based on a unique set of hostname/localport/
+			// remoteport, there is no need to continue
+			// looking for more matches: there are none.
+			return true ;
 			}
 		} // if( hostname == ... )
 	} // for()
 
-if( foundItem )
-	{
-	::pthread_cond_signal( &condWait ) ;
-	}
-
-return foundItem ;
+// Unable to find a matching Connection, return failure
+return false ;
 }
 
-bool ConnectionManager::DisconnectByIP( const string& IP,
+bool ConnectionManager::DisconnectByIP( ConnectionHandler* hPtr,
+	const string& IP,
 	const unsigned short int remotePort,
 	const unsigned short int localPort )
 {
+// Public method, check args
+assert( hPtr != 0 ) ;
+
 // An empty IP is ok here, it indicates that a listening Connection
 // is to be removed from the given port
 
-// This variable is used so that a pthread_cond_signal() can be
-// invoked only from a single spot in this method
-bool foundItem = false ;
+// Attempt to lookup the given handler
+// handlerItr will be equivalent to handlerMap.end() if the handler
+// is not found.
+handlerMapIterator handlerItr = handlerMap.find( hPtr ) ;
+if( handlerItr == handlerMap.end() )
+	{
+	// This ConnectionHandler has no Connections registered
+	// *shrug*
+	return false ;
+	}
 
 // Walk the connectionMap, looking for one or more matching Connections
-for( connectionMapIterator connectionItr = connectionMap.begin(),
-	connectionEndItr = connectionMap.end() ;
+for( connectionMapIterator connectionItr = handlerItr->second.begin(),
+	connectionEndItr = handlerItr->second.end() ;
 	connectionItr != connectionEndItr ; ++connectionItr )
 	{
 	// Store the address of the Connection object in cPtr
@@ -387,10 +421,14 @@ for( connectionMapIterator connectionItr = connectionMap.begin(),
 		if( localPort == cPtr->getLocalPort() )
 			{
 			// Found the listener we seek
-			scheduleErasure( connectionItr ) ;
+			scheduleErasure( hPtr, connectionItr ) ;
 
-			foundItem = true ;
-			break ;
+			// Since a machine (in most cases, in this
+			// one at least) may only have a single
+			// listener for a given port, there is no
+			// use in continuing with this loop.
+			// Return success
+			return true ;
 			}
 		}
 
@@ -415,9 +453,8 @@ for( connectionMapIterator connectionItr = connectionMap.begin(),
 		if( 0 == localPort )
 			{
 			// Remove all
-			scheduleErasure( connectionItr ) ;
+			scheduleErasure( hPtr, connectionItr ) ;
 
-			foundItem = true ;
 			// Keep going until end of connectionMap
 			}
 
@@ -425,30 +462,40 @@ for( connectionMapIterator connectionItr = connectionMap.begin(),
 		else if( localPort == cPtr->getLocalPort() )
 			{
 			// Exact match
-			scheduleErasure( connectionItr ) ;
+			scheduleErasure( hPtr, connectionItr ) ;
 
-			foundItem = true ;
-			break ;
+			// Since there can only be a single (by
+			// definition of TCP connections) connection
+			// based on a unique set of IP/localport/
+			// remoteport, there is no need to continue
+			// looking for more matches: there are none.
+			return true ;
 			}
 		} // if( hostname == ... )
 	} // for()
 
-if( foundItem )
-	{
-	::pthread_cond_signal( &condWait ) ;
-	}
-
-return foundItem ;
+// Unable to find a matching Connection, return failure
+return false ;
 }
 
-bool ConnectionManager::Disconnect( Connection* cPtr )
+bool ConnectionManager::Disconnect( ConnectionHandler* hPtr,
+	Connection* cPtr )
 {
 // Public method, verify method arguments
+assert( hPtr != 0 ) ;
 assert( cPtr != 0 ) ;
 
-// Attempt to locate the Connection in the connectionMap
-connectionMapIterator connectionItr = connectionMap.find( cPtr ) ;
-if( connectionItr == connectionMap.end() )
+// Attempt to locate the handler in the handler map
+handlerMapIterator handlerItr = handlerMap.find( hPtr ) ;
+if( handlerItr == handlerMap.end() )
+	{
+	// Handler not found
+	return false ;
+	}
+
+// Attempt to locate the Connection in the handler's connectionMap
+connectionMapIterator connectionItr = handlerItr->second.find( cPtr ) ;
+if( connectionItr == handlerItr->second.end() )
 	{
 	// Connection was not found for this handler
 	return false ;
@@ -461,7 +508,7 @@ cout	<< "ConnectionManager::Disconnect> Sheduling connection "
 
 // Schedule the connection to be erased during the next call
 // to Poll()
-scheduleErasure( connectionItr ) ;
+scheduleErasure( hPtr, connectionItr ) ;
 
 // Connection located and scheduled for erasure, return success
 return true ;
@@ -470,17 +517,17 @@ return true ;
 void ConnectionManager::Poll( const long seconds,
 	const long milliseconds )
 {
-
-cout	<< "Poll()" << endl ;
+//cout	<< "Poll()" << endl ;
 
 // Only execute this method if:
-// - The connectionMap is not empty, OR the eraseMap is not empty
+// - The handlerMap is not empty, OR the eraseMap is not empty
 // Either of these cases indicates that some processing must be
 // performed.
-if( connectionMap.empty() && eraseMap.empty() )
+if( handlerMap.empty() && eraseMap.empty() )
 	{
-	::pthread_cond_wait( &condWait, &condMutex ) ;
-	// TODO: Check return value
+//	elog	<< "ConnectionManager::Poll> handlerMap.empty()"
+//		<< endl ;
+	return ;
 	}
 
 // highestFD is passed to select() as the largest FD for which to
@@ -495,86 +542,83 @@ FD_ZERO( &readfds ) ;
 
 // Iterate through the table of Connection's to setup select()
 // FD information
-for( connectionMapIterator connectionItr = connectionMap.begin(),
-	connectionEndItr = connectionMap.end() ;
-	connectionItr != connectionEndItr ; ++connectionItr )
+for( constHandlerMapIterator handlerItr = handlerMap.begin() ;
+	handlerItr != handlerMap.end() ; ++handlerItr )
 	{
-	// Create a couple of convenience variables
-	Connection* connectionPtr = *connectionItr ;
-	int tempFD = connectionPtr->getSockFD() ;
-
-	// The order of the below if/else structure is important
-	// First check for the fully connected sockets.
-	if( connectionPtr->isConnected() )
+	for( constConnectionMapIterator connectionItr =
+		handlerItr->second.begin(),
+		connectionEndItr = handlerItr->second.end() ;
+		connectionItr != connectionEndItr ;
+		++connectionItr )
 		{
-		// This connection already connected
-		// Check to see if we can read
-		FD_SET( tempFD, &readfds ) ;
 
-		// Is the connection's output buffer empty?
-		if( !connectionPtr->outputBuffer.empty() )
+		// Create a couple of convenience variables
+		const Connection* connectionPtr = *connectionItr ;
+		int tempFD = connectionPtr->getSockFD() ;
+
+		// The order of the below if/else structure is important
+		// First check for the fully connected sockets.
+		if( connectionPtr->isConnected() )
 			{
-			// There is data present to be written
+			// This connection already connected
+			// Check to see if we can read
+			FD_SET( tempFD, &readfds ) ;
+
+			// Is the connection's output buffer empty?
+			if( !connectionPtr->outputBuffer.empty() )
+				{
+				// There is data present to be written
+				FD_SET( tempFD, &writefds ) ;
+				}
+			}
+		// Because listening sockets are technically pending
+		// sockets as well, process those first since they
+		// are handled differently than outgoing pending
+		// connections.
+		else if( connectionPtr->isListening() )
+			{
+			// Server socket, it is always pending :)
+			FD_SET( tempFD, &readfds ) ;
+			}
+
+		// Check for a still pending outgoing socket connection.
+		else if( connectionPtr->isPending() )
+			{
+			// Not yet fully connected, check for write
 			FD_SET( tempFD, &writefds ) ;
 			}
-		}
-	// Because listening sockets are technically pending
-	// sockets as well, process those first since they
-	// are handled differently than outgoing pending
-	// connections.
-	else if( connectionPtr->isListening() )
-		{
-		// Server socket, it is always pending :)
-		FD_SET( tempFD, &readfds ) ;
-		}
 
-	// Check for a still pending outgoing socket connection.
-	else if( connectionPtr->isPending() )
-		{
-		// Not yet fully connected, check for write
-		FD_SET( tempFD, &writefds ) ;
-		}
+		// Keep track of the highest FD
+		if( tempFD > highestFD )
+			{
+			highestFD = tempFD ;
+			}
+		} // for( connectionItr )
+	} // for( handlerItr )
 
-	// Keep track of the highest FD
-	if( tempFD > highestFD )
-		{
-		highestFD = tempFD ;
-		}
-	} // for( connectionItr )
+// timeval may be modified by select() on some systems,
+// so recreate it each time
+struct timeval to = { seconds, milliseconds } ;
 
-//cout	<< "Poll> Attempting to read "
-//	<< connectionMap.size()
-//	<< " fd's"
+// Call select()
+// Block indefinitely if seconds is -1
+errno = 0 ;
+int fdCnt = ::select( 1 + highestFD, &readfds, &writefds, 0,
+		(-1 == seconds) ? NULL : &to ) ;
+
+//elog	<< "ConnectionManager::Poll()> seconds: "
+//	<< seconds
+//	<< ", fdCnt: "
+//	<< fdCnt
 //	<< endl ;
 
-// fdCnt is the number of FD's returned by select()
-// loopCnt is the max number of attempts for select()
-int			fdCnt = -1,
-			loopCnt = 10 ;
-
-// Call select() repeatedly until either of the following:
-// - select() returns a value >= 0
-// - select() returns no error (other than EINTR)
-// - loopCnt becomes negative
-do
-	{
-	// timeval may be modified by select() on some systems,
-	// so recreate it each time
-	struct timeval to = { seconds, milliseconds } ;
-
-	// Make sure to clear errno
-	errno = 0 ;
-
-	// Call select()
-	// Block indefinitely if seconds is -1
-	fdCnt = ::select( 1 + highestFD, &readfds, &writefds, 0,
-		(-1 == seconds) ? NULL : &to ) ;
-	} while( (EINTR == errno) && (--loopCnt >= 0) ) ;
-
-// Is there still an error from select()?
+// Is there an error from select()?
 if( fdCnt < 0 )
 	{
 	// Error in select()
+	elog	<< "ConnectionManager::Poll> Error in Poll(): "
+		<< strerror( errno )
+		<< endl ;
 	return ;
 	}
 
@@ -585,36 +629,50 @@ if( fdCnt < 0 )
 // This variable is used for checking timeouts
 time_t now = ::time( 0 ) ;
 
-for( connectionMapIterator connectionItr = connectionMap.begin() ;
-	connectionItr != connectionMap.end() ; ++connectionItr )
+// Walk the handler list, checking connections for each connectionMap.
+for( constHandlerMapIterator handlerItr = handlerMap.begin() ;
+	handlerItr != handlerMap.end() ; ++handlerItr )
 	{
+	// Convenience variable for the long loop ahead
+	ConnectionHandler* hPtr = handlerItr->first ;
 
-	// This variable indicates if the connection should be
-	// kept (true) or removed (false) from the tables
-	bool connectOK = true ;
-
-	// Obtain a pointer to the Connection object being inspected
-	Connection* connectionPtr = *connectionItr ;
-
-	// Temporary variable, this is the value of the current
-	// Connection's socket (file) descriptor
-	int tempFD = connectionPtr->getSockFD() ;
-
-	// Order of this if/else is important here.
-	// First check for fully connected sockets
-	if( connectionPtr->isConnected() )
+	// Iterate through this handler's connectionMap, similar
+	// as the above loops.
+	for( connectionMapIterator connectionItr =
+		handlerItr->second.begin(),
+		connectionEndItr = handlerItr->second.end() ;
+		connectionItr != connectionEndItr ;
+		++connectionItr )
 		{
-		// Check for ability to read
-		if( FD_ISSET( tempFD, &readfds ) )
+
+		// This variable indicates if the connection should be
+		// kept (true) or removed (false) from the tables
+		bool connectOK = true ;
+
+		// Obtain a pointer to the Connection object being inspected
+		Connection* connectionPtr = *connectionItr ;
+
+		// Temporary variable, this is the value of the current
+		// Connection's socket (file) descriptor
+		int tempFD = connectionPtr->getSockFD() ;
+
+		// Order of this if/else is important here.
+		// First check for fully connected sockets
+		if( connectionPtr->isConnected() )
 			{
-			// Data available, or error
-			// handleRead() will perform the read()/recv()
-			// and distribute event to virtual methods
-			// (including OnDisconnect())
-			//
-			// Connected sockets are always checked
-			// for read
-			connectOK = handleRead( connectionPtr ) ;
+			// Check for ability to read
+			if( FD_ISSET( tempFD, &readfds ) )
+				{
+				// Data available, or error
+				// handleRead() will perform the read()/recv()
+				// and distribute event to virtual methods
+				// (including OnDisconnect())
+				//
+				// Connected sockets are always checked
+				// for read
+				connectOK = handleRead( hPtr,
+					connectionPtr ) ;
+				} // if( FD_ISSET( read ) )
 
 			// Attempt to write any buffered data
 			// if the connection is valid
@@ -622,68 +680,71 @@ for( connectionMapIterator connectionItr = connectionMap.begin() ;
 			// be modified since when we last checked,
 			// so no threat of a possibly blocking
 			// call here.
-			if( connectOK &&
-				!connectionPtr->outputBuffer.empty() )
+			if( connectOK && FD_ISSET( tempFD, &writefds ) )
 				{
-				connectOK = handleWrite( connectionPtr ) ;
+				connectOK = handleWrite( hPtr,
+					connectionPtr ) ;
 				}
-			} // if( FD_ISSET() )
-		} // if( connectionPtr->isConnected() )
+			} // if( connectionPtr->isConnected() )
 
-	// Next let's check if this is a listening (server) socket
-	else if( connectionPtr->isListening() )
-		{
-//		cout	<< "Poll> Checking listener: "
-//			<< *connectionPtr
-//			<< endl ;
-
-		// Yup.  See if anyone is waiting to connect
-		if( FD_ISSET( tempFD, &readfds ) )
+		// Next let's check if this is a listening (server) socket
+		else if( connectionPtr->isListening() )
 			{
-			// Could be, attempt an accept()
-			connectOK = finishAccept( connectionPtr ) ;
-				}
-		}
+//			elog	<< "Poll> Checking listener: "
+//				<< *connectionPtr
+//				<< endl ;
 
-	// Check for pending outgoing connection
-	else if( connectionPtr->isPending() )
-		{
-//		cout	<< "Poll> Checking pending: "
-//			<< *connectionPtr
-//			<< endl ;
-
-		// Ready for write state?
-		if( FD_ISSET( tempFD, &writefds ) )
-			{
-			// Yup, attempt to complete the connection
-			connectOK = finishConnect( connectionPtr ) ;
-			} // if( FD_ISSET() )
-		else
-			{
-			// FD is NOT set, and the connection is
-			// still pending; let's check for a timeout
-			if( now >= connectionPtr->getAbsTimeout() )
+			// Yup.  See if anyone is waiting to connect
+			if( FD_ISSET( tempFD, &readfds ) )
 				{
-				// This connection attempt has
-				// timed out
-				OnTimeout( connectionPtr ) ;
+				// Could be, attempt an accept()
+				connectOK = finishAccept( hPtr,
+					connectionPtr ) ;
+				}
+			}
 
-				// Mark this connection for erasure
-				connectOK = false ;
+		// Check for pending outgoing connection
+		else if( connectionPtr->isPending() )
+			{
+//			elog	<< "Poll> Checking pending: "
+//				<< *connectionPtr
+//				<< endl ;
 
-				} // if( now >= ... )
-			} // else()
-		} // if( connectionPtr->isPending() )
+			// Ready for write state?
+			if( FD_ISSET( tempFD, &writefds ) )
+				{
+				// Yup, attempt to complete the connection
+				connectOK = finishConnect( hPtr,
+					connectionPtr ) ;
+				} // if( FD_ISSET() )
+			else
+				{
+				// FD is NOT set, and the connection is
+				// still pending; let's check for a timeout
+				if( now >= connectionPtr->getAbsTimeout() )
+					{
+					// This connection attempt has
+					// timed out
+					// Notify the handler
+					hPtr->OnTimeout( connectionPtr ) ;
 
-	// Check if the connection is still valid
-	if( !connectOK )
-		{
-		// Nope, the connection is invalid
-		// Schedule it for erasure
-		scheduleErasure( connectionItr ) ;
-		} // if( !connectOK )
+					// Mark this connection for erasure
+					connectOK = false ;
 
-	} // for( connectionItr )
+					} // if( now >= ... )
+				} // else()
+			} // if( connectionPtr->isPending() )
+
+		// Check if the connection is still valid
+		if( !connectOK )
+			{
+			// Nope, the connection is invalid
+			// Schedule it for erasure
+			scheduleErasure( hPtr, connectionItr ) ;
+			} // if( !connectOK )
+
+		} // for( connectionItr )
+	} // for( handlerItr )
 
 // Handler methods have the freedom to call Disconnect() at will,
 // however disconnecting/deallocating Connection objects in a handler
@@ -697,43 +758,94 @@ for( connectionMapIterator connectionItr = connectionMap.begin() ;
 // class calling some form of Disconnect().
 // Either way, all terminal processing is done here.
 //
+// Note that the reason for using an associative container for the
+// eraseMap, instead of a linear one, is to increase efficiency here.
+// If the Connection*'s were unsorted in the eraseMap, then this
+// loop would be performing many handlerMap.find()'s looking for the
+// ConnectionHandler for each Connection.
+// With the eraseMap being associative, we can work a single
+// ConnectionHandler at a time to its completion, which saves
+// lookups.
 // No increment is done in this for loop, because it is done
 // in the inner for loop.
-// Because a set<> is a unique associative container, eraseMap will
-// never contain duplicate entries.
+// Because all Connections are erased by calling scheduleErasure(),
+// we are guaranteed that an iterator to a connection is not entered
+// into the eraseMap more than once.
 //
 for( eraseMapIterator eraseItr = eraseMap.begin(),
 	eraseEndItr = eraseMap.end() ;
-	eraseItr != eraseEndItr ; ++eraseItr )
+	eraseItr != eraseEndItr ; )
 	{
+	// First lookup the handlerItr.
+	// No error checking is performed here, because the above
+	// loop was able to find the handler, and no removes have
+	// been done (it is done here).
+	// Because the lookups are performed based on what is found
+	// in the eraseMap, handlerItr is guaranteed to have
+	// at least one Connection which must be removed.
+	//
+	handlerMapIterator handlerItr = handlerMap.find(
+		eraseItr->first ) ;
 
+	// Continue in the loop, erasing elements, until the
+	// handler in the eraseMap changes
+	// This loop guard will be evaluated to true at least once.
+	// The below loop will terminate when either of two conditions
+	// are present after incrementing eraseItr:
+	// - eraseItr is equivalent to eraseEndItr
+	// - eraseItr->first != handlerItr->first
+	// Be sure to check both, beginning with the case that could
+	// crash the process :)
 	// There is no reason to call the notification methods of
 	// the handlers here, all of that processing is performed
 	// by the above for() loops (either directly, or through calls
 	// to finishAccept(),finishConnect(),handleRead(),handleWrite())
 	//
-	// Obtain a convenience pointer for readability
-	Connection* connectionPtr = *(*eraseItr) ;
+	for( ; (eraseItr != eraseEndItr) &&
+		(eraseItr->first == handlerItr->first) ; ++eraseItr )
+		{
+		// Obtain a convenience pointer for readability
+		Connection* connectionPtr = *(eraseItr->second) ;
 
-//	cout	<< "Poll> Removing connection: "
-//		<< *connectionPtr
-//		<< endl ;
+//		elog	<< "Poll> Removing connection: "
+//			<< *connectionPtr
+//			<< endl ;
 
-	// Close the Connection's socket (file) descriptor
-	closeSocket( connectionPtr->getSockFD() ) ;
+		// Close the Connection's socket (file) descriptor
+		closeSocket( connectionPtr->getSockFD() ) ;
 
-	// Deallocate the memory associated with the Connection
-	delete connectionPtr ;
+		// Deallocate the memory associated with the Connection
+		delete connectionPtr ;
 
-	// Remove the Connection from the connectionMap
-	// for this handler
-	connectionMap.erase( *eraseItr ) ;
+		// Remove the Connection from the connectionMap
+		// for this handler
+		handlerItr->second.erase( eraseItr->second ) ;
+
+		} // for( ; eraseItr->first == handlerItr->first ; )
 
 	} // for( eraseItr != eraseEndItr )
 
 // Now that all elements in the eraseMap have been handled, clear
 // the map for future use.
 eraseMap.clear() ;
+
+// Check if the connectionMap for any particular handler is empty
+for( handlerMapIterator handlerItr = handlerMap.begin() ;
+	handlerItr != handlerMap.end() ; ++handlerItr )
+	{
+	// From SGI STL website:
+	// Map has the important property that inserting a new element 
+	// into a map does not invalidate iterators that point to 
+	// existing elements.  Erasing an element from a map also does
+	// not invalidate any iterators, except, of course, for iterators 
+	// that actually point to the element that is being erased. 
+	if( handlerItr->second.empty() )
+		{
+		// The connectionMap for this handler is empty
+		// Erase it
+		handlerMap.erase( handlerItr ) ;
+		}
+	} // for()
 
 //cout	<< "Poll> End"
 //	<< endl ;
@@ -837,7 +949,8 @@ void ConnectionManager::closeSocket( int fd )
 }
 
 // Caller handles erasing/closing upon a failed call to handleRead().
-bool ConnectionManager::handleRead( Connection* cPtr )
+bool ConnectionManager::handleRead( ConnectionHandler* hPtr,
+	Connection* cPtr )
 {
 // protected member, no error checking
 
@@ -846,14 +959,29 @@ char buf[ 4096 ] ;
 memset( buf, 0, 4096 ) ;
 
 // Attempt the read from the socket
+errno = 0 ;
 int readResult = ::recv( cPtr->getSockFD(), buf, 4096, 0 ) ;
 
+if( EAGAIN == errno )
+	{
+	// Nonblocking type error
+	// Ignore it
+	elog	<< "ConnectionManager::handleRead> EAGAIN"
+		<< endl ;
+	return true ;
+	}
+
+//elog	<< "ConnectionManager::handleRead> Read "
+//	<< readResult
+//	<< " bytes"
+//	<< endl ;
+
 // Check for error on read()
-if( readResult < 0 )
+if( readResult <= 0 )
 	{
 	// Error on read, socket no longer valid
 	// Notify handler
-	OnDisconnect( cPtr ) ;
+	hPtr->OnDisconnect( cPtr ) ;
 
 	// Read error
 	return false ;
@@ -875,7 +1003,7 @@ while( cPtr->inputBuffer.ReadLine( line ) )
 	{
 	// Line available
 	// Notify handler
-	OnRead( cPtr, line ) ;
+	hPtr->OnRead( cPtr, line ) ;
 	}
 
 // The read was successful, return success
@@ -883,7 +1011,8 @@ return true ;
 }
 
 // Caller handles erasing/closing upon a failed call to handleWrite().
-bool ConnectionManager::handleWrite( Connection* cPtr )
+bool ConnectionManager::handleWrite( ConnectionHandler* hPtr,
+	Connection* cPtr )
 {
 // protected member, no error checking
 
@@ -896,17 +1025,33 @@ bool ConnectionManager::handleWrite( Connection* cPtr )
 // the send(), and the system will send() as much as it can
 // The above applies to NONBLOCKING sockets.
 //
+errno = 0 ;
 int writeResult = ::send( cPtr->getSockFD(),
-	cPtr->outputBuffer.c_str(),
+	cPtr->outputBuffer.data(),
 	cPtr->outputBuffer.size(),
 	0 ) ;
+
+if( (ENOBUFS == errno) || (EWOULDBLOCK == errno) || (EAGAIN == errno) )
+	{
+	// Nonblocking type error
+	// Ignore it for now
+	elog	<< "ConnectionManager::handleWrite> errno: "
+		<< strerror( errno )
+		<< endl ;
+	return true ;
+	}
+
+//elog	<< "ConnectionManager::handleWrite> Read "
+//	<< writeResult
+//	<< " bytes"
+//	<< endl ;
 
 // Check for write error
 if( writeResult < 0 )
 	{
 	// Error on write, socket no longer valid
 	// Notify the handler.
-	OnDisconnect( cPtr ) ;
+	hPtr->OnDisconnect( cPtr ) ;
 
 	// Write error
 	return false ;
@@ -920,7 +1065,8 @@ return true ;
 }
 
 // Caller handles erasing/closing upon a failed call to finishConnect().
-bool ConnectionManager::finishConnect( Connection* cPtr )
+bool ConnectionManager::finishConnect( ConnectionHandler* hPtr,
+	Connection* cPtr )
 {
 // Protected member method, no error checking performed on
 // method arguments
@@ -947,7 +1093,7 @@ if( connectResult < 0 )
 
 		// Unable to establish connection
 		// Notify handler
-		OnConnectFail( cPtr ) ;
+		hPtr->OnConnectFail( cPtr ) ;
 
 		// Return failure
 		return false ;
@@ -958,14 +1104,15 @@ if( connectResult < 0 )
 cPtr->setConnected() ;
 
 // Notify handler
-OnConnect( cPtr ) ;
+hPtr->OnConnect( cPtr ) ;
 
 // Return success
 return true ;
 }
 
 // Caller handles erasing/closing upon a failed call to finishAccept().
-bool ConnectionManager::finishAccept( Connection* cPtr )
+bool ConnectionManager::finishAccept( ConnectionHandler* hPtr,
+	Connection* cPtr )
 {
 // Protected member, no arguments verified here
 // (cPtr) is the server socket, which is listen()'ing
@@ -1007,7 +1154,7 @@ if( (newFD < 0) && (EAGAIN != errno) && (EWOULDBLOCK != errno))
 	// so the handler can check for newConnection->isIncoming()
 	// to know that an incoming connection failed; it can
 	// obtain no other information about the Connection.
-	OnConnectFail( newConnection ) ;
+	hPtr->OnConnectFail( newConnection ) ;
 
 	// Clean up memory
 	delete newConnection ; newConnection = 0 ;
@@ -1046,7 +1193,7 @@ if( !setSocketOptions( newFD ) )
 	// Failed to set socket options
 	// The Connection now has the IP of the failed Connection
 	// Notify handler
-	OnConnectFail( newConnection ) ;
+	hPtr->OnConnectFail( newConnection ) ;
 
 	cout	<< "ConnectionManager::finishAccept> Failed to set "
 		<< "socket options for connection: "
@@ -1065,11 +1212,12 @@ if( !setSocketOptions( newFD ) )
 
 // Attempt to insert the new Connection into the appropriate
 // connectionMap for its handler
-if( !connectionMap.insert( newConnection ).second )
+if( !handlerMap[ hPtr ].insert( newConnection ).second )
 	{
+	// Failed to insert into handlerMap
 	// Notify the handler of a failure in connection
 	// TODO: The handler expects errno to be set appropriately.
-	OnConnectFail( newConnection ) ;
+	hPtr->OnConnectFail( newConnection ) ;
 
 	cout	<< "ConnectionManager::finishAccept> Failed to add "
 		<< "new connection to table: "
@@ -1088,7 +1236,7 @@ if( !connectionMap.insert( newConnection ).second )
 	}
 
 // Notify the responsible handler of the new incoming connection
-OnConnect( newConnection ) ;
+hPtr->OnConnect( newConnection ) ;
 
 // Return success
 return true ;
@@ -1142,8 +1290,47 @@ if( optval < 0 )
 return true ;
 }
 
-Connection* ConnectionManager::Listen( const unsigned short int localPort )
+void ConnectionManager::Write( const ConnectionHandler* hPtr,
+	Connection* cPtr, const string& msg )
 {
+// Public method, check method arguments
+assert( hPtr != 0 ) ;
+assert( cPtr != 0 ) ;
+
+// Do nothing if the output message is empty, or the socket
+// is a listening socket (not connected anyway).
+if( msg.empty() || cPtr->isListening() )
+	{
+	return ;
+	}
+
+// Append the outgoing data onto the Connection's output buffer
+cPtr->outputBuffer += msg ;
+}
+
+void ConnectionManager::Write( const ConnectionHandler* hPtr,
+	Connection* cPtr, const stringstream& msg )
+{
+// Public method, check method arguments
+assert( hPtr != 0 ) ;
+assert( cPtr != 0 ) ;
+
+// Do nothing if the socket is a listening socket (not connected)
+if( cPtr->isListening() )
+	{
+	return ;
+	}
+
+// Append the outgoing data onto the Connection's output buffer
+cPtr->outputBuffer += msg.str() ;
+}
+
+Connection* ConnectionManager::Listen( ConnectionHandler* hPtr,
+	const unsigned short int localPort )
+{
+// Public method, check arguments
+assert( hPtr != 0 ) ;
+
 cout	<< "ConnectionManager::Listen> Port: "
 	<< localPort
 	<< endl ;
@@ -1236,10 +1423,11 @@ if( ::listen( listenFD, 5 ) < 0 )
 
 // Attempt to add this new connection into the handler map for
 // the given handler
-if( !connectionMap.insert( newConnection ).second )
+if( !handlerMap[ hPtr ].insert( newConnection ).second )
 	{
+	// Addition to handlerMap failed :(
 	cout	<< "ConnectionManager::Listen> Failed to add new "
-		<< "connection to connectionMap: "
+		<< "connection to handlerMap: "
 		<< *newConnection
 		<< endl ;
 
@@ -1261,47 +1449,36 @@ if( !connectionMap.insert( newConnection ).second )
 return newConnection ;
 }
 
-void ConnectionManager::scheduleErasure(
+void ConnectionManager::scheduleErasure( ConnectionHandler* hPtr,
 	connectionMapIterator connectionItr )
 {
-if( std::find( eraseMap.begin(), eraseMap.end(),
-	connectionItr ) == eraseMap.end() )
+// Protected member, no error checking performed on arguments
+eraseMapIterator eraseItr = eraseMap.find( hPtr ) ;
+
+// Walk through the container
+// Continue walking until we find the duplicate (in which case
+// return from this method), we encounter the end of the eraseMap,
+// or we are no longer examining the connections for the given
+// handler (we can do this because a multimap guarantees its
+// entries to be kept in a strict weak order)
+for( ; (eraseItr != eraseMap.end()) && (eraseItr->first == hPtr) ;
+	++eraseItr )
 	{
-	eraseMap.push_back( connectionItr ) ;
-	}
-}
+	if( eraseItr->second == connectionItr )
+		{
+		// Found a duplicate
+		// No need to perform any further processing,
+		// this connection is already scheduled for
+		// erasure and will be removed on the next call
+		// to Poll() (assuming this method isn't already
+		// being called from Poll() <G>)
+		return ;
+		}
+	} // while()
 
-void ConnectionManager::OnConnect( Connection* )
-{}
-
-void ConnectionManager::OnDisconnect( Connection* )
-{}
-
-void ConnectionManager::OnConnectFail( Connection* )
-{}
-
-void ConnectionManager::OnTimeout( Connection* )
-{}
-
-void ConnectionManager::OnRead( Connection*, const string& )
-{}
-
-void ConnectionManager::Write( Connection* cPtr, const string& data )
-{
-assert( cPtr != 0 ) ;
-
-// Ok to append an empty string
-cPtr->outputBuffer += data ;
-}
-
-void ConnectionManager::Write( Connection* cPtr,
-	const stringstream& data )
-{
-assert( cPtr != 0 ) ;
-
-// Ok to append an empty string
-cPtr->outputBuffer += data.str() ;
+// The connectionItr is not present in the eraseMap, go ahead
+// and add it to the eraseMap to be erased by Poll()
+eraseMap.insert( eraseMapType::value_type( hPtr, connectionItr ) ) ;
 }
 
 } // namespace gnuworld
-

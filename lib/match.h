@@ -1,10 +1,10 @@
 /*
  * match.h
  *
- * $Id: match.h,v 1.2 2002-07-01 00:18:22 jeekay Exp $
+ * $Id: match.h,v 1.3 2002-07-27 14:54:10 jeekay Exp $
  */
 #ifndef __MATCH_H
-#define __MATCH_H "$Id: match.h,v 1.2 2002-07-01 00:18:22 jeekay Exp $"
+#define __MATCH_H "$Id: match.h,v 1.3 2002-07-27 14:54:10 jeekay Exp $"
 
 #include	<string>
 

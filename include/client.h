@@ -21,7 +21,7 @@
  */
 
 #ifndef __CLIENT_H
-#define __CLIENT_H "$Id: client.h,v 1.2 2002-07-01 00:16:13 jeekay Exp $"
+#define __CLIENT_H "$Id: client.h,v 1.3 2002-07-27 14:54:07 jeekay Exp $"
 
 #include	<sstream>
 #include	<string>

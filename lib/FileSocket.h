@@ -17,11 +17,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: FileSocket.h,v 1.2 2002-07-01 00:18:21 jeekay Exp $
+ * $Id: FileSocket.h,v 1.3 2002-07-27 14:54:09 jeekay Exp $
  */
 
 #ifndef __FILESOCKET_H
-#define __FILESOCKET_H "$Id: FileSocket.h,v 1.2 2002-07-01 00:18:21 jeekay Exp $"
+#define __FILESOCKET_H "$Id: FileSocket.h,v 1.3 2002-07-27 14:54:09 jeekay Exp $"
 
 #include	<string>
 

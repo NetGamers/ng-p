@@ -3292,27 +3292,8 @@ fi
 
 echo $ac_n "checking for libpq++.h""... $ac_c" 1>&6
 echo "configure:3295: checking for libpq++.h" >&5
-if test -f "/usr/local/include/pgsql/libpq++.h"; then
-	PGSQL_INCLUDE="/usr/local/include/pgsql"
-	PGSQL_LIB="/usr/local/lib"
-elif test -f "$PGSQL_PREFIX/include/libpq++.h"; then
-	PGSQL_INCLUDE="$PGSQL_PREFIX/include"
-	PGSQL_LIB="$PGSQL_PREFIX/lib"
-elif test -f "/usr/local/include/libpq++.h"; then
-	PGSQL_INCLUDE=/usr/local/include
-	PGSQL_LIB=/usr/local/lib
-elif test -f "/usr/include/postgresql/libpq++.h"; then
-	PGSQL_INCLUDE=/usr/include/postgresql
-	PGSQL_LIB=/usr/lib/pgsql
-elif test -f "/usr/include/pgsql/libpq++.h"; then
-	PGSQL_INCLUDE=/usr/include/pgsql
-	PGSQL_LIB=/usr/lib/pgsql
-elif test -f "/usr/local/include/pgsql/libpq++.h"; then
-	PGSQL_INCLUDE=/usr/local/include/pgsql
-	PGSQL_LIB=/usr/local/lib
-else
-        { echo "configure: error: Unable to find PostGreSQL " 1>&2; exit 1; }
-fi
+PGSQL_INCLUDE="/usr/include"
+PGSQL_LIB="/usr/lib"
 echo "$ac_t""yes" 1>&6
 
 

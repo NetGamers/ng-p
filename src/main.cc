@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: main.cc,v 1.2 2002-07-01 00:28:27 jeekay Exp $
+ * $Id: main.cc,v 1.3 2002-07-27 14:54:12 jeekay Exp $
  */
 
 #include	<new>
@@ -41,10 +41,8 @@
 #include	"moduleLoader.h"
 #include	"md5hash.h"
 
-void		gnu() ;
-
 const char config_h_rcsId[] = __CONFIG_H ;
-const char main_cc_rcsId[] = "$Id: main.cc,v 1.2 2002-07-01 00:28:27 jeekay Exp $" ;
+const char main_cc_rcsId[] = "$Id: main.cc,v 1.3 2002-07-27 14:54:12 jeekay Exp $" ;
 const char ELog_h_rcsId[] = __ELOG_H ;
 const char FileSocket_h_rcsId[] = __FILESOCKET_H ;
 const char server_h_rcsId[] = __SERVER_H ;
@@ -57,15 +55,21 @@ using std::cerr ;
 using std::clog ;
 using std::endl ;
 using std::string ;
- 
+
+// Output the GNU greeting
+void		gnu() ;
+
+// Instantiate the logging stream
 gnuworld::ELog		gnuworld::elog ;
 
+/// This method is called when a registered system signal occurs
 void xServer::sigHandler( int whichSig )
 {
 xServer::caughtSignal = true ;
 xServer::whichSig = whichSig ;
 }
 
+/// Output the command line arguments for gnuworld
 void usage( const string& progName )
 {
 clog << "Usage: " << progName << " [options]\n" ;
@@ -83,9 +87,10 @@ clog << "\t\t\tRun in simulation mode\n" ;
 clog << endl ;
 }
 
+/// Output the GNUWorld/GNU welcome message
 void gnu()
 {
-clog	<< "GNUWorld version 1.1" << endl ;
+clog	<< "GNUWorld version 2.1" << endl ;
 clog	<< "Copyright (C) 2002 Free Software Foundation, Inc." << endl ;
 clog	<< "GNUWorld comes with NO WARRANTY," << endl ;
 clog	<< "to the extent permitted by law." << endl ;
@@ -121,7 +126,7 @@ assert( theServer != 0 ) ;
 			<< endl ;
 
 		delete theServer ; theServer = 0 ;
-		return 0 ;
+		return -1 ;
 		}
 
 	pidFile	<< getpid()
@@ -133,16 +138,7 @@ assert( theServer != 0 ) ;
 // Connect to the server
 clog << "*** Connecting..." << endl ;
 
-if( theServer->Connect() < 0 )
-	{
-	clog << "*** Cannot get connected to server!\n" ;
-	::exit( 0 ) ;
-	}
-else
-	{
-	clog	<< "*** Connection Established!\n" ;
-	theServer->run() ;
-	}
+theServer->run() ;
 delete theServer ;
 return 0 ;
 }
@@ -156,7 +152,6 @@ xServer::xServer( int argc, char** argv )
 {
 
 string simFileName ;
-
 verbose = false ;
 
 int c = EOF ;
@@ -203,7 +198,8 @@ while( (c = getopt( argc, argv, "cd:f:hs:")) != EOF )
 		case 4:
 		case 's':
 			simFileName = optarg ;
-			clog << "*** Running in simulation mode...\n" ;
+			clog	<< "*** Running in simulation mode..."
+				<< endl ;
 			break ;
 		case ':':
 			clog << "*** Missing parameter\n" ;
@@ -222,20 +218,28 @@ while( (c = getopt( argc, argv, "cd:f:hs:")) != EOF )
 	elog.openFile( elogFileName.c_str() ) ;
 	if( !elog.isOpen() )
 		{
-		clog	<< "*** Unable to open elog file: " << elogFileName
+		clog	<< "*** Unable to open elog file: "
+			<< elogFileName
 			<< endl ;
 		::exit( 0 ) ;
 		}
-	clog	<< "*** Running in debug mode...\n" ;
+	clog	<< "*** Running in debug mode..."
+		<< endl ;
 #endif
 
 if( verbose )
 	{
 	elog.setStream( &clog ) ;
-	elog	<< "*** Running in verbose mode...\n" ;
+	elog	<< "*** Running in verbose mode..."
+		<< endl ;
 	}
 
-setupSignals();
+if( !setupSignals() )
+	{
+	clog	<< "Failed to establish signal handlers"
+		<< endl ;
+	::exit( -1 ) ;
+	}
 
 // Sets up the server internals
 initializeSystem() ;
@@ -245,43 +249,76 @@ initializeSystem() ;
 	if( !socketFile.is_open() )
 		{
 		clog	<< "*** Unable to open socket log file: "
-			<< LOG_SOCKET_NAME << endl ;
-		::exit( 0 ) ;
+			<< LOG_SOCKET_NAME
+			<< endl ;
+		::exit( -1 ) ;
 		}
 #endif
 
-srand( ::time( 0 ) ) ;
+// Seed the random number generator
+::srand( ::time( 0 ) ) ;
 
 // Run in simulation mode?
 if( !simFileName.empty() )
 	{
-	setSocket( new FileSocket( simFileName ) ) ;
+//	setSocket( new FileSocket( simFileName ) ) ;
 	}
 }
 
 void xServer::mainLoop()
 {
+// When this method is first invoked, the server is not connected
+while( keepRunning )
+	{
+	if( NULL == serverConnection )
+		{
+		// Not connected
+		serverConnection = Connect( this, UplinkName, Port ) ;
+		}
 
-timeval tv = { 0, 0 } ;
-timeval local = { 0, 0 } ;
+	// Check for pending timers before calling Poll(), just for
+	// If timers are pending, then set the duration until the next
+	// arriving timer expiration to be the maximum wait time
+	// for Poll()
 
-fd_set readSet, writeSet ;
-time_t now = 0 ;
-int selectRet = -1 ;
-int sockFD = theSock->getFD() ;
-bool setTimer = false ;
-unsigned int cnt = 0 ; 
-char charBuf[ 1024 ] = { 0 } ;
+	// If there are timers waiting, this variable will be set to
+	// true.  A value of false means that no timers are pending,
+	// and that Poll() can block indefinitely.
+	bool setTimers = false ;
 
-while( keepRunning && _connected )
-        {
+	long seconds = -1 ;
+	time_t now = ::time( 0 ) ;
 
-        memset( charBuf, 0, 1024 ) ;
+        if( !timerQueue.empty() )
+                {
+//		elog	<< "mainLoop> Found a timer"
+//			<< endl ;
+
+                // Yes, set select() timeout to time at which
+                // the nearest timer will expire
+                setTimers = true ;
+
+		// Set tv.tv_sec to the duration (in seconds) until
+		// the first timer will expire.
+                seconds = timerQueue.top().second->absTime - now ;
+
+		if( seconds < 0 )
+			{
+			// A negative value here will result
+			// in inifinite blocking in Poll(),
+			// which is exactly opposite of what is needed here
+			seconds = 0 ;
+			}
+                }
+
+	// Process all available data
+	Poll( seconds ) ;
+
+	// Poll() will call all appropriate data handlers
+	// Check the timers
+	CheckTimers() ;
 
         // Did we catch a signal?
-        // This needs to be put at the top of this loop.
-        // If select() returns -1 because of a signal, this
-        // loop continues without executing the rest of the loop.
         if( caughtSignal )
                 {
 		if( !PostSignal( whichSig ) )
@@ -293,134 +330,8 @@ while( keepRunning && _connected )
 		whichSig = 0 ;
                 }
 
-        setTimer = false ;
-        selectRet = -1 ;
-        cnt = 0 ;
-        now = ::time( 0 ) ;   
-
-        FD_ZERO( &readSet ) ;
-        FD_ZERO( &writeSet ) ;
-
-	FD_SET( sockFD, &readSet ) ;
-
-        // Does the output buffer have any data?
-        if( !outputBuffer.empty() )
-                {
-                // Yes, test for write state on the socket
-                FD_SET( sockFD, &writeSet ) ;
-                }
-
-        // Run any timers before calling select()
-        CheckTimers() ;
-
-	tv.tv_sec = 0 ;
-	tv.tv_usec = 0 ;
-                 
-        // Are there are any timers remaining to run?
-        if( !timerQueue.empty() )
-                {
-                // Yes, set select() timeout to time at which
-                // the nearest timer will expire
-                setTimer = true ;
-
-		// Set tv.tv_sec to the duration (in seconds) until
-		// the first timer will expire.
-                tv.tv_sec = timerQueue.top().second->absTime - now ;
-                }
-        else
-                {
-                // No timers waiting to run
-                setTimer = false ;
-                }
-                
-        // Call select() until the max loop count is reached
-        // or a successful return is obtained
-        do
-                {
-                // Be sure to reset errno before calling select()
-                errno = 0 ;
-		local = tv ;
-                selectRet = ::select( sockFD + 1, &readSet, &writeSet,
-                        0, setTimer ? &local : 0 ) ;
-                }
-                // We are not expecting any signals, but one
-                // may occur anyway
-                while( (selectRet < 0) &&
-			(EINTR == errno) &&
-			(cnt++ <= 10) ) ;
-                 
-	// Did a timer expire?  Note that the above loop is
-	// non-deterministic.  All timers are checked before
-	// calling select(), however a timer may expire
-	// before we get to call select().  If this is the
-	// case, the timeval structure will contain an invalid
-	// time, and errno will be set to EINVAL.
-
-	// Check if a timer expired
-	if( (0 == selectRet) || (EINVAL == selectRet) )
-		{
-                // select() timed out..timer has expired
-                CheckTimers() ;
-                continue ;
-		}
-	else if( selectRet < 0 )
-		{
-                // Caught some form of signal
-                elog    << "xServer::mainLoop> select() returned error: "
-                        << strerror( errno )
-			<< endl ;
-                continue ;
-                }
-                 
-        // Otherwise, select() returned a value greater than 0
-        // At least one socket descriptor has a ready state
-                
-        // Check if there is a read state available
-        if( FD_ISSET( sockFD, &readSet ) )
-                {
-                // Yes, read all available data
-                DoRead() ;
-                
-                // Are we still connected?
-                if( !_connected )
-                        {
-                        // Nope, doh!
-                        continue ;
-                        }
-                }
-                
-        // Attempt to process any new data
-        while( GetString( charBuf ) )
-                {
-#ifdef LOG_SOCKET
-		socketFile << charBuf << endl ;
-#endif
-		if( verbose )
-			{
-			clog	<< "[IN]:  " << charBuf
-				<< endl ;
-			}
-
-                Process( charBuf ) ;
-                }
-
-        // Can we write to the socket without blocking?
-        if( FD_ISSET( sockFD, &writeSet ) )
-                {
-                // Attempt to write output buffer to socket
-                DoWrite() ;
-                
-                // Are we still connecte?
-                if( !_connected )
-                        {
-                        // Nope, doh!
-                        continue ;
-                        }
-                }
-        
-        } // while( keepRunning && _connected )
-                 
-}
+	} // while( keepRunning )
+} // mainLoop()
 
 bool xServer::setupSignals()
 {

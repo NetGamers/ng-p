@@ -17,11 +17,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: UnloadClientTimerHandler.h,v 1.2 2002-07-01 00:16:13 jeekay Exp $
+ * $Id: UnloadClientTimerHandler.h,v 1.3 2002-07-27 14:54:06 jeekay Exp $
  */
 
 #ifndef __UNLOADCLIENTTIMERHANDLER_H
-#define __UNLOADCLIENTTIMERHANDLER_H "$Id: UnloadClientTimerHandler.h,v 1.2 2002-07-01 00:16:13 jeekay Exp $"
+#define __UNLOADCLIENTTIMERHANDLER_H "$Id: UnloadClientTimerHandler.h,v 1.3 2002-07-27 14:54:06 jeekay Exp $"
 
 #include	<string>
 

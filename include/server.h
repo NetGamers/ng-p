@@ -18,24 +18,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: server.h,v 1.2 2002-07-01 00:16:14 jeekay Exp $
- */
-
-/* Command Map Description
- * -----------------------
- * Command messages read from the network are in the
- * form of characters and character strings.  Messages
- * are handled by passing the message and its arguments
- * to handler functions.
- * Command handler function names are all preceeded
- * with: MSG_
- * Pointers to offsets of these functions within the
- * global variable xServer* Server are stored in a
- * hash_map<>
+ * $Id: server.h,v 1.3 2002-07-27 14:54:07 jeekay Exp $
  */
 
 #ifndef __SERVER_H
-#define __SERVER_H "$Id: server.h,v 1.2 2002-07-01 00:16:14 jeekay Exp $"
+#define __SERVER_H "$Id: server.h,v 1.3 2002-07-27 14:54:07 jeekay Exp $"
 
 #include	<string>
 #include	<vector>
@@ -46,12 +33,11 @@
 #include	<algorithm>
 
 #include	<ctime>
+#include	<cassert>
 
 #include	"Numeric.h"
 #include	"iServer.h"
 #include	"iClient.h"
-#include	"Socket.h"
-#include	"ClientSocket.h"
 #include	"Buffer.h"
 #include	"events.h"
 #include	"Gline.h"
@@ -60,48 +46,20 @@
 #include	"moduleLoader.h"
 #include	"ELog.h"
 #include	"TimerHandler.h"
-#include	"defs.h"
-
-/*
-#ifdef GNU_EXTENSIONS
- #include       <ext/hash_map>
-#else
- #include       <hash_map>
-#endif
-*/
+#include	"ServerCommandHandler.h"
+#include	"ConnectionManager.h"
+#include	"ConnectionHandler.h"
+#include	"Connection.h"
 
 namespace gnuworld
 {
 
-//using HASHMAPNS::hash ;
-//using HASHMAPNS::hash_map ;
 using std::string ;
 using std::list ;
 using std::vector ;
 using std::stringstream ;
 using std::priority_queue ;
 using std::map ;
-
-/**
- * This macro constructs a method prototype for a command
- * handler with the given name MSG_handlerFunc.
- */
-#define DECLARE_MSG( handlerFunc ) \
- virtual int MSG_##handlerFunc( xParameters& ) ;
-
-/**
- * This method registers a command handler with the xServer's
- * command table.  It must first be prototyped in the xServer
- * class declaration.
- */
-#define REGISTER_MSG( key, handlerFunc ) \
-  if( !commandMap->insert( commandMapType::value_type( key, \
-	&xServer::MSG_##handlerFunc ) ).second ) \
-	{\
-	elog << "Unable to register function: "\
-		<< key << std::endl ;\
-	exit( 0 ) ; \
-	}
 
 /// Forward declaration of xClient
 class xClient ;
@@ -123,7 +81,7 @@ enum MessageType
  * This class is the server proper; it is responsible for the connection
  * to the IRC network, and for maintaining the services clients.
  */
-class xServer
+class xServer : public ConnectionManager, ConnectionHandler
 {
 
 protected:
@@ -230,24 +188,32 @@ public:
 		{ return glineList.end() ; }
 
 	/**
-	 * Connect to a network uplink of the given address
-	 * (IP or hostname) and on the given port.
+	 * Return an iterator to the beginning of the gline structure.
 	 */
-	virtual int Connect( const string& Address, int Port ) ;
+	inline glineIterator	gline_begin()
+		{ return glineList.begin() ; }
 
 	/**
-	 * Connect to the default uplink and port.
+	 * Return an iterator to the end of the gline structure.
 	 */
-	virtual int Connect()
-		{ return Connect( UplinkName, Port ) ; }
+	inline glineIterator	gline_end()
+		{ return glineList.end() ; }
 
-	/**
-	 * Call this method when a read/write error occurs on the
-	 * uplink socket.  This will close and deallocate the socket,
-	 * as well as clear the input/output buffers and post a
-	 * message for GetMessage() later.
-	 */
-	virtual void OnDisConnect() ;
+	/// Deprecated.
+	inline size_t		getTotalReceived() const
+		{ return 0 ; }
+
+	/// Deprecated.
+	inline size_t		getTotalSent() const
+		{ return 0 ; }
+
+	virtual void OnDisconnect( Connection* ) ;
+
+	virtual void OnConnect( Connection* ) ;
+
+	virtual void OnConnectFail( Connection* ) ;
+
+	virtual void OnRead( Connection*, const string& ) ;
 
 	/**
 	 * Attach a fake server to this services server.
@@ -260,31 +226,19 @@ public:
 	 */
 	virtual bool SquitServer( const string& name, const string& reason ) ;
 
-	/* I/O stuff */
-
-	/**
-	 * Perform the physical read of the socket.
-	 */
-	virtual void DoRead() ;
-
-	/**
-	 * Perform the physical write to the socket.
-	 */
-	virtual void DoWrite() ;
-
 	/**
 	 * Append a std::string to the output buffer.
 	 * The second argument determines if data should be written
 	 * during burst time.
 	 */
-	virtual size_t Write( const string& ) ;
+	virtual bool Write( const string& ) ;
 
 	/**
 	 * Similar to the above signature of Write() except that data
 	 * will be written to the normal output buffer even during
 	 * burst time.
 	 */
-	virtual size_t WriteDuringBurst( const string& ) ;
+	virtual bool WriteDuringBurst( const string& ) ;
 
 	/**
 	 * Append a C variable argument list/character array to the output
@@ -293,55 +247,28 @@ public:
 	 * method cannot support a final default argument -- this method
 	 * defaults to NOT writing during burst.
 	 */
-	virtual size_t Write( const char*, ... ) ;
+	virtual bool Write( const char*, ... ) ;
 
 	/**
 	 * This method is similar to the above Write(), except
 	 * that the data will be written to the normal output
 	 * buffer even during burst time.
 	 */
-	virtual size_t WriteDuringBurst( const char*, ... ) ;
+	virtual bool WriteDuringBurst( const char*, ... ) ;
 
 	/**
 	 * Append a std::stringstream to the output buffer.
 	 * The second argument determines if data should be written
 	 * during burst time.
 	 */
-	virtual size_t Write( const stringstream& ) ;
+	virtual bool Write( const stringstream& ) ;
 
 	/**
 	 * This method is similar to the above Write(), except
 	 * that the data will be written to the normal output
 	 * buffer even during burst time.
 	 */
-	virtual size_t WriteDuringBurst( const stringstream& ) ;
-
-	/**
-	 * Write any bufferred data to the network.
-	 * Returns false on write error.
-	 */
-	virtual inline bool flushBuffer() ;
-
-	/**
-	 * Read a '\n' delimited line from the input buffer.
-	 * Return true is none exist.  (size) is the length of
-	 * the C string buffer (buf).
-	 */
-	virtual inline bool GetString( char* buf ) ;
-
-	/**
-	 * Return true if a read attempt from the network
-	 * would NOT block.
-	 * This method is not const beause it may modify
-	 * _connected and Socket if an error occurs.
-	 */
-	virtual inline bool ReadyForRead() ;
-
-	/**
-	 * Return true if data exists to be written to the
-	 * network, and a write would NOT block.
-	 */
-	virtual inline bool ReadyForWrite() const ;
+	virtual bool WriteDuringBurst( const stringstream& ) ;
 
 	/**
 	 * Process is responsible for parsing lines of data.
@@ -363,6 +290,24 @@ public:
 	 */
 	virtual bool removeGline( const string& userHost,
 		const  xClient* remClient = NULL) ;
+
+	/**
+	 * Erase a gline from the internal data structures.  This does
+	 * NOT send a message to the network; for that functionality,
+	 * use RemoveGline() instead.
+	 */
+	virtual void eraseGline( glineIterator removeMe )
+		{ glineList.erase( removeMe ) ; }
+
+	/**
+	 * Add a gline to the internal data structures.  This does
+	 * NOT send a message to the network; for that functionality,
+	 * use SetGline() instead.
+	 */
+	virtual void addGline( Gline* newGline )
+		{ assert( newGline != 0 ) ;
+		  glineList.push_back( newGline ) ;
+		}
 
 	/**
 	 * Find a gline by lexical searching, case insensitive.
@@ -585,6 +530,10 @@ public:
 	 * Post a system event to the rest of the system.  Note
 	 * that this method is public, so xClients may post
 	 * events.
+	 * The last argument is the an exclude xClient -- the
+	 * event will NOT be sent to that client (in the case that
+	 * an xClient calls PostEvent(), it may not want to receive
+	 * that event back).
 	 */
 	virtual void PostEvent( const eventType&,
 		void* = 0, void* = 0, void* = 0, void* = 0 ,
@@ -614,6 +563,7 @@ public:
 			iClient* destClient,
 			const string& kickMessage,
 			bool authoritative ) ;
+
 	/**
 	 * This variable represents "all channels."  Clients may
 	 * register for events of this channel, and each will receive
@@ -650,7 +600,7 @@ public:
 	/**
 	 * Retrieve a message.  Returns -1 if no message ready.
 	 */
-	virtual MessageType GetMessage()
+	virtual MessageType GetMessage() const
 		{ return Message ; }
 
 	/**
@@ -669,11 +619,27 @@ public:
 		{ return !bursting ; }
 
 	/**
+	 * Return true if this server is currently bursting, false
+	 * otherwise.
+	 */
+	inline bool isBursting() const
+		{ return bursting ; }
+
+	/**
+	 * Set the bursting value to the given argument, with default
+	 * argument set to true.
+	 * This method should NOT be called by anything other than the
+	 * server command handlers.
+	 */
+	inline void setBursting( bool newVal = true )
+		{ bursting = newVal ; }
+
+	/**
 	 * Return true if the server has a valid connection to
 	 * its uplink, false otherwise.
 	 */
 	virtual bool isConnected() const
-		{ return _connected ; }
+		{ return (serverConnection != 0) ; }
 
 	/* Numeric utility methods */
 
@@ -759,23 +725,49 @@ public:
 		{ return ConnectionTime ; }
 
 	/**
-	 * Returns the total number of bytes recieved from the uplink
+	 * Return a pointer to this server's uplink.
 	 */
-	inline const unsigned long getTotalReceived() const
-		{ return theSock->getTotalReceived(); }
+	inline iServer*		getUplink() const
+		{ return Uplink ; }
 
 	/**
-	 * Returns the total number of bytes sent to the uplink
+	 * Set this server's uplink.
+	 * This method should ONLY be called by the server command
+	 * handlers.
 	 */
-	inline const unsigned long getTotalSent() const
-		{ return theSock->getTotalSent(); }
-	
+	inline void		setUplink( iServer* newUplink )
+		{ Uplink = newUplink ; }
+
 	/**
-	 * This is a simple mutator of the server's socket pointer.
-	 * This is used ONLY for implementing the simulation mode.
+	 * Enable or disable the burstBuffer.
+	 * This method should ONLY be called by the server command
+	 * handlers.
 	 */
-	inline void setSocket( ClientSocket* newSock )
-		{ theSock = newSock ; }
+	inline void setUseHoldBuffer( bool newVal )
+		{ useHoldBuffer = newVal ; }
+
+	/**
+	 * Set the time of the most recent end of burst.
+	 * This method should ONLY be called by the server command
+	 * handlers.
+	 */
+	inline void setBurstEnd( const time_t newVal )
+		{ burstEnd = newVal ; }
+
+	/**
+	 * Set the time of the most recent start of burst.
+	 * This method should ONLY be called by the server command
+	 * handlers.
+	 */
+	inline void setBurstStart( const time_t newVal )
+		{ burstStart = newVal ; }
+
+	/**
+	 * Transfer the burstHoldBuffer data to the outputBuffer.
+	 * This method should ONLY be called by the server command
+	 * handlers.
+	 */
+	virtual void WriteBurstBuffer() ;
 
 	/**
 	 * Shutdown the server.
@@ -903,6 +895,22 @@ public:
 	 */
 	virtual bool isJuped( const iServer* ) const ;
 
+	/**
+	 * Burst out information about all xClients on this server.
+	 */
+	virtual void 	BurstClients() ;
+
+	/**
+	 * Output channel information for each client on this server.
+	 */
+	virtual void	BurstChannels() ;
+
+	/**
+	 * Deletes a juped server from the juped server list.
+	 * This does not alter the server itself.
+	 */
+	virtual bool	RemoveJupe( const iServer* );
+
 protected:
 
 	/**
@@ -924,12 +932,6 @@ protected:
 	xServer operator=( const xServer& ) ;
 
 	/**
-	 * Deletes a juped server from the juped server list.
-	 * This does not alter the server itself.
-	 */
-	virtual bool	RemoveJupe( const iServer* );
-
-	/**
 	 * Remove glines which match the given userHost, post event.
 	 */
 	virtual void	removeMatchingGlines( const string& ) ;
@@ -940,28 +942,6 @@ protected:
 	 * is being removed from the server.
 	 */
 	virtual void	removeClient( xClient* ) ;
-
-	/**
-	 * Return an iterator to the beginning of the gline structure.
-	 */
-	inline glineIterator	gline_begin()
-		{ return glineList.begin() ; }
-
-	/**
-	 * Return an iterator to the end of the gline structure.
-	 */
-	inline glineIterator	gline_end()
-		{ return glineList.end() ; }
-
-	/**
-	 * Burst out information about all xClients on this server.
-	 */
-	virtual void 	BurstClients() ;
-
-	/**
-	 * Output channel information for each client on this server.
-	 */
-	virtual void	BurstChannels() ;
 
 	/**
 	 * Remove all modes from a channel, used when bursting an
@@ -982,23 +962,6 @@ protected:
 	virtual bool	banSyntax( const string& ) const ;
 
 	/**
-	 * Parse a burst line for channel bans.
-	 */
-	virtual void	parseBurstBans( Channel*, const char* ) ;
-
-	/**
-	 * Parse a burst line for channel users.
-	 */
-	virtual void	parseBurstUsers( Channel*, const char* ) ;
-
-	/**
-	 * Convenience method that will part a given network
-	 * client from all channels, and notify each listening
-	 * xClient of the parts.
-	 */
-	virtual void	userPartAllChannels( iClient* ) ;
-
-	/**
 	 * Read the config file.  Return true if success, false
 	 * otherwise.
 	 */
@@ -1009,19 +972,13 @@ protected:
 	 * specified therein.  If any part of the process fails,
 	 * false is returned.  Otherwise, true is returned.
 	 */
-	virtual bool	loadModules( const string& ) ;
+	virtual bool	loadClients( const string& ) ;
 
 	/**
 	 * Signal handler for the server itself.
 	 * Returns true if the signal was handled.
 	 */
 	virtual bool	OnSignal( int ) ;
-
-	/**
-	 * This method is called when a user mode change is detected.
-	 */
-	virtual void	onUserModeChange( xParameters& ) ;
-
 
 	/**
 	 * This variable is false when no signal has occured, true
@@ -1089,145 +1046,13 @@ protected:
 	 */
 	virtual timerID		getUniqueTimerID() ;
 
-	/* Network message handlers */
-
-	/// AD(MIN)
-	DECLARE_MSG(AD);
-
-	/// B(URST) message handler.
-	DECLARE_MSG(B);
-
-	/// C(REATE) message handler.
-	DECLARE_MSG(C);
-
-	/// CM(CLEARMODE) message handler.
-	DECLARE_MSG(CM);
-
-	/// D(KILL) message handler.
-	DECLARE_MSG(D);
-
-	/// DE(SYNCH) ?
-	DECLARE_MSG(DS);
-
-	/// EA (End of burst Acknowledge) message handler.
-	DECLARE_MSG(EA);
-
-	/// EB (End of BURST) message handler.
-	DECLARE_MSG(EB);
-
-	/// ERROR message handler, deprecated.
-	DECLARE_MSG(Error);
-
-	/// G(PING) message handler.
-	DECLARE_MSG(G);
-
-	/// GL(INE) message handler
-	DECLARE_MSG(GL);
-
-	/// I(NVITE)
-	DECLARE_MSG(I);
-
-	/// J(OIN) message handler.
-	DECLARE_MSG(J);
-
-	/// K(ICK) message handler.
-	DECLARE_MSG(K);
-
-	// JU(PE) message handler.
-	DECLARE_MSG(JU);
-
-	/// L(EAVE) message handler.
-	DECLARE_MSG(L);
-
-	/// P(RIVMSG) message handler.
-	DECLARE_MSG(P);
-
-	/// PART message handler, non-tokenized, bogus
-	DECLARE_MSG(PART);
-
-	// PRIVMSG message handler, bogus.
-	DECLARE_MSG(PRIVMSG);
-
-	/// M(ODE) message handler.
-	DECLARE_MSG(M);
-
-	/// N(ICK) message handler.
-	DECLARE_MSG(N);
-
-	/// Q(UIT) message handler.
-	DECLARE_MSG(Q);
-
-	/// PASS message handler.
-	DECLARE_MSG(PASS);
-
-	// STATS message handler.
-	DECLARE_MSG(R);
-
-	/// RPING message handler, deprecated.
-	DECLARE_MSG(RemPing);
-
-	/// S(ERVER) message handler.
-	DECLARE_MSG(S);
-
-	/// SERVER message handler, deprecated.
-	DECLARE_MSG(Server);
-
-	/// SQ(UIT) message handler.
-	DECLARE_MSG(SQ);
-
-	/// T(OPIC) message handler.
-	DECLARE_MSG(T);
-
-	/// U(SILENCE)
-//	DECLARE_MSG(U);
-
-	/// WA(LLOPS) message handler.
-	DECLARE_MSG(WA);
-
-	/// W(HOIS) message handler.
-	DECLARE_MSG(W);
-
-	/// Account message handler.
-	DECLARE_MSG(AC);
-
-	/// NOOP message.
-	/// Use this handler for any messages that we don't need to handle.
-	/// Included for completeness.
-	DECLARE_MSG(NOOP);
-
-	/// 351 message
-	/// when our client recieve back a version reply from a server
-	DECLARE_MSG(M351);
-
-	// Non-tokenized command handlers
-	// Replication of code *sigh*
-
 	/**
 	 * Bounds checker for events.
 	 */
 	inline bool validEvent( const eventType& theEvent ) const
 		{ return (theEvent >= 0 && theEvent < EVT_NOOP) ; }
 
-	/**
-	 * This is the command map type.  Pointers to
-	 * the bound offset of the command handler methods
-	 * are stored in this structure.
-	 */
-	typedef map< string, int (xServer::*)( xParameters& ) >
-		commandMapType ;
-
-	/**
-	 * A pointer to the server command handler.
-	 */
-	commandMapType		*commandMap ;
-
-	/**
-	 * This points to the input/output stream to be used for
-	 * server->server communication.  This may point to an
-	 * instance of FileSocket if the server is running in
-	 * simulation mode.
-	 */
-	ClientSocket		*theSock ;
+	Connection		*serverConnection ;
 
 	/**
 	 * The name of the server, as the network sees it.
@@ -1273,14 +1098,11 @@ protected:
 	/**
 	 * Type used to store the channel event map.
 	 */
-	typedef map< string, list< xClient* >* > channelEventMapType ;
+	typedef map< string, list< xClient* >*, noCaseCompare > channelEventMapType ;
 
 	/**
-	 * This structure provides a nice iterator interface, and
-	 * runs in O(logn) time.  This should probably be moved
-	 * to some form of a hashtable, though it will have to
-	 * be specially built to meet the server's needs.
-	 * Any volunteers? :)
+	 * The structure used to maintain xClient registrations for
+	 * channel events.
 	 */
 	channelEventMapType	channelEventMap ;
 
@@ -1331,21 +1153,16 @@ protected:
 
 	/**
 	 * This variable will be true when the default behavior
-	 * of Write() is to write to the burstOutputBuffer.
+	 * of Write() is to write to the burstHoldBuffer.
 	 */
-	bool			useBurstBuffer ;
-
-	/**
-	 * This variable is true when the socket connection is valid.
-	 */
-	bool			_connected ;
+	bool			useHoldBuffer ;
 
 	/**
 	 * This variable remains true while the server should continue
 	 * running.  It may be set false by user input, or caught
 	 * signals.
 	 */
-	volatile bool		keepRunning ;
+	bool			keepRunning ;
 
 	/**
 	 * This is the current message error number, or -1 if no
@@ -1356,7 +1173,7 @@ protected:
 	/**
 	 * This is the port number to which we connect on our uplink.
 	 */
-	int			Port ;
+	unsigned short int	Port ;
 
 	/**
 	 * This is the unsigned integer representation of our server numeric.
@@ -1388,31 +1205,21 @@ protected:
 	iServer* 		Uplink ;
 
 	/**
-	 * This is the buffer into which network commands are read
-	 * and from which they are later processed.
-	 */
-	Buffer			inputBuffer ;
-
-	/**
-	 * This is the output buffer from which data is written to
-	 * the network.
-	 */
-	Buffer			outputBuffer ;
-
-	/**
 	 * This buffer will hold data to be written during burst time.
 	 */
-	Buffer			burstOutputBuffer ;
+	Buffer			burstHoldBuffer ;
 
 	/**
-	 * This is the size of the TCP input window.
+	 * The name of the file which contains the command handler
+	 * mapping from network message to handler.
 	 */
-	size_t			inputReadSize ;
+	string			commandMapFileName ;
 
 	/**
-	 * This is the size of the TCP output window.
+	 * The path prefix to the command handler, of the form
+	 * "/path/to/command/map/file"
 	 */
-	size_t			outputWriteSize ;
+	string			commandHandlerPrefix ;
 
 	/**
 	 * Burst() is called when the network connection is
@@ -1428,12 +1235,52 @@ protected:
 	/**
 	 * Type used to store runtime client modules.
 	 */
-	typedef vector< moduleLoader< xClient* >* >	moduleListType;
+	typedef vector< moduleLoader< xClient* >* >	clientModuleListType;
 
 	/**
 	 * Structure used to store runtime client modules.
 	 */
-	moduleListType		moduleList;
+	clientModuleListType		clientModuleList;
+
+	/**
+	 * The type of the modules used to load ServerCommandHandlers
+	 * from dynamically loadable libraries.
+	 * This is stored here in order to properly close them when
+	 * needed, including reloading command handlers.
+	 */
+	typedef moduleLoader< ServerCommandHandler*, xServer* >
+			commandModuleType ;
+
+	/**
+	 * A vector of modules representing ServerCommandHandlers.
+	 */
+	typedef vector< commandModuleType* > commandModuleListType ;
+
+	/**
+	 * The structure of moduleLoader's, each representing a
+	 * ServerCommandHandler.
+	 */
+	commandModuleListType		commandModuleList ;
+
+	/**
+	 * The type used to store ServerCommandHandlers, each
+	 * associated with a particular server message (key).
+	 */
+	typedef map< string, ServerCommandHandler*, noCaseCompare >
+			commandMapType ;
+
+	/**
+	 * The structure used to store ServerCommandHandlers, each
+	 * associated with a particular server message (key).
+	 */
+	commandMapType			commandMap ;
+
+	/**
+	 * Attempt to locate a commandModuleType by its key.  This is
+	 * used to reload a module, and to ensure that a module is
+	 * not accidentally loaded more than once.
+	 */
+	commandModuleType*	lookupCommandModule( const string& ) const ;
 
 	/**
 	 * The type used to store timed events.
@@ -1488,8 +1335,11 @@ protected:
 	 * The char array to be used to read in network data.
 	 * This is allocated only once in the server for
 	 * performance reasons.
+	 * It is of fixed size since this buffer isn't used for
+	 * actual reading from the network connection, only for
+	 * handling a single network message a time (max 512 bytes).
 	 */
-	char*		inputCharBuffer ;
+	char		inputCharBuffer[ 1024 ] ;
 
 	/**
 	 * True if all elog data should be output to clog.
@@ -1514,7 +1364,15 @@ protected:
 	/**
 	 * This method loads all command handlers.
 	 */
-	void		loadCommandHandlers() ;
+	bool		loadCommandHandlers() ;
+
+	/**
+	 * Load an individual command handler from a file (fileName),
+	 * and associate that handler with the network message
+	 * (commandKey).
+	 */
+	bool		loadCommandHandler( const string& fileName,
+				const string& commandKey ) ;
 
 	/**
 	 * This method maps all relevant signals to sigHandler().

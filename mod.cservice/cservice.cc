@@ -3960,7 +3960,7 @@ void cservice::checkDbConnectionStatus()
 			if (connectRetries >= 6)
 			{
 				logAdminMessage("Unable to contact database after 6 attempts, shutting down.");
-				MyUplink->flushBuffer();
+				//MyUplink->flushBuffer();
 				::exit(0);
 			} else
 			{
@@ -4189,7 +4189,7 @@ const string cservice::getVerify(const int officialLevel)
 	verifyTable[2] = "a VirusFix Member";
 	verifyTable[3] = "a Planetarion Team Member";
 	verifyTable[4] = "a Planetarion Team Leader";
-	verifyTable[50] = "an Official CSC Helper";
+	verifyTable[50] = "an CSC Junior Helper";
 	verifyTable[99] = "a Planetarion Creator";
 	
 	verifyTableType::const_iterator ptr = verifyTable.find(officialLevel);
