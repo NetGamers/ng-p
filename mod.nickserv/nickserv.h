@@ -1,6 +1,6 @@
 
 #ifndef __NICKSERV_H
-#define __NICKSERV_H "$Id: nickserv.h,v 1.3 2002-01-17 23:38:56 jeekay Exp $"
+#define __NICKSERV_H "$Id: nickserv.h,v 1.4 2002-01-18 19:29:03 jeekay Exp $"
 
 
 #include	<string>
@@ -275,7 +275,9 @@ protected:
 	
 } ; 
  
-} //namespace uworld
+} //namespace nserv
+
+const string escapeSQLChars(const string& theString);
 
 } // namespace gnuworld
  

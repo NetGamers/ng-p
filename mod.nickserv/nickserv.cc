@@ -22,7 +22,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.4 2002-01-17 23:38:56 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.5 2002-01-18 19:29:03 jeekay Exp $" ;
 
 // If DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -640,7 +640,31 @@ short int nickserv::getAdminAccessLevel( string theNick )
     }
 }
 
-} // namespace gnuworld
+} // namespace nserv
 
+const string gnuworld::escapeSQLChars(const string& theString)
+{
+  string retMe ;
+
+  for( string::const_iterator ptr = theString.begin() ;
+       ptr != theString.end() ; ++ptr )
+    {
+      if( *ptr == '\'' )
+	{
+	  retMe += "\\\047" ;
+	}
+      else if ( *ptr == '\\' )
+	{
+	  retMe += "\\\134" ;
+	}
+        else
+	  {
+	    retMe += *ptr ;
+	  }
+    }
+  return retMe ;
 }
+
+
+} // namespace gnuworld
 

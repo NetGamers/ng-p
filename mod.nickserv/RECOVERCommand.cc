@@ -11,7 +11,7 @@
 #include        "nickserv.h"
 #include        "sqlnsUser.h"
 
-const char RECOVERCommand_cc_rcsId[] = "$Id: RECOVERCommand.cc,v 1.1 2002-01-16 18:33:12 jeekay Exp $" ;
+const char RECOVERCommand_cc_rcsId[] = "$Id: RECOVERCommand.cc,v 1.2 2002-01-18 19:29:03 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -51,7 +51,7 @@ if(st[1][0] == '#')
 
 sqlnsUser* theUser = new (std::nothrow) sqlnsUser(bot->SQLDb);
 
-if(!theUser->loadData(theClient->getNickName()))
+if(!theUser->loadData(escapeSQLChars(st[1])))
   {
     bot->Notice(theClient, "AUTHENTICATION FAILED as %s.", st[1].c_str());
     return false;
