@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.8 2002-01-23 17:17:25 ultimate Exp $" ;
+const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.9 2002-02-07 03:19:45 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -16,39 +16,37 @@ namespace gnuworld
 using std::string ;
 
 static const char* lvl_1000_cmds = "\002Level 1000\002: everything";
-static const char* lvl_900_cmds = "\002Level  900\002: servnotice rehash say set[noforce]";
-static const char* lvl_850_cmds = "\002Level  850\002: * adduser remuser modinfo";
-static const char* lvl_800_cmds = "\002Level  800\002: set[nopurge|special|vacation|caution|neverreg]";
-static const char* lvl_750_cmds = "\002Level  750\002: suspend";
-static const char* lvl_600_cmds = "\002Level  600\002: purge removeall register comment(user) set[suspend]";
-static const char* lvl_501_cmds = "\002Level  501\002: remignore invme set[locked] comment(chan)";
-static const char* lvl_500_cmds = "\002Level  500\002: set";
-static const char* lvl_450_cmds = "\002Level  450\002: part join";
-static const char* lvl_400_cmds = "\002Level  400\002: adduser%s clearmode modinfo%s remuser%s";
-static const char* lvl_100_cmds = "\002Level  100\002: op deop suspend%s unsuspend%s";
-static const char* lvl_75_cmds = "\002Level   75\002: ban unban";
-static const char* lvl_50_cmds = "\002Level   50\002: kick%s topic";
-static const char* lvl_25_cmds = "\002Level   25\002: voice devoice";
-static const char* lvl_24_cmds = "\002Level   24\002: invite";
-static const char* lvl_1_cmds = "\002Level    1\002: status%s";
-static const char* lvl_adm_cmds = "\002Level    *\002: force unforce";
-static const char* lvl_0_cmds = "\002Level    0\002: access banlist chaninfo info help lbanlist login motd newpass showcommands showignore verify recover note";
-static const char* lvl_oper_cmds = "\002Level Oper\002: operjoin operpart settime opersuspend";
+static const char* lvl_950_cmds  = "\002Level  950\002: quote";
+static const char* lvl_900_cmds  = "\002Level  900\002: servnotice rehash say shutdown";
+static const char* lvl_850_cmds  = "\002Level  850\002: * adduser remuser modinfo force";
+static const char* lvl_750_cmds  = "\002Level  750\002: suspend";
+static const char* lvl_600_cmds  = "\002Level  600\002: purge removeall register comment(user)";
+static const char* lvl_501_cmds  = "\002Level  501\002: remignore invme comment(chan)";
+static const char* lvl_500_cmds  = "\002Level  500\002: set";
+static const char* lvl_450_cmds  = "\002Level  450\002: part join mode";
+static const char* lvl_400_cmds  = "\002Level  400\002: adduser%s clearmode modinfo%s remuser%s";
+static const char* lvl_100_cmds  = "\002Level  100\002: op deop suspend%s unsuspend%s";
+static const char* lvl_75_cmds   = "\002Level   75\002: ban unban";
+static const char* lvl_50_cmds   = "\002Level   50\002: kick%s topic";
+static const char* lvl_25_cmds   = "\002Level   25\002: voice devoice";
+static const char* lvl_24_cmds   = "\002Level   24\002: invite";
+static const char* lvl_1_cmds    = "\002Level    1\002: status%s";
+static const char* lvl_adm_cmds  = "\002Level    *\002: force unforce";
+static const char* lvl_0_cmds    = "\002Level    0\002: access banlist chaninfo info help lbanlist login motd newpass showcommands showignore verify recover note";
+static const char* lvl_oper_cmds = "\002Level Oper\002: operjoin operpart";
 
 /*
- * [15:18] <Kheldar> 06:15 -P- Level 900: noforce
- * [15:18] <Kheldar> 06:15 -P- Level 800: nopurge special vacation caution neverreg
- * [15:18] <Kheldar> 06:15 -P- Level 600: suspend
- * [15:18] <Kheldar> 06:15 -P- Level 501: comment locked
+ * These are the flags that can be used with /msg P SET (nick|#chan) OPTION
  */
-static const char* lvl_0_set_cmds = "\002Level   0\002: invisible lang coords alliance note";
-static const char* lvl_25_set_cmds = "\002Level  25\002: autoinvite";
-static const char* lvl_450_set_cmds = "\002Level 450\002: userflag autotopic url keywords desc mode welcome";
-static const char* lvl_500_set_cmds = "\002Level 500\002: massdeoppro noop strictop lang autojoin floatlim";
-static const char* lvl_501_set_cmds = "\002Level 501\002: locked";
-static const char* lvl_600_set_cmds = "\002Level 600\002: suspend";
-static const char* lvl_800_set_cmds = "\002Level 800\002: nopurge special vacation caution neverreg";
+
 static const char* lvl_900_set_cmds = "\002Level 900\002: noforce";
+static const char* lvl_800_set_cmds = "\002Level 800\002: caution neverreg nopurge noreg special tempman vacation";
+static const char* lvl_600_set_cmds = "\002Level 600\002: suspend";
+static const char* lvl_501_set_cmds = "\002Level 501\002: locked";
+static const char* lvl_500_set_cmds = "\002Level 500\002: autojoin floatlim lang massdeoppro noop strictop strictvoice";
+static const char* lvl_450_set_cmds = "\002Level 450\002: autotopic desc keywords mode url userflag welcome";
+static const char* lvl_24_set_cmds = "\002Level  24\002: autoinvite";
+static const char* lvl_0_set_cmds = "\002Level   0\002: alliance coords invisible lang note";
 
 bool SHOWCOMMANDSCommand::Exec( iClient* theClient, const string& Message )
 { 
@@ -101,7 +99,7 @@ if(string_upper(st[1]) == "SET") {
  	if (level >= 501) bot->Notice(theClient, lvl_501_set_cmds);
  	if (level >= 500) bot->Notice(theClient, lvl_500_set_cmds);
  	if (level >= 450) bot->Notice(theClient, lvl_450_set_cmds);
- 	if (level >= 25) bot->Notice(theClient,   lvl_25_set_cmds);
+ 	if (level >= 24) bot->Notice(theClient,   lvl_24_set_cmds);
 	
 	bot->Notice(theClient, lvl_0_set_cmds);
 	return true;
@@ -146,9 +144,9 @@ int admin = bot->getEffectiveAccessLevel(theUser,
 	bot->getChannelRecord("*"), true); 
 
 if (level >= 1000) bot->Notice(theClient, lvl_1000_cmds);
+if (level >= 950) bot->Notice(theClient, lvl_950_cmds);
 if (level >= 900) bot->Notice(theClient, lvl_900_cmds);
 if (level >= 850) bot->Notice(theClient, lvl_850_cmds);
-if (level >= 800) bot->Notice(theClient, lvl_800_cmds);
 if (level >= 750) bot->Notice(theClient, lvl_750_cmds);
 if (level >= 600) bot->Notice(theClient, lvl_600_cmds);
 if (level >= 501) bot->Notice(theClient, lvl_501_cmds);
