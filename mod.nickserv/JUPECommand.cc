@@ -2,13 +2,14 @@
 
 #include <string>
 #include <iomanip.h>
+#include <time.h>
 
 #include "StringTokenizer.h"
 #include "Network.h"
 #include "nickserv.h"
 #include "levels.h"
 
-const char JUPECommand_cc_rcsId[] = "$Id: JUPECommand.cc,v 1.1 2002-02-04 04:45:34 jeekay Exp $";
+const char JUPECommand_cc_rcsId[] = "$Id: JUPECommand.cc,v 1.2 2002-02-05 02:24:06 jeekay Exp $";
 
 namespace gnuworld
 {
@@ -35,7 +36,7 @@ string option = string_upper(st[1]);
 
 int adminAccess = bot->getAdminAccessLevel(theUser->getLoggedNick());
 
-if("ADD" == option && (adminAccess >= level::jupeadd))
+if("ADD" == option && (adminAccess >= level::jupe::add))
 	{
 	iClient* targetClient = Network->findNick(st[2]);
 	if(targetClient)
@@ -55,7 +56,7 @@ if("ADD" == option && (adminAccess >= level::jupeadd))
 	return true;
 	}
 
-if("DEL" == option && (adminAccess >= level::jupedel))
+if("DEL" == option && (adminAccess >= level::jupe::del))
 	{
 	if(bot->removeJupeNick(st[2]))
 		{
@@ -68,7 +69,7 @@ if("DEL" == option && (adminAccess >= level::jupedel))
 	return true;
 	}
 
-if("FORCEADD" == option && (adminAccess >= level::jupeforce))
+if("FORCEADD" == option && (adminAccess >= level::jupe::force))
 	{
 	if(bot->jupeNick(st[2]))
 		{
@@ -77,6 +78,24 @@ if("FORCEADD" == option && (adminAccess >= level::jupeforce))
 	else
 		{
 		bot->Notice(theClient, "Unable to jupe %s.", st[2].c_str());
+		}
+	return true;
+	}
+
+if("INFO" == option && (adminAccess >= level::jupe::info))
+	{
+	juUser* theUser = bot->findJupeNick(st[2]);
+	if(!theUser)
+		{
+		bot->Notice(theClient, "No active jupe found for %s.", st[2].c_str());
+		}
+	else
+		{
+		bot->Notice(theClient, "Jupe information for %s:", st[2].c_str());
+		bot->Notice(theClient, "Jupe Numeric   : %s%s", bot->getUplinkCharYY(), theUser->getNumeric().c_str());
+		bot->Notice(theClient, "Jupe Activated : %s", ctime(theUser->getSet()));
+		bot->Notice(theClient, "Jupe Expires   : %s", ctime(theUser->getExpires()));
+		bot->Notice(theClient, "Jupe Reason    : %s", theUser->getReason().c_str());
 		}
 	return true;
 	}
