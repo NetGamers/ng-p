@@ -11,7 +11,7 @@
  *
  * Caveats: None
  *
- * $Id: TOPICCommand.cc,v 1.5 2002-11-01 13:58:43 jeekay Exp $
+ * $Id: TOPICCommand.cc,v 1.6 2003-01-28 22:37:48 jeekay Exp $
  */
 
 #include	<string>
@@ -23,7 +23,7 @@
 #include	"responses.h"
 #include	"Network.h"
 
-const char TOPICCommand_cc_rcsId[] = "$Id: TOPICCommand.cc,v 1.5 2002-11-01 13:58:43 jeekay Exp $" ;
+const char TOPICCommand_cc_rcsId[] = "$Id: TOPICCommand.cc,v 1.6 2003-01-28 22:37:48 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -102,9 +102,9 @@ string topic = st.assemble(2);
 
 // Default ircu TOPICLEN - maxusername?
 // TODO: Put into config somewhere
-if( topic.size() > 145 )
+if( topic.size() > 230 )
 	{
-	bot->Notice(theClient, "ERROR: Topic cannot exceed 145 chars. You attempted to use %u characters.",
+	bot->Notice(theClient, "ERROR: Topic cannot exceed 230 chars. You attempted to use %u characters.",
 		topic.size());
 	return false;
         }

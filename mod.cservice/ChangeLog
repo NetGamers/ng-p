@@ -1,5 +1,6 @@
 2003-01-27 1.2.04 Jeekay
 * Fixed help to display right options for REHASH
+* Changed max TOPIC length to 230 from 154
 * Bumped version to 1.2.04
 
 2003-01-15 1.2.03 Jeekay
