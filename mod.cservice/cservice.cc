@@ -2288,6 +2288,7 @@ if (timer_id == cache_timerID)
 	cache_timerID = MyUplink->RegisterTimer(theTime, this, NULL);
 	}
 
+return 0;
 }
 
 /**
