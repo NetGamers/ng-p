@@ -20,7 +20,7 @@
  *
  * Caveats: None
  *
- * $Id: OPCommand.cc,v 1.3 2002-01-29 23:27:44 jeekay Exp $
+ * $Id: OPCommand.cc,v 1.4 2002-02-01 04:31:30 jeekay Exp $
  */
 
 #include	<string>
@@ -35,7 +35,7 @@
 
 using std::map ;
 
-const char OPCommand_cc_rcsId[] = "$Id: OPCommand.cc,v 1.3 2002-01-29 23:27:44 jeekay Exp $" ;
+const char OPCommand_cc_rcsId[] = "$Id: OPCommand.cc,v 1.4 2002-02-01 04:31:30 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -166,8 +166,7 @@ vector< iClient* > opList; // List of clients to op.
 
 if( st.size() < 3 ) /* No nicks provided, assume we op ourself. :) */
 	{
-	opList.push_back(theClient);
-	source = Message;
+	source = Message + string(" ") + theClient->getNickName();
 	delim = ' ';
 	}
 else
