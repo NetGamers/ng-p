@@ -1,7 +1,7 @@
 /* cservice_config.h */
 
 #ifndef __CSERVICE_CONFIG_H
-#define __CSERVICE_CONFIG_H "$Id: cservice_config.h,v 1.2 2002-01-16 00:00:21 morpheus Exp $"
+#define __CSERVICE_CONFIG_H "$Id: cservice_config.h,v 1.3 2002-01-16 23:24:16 morpheus Exp $"
 
 /**
  * Define this if you wish for all SQL queries to be sent
@@ -44,5 +44,7 @@
 #define FEATURE_INVITE
 
 #define FEATURE_NOFORCE
+
+#define FEATURE_MEMOSERV
 
 #endif // __CSERVICE_CONFIG_H
