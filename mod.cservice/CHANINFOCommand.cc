@@ -13,7 +13,7 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.30 2004-08-25 20:32:35 jeekay Exp $
+ * $Id: CHANINFOCommand.cc,v 1.31 2004-10-11 17:35:53 jeekay Exp $
  */
 
 #include  <string>
@@ -129,7 +129,11 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) ) {
     bot->prettyDuration(targetUser->getLastSeen()).c_str());
 
   if (targetUser->getFlag(sqlUser::F_GLOBAL_SUSPEND)) {
-    bot->Notice(theClient, "\002** This account has been suspended by a CService Administrator **\002");
+    if( theUser == targetUser	||
+        theClient->isOper()	||
+	bot->getAdminAccessLevel(theUser) ) {
+      bot->Notice(theClient, "\002** This account has been suspended by a CService Administrator **\002");
+    }
   }
 
   if(adminAccess) {
