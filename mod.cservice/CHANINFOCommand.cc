@@ -13,7 +13,7 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.5 2002-02-16 21:40:01 jeekay Exp $
+ * $Id: CHANINFOCommand.cc,v 1.6 2002-03-05 21:28:55 jeekay Exp $
  */
 
 #include	<string>
@@ -26,7 +26,7 @@
 #include	"libpq++.h"
 #include	"cservice_config.h"
 
-const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.5 2002-02-16 21:40:01 jeekay Exp $" ;
+const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.6 2002-03-05 21:28:55 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -105,6 +105,11 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 	{
 		bot->Notice(theClient," - What do you mean you want to demolish Planetarion to make way for a new"
 		" hyperspace expressway?");
+	}
+	
+	if (theUser->getID() == 23326)
+	{
+		bot->Notice(theClient, " - Wibble!");
 	}
 
 	iClient* targetClient = theUser->isAuthed();
@@ -186,6 +191,7 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 
 		bot->Notice(theClient, "Account suspended %s ago, Reason: %s", bot->prettyDuration(theTime).c_str(),
 			reason.c_str());
+		bot->Notice(theClient, "Due to expire: %s", bot->prettyDuration(-(theUser->getSuspendedExpire()) + 2*(bot->currentTime())).c_str());
 		} else
 		{
 		/*
