@@ -12,7 +12,7 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 
-const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.4 2002-01-17 00:27:32 morpheus Exp $" ;
+const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.5 2002-01-17 00:48:07 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -391,8 +391,8 @@ if( PGRES_TUPLES_OK != status )
 
 if (bot->SQLDb->Tuples() > 0 && atoi(bot->SQLDb->GetValue(0, 0)) > 0)
 	{
-		bot->Notice(theClient, "You have %d note(s). To view them, type \002/msg X note read\002.",
-			atoi(bot->SQLDb->GetValue(0, 0)));
+		bot->Notice(theClient, "You have %d note(s). To view them, type \002/msg %s note read\002.",
+			atoi(bot->SQLDb->GetValue(0, 0)), bot->getNickName().c_str());
 	}
 #endif
 
