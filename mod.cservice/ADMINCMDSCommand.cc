@@ -4,7 +4,7 @@
  * (c) Copyright 2002 Rasmus Hansen (GK@panet)
  * Distributed under the GNU Public License
  *
- * $Id: ADMINCMDSCommand.cc,v 1.26 2005-03-20 16:39:25 jeekay Exp $
+ * $Id: ADMINCMDSCommand.cc,v 1.27 2005-03-20 16:41:23 jeekay Exp $
  */
 
 #include	<string>
@@ -70,7 +70,7 @@ if(aLevel >= 800)
 	{
 	bot->Notice(theClient, "\002Level  800 - CSC Supervisor");
 	bot->Notice(theClient, "ADDUSER * (nick) (level)");
-	bot->Notice(theClient, "GLOBALNOTICE (message)");
+	bot->Notice(theClient, "GLOBALNOTICE (subject) (target) (message)");
 	bot->Notice(theClient, "MODINFO * ACCESS (nick) (level)");
 	bot->Notice(theClient, "OFFICIAL (CHECK <user>) (CLEAR <user>) (LIST) (SET <user> <level>");
 	bot->Notice(theClient, "SUSPEND * (nick) (duration) (reason)");
