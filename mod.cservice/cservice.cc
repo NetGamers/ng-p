@@ -2297,6 +2297,60 @@ if( st2[ 1 ].size() > 128 )
 return true ;
 }
 
+void cservice::OnChannelModeV( Channel* theChan, ChannelUser* theChanUser,
+															 const xServer::voiceVectorType& theTargets)
+{
+/*
+ * A user has been voiced in the channel.
+ * Need to check that the user isn't banned
+ */
+ 
+sqlChannel* reggedChan = getChannelRecord(theChan->getName());
+if(!reggedChan)
+	{
+	elog << "cservice::OnChannelModeV> WARNING, unable to "
+			 << "locate channel record for registered channel "
+			 << "event: " << theChan->getName() << endl;
+	return;
+	}
+
+// List of clients to devoice
+vector< iClient* > devoiceList;
+
+for( xServer::voiceVectorType::const_iterator ptr = theTargets.begin();
+		 ptr != theTargets.end(); ++ptr)
+	{ // Iterate through voiced
+	bool polarity = ptr->first;
+	ChannelUser* tmpUser = ptr->second;
+	
+	if(polarity)
+		{ // Someone is being voiced
+		sqlBan* theBan = isBannedOnChan(reggedChan, tmpUser->getClient());
+		if(theBan && (theBan->getLevel() >= 25))
+			{ // Ban >= 25
+			if(!tmpUser->getClient()->getMode(iClient::MODE_SERVICES) )
+				{ // Voicee is not a service
+				devoiceList.push_back(tmpUser->getClient());
+				Notice(tmpUser->getClient(), "You are not allowed to be voiced in %s",
+							 reggedChan->getName().c_str());
+				if(theChanUser && !theChanUser->getClient()->getMode(iClient::MODE_SERVICES) )
+					{ // Voicer is not a service
+					Notice(theChanUser->getClient(), "%s is not allowed to be voiced in %s",
+								 tmpUser->getClient()->getNickName().c_str(),
+								 reggedChan->getName().c_str());
+					} // Voicer is not a service
+				} // Voicee is not a service
+			} // Ban >= 25
+		} // Someone is being voiced
+	} // Iterate through voiced
+
+// Perform devoicings if necessary
+if( !devoiceList.empty() )
+	{ // devoiceList not empty
+	DeVoice(theChan, devoiceList);
+	} // devoiceList not empty
+} // cservice::OnChannelModeV
+
 void cservice::OnChannelModeO( Channel* theChan, ChannelUser* theChanUser,
 	const xServer::opVectorType& theTargets)
 {

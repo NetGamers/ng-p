@@ -1,5 +1,5 @@
 #ifndef __CSERVICE_H
-#define __CSERVICE_H "$Id: cservice.h,v 1.2 2002-01-23 17:17:25 ultimate Exp $"
+#define __CSERVICE_H "$Id: cservice.h,v 1.3 2002-01-30 19:00:34 jeekay Exp $"
 
 #include	<string>
 #include	<vector>
@@ -86,6 +86,8 @@ public:
 	virtual bool UnRegisterCommand( const string& ) ;
 	virtual void OnChannelModeO( Channel*, ChannelUser*,
 		const xServer::opVectorType& ) ;
+	virtual void OnChannelModeV( Channel*, ChannelUser*,
+		const xServer::voiceVectorType& );
 	virtual int OnChannelEvent( const channelEventType& whichEvent,
 		Channel* theChan,
 		void* data1, void* data2, void* data3, void* data4 );
