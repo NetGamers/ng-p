@@ -13,7 +13,7 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.29 2004-05-16 15:20:21 jeekay Exp $
+ * $Id: CHANINFOCommand.cc,v 1.30 2004-08-25 20:32:35 jeekay Exp $
  */
 
 #include  <string>
@@ -31,12 +31,10 @@
 #include	"sqlCommandLevel.h"
 #include	"sqlUser.h"
 
-const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.29 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
-using std::ends;
 using std::string ;
 
 static const char* queryHeader = "SELECT channels.name,users.user_name,levels.access,users_lastseen.last_seen FROM levels,channels,users,users_lastseen ";
@@ -224,7 +222,7 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) ) {
         << "WHERE levels.channel_id = channels.id AND channels.registered_ts <> 0 AND levels.user_id = "
         << targetUser->getID()
         << " ORDER BY levels.access DESC"
-        << ends;
+        ;
 
     #ifdef LOG_SQL
       elog  << "CHANINFO::sqlQuery> "
@@ -301,16 +299,16 @@ if( !theChan ) {
  */
 
 stringstream theQuery;
-theQuery  << queryHeader
-    << queryString
-    << "AND levels.channel_id = "
-    << theChan->getID()
-    << ends;
+theQuery	<< queryHeader
+		<< queryString
+		<< "AND levels.channel_id = "
+		<< theChan->getID()
+		;
 
 #ifdef LOG_SQL
-  elog  << "CHANINFO::sqlQuery> "
-    << theQuery.str().c_str()
-    << endl;
+	elog	<< "CHANINFO::sqlQuery> "
+		<< theQuery.str().c_str()
+		<< endl;
 #endif
 
 const long int registeredTS = theChan->getRegisteredTS();

@@ -4,7 +4,7 @@
  * Class which contains details about channels which are 'pending'
  * registration.
  * 
- * $Id: sqlPendingChannel.cc,v 1.3 2002-09-13 21:30:41 jeekay Exp $
+ * $Id: sqlPendingChannel.cc,v 1.4 2004-08-25 20:33:19 jeekay Exp $
  */
  
 #include	<string> 
@@ -23,13 +23,12 @@
 #include	"sqlPendingTraffic.h"
  
 const char sqlPendingChannel_h_rcsId[] = __SQLPENDINGCHANNEL_H ;
-const char sqlPendingChannel_cc_rcsId[] = "$Id: sqlPendingChannel.cc,v 1.3 2002-09-13 21:30:41 jeekay Exp $" ;
+const char sqlPendingChannel_cc_rcsId[] = "$Id: sqlPendingChannel.cc,v 1.4 2004-08-25 20:33:19 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::string ; 
 using std::endl ;
-using std::ends ;
 
 sqlPendingChannel::sqlPendingChannel(PgDatabase* _SQLDb)
 :channel_id(0), 
@@ -62,8 +61,8 @@ void sqlPendingChannel::loadTrafficCache()
 	 */ 
 stringstream theQuery;
 theQuery 	<< "SELECT ip_number, join_count FROM pending_traffic"
-			<< " WHERE channel_id = " << channel_id
-			<< ends;
+		<< " WHERE channel_id = " << channel_id
+		;
 
 #ifdef LOG_SQL
 	elog	<< "sqlPendingChannel::loadTrafficCache> "
@@ -115,12 +114,12 @@ bool sqlPendingChannel::commit()
 unique_join_count = trafficList.size();
  
 stringstream queryString; 
-queryString << "UPDATE pending SET "
-			<< "join_count = " << join_count << ", "
-			<< "unique_join_count = " << unique_join_count
-			<< " WHERE channel_id = " 
-			<< channel_id
-			<< ends;
+queryString	<< "UPDATE pending SET "
+		<< "join_count = " << join_count << ", "
+		<< "unique_join_count = " << unique_join_count
+		<< " WHERE channel_id = " 
+		<< channel_id
+		;
 
 #ifdef LOG_SQL
 	elog	<< "sqlPendingChannel::commit> "
@@ -156,27 +155,27 @@ if( PGRES_COMMAND_OK != status )
 bool sqlPendingChannel::commitSupporter(unsigned int sup_id, unsigned int count)
 {
 	stringstream queryString; 
-	queryString << "UPDATE supporters SET "
-				<< "join_count = " 
-				<< count 
-				<< " WHERE channel_id = "
-				<< channel_id
-				<< " AND user_id = "
-				<< sup_id
-				<< ends;
+	queryString	<< "UPDATE supporters SET "
+			<< "join_count = " 
+			<< count 
+			<< " WHERE channel_id = "
+			<< channel_id
+			<< " AND user_id = "
+			<< sup_id
+			;
 	
 	#ifdef LOG_SQL
 		elog	<< "sqlPendingChannel::commit> "
-				<< queryString.str()
-				<< endl;
+			<< queryString.str()
+			<< endl;
 	#endif
 	
 	ExecStatusType status = SQLDb->Exec(queryString.str().c_str()) ;
 	
 	if( PGRES_COMMAND_OK != status )
 		{
-			elog << "sqlPendingChannel::commit> Error updating supporter "
-				 << "record for " << sup_id << endl;
+			elog	<< "sqlPendingChannel::commit> Error updating supporter "
+				<< "record for " << sup_id << endl;
 		}
 
 	return true;

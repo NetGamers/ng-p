@@ -8,7 +8,7 @@
  *
  * Caveats: None.
  *
- * $Id: UNBANCommand.cc,v 1.7 2004-05-16 15:20:22 jeekay Exp $
+ * $Id: UNBANCommand.cc,v 1.8 2004-08-25 20:33:13 jeekay Exp $
  */
 
 #include	<string>
@@ -24,12 +24,10 @@
 #include	"sqlChannel.h"
 #include	"sqlUser.h"
 
-const char UNBANCommand_cc_rcsId[] = "$Id: UNBANCommand.cc,v 1.7 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
-using std::ends ;
 using std::string ;
 using namespace level;
 
@@ -227,7 +225,7 @@ while (cPtr != theChannel->banList_end())
 		s	<< bot->getCharYYXXX()
 			<< " M " << theChannel->getName()
 			<< " -b " << (*cPtr)
-			<< ends;
+			;
 		bot->Write( s );
 
 		theChannel->removeBan(*cPtr);

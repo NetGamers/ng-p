@@ -4,7 +4,7 @@
  *
  * Distributed under the GNU Public Licence
  *
- * $Id: DEBUGCommand.cc,v 1.7 2004-05-16 15:20:21 jeekay Exp $
+ * $Id: DEBUGCommand.cc,v 1.8 2004-08-25 20:32:40 jeekay Exp $
  */
 
 #include	<string>
@@ -18,7 +18,6 @@
 #include	"sqlCommandLevel.h"
 #include	"sqlUser.h"
 
-const char DEBUGCommand_cc_rcsId[] = "$Id: DEBUGCommand.cc,v 1.7 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {

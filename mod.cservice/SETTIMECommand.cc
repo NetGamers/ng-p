@@ -5,7 +5,6 @@
 namespace gnuworld
 {
 
-using std::ends;
 using std::string;
  
 void SETTIMECommand::Exec( iClient* theClient, const string& Message )
@@ -18,8 +17,12 @@ if(!theClient->isOper())
         }
 								
 stringstream s;
-s	<< server->getCharYY() << " SE " << time(NULL) << ":" << server->getName()
-	<< ends;
+s	<< server->getCharYY()
+	<< " SE " 
+	<< time(NULL) 
+	<< ":" 
+	<< server->getName()
+	;
 
 bot->Write( s ) ; 
 

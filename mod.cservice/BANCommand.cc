@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: BANCommand.cc,v 1.11 2004-05-16 15:20:21 jeekay Exp $
+ * $Id: BANCommand.cc,v 1.12 2004-08-25 20:32:30 jeekay Exp $
  */
 
 #include	<new>
@@ -37,12 +37,10 @@
 #include	"sqlCommandLevel.h"
 #include	"sqlUser.h"
 
-const char BANCommand_cc_rcsId[] = "$Id: BANCommand.cc,v 1.11 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
-using std::ends;
 using std::string ;
 using namespace level;
 
@@ -379,7 +377,7 @@ else
 		// TODO: Use xClient::Ban() here
 		stringstream s;
 		s	<< bot->getCharYYXXX() << " M " << theChannel->getName()
-			<< " +b " << banTarget << ends;
+			<< " +b " << banTarget ;
 
 		bot->Write( s );
 

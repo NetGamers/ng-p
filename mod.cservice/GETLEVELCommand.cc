@@ -15,7 +15,6 @@
 #include	"sqlCommandLevel.h"
 #include	"sqlUser.h"
 
-const char GETLEVELCommand_cc_rcsId[] = "$Id: GETLEVELCommand.cc,v 1.3 2004-05-16 15:20:21 jeekay Exp $";
 
 namespace gnuworld {
 

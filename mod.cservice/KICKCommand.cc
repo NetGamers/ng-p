@@ -11,7 +11,7 @@
 *
 * Suggestion: Support several nicks by seperating them with a comma.
 *             IE: /msg E kick #coder-com nick1,nick2,nick3 get outta here!
-* $Id: KICKCommand.cc,v 1.6 2004-05-16 15:20:21 jeekay Exp $
+* $Id: KICKCommand.cc,v 1.7 2004-08-25 20:32:41 jeekay Exp $
 */
 
 #include	<string>
@@ -27,7 +27,6 @@
 #include	"sqlChannel.h"
 #include	"sqlUser.h"
 
-const char KICKCommand_cc_rcsId[] = "$Id: KICKCommand.cc,v 1.6 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {

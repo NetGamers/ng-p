@@ -8,7 +8,7 @@
  *
  * Caveats: Needs to be written :)
  *
- * $Id: HELPCommand.cc,v 1.4 2004-05-16 13:08:16 jeekay Exp $
+ * $Id: HELPCommand.cc,v 1.5 2004-08-25 20:32:40 jeekay Exp $
  */
 
 #include	<string>
@@ -18,7 +18,6 @@
 #include	"cservice.h" 
 #include 	"responses.h"
 
-const char HELPCommand_cc_rcsId[] = "$Id: HELPCommand.cc,v 1.4 2004-05-16 13:08:16 jeekay Exp $" ;
 
 namespace gnuworld
 {

@@ -1,7 +1,7 @@
 /* 
  * sqlPendingTraffic.cc
  * 
- * $Id: sqlPendingTraffic.cc,v 1.3 2002-09-13 21:30:41 jeekay Exp $
+ * $Id: sqlPendingTraffic.cc,v 1.4 2004-08-25 20:33:19 jeekay Exp $
  */
  
 #include	<string> 
@@ -19,13 +19,12 @@
 #include	"sqlPendingTraffic.h"
  
 const char sqlPendingTraffic_h_rcsId[] = __SQLPENDINGTRAFFIC_H ;
-const char sqlPendingTraffic_cc_rcsId[] = "$Id: sqlPendingTraffic.cc,v 1.3 2002-09-13 21:30:41 jeekay Exp $" ;
+const char sqlPendingTraffic_cc_rcsId[] = "$Id: sqlPendingTraffic.cc,v 1.4 2004-08-25 20:33:19 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::string ;
 using std::endl ;
-using std::ends ;
 
 sqlPendingTraffic::sqlPendingTraffic(PgDatabase* _SQLDb)
 :channel_id(0),
@@ -40,11 +39,11 @@ bool sqlPendingTraffic::insertRecord()
 int theip_number = ip_number;
  
 stringstream queryString;
-queryString << "INSERT INTO pending_traffic (channel_id, ip_number, join_count) VALUES ("
-			<< channel_id << ", "
-			<< theip_number << ", "
-			<< join_count << ")"
-			<< ends;
+queryString	<< "INSERT INTO pending_traffic (channel_id, ip_number, join_count) VALUES ("
+		<< channel_id << ", "
+		<< theip_number << ", "
+		<< join_count << ")"
+		;
 
 #ifdef LOG_SQL
 	elog	<< "sqlPendingTraffic::insertRecord> "
@@ -71,14 +70,14 @@ bool sqlPendingTraffic::commit()
 	int theip_number = ip_number;
 	
 	stringstream queryString; 
-	queryString << "UPDATE pending_traffic SET "
-				<< "join_count = " 
-				<< join_count
-				<< " WHERE channel_id = "
-				<< channel_id
-				<< " AND ip_number = "
-				<< theip_number
-				<< ends;
+	queryString	<< "UPDATE pending_traffic SET "
+			<< "join_count = " 
+			<< join_count
+			<< " WHERE channel_id = "
+			<< channel_id
+			<< " AND ip_number = "
+			<< theip_number
+			;
 	
 	#ifdef LOG_SQL
 		elog	<< "sqlPendingTraffic::commit> "

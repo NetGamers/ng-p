@@ -7,7 +7,6 @@
 #include	"cservice.h"
 #include 	"responses.h"
 
-const char MOTDCommand_cc_rcsId[] = "$Id: MOTDCommand.cc,v 1.4 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {

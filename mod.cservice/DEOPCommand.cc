@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: DEOPCommand.cc,v 1.5 2004-05-16 15:20:21 jeekay Exp $
+ * $Id: DEOPCommand.cc,v 1.6 2004-08-25 20:32:40 jeekay Exp $
  */
 
 #include	<string>
@@ -24,7 +24,6 @@
 #include	"sqlChannel.h"
 #include	"sqlUser.h"
 
-const char DEOPCommand_cc_rcsId[] = "$Id: DEOPCommand.cc,v 1.5 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {

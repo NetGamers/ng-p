@@ -20,7 +20,7 @@
  *
  * Caveats: None
  *
- * $Id: OPCommand.cc,v 1.6 2004-05-16 15:20:21 jeekay Exp $
+ * $Id: OPCommand.cc,v 1.7 2004-08-25 20:33:01 jeekay Exp $
  */
 
 #include	<string>
@@ -38,7 +38,6 @@
 
 using std::map ;
 
-const char OPCommand_cc_rcsId[] = "$Id: OPCommand.cc,v 1.6 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {

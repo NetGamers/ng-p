@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: REGISTERCommand.cc,v 1.8 2004-05-16 15:20:22 jeekay Exp $
+ * $Id: REGISTERCommand.cc,v 1.9 2004-08-25 20:33:02 jeekay Exp $
  */
 
 #include	<string>
@@ -26,12 +26,10 @@
 #include	"sqlLevel.h"
 #include	"sqlUser.h"
 
-const char REGISTERCommand_cc_rcsId[] = "$Id: REGISTERCommand.cc,v 1.8 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
-using std::ends;
 
 void REGISTERCommand::Exec( iClient* theClient, const string& Message )
 {
@@ -71,7 +69,7 @@ void REGISTERCommand::Exec( iClient* theClient, const string& Message )
 	// Check the channel is not currently in the database either
 	stringstream chanQuery;
 	chanQuery << "SELECT id FROM channels WHERE lower(name) = '"
-						<< escapeSQLChars(st[1]) << "'" << ends;
+						<< escapeSQLChars(st[1]) << "'" ;
 #ifdef LOG_SQL
 	elog << "REGISTER::sqlQuery> " << chanQuery.str() << endl;
 #endif
@@ -160,7 +158,7 @@ void REGISTERCommand::Exec( iClient* theClient, const string& Message )
 				<< "registered_ts = 0 AND lower(name) = '"
 				<< escapeSQLChars(string_lower(st[1]))
 				<< "'"
-				<< ends;
+				;
 
 #ifdef LOG_SQL
 	elog << "sqlQuery> " << checkQuery.str().c_str() << endl;
@@ -180,13 +178,13 @@ void REGISTERCommand::Exec( iClient* theClient, const string& Message )
 
 		stringstream reclaimQuery;
 
-		reclaimQuery<< "UPDATE channels SET registered_ts = now()::abstime::int4,"
-					<< " last_updated = now()::abstime::int4, "
-					<< " flags = 0, description = '', url = '', comment = '', keywords = '', channel_mode = '+tn' "
-					<< " WHERE lower(name) = '"
-					<< escapeSQLChars(string_lower(st[1]))
-					<< "'"
-					<< ends;
+		reclaimQuery	<< "UPDATE channels SET registered_ts = now()::abstime::int4,"
+				<< " last_updated = now()::abstime::int4, "
+				<< " flags = 0, description = '', url = '', comment = '', keywords = '', channel_mode = '+tn' "
+				<< " WHERE lower(name) = '"
+				<< escapeSQLChars(string_lower(st[1]))
+				<< "'"
+				;
 
 #ifdef LOG_SQL
 		elog << "sqlQuery> " << reclaimQuery.str().c_str() << endl;
@@ -228,10 +226,10 @@ void REGISTERCommand::Exec( iClient* theClient, const string& Message )
 	stringstream idQuery;
 
 	idQuery 	<< "SELECT id FROM channels WHERE "
-				<< "lower(name) = '"
-				<< escapeSQLChars(string_lower(st[1]))
-				<< "'"
-				<< ends;
+			<< "lower(name) = '"
+			<< escapeSQLChars(string_lower(st[1]))
+			<< "'"
+			;
 
 #ifdef LOG_SQL
 	elog << "sqlQuery> " << idQuery.str().c_str() << endl;

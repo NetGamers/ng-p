@@ -4,7 +4,7 @@
  * Storage class for accessing Ban information either from the backend
  * or internal storage.
  * 
- * $Id: sqlBan.cc,v 1.4 2002-09-24 20:06:19 jeekay Exp $
+ * $Id: sqlBan.cc,v 1.5 2004-08-25 20:33:13 jeekay Exp $
  */
  
 #include	<string> 
@@ -19,14 +19,13 @@
 #include	"cservice_config.h"
  
 const char sqlBan_h_rcsId[] = __SQLBAN_H ;
-const char sqlBan_cc_rcsId[] = "$Id: sqlBan.cc,v 1.4 2002-09-24 20:06:19 jeekay Exp $" ;
+const char sqlBan_cc_rcsId[] = "$Id: sqlBan.cc,v 1.5 2004-08-25 20:33:13 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
 using std::string ; 
 using std::endl ;
-using std::ends ;
 
 sqlBan::sqlBan(PgDatabase* _SQLDb)
   : id(0),
@@ -80,7 +79,7 @@ queryString	<< queryHeader
 		<< "reason = '" << escapeSQLChars(reason) << "', " 
 		<< "last_updated = now()::abstime::int4 "
 		<< " WHERE id = " << id
-		<< ends;
+		;
 
 #ifdef LOG_SQL
 	elog	<< "sqlBan::commit> "
@@ -121,7 +120,7 @@ queryString	<< queryHeader
 		<< expires << ", '" 
 		<< escapeSQLChars(reason) << "', " 
 		<< "now()::abstime::int4); SELECT currval('bans_id_seq')" 
-		<< ends;
+		;
 
 #ifdef LOG_SQL
 	elog	<< "sqlBan::insertRecord> "
@@ -156,7 +155,7 @@ static const char* queryHeader = "DELETE FROM bans WHERE id = ";
 stringstream queryString;
 queryString	<< queryHeader 
 		<< id
-		<< ends;
+		;
 
 #ifdef LOG_SQL
 	elog	<< "sqlBan::delete> "

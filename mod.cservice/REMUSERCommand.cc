@@ -9,7 +9,7 @@
  * Caveats: None
  *
  *
- * $Id: REMUSERCommand.cc,v 1.11 2004-05-16 15:20:22 jeekay Exp $
+ * $Id: REMUSERCommand.cc,v 1.12 2004-08-25 20:33:02 jeekay Exp $
  */
 
 #include	<string>
@@ -28,12 +28,10 @@
 #include	"sqlLevel.h"
 #include	"sqlUser.h"
 
-const char REMUSERCommand_cc_rcsId[] = "$Id: REMUSERCommand.cc,v 1.11 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
-using std::ends;
 
 void REMUSERCommand::Exec( iClient* theClient, const string& Message )
 {
@@ -216,10 +214,11 @@ void REMUSERCommand::Exec( iClient* theClient, const string& Message )
 	 *  Now, build up the SQL query & execute it!
 	 */
 
-	theQuery << queryHeader
-	<< "channel_id = " << theChan->getID()
-	<< " AND user_id = " << targetUser->getID()
-	<< ";" << ends;
+	theQuery	<< queryHeader
+			<< "channel_id = " << theChan->getID()
+			<< " AND user_id = " << targetUser->getID()
+			<< ";"
+			;
 
 #ifdef LOG_SQL
 	elog << "sqlQuery> " << theQuery.str().c_str() << endl;

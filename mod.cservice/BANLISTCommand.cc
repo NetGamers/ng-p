@@ -9,7 +9,7 @@
  *
  * Caveats: None.
  *
- * $Id: BANLISTCommand.cc,v 1.3 2004-05-16 13:08:16 jeekay Exp $
+ * $Id: BANLISTCommand.cc,v 1.4 2004-08-25 20:32:35 jeekay Exp $
  */
 
 #include        <string>
@@ -20,7 +20,6 @@
 #include        "levels.h"
 #include        "responses.h"
 
-const char BANLISTCommand_cc_rcsId[] = "$Id: BANLISTCommand.cc,v 1.3 2004-05-16 13:08:16 jeekay Exp $" ;
 
 namespace gnuworld
 {

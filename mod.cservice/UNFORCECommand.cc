@@ -12,7 +12,6 @@
 #include	"sqlCommandLevel.h"
 #include	"sqlUser.h"
 
-const char UNFORCECommand_cc_rcsId[] = "$Id: UNFORCECommand.cc,v 1.5 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {

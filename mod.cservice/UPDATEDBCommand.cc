@@ -21,7 +21,6 @@
 #include	"sqlCommandLevel.h"
 #include	"sqlUser.h"
 
-const char UPDATEDBCommand_cc_rcsId[] = "$Id: UPDATEDBCommand.cc,v 1.8 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {

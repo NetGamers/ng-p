@@ -12,7 +12,6 @@
 #include	"sqlCommandLevel.h"
 #include	"sqlUser.h"
 
-const char QUOTECommand_cc_rcsId[] = "$Id: QUOTECommand.cc,v 1.4 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {

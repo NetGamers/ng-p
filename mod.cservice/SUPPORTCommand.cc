@@ -9,12 +9,10 @@
 #include	"sqlChannel.h"
 #include	"sqlUser.h"
 
-const char SUPPORTCommand_cc_rcsId[] = "$Id: SUPPORTCommand.cc,v 1.5 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
-using std::ends ;
 using std::string ;
 
 void SUPPORTCommand::Exec( iClient* theClient, const string& Message )
@@ -68,7 +66,7 @@ theQuery	<< "SELECT channels.id FROM pending,channels"
 			<< "'"
 			<< " AND channels.id = pending.channel_id"
 			<< " AND pending.status = 0"
-			<< ends;
+			;
 
 #ifdef LOG_SQL
 elog	<< "SUPPORTCommand::sqlQuery> "
@@ -102,11 +100,11 @@ unsigned int channel_id = atoi(bot->SQLDb->GetValue(0, 0));
 
 stringstream supQuery;
 supQuery 	<< "SELECT support FROM supporters"
-			<< " WHERE channel_id = "
-			<< channel_id
-			<< " AND user_id = "
-			<< theUser->getID()
-			<< ends;
+		<< " WHERE channel_id = "
+		<< channel_id
+		<< " AND user_id = "
+		<< theUser->getID()
+		;
 
 #ifdef LOG_SQL
 elog	<< "SUPPORTCommand::sqlQuery> "
@@ -148,14 +146,14 @@ if ((currentSupport == "Y") || (currentSupport == "N"))
 
 stringstream updateQuery;
 updateQuery	<< "UPDATE supporters SET support = '"
-			<< supportChar
-			<< "'"
-			<< ", last_updated = now()::abstime::int4"
-			<< " WHERE channel_id = "
-			<< channel_id
-			<< " AND user_id = "
-			<< theUser->getID()
-			<< ends;
+		<< supportChar
+		<< "'"
+		<< ", last_updated = now()::abstime::int4"
+		<< " WHERE channel_id = "
+		<< channel_id
+		<< " AND user_id = "
+		<< theUser->getID()
+		;
 
 #ifdef LOG_SQL
 elog	<< "SUPPORTCommand::sqlQuery> "
@@ -194,10 +192,10 @@ if (supportChar == 'Y')
 
 	stringstream tenQuery;
 	tenQuery 	<< "SELECT count(*) FROM supporters"
-				<< " WHERE channel_id = "
-				<< channel_id
-				<< " AND support = 'Y'"
-				<< ends;
+			<< " WHERE channel_id = "
+			<< channel_id
+			<< " AND support = 'Y'"
+			;
 
 #ifdef LOG_SQL
 	elog	<< "SUPPORTCommand::sqlQuery> "
@@ -221,12 +219,12 @@ if (supportChar == 'Y')
 	{
 		stringstream updatePendingQuery;
 		updatePendingQuery	<< "UPDATE pending SET status = '1',"
-							<< " last_updated = now()::abstime::int4,"
-							<< " check_start_ts = now()::abstime::int4"
-							<< " WHERE channel_id = "
-							<< channel_id
-							<< " AND status = '0'"
-							<< ends;
+					<< " last_updated = now()::abstime::int4,"
+					<< " check_start_ts = now()::abstime::int4"
+					<< " WHERE channel_id = "
+					<< channel_id
+					<< " AND status = '0'"
+					;
 
 #ifdef LOG_SQL
 		elog	<< "SUPPORTCommand::sqlQuery> "
@@ -255,13 +253,13 @@ if (supportChar == 'N')
 
 	stringstream updatePendingQuery;
 	updatePendingQuery	<< "UPDATE pending SET status = '9',"
-						<< " last_updated = now()::abstime::int4,"
-						<< " decision_ts = now()::abstime::int4,"
-						<< " decision = '--AUTOMATIC (REGPROC)-- NON-SUPPORT'"
-						<< " WHERE channel_id = "
-						<< channel_id
-						<< " AND status = '0'"
-						<< ends;
+				<< " last_updated = now()::abstime::int4,"
+				<< " decision_ts = now()::abstime::int4,"
+				<< " decision = '--AUTOMATIC (REGPROC)-- NON-SUPPORT'"
+				<< " WHERE channel_id = "
+				<< channel_id
+				<< " AND status = '0'"
+				;
 
 #ifdef LOG_SQL
 	elog	<< "SUPPORTCommand::sqlQuery> "
@@ -281,11 +279,11 @@ if (supportChar == 'N')
 
 	stringstream mgrQuery;
 	mgrQuery 	<< "SELECT user_name,email FROM users,pending"
-				<< " WHERE pending.manager_id = users.id "
-				<< " AND pending.channel_id = "
-				<< channel_id
-				<< " AND pending.status = '9'"
-				<< ends;
+			<< " WHERE pending.manager_id = users.id "
+			<< " AND pending.channel_id = "
+			<< channel_id
+			<< " AND pending.status = '9'"
+			;
 
 #ifdef LOG_SQL
 	elog	<< "SUPPORTCommand::sqlQuery> "
@@ -311,15 +309,15 @@ if (supportChar == 'N')
 
 		stringstream noregQuery;
 		noregQuery	<< cmdHeader
-					<< "('', '','"
-					<< escapeSQLChars(channelName) << "',"
-					<< "1, (now()::abstime::int4 + (86400*3)), now()::abstime::int4, '* REGPROC', '-NON SUPPORT-'"
-					<< ")" << ends;
+				<< "('', '','"
+				<< escapeSQLChars(channelName) << "',"
+				<< "1, (now()::abstime::int4 + (86400*3)), now()::abstime::int4, '* REGPROC', '-NON SUPPORT-'"
+				<< ")" ;
 
 #ifdef LOG_SQL
 		elog	<< "SUPPORTCommand::sqlQuery> "
-				<< noregQuery.str().c_str()
-				<< endl;
+			<< noregQuery.str().c_str()
+			<< endl;
 #endif
 
 		bot->SQLDb->Exec( noregQuery.str().c_str() ) ;
@@ -330,12 +328,12 @@ if (supportChar == 'N')
 
 		stringstream usernoregQuery;
 		usernoregQuery	<< cmdHeader
-					<< "('"
-					<< escapeSQLChars(managerName) << "', '"
-					<< escapeSQLChars(managerEmail) << "', "
-					<< "'', "
-					<< "1, (now()::abstime::int4 + (86400*30)), now()::abstime::int4, '* REGPROC', '-NON SUPPORT-'"
-					<< ")" << ends;
+				<< "('"
+				<< escapeSQLChars(managerName) << "', '"
+				<< escapeSQLChars(managerEmail) << "', "
+				<< "'', "
+				<< "1, (now()::abstime::int4 + (86400*30)), now()::abstime::int4, '* REGPROC', '-NON SUPPORT-'"
+				<< ")" ;
 
 #ifdef LOG_SQL
 		elog	<< "SUPPORTCommand::sqlQuery> "
@@ -351,12 +349,12 @@ if (supportChar == 'N')
 
 		stringstream clogQuery;
 		clogQuery	<< "INSERT INTO channellog (ts, channelid, event, message, last_updated) VALUES ("
-					<< "now()::abstime::int4, "
-					<< channel_id << ", "
-					<< "1, 'Non-support by "
-					<< escapeSQLChars(theUser->getUserName()) << "', "
-					<< "now()::abstime::int4)"
-					<< ends;
+				<< "now()::abstime::int4, "
+				<< channel_id << ", "
+				<< "1, 'Non-support by "
+				<< escapeSQLChars(theUser->getUserName()) << "', "
+				<< "now()::abstime::int4)"
+				;
 
 #ifdef LOG_SQL
 		elog	<< "SUPPORTCommand::sqlQuery> "

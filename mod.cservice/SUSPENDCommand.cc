@@ -7,7 +7,7 @@
  * Suspends an user on the specified channel, if suspend duration 0
  * is defined, the user will be unsuspended.
  *
- * $Id: SUSPENDCommand.cc,v 1.8 2004-05-16 15:20:22 jeekay Exp $
+ * $Id: SUSPENDCommand.cc,v 1.9 2004-08-25 20:33:13 jeekay Exp $
  */
 
 #include	<string>
@@ -27,7 +27,6 @@
 #include	"sqlLevel.h"
 #include	"sqlUser.h"
 
-const char SUSPENDCommand_cc_rcsId[] = "$Id: SUSPENDCommand.cc,v 1.8 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {

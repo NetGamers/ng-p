@@ -11,7 +11,7 @@
  *
  * Caveats: None
  *
- * $Id: TOPICCommand.cc,v 1.8 2004-05-16 15:20:22 jeekay Exp $
+ * $Id: TOPICCommand.cc,v 1.9 2004-08-25 20:33:13 jeekay Exp $
  */
 
 #include	<string>
@@ -26,12 +26,10 @@
 #include	"sqlChannel.h"
 #include	"sqlUser.h"
 
-const char TOPICCommand_cc_rcsId[] = "$Id: TOPICCommand.cc,v 1.8 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
-using std::ends ;
 
 void TOPICCommand::Exec( iClient* theClient, const string& Message )
 {
@@ -120,7 +118,7 @@ s	<< bot->getCharYYXXX()
 	<< theUser->getUserName()
 	<< ") "
 	<< topic
-	<< ends;
+	;
 
 bot->Write( s );
 

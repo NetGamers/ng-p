@@ -12,12 +12,9 @@
 
 #include	"sqlUser.h"
 
-const char NEWPASSCommand_cc_rcsId[] = "$Id: NEWPASSCommand.cc,v 1.6 2004-05-16 15:20:21 jeekay Exp $" ;
-
 namespace gnuworld
 {
 
-using std::ends;
 using std::hex;
 using std::setw;
 
@@ -111,7 +108,6 @@ for( size_t ii = 0; ii < MD5_DIGEST_LENGTH; ii++ )
 	{
 	output << setw(2) << data[ii];
 	}
-output << ends;
 
 // Prepend the md5 hash to the salt
 string finalPassword = salt + output.str().c_str();

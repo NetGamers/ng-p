@@ -3,7 +3,7 @@
  *
  * 20020201 - Jeekay - Initial Version
  *
- * $Id: MODECommand.cc,v 1.11 2004-05-16 13:08:16 jeekay Exp $
+ * $Id: MODECommand.cc,v 1.12 2004-08-25 20:32:46 jeekay Exp $
  */
 
 #include <string>
@@ -14,12 +14,10 @@
 #include "levels.h"
 #include "ELog.h"
 
-const char MODECommand_cc_rcsId[] = "$Id: MODECommand.cc,v 1.11 2004-05-16 13:08:16 jeekay Exp $";
 
 namespace gnuworld
 {
 
-using std::ends;
 
 void MODECommand::Exec( iClient* theClient, const string& Message )
 {

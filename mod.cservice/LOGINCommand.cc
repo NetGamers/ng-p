@@ -15,8 +15,6 @@
 #include	"sqlLevel.h"
 #include	"sqlUser.h"
 
-const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.21 2004-05-18 22:54:38 jeekay Exp $" ;
-
 namespace gnuworld
 {
 struct autoOpData {
@@ -25,7 +23,6 @@ struct autoOpData {
 	unsigned int suspend_expires;
 } aOp;
 
-using std::ends;
 
 void LOGINCommand::Exec( iClient* theClient, const string& Message )
 {

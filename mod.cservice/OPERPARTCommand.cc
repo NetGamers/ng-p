@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: OPERPARTCommand.cc,v 1.5 2004-05-16 15:20:21 jeekay Exp $
+ * $Id: OPERPARTCommand.cc,v 1.6 2004-08-25 20:33:01 jeekay Exp $
  */
 
 
@@ -23,12 +23,10 @@
 
 #include	"sqlChannel.h"
 
-const char OPERPARTCommand_cc_rcsId[] = "$Id: OPERPARTCommand.cc,v 1.5 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
-using std::ends ;
 using std::string ;
 
 void OPERPARTCommand::Exec( iClient* theClient, const string& Message )
@@ -90,7 +88,7 @@ s       << server->getCharYY()
 	<< " WA :"
 	<< "An IRC Operator is asking me to leave channel "
 	<< theChan->getName()
-	<< ends;
+	;
 
 bot->Write(s);
 

@@ -9,7 +9,7 @@
  *
  * Caveats: None.
  *
- * $Id: SEARCHCommand.cc,v 1.4 2004-05-16 13:08:17 jeekay Exp $
+ * $Id: SEARCHCommand.cc,v 1.5 2004-08-25 20:33:02 jeekay Exp $
  */
 
 #include	<string>
@@ -21,12 +21,10 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char SEARCHCommand_cc_rcsId[] = "$Id: SEARCHCommand.cc,v 1.4 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
-using std::ends ;
 using std::string ;
 
 static const char* queryHeader =    "SELECT channels.name,channels.keywords FROM channels ";
@@ -53,14 +51,14 @@ stringstream extraCond;
 extraCond	<< "'"
 		<< escapeSQLChars(matchString)
 		<< "' "
-		<< ends;
+		;
 
 stringstream theQuery;
 theQuery	<< queryHeader
 		<< queryCondition
 		<< extraCond.str()
 		<< queryFooter
-		<< ends;
+		;
 
 #ifdef LOG_SQL
 	elog	<< "SEARCH::sqlQuery> "

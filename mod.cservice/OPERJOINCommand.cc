@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: OPERJOINCommand.cc,v 1.5 2004-05-16 15:20:21 jeekay Exp $
+ * $Id: OPERJOINCommand.cc,v 1.6 2004-08-25 20:33:01 jeekay Exp $
  */
 
 
@@ -23,12 +23,9 @@
 
 #include	"sqlChannel.h"
 
-const char OPERJOINCommand_cc_rcsId[] = "$Id: OPERJOINCommand.cc,v 1.5 2004-05-16 15:20:21 jeekay Exp $" ;
-
 namespace gnuworld
 {
 
-using std::ends ;
 using std::string ;
 
 void OPERJOINCommand::Exec( iClient* theClient, const string& Message )
@@ -86,7 +83,7 @@ s	<< server->getCharYY()
 	<< " WA :"
 	<< "An IRC Operator is asking me to join channel "
 	<< theChan->getName()
-	<< ends;
+	;
 
 bot->Write(s);
 

@@ -4,7 +4,7 @@
  * Storage class for accessing channel user/level information either from the backend
  * or internal storage.
  *
- * $Id: sqlLevel.cc,v 1.4 2002-09-24 20:06:19 jeekay Exp $
+ * $Id: sqlLevel.cc,v 1.5 2004-08-25 20:33:19 jeekay Exp $
  */
 
 #include	<string>
@@ -22,14 +22,13 @@
 #include	"cservice_config.h"
 
 const char sqlLevel_h_rcsId[] = __SQLLEVEL_H ;
-const char sqlLevel_cc_rcsId[] = "$Id: sqlLevel.cc,v 1.4 2002-09-24 20:06:19 jeekay Exp $" ;
+const char sqlLevel_cc_rcsId[] = "$Id: sqlLevel.cc,v 1.5 2004-08-25 20:33:19 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
 using std::string ;
 using std::endl ;
-using std::ends ;
 
 const sqlLevel::flagType sqlLevel::F_AUTOOP =	0x01 ;
 const sqlLevel::flagType sqlLevel::F_PROTECT =	0x02 ;
@@ -80,7 +79,7 @@ queryString	<< "SELECT "
 		<< channelID
 		<< " AND user_id = "
 		<< userID
-		<< ends;
+		;
 
 #ifdef LOG_SQL
 	elog 	<< "sqlLevel::loadData> "
@@ -155,7 +154,7 @@ queryString	<< queryHeader
 		<< "last_updated = now()::abstime::int4 "
 		<< " WHERE channel_id = " << channel_id
 		<< " AND user_id = " << user_id
-		<< ends;
+		;
 
 #ifdef LOG_SQL
 	elog	<< "sqlLevel::commit> "
@@ -184,16 +183,16 @@ static const char* queryHeader = "INSERT INTO levels (channel_id,user_id,access,
 
 stringstream queryString;
 queryString	<< queryHeader
-			<< channel_id << ", "
-			<< user_id << ", "
-			<< access << ", "
-			<< flags << ", "
-			<< added << ", '"
-			<< escapeSQLChars(added_by) << "', "
-			<< last_modif << ", '"
-			<< escapeSQLChars(last_modif_by) << "', "
-			<< "now()::abstime::int4)"
-			<< ends;
+		<< channel_id << ", "
+		<< user_id << ", "
+		<< access << ", "
+		<< flags << ", "
+		<< added << ", '"
+		<< escapeSQLChars(added_by) << "', "
+		<< last_modif << ", '"
+		<< escapeSQLChars(last_modif_by) << "', "
+		<< "now()::abstime::int4)"
+		;
 
 #ifdef LOG_SQL
 	elog	<< "sqlLevel::insertRecord> "

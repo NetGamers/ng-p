@@ -4,7 +4,7 @@
  *
  * Distributed under the GNU Public Licence
  *
- * $Id: SCANCommand.cc,v 1.8 2004-05-16 15:20:22 jeekay Exp $
+ * $Id: SCANCommand.cc,v 1.9 2004-08-25 20:33:02 jeekay Exp $
  */
 
 #include	<string>
@@ -17,12 +17,10 @@
 #include	"sqlCommandLevel.h"
 #include	"sqlUser.h"
 
-const char SCANCommand_cc_rcsId[] = "$Id" ;
 
 namespace gnuworld
 {
 
-using std::ends ;
 using std::string ;
 
 void SCANCommand::Exec( iClient* theClient, const string& Message )
@@ -58,7 +56,7 @@ if("EMAIL" == option)
 	emailQuery << "SELECT user_name,email FROM users WHERE"
 		<< " lower(email) LIKE '%" << escapeSQLChars(search) << "%'"
 		<< " LIMIT 10"
-		<< ends;
+		;
 #ifdef LOG_SQL
 	elog << "SCAN:SQL> " << emailQuery.str().c_str() << endl;
 #endif
@@ -94,7 +92,7 @@ if("HOSTMASK" == option)
 		<< " WHERE id = user_id AND lower(last_hostmask) LIKE '%"
 		<< escapeSQLChars(search) << "%'"
 		<< " LIMIT 10"
-		<< ends;
+		;
 #ifdef LOG_SQL
 	elog << "SCAN:SQL> " << hostmaskQuery.str().c_str() << endl;
 #endif
@@ -129,7 +127,7 @@ if("NICK" == option)
 	nickQuery << "SELECT user_name FROM users WHERE"
 		<< " lower(user_name) LIKE '%" << escapeSQLChars(search) << "%'"
 		<< " LIMIT 10"
-		<< ends;
+		;
 #ifdef LOG_SQL
 	elog << "SCAN:SQL> " << nickQuery.str().c_str() << endl;
 #endif

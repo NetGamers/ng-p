@@ -9,7 +9,7 @@
  * 30/12/2000: Moved static SQL data to constants.h --Gte
  * Set loadData up to take data from rows other than 0.
  *
- * $Id: sqlChannel.cc,v 1.9 2003-10-11 15:24:55 jeekay Exp $
+ * $Id: sqlChannel.cc,v 1.10 2004-08-25 20:33:14 jeekay Exp $
  */
 
 #include	<string>
@@ -24,14 +24,13 @@
 #include	"cservice_config.h"
 
 const char sqlChannel_h_rcsId[] = __SQLCHANNEL_H ;
-const char sqlChannel_cc_rcsId[] = "$Id: sqlChannel.cc,v 1.9 2003-10-11 15:24:55 jeekay Exp $" ;
+const char sqlChannel_cc_rcsId[] = "$Id: sqlChannel.cc,v 1.10 2004-08-25 20:33:14 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
 using std::string ;
 using std::endl ;
-using std::ends ;
 
 const sqlChannel::flagType sqlChannel::F_NOPURGE     = 0x00000001 ;
 const sqlChannel::flagType sqlChannel::F_SPECIAL     = 0x00000002 ;
@@ -126,7 +125,7 @@ queryString	<< "SELECT "
 		<< " AND lower(name) = '"
 		<< escapeSQLChars(string_lower(channelName))
 		<< "'"
-		<< ends ;
+		;
 
 #ifdef LOG_SQL
 	elog	<< "sqlChannel::loadData> "
@@ -172,7 +171,7 @@ queryString	<< "SELECT "
 		<< sql::channel_fields
 		<< " FROM channels WHERE registered_ts <> 0 AND id = "
 		<< channelID
-		<< ends ;
+		;
 
 #ifdef LOG_SQL
 	elog	<< "sqlChannel::loadData> "
@@ -261,7 +260,7 @@ queryString	<< queryHeader
 		<< "welcome = '" << escapeSQLChars(welcome) << "', "
 		<< "suspend_expires_ts = " << suspendExpires << " "
 		<< queryCondition << id
-		<< ends;
+		;
 
 #ifdef LOG_SQL
 	elog	<< "sqlChannel::commit> "
@@ -288,13 +287,13 @@ static const char* queryHeader = "INSERT INTO channels (name, flags, registered_
 
 stringstream queryString;
 queryString	<< queryHeader
-			<< "'" << escapeSQLChars(name) << "', "
-			<< flags << ", "
-			<< registered_ts << ", "
-			<< channel_ts << ", '"
-			<< escapeSQLChars(channel_mode) << "', "
-			<< "now()::abstime::int4)"
-			<< ends;
+		<< "'" << escapeSQLChars(name) << "', "
+		<< flags << ", "
+		<< registered_ts << ", "
+		<< channel_ts << ", '"
+		<< escapeSQLChars(channel_mode) << "', "
+		<< "now()::abstime::int4)"
+		;
 
 #ifdef LOG_SQL
 	elog	<< "sqlChannel::insertRecord> "
@@ -321,11 +320,11 @@ const string sqlChannel::getLastEvent(unsigned short eventType, unsigned int& ev
 {
 stringstream queryString;
 
-queryString << "SELECT message,ts FROM channellog"
-						<< " WHERE channelid = " << id
-						<< " AND event = " << eventType
-						<< " ORDER BY ts DESC LIMIT 1"
-						<< ends;
+queryString	<< "SELECT message,ts FROM channellog"
+		<< " WHERE channelid = " << id
+		<< " AND event = " << eventType
+		<< " ORDER BY ts DESC LIMIT 1"
+		;
 
 #ifdef LOG_SQL
 elog << "sqlChannel::getLastEvent> "

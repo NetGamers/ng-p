@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: PARTCommand.cc,v 1.5 2004-05-16 15:20:22 jeekay Exp $
+ * $Id: PARTCommand.cc,v 1.6 2004-08-25 20:33:02 jeekay Exp $
  */
 
 
@@ -23,7 +23,6 @@
 #include	"sqlChannel.h"
 #include	"sqlUser.h"
 
-const char PARTCommand_cc_rcsId[] = "$Id: PARTCommand.cc,v 1.5 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {

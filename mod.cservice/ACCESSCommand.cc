@@ -12,7 +12,7 @@
  * Displays all "Level" records for a specified channel.
  * Can optionally narrow down selection using a number of switches.
  *
- * $Id: ACCESSCommand.cc,v 1.10 2004-05-16 15:20:21 jeekay Exp $
+ * $Id: ACCESSCommand.cc,v 1.11 2004-08-25 20:32:24 jeekay Exp $
  */
 
 #include	<string>
@@ -30,12 +30,10 @@
 #include	"sqlLevel.h"
 #include	"sqlUser.h"
 
-const char ACCESSCommand_cc_rcsId[] = "$Id: ACCESSCommand.cc,v 1.10 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
-using std::ends;
 
 static const char* queryHeader =    "SELECT channels.name,users.user_name,levels.access,levels.flags,users_lastseen.last_seen,levels.suspend_expires,levels.last_modif,levels.last_modif_by,levels.suspend_level FROM levels,channels,users,users_lastseen ";
 static const char* queryCondition = "WHERE levels.channel_id=channels.id AND levels.user_id=users.id AND users.id=users_lastseen.user_id ";
@@ -263,7 +261,6 @@ if (maxAmount)
 	{
 	extraCond << "AND levels.access <= " << maxAmount << " ";
 	}
-extraCond << ends;
 
 stringstream theQuery;
 theQuery	<< queryHeader
@@ -273,7 +270,7 @@ theQuery	<< queryHeader
 		<< theChan->getID()
 		<< " "
 		<< queryFooter
-		<< ends;
+		;
 
 #ifdef LOG_SQL
 	elog	<< "ACCESS::sqlQuery> "

@@ -4,7 +4,7 @@
  * Storage class for accessing user information either from the backend
  * or internal storage.
  *
- * $Id: sqlUser.cc,v 1.16 2004-05-01 15:31:43 jeekay Exp $
+ * $Id: sqlUser.cc,v 1.17 2004-08-25 20:33:19 jeekay Exp $
  */
 
 #include	<string.h>
@@ -22,7 +22,6 @@ namespace gnuworld
 {
 
 using std::endl ;
-using std::ends ;
 
 const sqlUser::flagType sqlUser::F_GLOBAL_SUSPEND	= 0x01 ;
 const sqlUser::flagType sqlUser::F_LOGGEDIN		= 0x02 ;
@@ -81,7 +80,7 @@ queryString	<< "SELECT "
 		<< sql::user_fields
 		<< " FROM users WHERE id = "
 		<< userID
-		<< ends;
+		;
 
 #ifdef LOG_SQL
 	elog	<< "sqlUser::loadData> "
@@ -129,7 +128,7 @@ queryString	<< "SELECT "
 		<< " FROM users WHERE lower(user_name) = '"
 		<< escapeSQLChars(string_lower(userName))
 		<< "'"
-		<< ends;
+		;
 
 #ifdef LOG_SQL
 	elog	<< "sqlUser::loadData> "
@@ -208,10 +207,10 @@ queryString	<< queryHeader
 		<< "question_id = " << questionID << ", "
 		<< "verificationdata = '" << escapeSQLChars(verificationData) << "', "
 		<< "email = '" << escapeSQLChars(email) << "', "
-    << "maxlogins = " << maxlogins << ", "
-    << "verify = " << verify << " "
+		<< "maxlogins = " << maxlogins << ", "
+		<< "verify = " << verify << " "
 		<< queryCondition << id
-		<< ends;
+		;
 
 #ifdef LOG_SQL
 	elog	<< "sqlUser::commit> " << queryString.str().c_str() << endl;
@@ -252,7 +251,7 @@ queryString	<< queryHeader
 		<< "last_updated = now()::abstime::int4 "
 		<< queryCondition
 		<< id
-		<< ends;
+		;
 
 #ifdef LOG_SQL
 	elog	<< "sqlUser::commitLastSeen> "
@@ -281,7 +280,7 @@ stringstream queryString;
 queryString	<< "SELECT last_seen"
 		<< " FROM users_lastseen WHERE user_id = "
 		<< id
-		<< ends;
+		;
 
 #ifdef LOG_SQL
 	elog	<< "sqlUser::getLastSeen> "
@@ -317,7 +316,7 @@ const string sqlUser::getLastHostMask()
    queryString     << "SELECT last_hostmask" 
                    << " FROM users_lastseen WHERE user_id = " 
                    << id 
-                   << ends; 
+                   ; 
     
    #ifdef LOG_SQL 
            elog    << "sqlUser::getLastHostMask> " 
@@ -363,7 +362,7 @@ theLog	<< "INSERT INTO userlog (ts, user_id, event, message, "
 	<< escapeSQLChars(theMessage)
 	<< " (By " << userExtra << ")"
 	<< "', now()::abstime::int4)"
-	<< ends;
+	;
 
 #ifdef LOG_SQL
 	elog	<< "sqlUser::writeEvent> "
@@ -380,12 +379,12 @@ const string sqlUser::getLastEvent(unsigned short eventType, unsigned int& event
 stringstream queryString;
 
 queryString	<< "SELECT message,ts"
-			<< " FROM userlog WHERE user_id = "
-			<< id
-			<< " AND event = "
-			<< eventType
-			<< " ORDER BY ts DESC LIMIT 1"
-			<< ends;
+		<< " FROM userlog WHERE user_id = "
+		<< id
+		<< " AND event = "
+		<< eventType
+		<< " ORDER BY ts DESC LIMIT 1"
+		;
 
 #ifdef LOG_SQL
 	elog	<< "sqlUser::getLastEvent> "

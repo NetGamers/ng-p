@@ -11,7 +11,6 @@
 #include	"sqlCommandLevel.h"
 #include	"sqlUser.h"
 
-const char REHASHCommand_cc_rcsId[] = "$Id: REHASHCommand.cc,v 1.5 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {

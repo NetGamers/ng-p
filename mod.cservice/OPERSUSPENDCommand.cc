@@ -4,7 +4,7 @@
  *
  * Suspends a channel for 12 hours, can be removed only by cservice admin
  *
- * $Id: OPERSUSPENDCommand.cc,v 1.3 2004-05-16 15:20:22 jeekay Exp $
+ * $Id: OPERSUSPENDCommand.cc,v 1.4 2004-08-25 20:33:02 jeekay Exp $
  */
 
 #include	<string>
@@ -20,7 +20,6 @@
 
 #include	"sqlChannel.h"
 
-const char OPERSUSPENDCommand_cc_rcsId[] = "$Id: OPERSUSPENDCommand.cc,v 1.3 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {

@@ -18,12 +18,10 @@
 #include	"sqlLevel.h"
 #include	"sqlUser.h"
 
-const char REMOVEALLCommand_cc_rcsId[] = "$Id: REMOVEALLCommand.cc,v 1.9 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
-using std::ends ;
 using std::string ;
 
 void REMOVEALLCommand::Exec( iClient* theClient, const string& Message )
@@ -101,8 +99,8 @@ if(!forceLevel)
 stringstream clearAllQuery;
 clearAllQuery	<< "SELECT user_id FROM levels WHERE"
 		<< " channel_id = "	<< theChan->getID()
-    << " AND access < 499"
-		<< ends;
+		<< " AND access < 499"
+		;
 
 #ifdef LOG_SQL
 	elog	<< "sqlQuery> "
@@ -153,8 +151,8 @@ for (int i = 0 ; i < bot->SQLDb->Tuples(); i++)
 stringstream deleteAllQuery;
 deleteAllQuery	<< "DELETE FROM levels WHERE"
 		<< " channel_id = " << theChan->getID()
-    << " AND access < 499"
-		<< ends;
+		<< " AND access < 499"
+		;
 
 #ifdef LOG_SQL
 	elog	<< "sqlQuery> "

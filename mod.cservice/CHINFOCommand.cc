@@ -4,7 +4,7 @@
  *
  * Distributed under the GNU Public Licence
  *
- * $Id: CHINFOCommand.cc,v 1.9 2004-05-16 15:20:21 jeekay Exp $
+ * $Id: CHINFOCommand.cc,v 1.10 2004-08-25 20:32:40 jeekay Exp $
  */
 
 #include	<string>
@@ -17,7 +17,6 @@
 #include	"sqlCommandLevel.h"
 #include	"sqlUser.h"
 
-const char CHINFOCommand_cc_rcsId[] = "$Id: CHINFOCommand.cc,v 1.9 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {

@@ -20,7 +20,7 @@
  *
  * Caveats: None
  *
- * $Id: VOICECommand.cc,v 1.7 2004-05-16 15:20:22 jeekay Exp $
+ * $Id: VOICECommand.cc,v 1.8 2004-08-25 20:33:13 jeekay Exp $
  */
 
 #include	<string>
@@ -40,7 +40,6 @@
 using std::map ;
 using std::vector ;
 
-const char VOICECommand_cc_rcsId[] = "$Id: VOICECommand.cc,v 1.7 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {

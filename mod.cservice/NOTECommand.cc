@@ -9,12 +9,10 @@
 
 #include	"sqlUser.h"
 
-const char NOTECommand_cc_rcsId[] = "$Id: NOTECommand.cc,v 1.16 2004-05-16 15:20:21 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
-using std::ends ;
 using std::string ;
 
 void NOTECommand::Exec(iClient* theClient, const string& Message)
@@ -108,7 +106,7 @@ if (cmd == "SEND")
 		thecount	<< "SELECT COUNT(*) as count "
 				<< "FROM memo where to_id="
 				<< targetUser->getID()
-				<< ends;
+				;
 		
 		ExecStatusType status = bot->SQLDb->Exec( thecount.str().c_str() );
 
@@ -137,7 +135,7 @@ if (cmd == "SEND")
 				<< targetUser->getID() << ", "
 				<< "'" << escapeSQLChars(st.assemble(3)) << "', "
 				<< "now()::abstime::int4)"
-				<< ends;
+				;
 #ifdef LOG_SQL
 			elog	<< "NOTE:SEND::sqlQuery> "
 				<< theQuery.str().c_str()
@@ -173,7 +171,7 @@ if (cmd == "READ")
 		<< "WHERE users.id = memo.from_id "
 		<< "AND memo.to_id = " << theUser->getID()
 		<< " ORDER BY ts DESC LIMIT 15"
-		<< ends;
+		;
 #ifdef LOG_SQL
 	elog	<< "NOTE:READ::sqlQuery> "
 		<< theQuery.str().c_str()
@@ -226,8 +224,6 @@ if (cmd == "ERASE")
 	if (string_upper(st[2]) != "ALL")
 		theQuery << " AND id=" << atoi(st[2].c_str());
 	
-	theQuery	<< ends;
-	
 #ifdef LOG_SQL
 	elog	<< "NOTE:ERASE::sqlQuery> "
 		<< theQuery.str().c_str()
@@ -264,7 +260,7 @@ if (cmd == "ALLOW")
 		/* User wants his allow list cleared */
 		stringstream clearQuery;
 		clearQuery << "SELECT COUNT(*) as count FROM note_allow WHERE"
-			<< " user_id = " << theUser->getID() << ends;
+			<< " user_id = " << theUser->getID() ;
 		ExecStatusType statusClearQuery = bot->SQLDb->Exec(clearQuery.str().c_str());
 #ifdef LOG_SQL
 		elog << "NOTE:CLEAR:SQL> "
@@ -284,7 +280,7 @@ if (cmd == "ALLOW")
 		
 		stringstream clearDelete;
 		clearDelete << "DELETE FROM note_allow WHERE"
-			" user_id = " << theUser->getID() << ends;
+			" user_id = " << theUser->getID() ;
 		ExecStatusType statusClearDelete = bot->SQLDb->Exec(clearDelete.str().c_str());
 #ifdef LOG_SQL
 		elog << "NOTE:CLEAR:SQL> "
@@ -308,7 +304,8 @@ if (cmd == "ALLOW")
 		stringstream listSelect;
 		listSelect << "SELECT user_name FROM users,note_allow WHERE users.id=user_from_id"
 			<< " AND user_id = " << theUser->getID()
-			<< " ORDER BY user_name"<< ends;
+			<< " ORDER BY user_name"
+			;
 #ifdef LOG_SQL
 		elog << "NOTE:LIST:SQL> " << listSelect.str().c_str() << endl;
 #endif
@@ -361,7 +358,7 @@ if (cmd == "ALLOW")
 		stringstream addSelect;
 		addSelect << "SELECT COUNT(*) AS count FROM note_allow WHERE"
 			<< " user_id = " << userID << " AND user_from_id = " << targetID
-			<< ends;
+			;
 #ifdef LOG_SQL
 		elog << "NOTE:ADD:SQL> " << addSelect.str().c_str() << endl;
 #endif
@@ -387,7 +384,8 @@ if (cmd == "ALLOW")
 		stringstream addInsert;
 		addInsert << "INSERT INTO note_allow (user_id,user_from_id,last_updated)"
 			<< " VALUES (" << userID << "," << targetID
-			<< ",now()::abstime::int4)" << ends;
+			<< ",now()::abstime::int4)"
+			;
 #ifdef LOG_SQL
 		elog << "NOTE:ADD:SQL> " << addInsert.str().c_str() << endl;
 #endif
@@ -417,7 +415,7 @@ if (cmd == "ALLOW")
 		stringstream remSelect;
 		remSelect << "SELECT COUNT(*) AS count FROM note_allow WHERE"
 			<< " user_id = " << userID << " AND user_from_id = " << targetID
-			<< ends;
+			;
 #ifdef LOG_SQL
 		elog << "NOTE:REM:SQL> " << remSelect.str().c_str() << endl;
 #endif
@@ -442,7 +440,7 @@ if (cmd == "ALLOW")
 		remDelete << "DELETE FROM note_allow WHERE"
 			<< " user_id = " << userID << " AND"
 			<< " user_from_id = " << targetID
-			<< ends;
+			;
 #ifdef LOG_SQL
 		elog << "NOTE:REM:SQL> " << remDelete.str().c_str() << endl;
 #endif

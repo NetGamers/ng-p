@@ -13,12 +13,10 @@
 #include	"sqlChannel.h"
 #include	"sqlUser.h"
 
-const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.23 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
-using std::ends ;
 using std::string ;
 
 void STATUSCommand::Exec( iClient* theClient, const string& Message )
@@ -212,7 +210,7 @@ if (theChan->getFlag(sqlChannel::F_FLOATLIM))
            << ":"
            << theChan->getLimitGrace()
            << ")" 
-           << ends; 
+           ; 
            flagsSet += floatLim.str(); 
            } 
 
@@ -230,7 +228,7 @@ authQuery	<< "SELECT users.user_name,levels.access FROM "
 		<< "AND levels.channel_id = "
 		<< theChan->getID()
 		<< " ORDER BY levels.access DESC"
-		<< ends;
+		;
 
 #ifdef LOG_SQL
 	elog	<< "sqlQuery> "

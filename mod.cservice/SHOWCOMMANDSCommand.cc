@@ -8,7 +8,6 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.19 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {

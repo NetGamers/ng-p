@@ -7,7 +7,6 @@
 #include	"cservice.h"
 #include	"responses.h"
 
-const char SHOWIGNORECommand_cc_rcsId[] = "$Id: SHOWIGNORECommand.cc,v 1.2 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {

@@ -12,12 +12,10 @@
 #include	"sqlCommandLevel.h"
 #include	"sqlUser.h"
 
-const char REMIGNORECommand_cc_rcsId[] = "$Id: REMIGNORECommand.cc,v 1.7 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
-using std::ends ;
 using std::string ;
 
 void REMIGNORECommand::Exec( iClient* theClient, const string& Message )
@@ -63,7 +61,7 @@ for( cservice::silenceListType::iterator ptr = bot->silenceList.begin() ;
 		s	<< bot->getCharYYXXX()
 			<< " SILENCE * -"
 			<< ptr->first.c_str()
-			<< ends;
+			;
 		bot->Write( s );
 
 		/*

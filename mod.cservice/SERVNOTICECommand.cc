@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: SERVNOTICECommand.cc,v 1.4 2004-05-16 15:20:22 jeekay Exp $
+ * $Id: SERVNOTICECommand.cc,v 1.5 2004-08-25 20:33:02 jeekay Exp $
  */
 
 #include	<string>
@@ -25,7 +25,6 @@
 #include	"sqlCommandLevel.h"
 #include	"sqlUser.h"
 
-const char SERVNOTICECommand_cc_rcsId[] = "$Id: SERVNOTICECommand.cc,v 1.4 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {

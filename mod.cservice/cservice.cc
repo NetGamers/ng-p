@@ -43,7 +43,6 @@ namespace gnuworld
 {
 
 using std::endl ;
-using std::ends ;
 using std::make_pair ;
 using std::map ;
 using std::string ;
@@ -560,7 +559,7 @@ else
 			<< theClient->getCharYYXXX()
 			<< " "
 			<< silenceMask
-			<< ends;
+			;
 		Write( s.str() );
 
 		time_t expireTime = currentTime() + 1500;
@@ -819,8 +818,9 @@ if(findNick[0] == '-')
 		{
 	
 		stringstream findID;
-		findID << "SELECT user_name FROM users WHERE id = " << theID
-			<< ends;
+		findID	<< "SELECT user_name FROM users WHERE id = "
+			<< theID
+			;
 #ifdef LOG_SQL
 		elog << "gUR:SQL> " << findID.str() << endl;
 #endif
@@ -1306,7 +1306,7 @@ expireQuery	<< "SELECT user_id,channel_id FROM levels "
 		<< "WHERE suspend_expires <= "
 		<< currentTime()
 		<< " AND suspend_expires <> 0"
-		<< ends;
+		;
 
 #ifdef LOG_SQL
 	elog	<< "expireSuspends::sqlQuery> "
@@ -1442,18 +1442,18 @@ unsigned int Time = currentTime();
 
 stringstream insertChanQuery;
 insertChanQuery << "INSERT INTO channellog (ts,channelid,event,message,last_updated)"
-						<< " SELECT " << Time << ", channels.id, " << sqlChannel::EV_UNSUSPEND << ","
-						<< " 'Auto Unsuspend', " << Time
-						<< " FROM channels WHERE " << Time << " > channels.suspend_expires_ts"
-						<< " AND channels.suspend_expires_ts <> 0"
-						<< ends;
+		<< " SELECT " << Time << ", channels.id, " << sqlChannel::EV_UNSUSPEND << ","
+		<< " 'Auto Unsuspend', " << Time
+		<< " FROM channels WHERE " << Time << " > channels.suspend_expires_ts"
+		<< " AND channels.suspend_expires_ts <> 0"
+		;
 
 stringstream updateChanQuery;
 updateChanQuery << "UPDATE channels SET flags = (flags & ~" << sqlChannel::F_SUSPEND << "),"
-						<< " last_updated=" << Time << ", suspend_expires_ts = 0"
-						<< " WHERE " << Time << " > suspend_expires_ts AND"
-						<< " suspend_expires_ts <> 0"
-						<< ends;
+		<< " last_updated=" << Time << ", suspend_expires_ts = 0"
+		<< " WHERE " << Time << " > suspend_expires_ts AND"
+		<< " suspend_expires_ts <> 0"
+		;
 
 #ifdef LOG_SQL
 elog << "expireGlobalSuspends> " << insertChanQuery.str() << endl;
@@ -1504,13 +1504,13 @@ insertUserQuery << "INSERT INTO userlog (ts,user_id,event,message,last_updated)"
 	<< " 'Auto Unsuspend', " << Time
 	<< " FROM users WHERE " << Time << " > users.suspended_expire_ts AND"
 	<< " users.suspended_expire_ts <> 0"
-	<< ends;
+	;
 
 stringstream updateUserQuery;
 updateUserQuery << "UPDATE users SET flags = (flags & ~" << sqlUser::F_GLOBAL_SUSPEND << "),"
 	<< "last_updated=" << Time << ",suspended_expire_ts=0"
 	<< " WHERE " << Time << " > suspended_expire_ts AND suspended_expire_ts <> 0"
-	<< ends;
+	;
 
 #ifdef LOG_SQL
 elog << "expireGlobalSuspends> " << insertUserQuery.str() << endl;
@@ -1571,7 +1571,7 @@ while (ptr != silenceList.end())
 			<< ptr->second.second
 			<< " -"
 			<< theMask
-			<< ends;
+			;
 		Write( s.str() );
 
 		/*
@@ -1611,7 +1611,7 @@ stringstream expireQuery;
 expireQuery	<< "SELECT channel_id,id FROM bans "
 		<< "WHERE expires <= "
 		<< currentTime()
-		<< ends;
+		;
 
 #ifdef LOG_SQL
 	elog	<< "sqlQuery> "
@@ -1839,7 +1839,7 @@ if (ptr->second <= currentTime())
 				<< tmpChan->getName()
 				<< " +o "
 				<< getCharYYXXX()
-				<< ends;
+				;
 
 			Write( s.str() );
 
@@ -1880,7 +1880,7 @@ if (ptr->second <= currentTime())
             << tmpChan->getName()
             << " "
             << theChan->getChannelMode()
-            << ends;
+            ;
           
           Write(chanModes);
         }
@@ -1913,12 +1913,12 @@ void cservice::updateChannels()
 stringstream theQuery ;
 
 theQuery	<< "SELECT "
-			<< sql::channel_fields
-			<< ",now()::abstime::int4 as db_unixtime FROM "
-			<< "channels WHERE last_updated >= "
-			<< lastChannelRefresh
-			<< " AND registered_ts <> 0"
-			<< ends;
+		<< sql::channel_fields
+		<< ",now()::abstime::int4 as db_unixtime FROM "
+		<< "channels WHERE last_updated >= "
+		<< lastChannelRefresh
+		<< " AND registered_ts <> 0"
+		;
 
 #ifdef LOG_SQL
 elog	<< "*** [CMaster::processDBUpdates]:sqlQuery: "
@@ -1993,11 +1993,11 @@ void cservice::updateLevels()
 stringstream theQuery ;
 
 theQuery	<< "SELECT "
-			<< sql::level_fields
-			<< ",now()::abstime::int4 as db_unixtime FROM "
-			<< "levels WHERE last_updated >= "
-			<< lastLevelRefresh
-			<< ends;
+		<< sql::level_fields
+		<< ",now()::abstime::int4 as db_unixtime FROM "
+		<< "levels WHERE last_updated >= "
+		<< lastLevelRefresh
+		;
 
 #ifdef LOG_SQL
 elog	<< "*** [CMaster::updateLevels]: sqlQuery: "
@@ -2076,11 +2076,11 @@ void cservice::updateUsers()
 	stringstream theQuery ;
 
 	theQuery	<< "SELECT "
-				<< sql::user_fields
-				<< ",now()::abstime::int4 as db_unixtime FROM "
-				<< "users WHERE last_updated >= "
-				<< lastUserRefresh
-				<< ends;
+			<< sql::user_fields
+			<< ",now()::abstime::int4 as db_unixtime FROM "
+			<< "users WHERE last_updated >= "
+			<< lastUserRefresh
+			;
 
 	#ifdef LOG_SQL
 	elog	<< "*** [CMaster::updateUsers]: sqlQuery: "
@@ -2213,7 +2213,7 @@ s	<< MyUplink->getCharYY()
 	<< theChannel->getName()
 	<< " :"
 	<< buf
-	<< ends;
+	;
 
 Write( s.str() );
 
@@ -2233,7 +2233,7 @@ s	<< MyUplink->getCharYY()
 	<< theChannel->getName()
 	<< " :"
 	<< Message
-	<< ends;
+	;
 
 Write( s.str() );
 
@@ -3191,7 +3191,7 @@ if( theBan && (theBan->getLevel() >= 75) )
 		<< theChan->getName()
 		<< " +b "
 		<< theBan->getBanMask()
-		<< ends;
+		;
 
 	Write( s.str() );
 
@@ -3237,7 +3237,7 @@ s	<< getCharYY()
 	<< " " << targetClient->getUserName()
 	<< " " << targetClient->getInsecureHost()
 	<< " * :"
-	<< ends;
+	;
 Write( s.str() );
 
 stringstream s4;
@@ -3247,7 +3247,7 @@ s4	<< getCharYY()
 	<< " " << targetClient->getNickName()
 	<< " 0 " << targetClient->getConnectTime()
 	<< " :seconds idle, signon time"
-	<< ends;
+	;
 Write( s4.str() );
 
 if (targetClient->isOper())
@@ -3258,7 +3258,7 @@ if (targetClient->isOper())
 		<< sourceClient->getCharYYXXX()
 		<< " " << targetClient->getNickName()
 		<< " :is an IRC Operator"
-		<< ends;
+		;
 	Write( s5.str() );
 	}
 
@@ -3273,7 +3273,7 @@ if (theUser)
 		<< " " << targetClient->getNickName()
 		<< " :is Logged in as "
 		<< theUser->getUserName()
-		<< ends;
+		;
 	Write( s6.str() );
 	}
 
@@ -3285,7 +3285,7 @@ if (isIgnored(targetClient))
 		<< sourceClient->getCharYYXXX()
 		<< " " << targetClient->getNickName()
 		<< " :is currently being ignored. "
-		<< ends;
+		;
 	Write( s7.str() );
 	}
 
@@ -3295,7 +3295,7 @@ s3	<< getCharYY()
 	<< sourceClient->getCharYYXXX()
 	<< " " << targetClient->getNickName()
 	<< " :End of /WHOIS list."
-	<< ends;
+	;
 Write( s3.str() );
 
 return 0;
@@ -3373,7 +3373,7 @@ void cservice::updateLimits()
                    << theChan->getName() 
                    << " +l " 
                    << newLimit 
-                   << ends; 
+                   ; 
     
            Write( s.str() );
 	   incStat("CORE.FLOATLIM.ALTER.BYTES", strlen(s.str().c_str())); 
@@ -3404,7 +3404,7 @@ s	<< getCharYYXXX()
 	<< " :"
 	<< theChan->getDescription()
 	<< extra
-	<< ends;
+	;
 
 Write( s.str() );
 
@@ -3525,7 +3525,7 @@ theLog	<< "INSERT INTO channellog (ts, channelID, event, message, "
 	<< "', "
 	<< currentTime()
 	<< ")"
-	<< ends;
+	;
 
 #ifdef LOG_SQL
 	elog	<< "cservice::writeChannelLog> "
@@ -3638,11 +3638,11 @@ if (pendingChannelList.size() > 0)
 
 stringstream theQuery;
 theQuery	<<  "SELECT channels.name, pending.channel_id, user_id, pending.join_count, supporters.join_count, pending.unique_join_count"
-			<< " FROM pending,supporters,channels"
-			<< " WHERE pending.channel_id = supporters.channel_id"
-			<< " AND channels.id = pending.channel_id"
-			<< " AND pending.status = 1;"
-			<< ends;
+		<< " FROM pending,supporters,channels"
+		<< " WHERE pending.channel_id = supporters.channel_id"
+		<< " AND channels.id = pending.channel_id"
+		<< " AND pending.status = 1;"
+		;
 
 #ifdef LOG_SQL
 elog	<< "*** [CMaster::loadPendingChannelList]: Loading pending channel details."
@@ -3776,9 +3776,9 @@ void cservice::preloadChannelCache()
 {
 stringstream theQuery;
 theQuery	<< "SELECT " << sql::channel_fields
-			<< " FROM channels WHERE "
-			<< "registered_ts <> 0"
-			<< ends;
+		<< " FROM channels WHERE "
+		<< "registered_ts <> 0"
+		;
 
 elog	<< "*** [CMaster::preloadChannelCache]: Loading all registered channel records: "
 		<< endl;
@@ -3817,11 +3817,11 @@ void cservice::preloadBanCache()
 
 stringstream theQuery;
 theQuery	<< "SELECT " << sql::ban_fields
-			<< " FROM bans;"
-			<< ends;
+		<< " FROM bans;"
+		;
 
 elog		<< "*** [CMaster::preloadBanCache]: Precaching Ban table: "
-			<< endl;
+		<< endl;
 
 ExecStatusType status = SQLDb->Exec(theQuery.str().c_str()) ;
 
@@ -3859,13 +3859,13 @@ elog	<< "*** [CMaster::preloadBanCache]: Done. Loaded "
 unsigned short int cservice::preloadCommandLevelsCache()
 {
 stringstream theQuery;
-theQuery << "SELECT "
-  << sql::command_fields
-  << " FROM commands"
-  << ends;
+theQuery	<< "SELECT "
+		<< sql::command_fields
+		<< " FROM commands"
+		;
 
-elog << "*** [CMaster::preloadCommandLevelsCache] Precaching Commands table: "
-  << endl;
+elog	<< "*** [CMaster::preloadCommandLevelsCache] Precaching Commands table: "
+	<< endl;
 
 ExecStatusType status = SQLDb->Exec(theQuery.str().c_str());
 if(PGRES_TUPLES_OK != status) {
@@ -3968,8 +3968,8 @@ void cservice::preloadLevelsCache()
 
 stringstream theQuery;
 theQuery	<< "SELECT " << sql::level_fields
-			<< " FROM levels"
-			<< ends;
+		<< " FROM levels"
+		;
 
 elog		<< "*** [CMaster::preloadLevelCache]: Precaching Level table: "
 			<< endl;
@@ -4025,7 +4025,7 @@ void cservice::preloadUserCache()
 			<< " users_lastseen.user_id = users.id AND"
 			<< " users_lastseen.last_seen >= "
 			<< currentTime() - (preloadUserDays * 86400)
-			<< ends;
+			;
 
 	elog	<< "*** [CMaster::preloadUserCache] Loading users accounts logged in within "
 		<< preloadUserDays
@@ -4120,7 +4120,7 @@ theLog  << "INSERT INTO forcelog (ts, username, channelname, message) VALUES ("
         << "', '"
         << escapeSQLChars(theMessage)
         << "');"
-        << ends;
+        ;
 
 #ifdef LOG_SQL
         elog    << "forceLog::write> "
@@ -4175,7 +4175,6 @@ for( size_t ii = 0; ii < MD5_DIGEST_LENGTH; ii++ )
 	{
 	output << std::setw(2) << data[ii];
 	}
-output << ends;
 
 if(md5Part != output.str().c_str() ) /* Do the hashes match? */
 	{

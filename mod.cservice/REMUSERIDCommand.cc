@@ -3,7 +3,7 @@
  *
  * 20020308 GK@PAnet - Initial Writing
  *
- * $Id: REMUSERIDCommand.cc,v 1.18 2004-05-16 15:20:22 jeekay Exp $
+ * $Id: REMUSERIDCommand.cc,v 1.19 2004-08-25 20:33:02 jeekay Exp $
  */
 
 #include	<string>
@@ -17,12 +17,10 @@
 #include	"sqlCommandLevel.h"
 #include	"sqlUser.h"
 
-const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.18 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
-using std::ends ;
 using std::string ;
 
 void REMUSERIDCommand::Exec( iClient* theClient, const string& Message )
@@ -100,7 +98,7 @@ ExecStatusType status;
 stringstream chanOwner;
 chanOwner << "SELECT COUNT(*) AS count FROM levels WHERE user_id = "
 	<< targetUser->getID() << " AND access = 500 AND channel_id <> 1"
-	<< ends;
+	;
 #ifdef LOG_SQL
 elog << "REMUSERID:cO:SQL> " << chanOwner.str().c_str() << endl;
 #endif
@@ -139,7 +137,7 @@ if(chansOwned)
 stringstream selectLevelQuery;
 selectLevelQuery << "SELECT user_id,channel_id FROM levels WHERE user_id = "
 	<< targetUser->getID()
-	<< ends;
+	;
 
 status = bot->SQLDb->Exec(selectLevelQuery.str().c_str());
 
@@ -164,7 +162,7 @@ for(int i = 0; i < bot->SQLDb->Tuples(); i++)
 stringstream deleteLevelQuery;
 deleteLevelQuery << "DELETE FROM levels WHERE user_id = "
 	<< targetUser->getID()
-	<< ends;
+	;
 
 status = bot->SQLDb->Exec(deleteLevelQuery.str().c_str());
 
@@ -184,7 +182,7 @@ if(PGRES_COMMAND_OK != status)
 stringstream deleteLastseenQuery;
 deleteLastseenQuery << "DELETE FROM users_lastseen WHERE user_id = "
 	<< targetUser->getID()
-	<< ends;
+	;
 
 status = bot->SQLDb->Exec(deleteLastseenQuery.str().c_str());
 
@@ -205,7 +203,7 @@ stringstream deleteMemoQuery;
 deleteMemoQuery << "DELETE FROM memo WHERE"
 	<< " from_id = " << targetUser->getID()
 	<< " OR to_id = " << targetUser->getID()
-	<< ends;
+	;
 status = bot->SQLDb->Exec(deleteMemoQuery.str().c_str());
 
 if(PGRES_COMMAND_OK != status)
@@ -225,7 +223,7 @@ stringstream deleteAllowQuery;
 deleteAllowQuery << "DELETE FROM note_allow WHERE"
 	<< " user_id = " << targetUser->getID()
 	<< " OR user_from_id = " << targetUser->getID()
-	<< ends;
+	;
 status = bot->SQLDb->Exec(deleteAllowQuery.str().c_str());
 
 if(PGRES_COMMAND_OK != status)
@@ -244,7 +242,7 @@ if(PGRES_COMMAND_OK != status)
 stringstream deleteUserlogQuery;
 deleteUserlogQuery << "DELETE FROM userlog WHERE"
 	<< " user_id = " << targetUser->getID()
-	<< ends;
+	;
 #ifdef LOG_SQL
 elog << "REMUSERID:SQL> " << deleteUserlogQuery.str().c_str() << endl;
 #endif
@@ -266,7 +264,7 @@ if(PGRES_COMMAND_OK != status)
 stringstream delUserQuery;
 delUserQuery << "DELETE FROM users WHERE id = "
 	<< targetUser->getID()
-	<< ends;
+	;
 
 #ifdef LOG_SQL
 	elog << "REMUSERID::sqlQuery> "

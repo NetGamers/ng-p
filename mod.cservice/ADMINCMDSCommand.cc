@@ -4,7 +4,7 @@
  * (c) Copyright 2002 Rasmus Hansen (GK@panet)
  * Distributed under the GNU Public License
  *
- * $Id: ADMINCMDSCommand.cc,v 1.20 2004-05-16 13:08:16 jeekay Exp $
+ * $Id: ADMINCMDSCommand.cc,v 1.21 2004-08-25 20:32:29 jeekay Exp $
  */
 
 #include	<string>
@@ -14,7 +14,6 @@
 #include	"cservice.h"
 #include  "levels.h"
 
-const char ADMINCMDSCommand_cc_rcsId[] = "$Id: ADMINCMDSCommand.cc,v 1.20 2004-05-16 13:08:16 jeekay Exp $" ;
 
 namespace gnuworld
 {

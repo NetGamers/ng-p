@@ -4,7 +4,7 @@
  * (c) Copyright 2002 Rasmus Hansen
  * Released under the GNU Public Licence
  *
- * $Id: RELEASECommand.cc,v 1.3 2004-05-16 15:20:22 jeekay Exp $
+ * $Id: RELEASECommand.cc,v 1.4 2004-08-25 20:33:02 jeekay Exp $
  */
 
 #include	<string>
@@ -15,7 +15,6 @@
 
 #include	"sqlUser.h"
 
-const char RELEASECommand_cc_rcsId[] = "$Id: RELEASECommand.cc,v 1.3 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {

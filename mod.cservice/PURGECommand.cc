@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: PURGECommand.cc,v 1.15 2004-05-16 15:20:22 jeekay Exp $
+ * $Id: PURGECommand.cc,v 1.16 2004-08-25 20:33:02 jeekay Exp $
  */
 
 #include	<string>
@@ -27,12 +27,10 @@
 #include	"sqlLevel.h"
 #include	"sqlUser.h"
 
-const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.15 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
-using std::ends;
 
 void PURGECommand::Exec( iClient* theClient, const string& Message )
 {
@@ -105,7 +103,7 @@ if("FORCE" == string_upper(st[1]))
 	stringstream queryChan;
 	queryChan << "SELECT id FROM channels WHERE lower(name) = '"
 		<< escapeSQLChars(targetChan) << "'"
-		<< ends;
+		;
 #ifdef LOG_SQL
 	elog << "PURGEFORCE:SQL> " << queryChan.str().c_str() << endl;
 #endif
@@ -130,8 +128,9 @@ if("FORCE" == string_upper(st[1]))
 	
 	/* Now clear channellog */
 	stringstream delChanLog;
-	delChanLog << "DELETE FROM channellog WHERE channelid = " << chanID
-		<< ends;
+	delChanLog	<< "DELETE FROM channellog WHERE channelid = "
+			<< chanID
+			;
 #ifdef LOG_SQL
 	elog << "PURGEFORCE:SQL> " << delChanLog.str().c_str() << endl;
 #endif
@@ -147,8 +146,7 @@ if("FORCE" == string_upper(st[1]))
 	/* Now delete the channel proper */
 	
 	stringstream delChan;
-	delChan << "DELETE FROM channels WHERE id = " << chanID
-		<< ends;
+	delChan << "DELETE FROM channels WHERE id = " << chanID ;
 #ifdef LOG_SQL
 	elog << "PURGEFORCE:SQL> " << delChan.str().c_str() << endl;
 #endif
@@ -223,7 +221,7 @@ managerQuery	<< "SELECT users.user_name,users.email "
 		<< "AND levels.channel_id = "
 		<< theChan->getID()
 		<< " LIMIT 1"
-		<< ends;
+		;
 
 #ifdef LOG_SQL
 	elog	<< "sqlQuery> "
@@ -272,7 +270,7 @@ theChan->commit();
 stringstream theQuery ;
 theQuery	<< "DELETE FROM levels WHERE channel_id = "
 		<< theChan->getID()
-		<< ends;
+		;
 
 #ifdef LOG_SQL
 	elog	<< "sqlQuery> "

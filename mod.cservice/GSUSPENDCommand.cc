@@ -3,7 +3,7 @@
  *
  * Allow global suspending of nicks/channels
  *
- * $Id: GSUSPENDCommand.cc,v 1.8 2004-05-16 15:20:21 jeekay Exp $
+ * $Id: GSUSPENDCommand.cc,v 1.9 2004-08-25 20:32:40 jeekay Exp $
  */
 
 #include	<string>
@@ -16,7 +16,6 @@
 #include	"sqlCommandLevel.h"
 #include	"sqlUser.h"
 
-const char GSUSPENDCommand_cc_rcsId[] = "$Id: GSUSPENDCommand.cc,v 1.8 2004-05-16 15:20:21 jeekay Exp $";
 
 namespace gnuworld
 {

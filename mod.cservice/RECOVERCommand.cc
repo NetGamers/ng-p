@@ -13,12 +13,10 @@
 
 #include	"sqlUser.h"
 
-const char RECOVERCommand_cc_rcsId[] = "$Id: RECOVERCommand.cc,v 1.11 2004-05-16 15:20:22 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
-using std::ends;
 
 void RECOVERCommand::Exec( iClient* theClient, const string& Message )
 {
@@ -113,7 +111,7 @@ s       << bot->getCharYY()
 	<< targetClient->getCharYYXXX() << " :" << bot->getNickName()
        	<< " [RECOVER] Ghost removed by " << theClient->getNickName()
         << " (" << theUser->getUserName() << ")"
-       	<< ends;
+       	;
 bot->Write(s);
 
 server->PostEvent(gnuworld::EVT_NSKILL, static_cast<void*>(targetClient));

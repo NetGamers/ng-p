@@ -16,7 +16,6 @@
 namespace gnuworld {
 
 using std::endl ;
-using std::ends ;
 using std::stringstream ;
 
 const sqlCommandLevel::flagType sqlCommandLevel::F_LOCKED = 0x01;
@@ -40,7 +39,7 @@ bool sqlCommandLevel::commit() {
   commitString << "UPDATE commands SET "
     << "command_name = '" << escapeSQLChars(command_name) 
     << "WHERE command_name = '" << escapeSQLChars(command_name) << "'"
-    << ends;
+    ;
 
 #ifdef LOG_SQL
   elog << "sqlCommandLevel::commit> "
@@ -75,7 +74,7 @@ bool sqlCommandLevel::loadData(string& commandName) {
     << sql::command_fields
     << "FROM commands "
     << "WHERE command_name = upper('" << escapeSQLChars(commandName) << "')"
-    << ends;
+    ;
   
 #ifdef LOG_SQL
   elog << "sqlCommandLevel::loadData> Executing SQL: "

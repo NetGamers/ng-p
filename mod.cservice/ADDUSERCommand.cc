@@ -11,7 +11,7 @@
  *
  * Caveats: None
  *
- * $Id: ADDUSERCommand.cc,v 1.14 2004-05-16 15:20:21 jeekay Exp $
+ * $Id: ADDUSERCommand.cc,v 1.15 2004-08-25 20:32:29 jeekay Exp $
  */
 
 #include	<string>
@@ -30,12 +30,9 @@
 #include	"sqlLevel.h"
 #include	"sqlUser.h"
 
-const char ADDUSERCommand_cc_rcsId[] = "$Id: ADDUSERCommand.cc,v 1.14 2004-05-16 15:20:21 jeekay Exp $" ;
-
 namespace gnuworld
 {
 
-using std::ends ;
 using std::string ;
 
 static const char* queryHeader = "INSERT INTO levels (channel_id, user_id, access, flags, added, added_by, last_modif, last_modif_by, last_updated) ";
@@ -230,12 +227,12 @@ for(StringTokenizer::size_type counter = 0; counter < st2.size(); ++counter)
 			<< "'" << escapeSQLChars(lastModifMask) << "',"
 			<< bot->currentTime()
 			<< ");"
-			<< ends;
+			;
 
 #ifdef LOG_SQL
 		elog	<< "ADDUSER::sqlQuery> "
-					<< theQuery.str().c_str()
-					<< endl;
+			<< theQuery.str().c_str()
+			<< endl;
 #endif
 
 	ExecStatusType status = bot->SQLDb->Exec(theQuery.str().c_str()) ;
