@@ -2768,9 +2768,11 @@ switch( theEvent )
 		sqlUser* tmpSqlUser = isAuthed(tmpUser, false);
 		if (tmpSqlUser)
 			{
-			logAdminMessage("LOGOUT - SUCCESS - ADMIN - %s (%s)",
-				tmpUser->getNickName().c_str(),
-				tmpSqlUser->getUserName().c_str());
+			if(getAdminAccessLevel(tmpSqlUser)) {
+				logAdminMessage("LOGOUT - SUCCESS - ADMIN - %s (%s)",
+					tmpUser->getNickName().c_str(),
+					tmpSqlUser->getUserName().c_str());
+			}
 			
 			tmpSqlUser->removeAuthedClient(tmpUser);
 			tmpSqlUser->removeFlag(sqlUser::F_LOGGEDIN);

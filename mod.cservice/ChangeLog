@@ -1,4 +1,5 @@
 2003-04-10 1.2.08 Jeekay
+* Fixed silly logging of non-admins logging out.
 * Bumped version to 1.2.08
 
 2003-03-29 1.2.07 Jeekay
