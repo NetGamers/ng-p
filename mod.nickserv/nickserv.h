@@ -1,6 +1,6 @@
 
 #ifndef __NICKSERV_H
-#define __NICKSERV_H "$Id: nickserv.h,v 1.2 2002-01-15 18:36:13 jeekay Exp $"
+#define __NICKSERV_H "$Id: nickserv.h,v 1.3 2002-01-17 23:38:56 jeekay Exp $"
 
 
 #include	<string>
@@ -20,6 +20,9 @@
 #include	"md5hash.h" 
 #include	"nickservCommands.h"
 #include	"nsUser.h"
+
+// The flag in the cservice db
+#define F_AUTOKILL 0x08
 
 namespace gnuworld
 {

@@ -22,7 +22,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.3 2002-01-16 18:33:12 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.4 2002-01-17 23:38:56 jeekay Exp $" ;
 
 // If DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -204,6 +204,7 @@ theServer->RegisterEvent( EVT_KILL, this );
 theServer->RegisterEvent( EVT_QUIT, this );
 theServer->RegisterEvent( EVT_NICK , this );
 theServer->RegisterEvent( EVT_CHNICK, this );
+theServer->RegisterEvent( EVT_LOGGEDIN, this );
 
 // Start the counters rolling
 processQueueID = theServer->RegisterTimer(::time(NULL) + timeToLive, this, NULL);
@@ -283,8 +284,11 @@ switch( theEvent )
 	    // Data1 = iClient*, Data2 = string*
 	    iClient* theClient = static_cast< iClient* >( Data1);
 	    string* authNick = static_cast< string* >( Data2);
-	    removeFromQueue(theClient);
 	    authUser(theClient, *authNick);
+	    if(string_lower(theClient->getNickName()) == string_lower(*authNick))
+	      {
+		removeFromQueue(theClient);
+	      }
 	    break;
 	  }
 	case EVT_QUIT:
@@ -502,22 +506,22 @@ return xClient::Kick( theChan, theClient, reason ) ;
 
 bool nickserv::checkUser(nsUser* tmpUser)
 {
+unsigned short int userFlags;
+
 ExecStatusType status;
 strstream s;
-s << "SELECT id,user_name,autokill from Users Where lower(user_name) = '"
+s << "SELECT id,user_name,flags from Users Where lower(user_name) = '"
 	    << string_lower(tmpUser->getNickName()) << "'" << ends;
 status = SQLDb->Exec(s.str());
 
 delete[] s.str();
 
-int tmpKill;
-
 if(PGRES_TUPLES_OK == status)
 	{
 	if(SQLDb->Tuples() > 0)
 		{
-		  tmpKill = atoi(SQLDb->GetValue(0, 2));
-		  return tmpKill;
+		  userFlags = atoi(SQLDb->GetValue(0, 2));
+		  return userFlags & F_AUTOKILL;
 		}
 	return false;
 	}
