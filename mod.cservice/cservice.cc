@@ -176,6 +176,7 @@ RegisterCommand(new VOICECommand(this, "VOICE", "<#channel> [nick] [nick] ..", 3
 RegisterCommand(new DEVOICECommand(this, "DEVOICE", "<#channel> [nick] [nick] ..", 3));
 RegisterCommand(new ADDUSERCommand(this, "ADDUSER", "<#channel> <username> <access>", 8));
 RegisterCommand(new REMUSERCommand(this, "REMUSER", "<#channel> <username>", 4));
+RegisterCommand(new MODECommand(this, "MODE", "<#channel> <modestring>", 4));
 RegisterCommand(new MODINFOCommand(this, "MODINFO", "<#channel> [ACCESS <username> <level>] [AUTOMODE <username> <NONE|OP|VOICE>]", 6));
 RegisterCommand(new SETCommand(this, "SET", "[#channel] <variable> <value> or, SET <invisible> <ON|OFF>", 6));
 RegisterCommand(new INVITECommand(this, "INVITE", "<#channel>", 2));
@@ -211,6 +212,7 @@ RegisterCommand(new SAYCommand(this, "SAY", "<#channel> <text>", 5));
 RegisterCommand(new QUOTECommand(this, "QUOTE", "<text>", 5));
 RegisterCommand(new REHASHCommand(this, "REHASH", "[translations|help]", 5));
 RegisterCommand(new STATSCommand(this, "STATS", "", 8));
+RegisterCommand(new SHUTDOWNCommand(this, "SHUTDOWN", "<message>", 5));
 //RegisterCommand(new ADDCOMMENTCommand(this, "ADDCOMMENT", "<username> <comment>", 10));
 RegisterCommand(new COMMENTCommand(this, "COMMENT", "<username/channel> <comment/off>", 10));
 
