@@ -22,7 +22,7 @@
 #include	"server.h"
 
 const char Nickserv_h_rcsId[] = __NICKSERV_H ;
-const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.8 2002-01-29 23:41:18 jeekay Exp $" ;
+const char Nickserv_cc_rcsId[] = "$Id: nickserv.cc,v 1.9 2002-01-30 00:49:57 jeekay Exp $" ;
 
 // If __NS_DEBUG is defined, no output is ever sent to users
 // this also prevents users being killed. It is intended
@@ -334,7 +334,7 @@ switch( theEvent )
 	  removeFromQueue(NewUser);
 
 	  // Is the new nick the authed nick? If so, dont add to queue
-	  if(tmpUser->getLoggedIn() && (tmpUser->getLoggedNick() == NewUser->getNickName())) { return 0; }
+	  if(tmpUser->getLoggedIn() && (string_lower(tmpUser->getLoggedNick()) == string_lower(NewUser->getNickName()))) { return 0; }
 	
 	  // Create new custom data, readd to queue for verification
 	  tmpUser->SetData(NewUser->getCharYYXXX(), ::time(NULL), NewUser->getNickName());
