@@ -1,5 +1,5 @@
 #ifndef __CSERVICECOMMANDS_H
-#define __CSERVICECOMMANDS_H "$Id: cserviceCommands.h,v 1.20 2003-11-04 20:47:38 jeekay Exp $"
+#define __CSERVICECOMMANDS_H "$Id: cserviceCommands.h,v 1.21 2004-05-16 13:08:18 jeekay Exp $"
 
 #include	<string>
 #include	"iClient.h"
@@ -28,7 +28,7 @@ public:
 
         /// Exec returns true if the command was successfully
         /// executed, false otherwise.
-        virtual bool Exec( iClient*, const string& ) = 0 ;
+        virtual void Exec( iClient*, const string& ) = 0 ;
 
         void    setServer( xServer* _server )
                 { server = _server ; }
@@ -62,7 +62,7 @@ public: \
                 unsigned short _flood_points) \
         : Command( _bot, _commName, _help, _flood_points ) \
         {} \
-        virtual bool Exec( iClient*, const string& ) ; \
+        virtual void Exec( iClient*, const string& ) ; \
         virtual ~commName##Command() {} \
 } ;
 

@@ -8,7 +8,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.18 2002-03-22 15:34:45 jeekay Exp $" ;
+const char SHOWCOMMANDSCommand_cc_rcsId[] = "$Id: SHOWCOMMANDSCommand.cc,v 1.19 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -51,7 +51,7 @@ static const char* lvl_450_set_cmds = "\002Level 450\002: autotopic desc floatli
 static const char* lvl_24_set_cmds = "\002Level  24\002: autoinvite";
 static const char* lvl_0_set_cmds = "\002Level   0\002: alliance coords invisible lang note";
 
-bool SHOWCOMMANDSCommand::Exec( iClient* theClient, const string& Message )
+void SHOWCOMMANDSCommand::Exec( iClient* theClient, const string& Message )
 { 
 
 StringTokenizer st( Message ) ;
@@ -63,7 +63,7 @@ if( st.size() < 2)
 		bot->Notice(theClient, lvl_oper_cmds);
 		}
 //		bot->Notice(theClient, cmdFooter);
-	return true;
+	return ;
 	}
 
 if(string_upper(st[1]) == "SET") {
@@ -71,7 +71,7 @@ if(string_upper(st[1]) == "SET") {
  	if( st.size() < 3)
          {
  	        bot->Notice(theClient, lvl_0_set_cmds);
- 		return true;
+ 		return ;
  	}
  
  	/*
@@ -81,7 +81,7 @@ if(string_upper(st[1]) == "SET") {
  	if (!theUser)
  	{
  		bot->Notice(theClient, lvl_0_set_cmds);
-                 return true;
+                 return ;
  	}
  
  	sqlChannel* theChan = bot->getChannelRecord(st[2]);
@@ -90,7 +90,7 @@ if(string_upper(st[1]) == "SET") {
  	        bot->Notice(theClient,
          	        bot->getResponse(theUser, language::chan_not_reg).c_str(),
                  	st[1].c_str());
- 	        return false;
+ 	        return ;
          	}
  
          int level = bot->getEffectiveAccessLevel(theUser, theChan, true);
@@ -105,7 +105,7 @@ if(string_upper(st[1]) == "SET") {
  	if (level >= 24) bot->Notice(theClient,   lvl_24_set_cmds);
 	
 	bot->Notice(theClient, lvl_0_set_cmds);
-	return true;
+	return ;
 }
 
 /*
@@ -122,7 +122,7 @@ if (!theUser)
 		bot->Notice(theClient, lvl_oper_cmds);
 		}
 //		bot->Notice(theClient, cmdFooter);
-	return true;	
+	return ;	
 	}
 
 /* 
@@ -135,7 +135,7 @@ if (!theChan)
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::chan_not_reg).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	} 
 
 /*
@@ -179,7 +179,7 @@ if (theClient->isOper())
 	}
 //	bot->Notice(theClient, cmdFooter);
 
-return true ;
+return ;
 } 
 
 

@@ -9,7 +9,7 @@
 #include	"cservice.h"
 #include	"responses.h"
 
-const char REMIGNORECommand_cc_rcsId[] = "$Id: REMIGNORECommand.cc,v 1.5 2002-10-20 02:12:08 jeekay Exp $" ;
+const char REMIGNORECommand_cc_rcsId[] = "$Id: REMIGNORECommand.cc,v 1.6 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -17,7 +17,7 @@ namespace gnuworld
 using std::ends ;
 using std::string ;
 
-bool REMIGNORECommand::Exec( iClient* theClient, const string& Message )
+void REMIGNORECommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.REMIGNORE");
 
@@ -25,7 +25,7 @@ StringTokenizer st( Message ) ;
 if( st.size() < 2 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 /*
@@ -36,7 +36,7 @@ if( st.size() < 2 )
 sqlUser* theUser = bot->isAuthed(theClient, true);
 if (!theUser)
 	{
-	return false;
+	return ;
  	}
 
 int admLevel = bot->getAdminAccessLevel(theUser);
@@ -48,7 +48,7 @@ if (admLevel < remIgnoreLevel->getLevel())
 		bot->getResponse(theUser,
 			language::insuf_access,
 			string("Sorry, you have insufficient access to perform that command.")));
-	return false;
+	return ;
 	}
 
 for( cservice::silenceListType::iterator ptr = bot->silenceList.begin() ;
@@ -86,7 +86,7 @@ for( cservice::silenceListType::iterator ptr = bot->silenceList.begin() ;
 			theClient->getNickName().c_str(),
 			theUser->getUserName().c_str(),
 			st[1].c_str());
-		return true;
+		return ;
 		}
 
 	} // for()
@@ -97,7 +97,7 @@ bot->Notice(theClient,
 		string("Couldn't find %s in my silence list")).c_str(),
 	st[1].c_str());
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld

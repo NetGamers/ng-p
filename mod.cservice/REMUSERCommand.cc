@@ -9,7 +9,7 @@
  * Caveats: None
  *
  *
- * $Id: REMUSERCommand.cc,v 1.9 2003-03-30 00:35:34 jeekay Exp $
+ * $Id: REMUSERCommand.cc,v 1.10 2004-05-16 13:08:17 jeekay Exp $
  */
 
 #include	<string>
@@ -23,14 +23,14 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char REMUSERCommand_cc_rcsId[] = "$Id: REMUSERCommand.cc,v 1.9 2003-03-30 00:35:34 jeekay Exp $" ;
+const char REMUSERCommand_cc_rcsId[] = "$Id: REMUSERCommand.cc,v 1.10 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
 using std::ends;
 
-bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
+void REMUSERCommand::Exec( iClient* theClient, const string& Message )
 {
 	bot->incStat("COMMANDS.REMUSER");
 
@@ -38,7 +38,7 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 	if( st.size() < 3 )
 	{
 		Usage(theClient);
-		return true;
+		return ;
 	}
 
 	static const char* queryHeader = "DELETE FROM levels WHERE ";
@@ -52,7 +52,7 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 	 */
 
 	sqlUser* theUser = bot->isAuthed(theClient, true);
-	if (!theUser) return false;
+	if (!theUser) return ;
 
  	/*
 	 *  First, check the channel is registered.
@@ -65,7 +65,7 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 				language::chan_not_reg,
 				string("Sorry, %s isn't registered with me.")).c_str(),
 			st[1].c_str());
-		return false;
+		return ;
 	}
 
 #ifdef FEATURE_FORCELOG
@@ -95,7 +95,7 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 	        if (level < chgAdminLevel->getLevel())
         	        {
                 	bot->Notice(theClient, "Sorry, you have insufficient access to perform that command");
-	                return false;
+	                return ;
         	        }
 	        }
 
@@ -105,7 +105,7 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 			bot->getResponse(theUser,
 				language::insuf_access,
 				string("You have insufficient access to perform that command.")));
-		return false;
+		return ;
 	}
 
 	/*
@@ -120,7 +120,7 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 				language::not_registered,
 				string("Sorry, I don't know who %s is.")).c_str(),
 			st[2].c_str());
-		return false;
+		return ;
 	}
 
 	/*
@@ -136,7 +136,7 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 				language::doesnt_have_access,
 				string("%s doesn't appear to have access in %s.")).c_str(),
 			targetUser->getUserName().c_str(), theChan->getName().c_str());
-		return false;
+		return ;
 	}
 
 	int targetLevel = tmpLevel->getAccess();
@@ -148,20 +148,20 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 
 	if(targetLevel == 499 && !bot->isForced(theChan, theUser)) {
 		bot->Notice(theClient, "Only CService may remove users with 499+ access.");
-		return false;
+		return ;
 	}
 
 	if ((level <= targetLevel) && (targetUser != theUser))
 	{
 		bot->Notice(theClient, "Cannot remove a user with equal or higher access than your own.");
-		return false;
+		return ;
 	}
 
 
 	if ((theChan->getName() == "*") && (targetUser == theUser))
 	{
 		bot->Notice(theClient, "CSC has your soul! YOU CAN NEVER ESCAPE!");
-                return false;
+                return ;
 	}
 
 	if ((targetLevel == 500) && (targetUser == theUser))
@@ -170,7 +170,7 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 			bot->getResponse(theUser,
 				language::cant_rem_owner_self,
 				string("You can't remove yourself from a channel you own.")));
-		return false;
+		return ;
 	}
 
 	/* If we have been removed from a channel with STRICTOP or STRICTVOICE
@@ -238,7 +238,7 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 	bot->sqlLevelCache.erase(thePair);
 	delete(tmpLevel);
 
-	return true ;
+	return ;
 }
 
 } // namespace gnuworld.

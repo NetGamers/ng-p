@@ -11,11 +11,11 @@
 #include "cservice.h"
 #include "responses.h"
 
-const char GETLEVELCommand_cc_rcsId[] = "$Id: GETLEVELCommand.cc,v 1.1 2002-10-20 02:12:07 jeekay Exp $";
+const char GETLEVELCommand_cc_rcsId[] = "$Id: GETLEVELCommand.cc,v 1.2 2004-05-16 13:08:16 jeekay Exp $";
 
 namespace gnuworld {
 
-bool GETLEVELCommand::Exec(iClient* theClient, const string& Message) {
+void GETLEVELCommand::Exec(iClient* theClient, const string& Message) {
 
 bot->incStat("COMMANDS.GETLEVEL");
 
@@ -23,12 +23,12 @@ bot->incStat("COMMANDS.GETLEVEL");
 StringTokenizer st(Message);
 if(st.size() < 2) {
   Usage(theClient);
-  return true;
+  return ;
 }
 
 sqlUser* theUser = bot->isAuthed(theClient, true);
 if(!theUser) {
-  return true;
+  return ;
 }
 
 int aLevel = bot->getAdminAccessLevel(theUser);
@@ -36,7 +36,7 @@ sqlCommandLevel* getlevelLevel = bot->getLevelRequired("GETLEVEL", "ADMIN");
 if(aLevel < getlevelLevel->getLevel()) {
   bot->Notice(theClient,
     bot->getResponse(theUser, language::insuf_access).c_str());
-  return true;
+  return ;
 }
 
 string command = string_upper(st[1]);
@@ -54,7 +54,7 @@ if("*" == command) {
     
   }
 
-  return true;
+  return ;
 }
 
 sqlCommandLevel* theLevel = bot->getLevelRequired(command, domain, false);
@@ -69,7 +69,7 @@ if(theLevel) {
     domain.c_str(), command.c_str());
 }
 
-return true;
+return ;
 
 } // bool GETLEVELCommand::Exec(iClient*, const string&)
 

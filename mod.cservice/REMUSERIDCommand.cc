@@ -3,7 +3,7 @@
  *
  * 20020308 GK@PAnet - Initial Writing
  *
- * $Id: REMUSERIDCommand.cc,v 1.16 2003-02-16 15:39:54 jeekay Exp $
+ * $Id: REMUSERIDCommand.cc,v 1.17 2004-05-16 13:08:17 jeekay Exp $
  */
 
 #include	<string>
@@ -14,7 +14,7 @@
 #include "cservice.h"
 #include "networkData.h"
 
-const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.16 2003-02-16 15:39:54 jeekay Exp $" ;
+const char REMUSERIDCommand_cc_rcsId[] = "$Id: REMUSERIDCommand.cc,v 1.17 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -22,7 +22,7 @@ namespace gnuworld
 using std::ends ;
 using std::string ;
 
-bool REMUSERIDCommand::Exec( iClient* theClient, const string& Message )
+void REMUSERIDCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.REMUSERID");
 
@@ -31,12 +31,12 @@ StringTokenizer st( Message ) ;
 if( st.size() < 3 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 sqlUser* theUser = bot->isAuthed(theClient, true);
 if(!theUser)
-	{ return false; }
+	{ return ; }
 
 int aLevel = bot->getAdminAccessLevel(theUser);
 sqlCommandLevel* remuseridLevel = bot->getLevelRequired("REMUSERID", "ADMIN");
@@ -45,47 +45,47 @@ sqlCommandLevel* chgadminLevel = bot->getLevelRequired("CHGADMIN", "ADMIN");
 if(aLevel < remuseridLevel->getLevel())
 	{
 	bot->Notice(theClient, "Sorry, you have insufficient access to perform that command.");
-	return false;
+	return ;
 	}
 
 sqlUser* targetUser = bot->getUserRecord(st[1]);
 if(!targetUser)
 	{
 	bot->Notice(theClient, "%s is not registered with me.", st[1].c_str());
-	return true;
+	return ;
 	}
 
 if(!targetUser->getComment().empty())
   {
   bot->Notice(theClient, "Sorry, %s is commented and cannot be removed.",
     targetUser->getUserName().c_str());
-  return false;
+  return ;
   }
 
 int targetALevel = bot->getAdminAccessLevel(targetUser);
 if(targetALevel && (aLevel < chgadminLevel->getLevel()))
 	{
 	bot->Notice(theClient, "Sorry, you cannot purge a user with admin access.");
-	return false;
+	return ;
 	}
 
 if(targetALevel >= aLevel)
 	{
 	bot->Notice(theClient, "You cannot purge someone with higher admin access than you.");
-	return false;
+	return ;
 	}
 
 if(targetUser->getFlag(sqlUser::F_NOPURGE))
 	{
 	bot->Notice(theClient, "%s has NOPURGE set. Purge not allowed.", targetUser->getUserName().c_str());
-	return true;
+	return ;
 	}
 
 /* Very first things first - is the user currently logged in? */
 if(targetUser->isAuthed()) {
   bot->Notice(theClient, "%s is currently logged in. Cannot REMUSERID this nick.",
     targetUser->getUserName().c_str());
-  return true;
+  return ;
 }
 
 /* First things first -
@@ -109,7 +109,7 @@ if(PGRES_TUPLES_OK != status)
 		<< bot->SQLDb->ErrorMessage()
 		<< endl;
 	bot->Notice(theClient, "Unknown SQL error removing user. Please contact a DB administrator.");
-	return false;
+	return ;
 	}
 
 int chansOwned = atoi(bot->SQLDb->GetValue(0,0));
@@ -119,7 +119,7 @@ if(chansOwned)
 		targetUser->getUserName().c_str(),
 		chansOwned,
 		(chansOwned == 1) ? ("") : ("s"));
-	return false;
+	return ;
 	}
 
 /*
@@ -146,7 +146,7 @@ if(PGRES_TUPLES_OK != status)
 		<< bot->SQLDb->ErrorMessage()
 		<< endl;
 	bot->Notice(theClient, "Unknown SQL error removing user. Please contact a DB administrator.");
-	return false;
+	return ;
 	}
 
 for(int i = 0; i < bot->SQLDb->Tuples(); i++)
@@ -171,7 +171,7 @@ if(PGRES_COMMAND_OK != status)
 		<< bot->SQLDb->ErrorMessage()
 		<< endl;
 	bot->Notice(theClient, "Unknown SQL error removing user. Please contact a DB administrator.");
-	return false;
+	return ;
 	}
 
 /* 
@@ -191,7 +191,7 @@ if(PGRES_COMMAND_OK != status)
 		<< bot->SQLDb->ErrorMessage()
 		<< endl;
 	bot->Notice(theClient, "Unknown SQL error removing user. Please contact a DB administrator.");
-	return false;
+	return ;
 	}
 
 /*
@@ -211,7 +211,7 @@ if(PGRES_COMMAND_OK != status)
 		<< bot->SQLDb->ErrorMessage()
 		<< endl;
 	bot->Notice(theClient, "Unknown SQL error removing user. Please contact a DB administrator.");
-	return false;
+	return ;
 	}
 
 /*
@@ -231,7 +231,7 @@ if(PGRES_COMMAND_OK != status)
 		<< bot->SQLDb->ErrorMessage()
 		<< endl;
 	bot->Notice(theClient, "Unknown SQL error removing user. Please contact a DB administrator.");
-	return false;
+	return ;
 	}
 
 /*
@@ -253,7 +253,7 @@ if(PGRES_COMMAND_OK != status)
 		<< bot->SQLDb->ErrorMessage()
 		<< endl;
 	bot->Notice(theClient, "Unknown SQL error removing user. Please contact a DB administrator.");
-	return false;
+	return ;
 	}
 
 /*
@@ -279,7 +279,7 @@ if(PGRES_COMMAND_OK != status)
 		<< bot->SQLDb->ErrorMessage()
 		<< endl;
 	bot->Notice(theClient, "Unknown SQL error removing user. Please contact a DB administrator.");
-	return false;
+	return ;
 	}
 
 bot->Notice(theClient, "Successfully removed %s from the database.", st[1].c_str());
@@ -307,7 +307,7 @@ bot->logAdminMessage("%s (%s) - REMUSERID - %s - %s",
 	theClient->getNickName().c_str(), theUser->getUserName().c_str(),
 	st[1].c_str(), st.assemble(2).c_str());
 
-return true ;
+return ;
 } // REMUSERIDCommand::Exec
 
 } // namespace gnuworld.

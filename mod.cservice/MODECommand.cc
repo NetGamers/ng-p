@@ -3,7 +3,7 @@
  *
  * 20020201 - Jeekay - Initial Version
  *
- * $Id: MODECommand.cc,v 1.10 2003-11-02 16:47:16 jeekay Exp $
+ * $Id: MODECommand.cc,v 1.11 2004-05-16 13:08:16 jeekay Exp $
  */
 
 #include <string>
@@ -14,14 +14,14 @@
 #include "levels.h"
 #include "ELog.h"
 
-const char MODECommand_cc_rcsId[] = "$Id: MODECommand.cc,v 1.10 2003-11-02 16:47:16 jeekay Exp $";
+const char MODECommand_cc_rcsId[] = "$Id: MODECommand.cc,v 1.11 2004-05-16 13:08:16 jeekay Exp $";
 
 namespace gnuworld
 {
 
 using std::ends;
 
-bool MODECommand::Exec( iClient* theClient, const string& Message )
+void MODECommand::Exec( iClient* theClient, const string& Message )
 {
 
 bot->incStat("COMMANDS.MODE");
@@ -31,18 +31,18 @@ StringTokenizer st( Message );
 if( st.size() < 3)
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 // Are we authed?
 sqlUser* theUser = bot->isAuthed(theClient, true);
-if(!theUser) { return false; }
+if(!theUser) { return ; }
 
 Channel* theChan = Network->findChannel(st[1]);
 if(!theChan)
 	{
 	bot->Notice(theClient, "Channel %s not found.", st[1].c_str());
-	return false;
+	return ;
 	}
 
 // Does the channel exist?
@@ -50,7 +50,7 @@ sqlChannel* sqlChan = bot->getChannelRecord(st[1]);
 if(!sqlChan)
 	{
 	bot->Notice(theClient, "The channel %s does not appear to be registered.", st[1].c_str());
-	return false;
+	return ;
 	} // if(!theChan)
 
 #ifdef FEATURE_FORCELOG
@@ -65,7 +65,7 @@ int level = bot->getEffectiveAccessLevel(theUser, sqlChan, true);
 if(level < level::mode)
 	{
 	bot->Notice(theClient, "Sorry, you have insufficient access to perform that command");
-	return false;
+	return ;
 	} // if(level < level::mode)
 
 
@@ -75,7 +75,7 @@ if(!tmpBotUser || !tmpBotUser->getMode(ChannelUser::MODE_O)) {
 	bot->Notice(theClient, "I'm not opped in %s.",
 		theChan->getName().c_str()
 		);
-	return false;
+	return ;
 }
 
 /*************************************
@@ -130,7 +130,7 @@ for( string::const_iterator itr = modeString.begin() ;
 					if(theChan->getMode(Channel::MODE_k)) {
 						/* The channel is +k */
 						bot->Notice(theClient, "You cannot set a new key without removing the old one.");
-						return true;
+						return ;
 					} else {
 						/* The channel is not +k */
 						if(!posargs.empty()) posargs += " ";
@@ -144,7 +144,7 @@ for( string::const_iterator itr = modeString.begin() ;
 					if(theChan->getMode(Channel::MODE_k)) {
 						if(theChan->getKey() != st[curarg]) {
 							bot->Notice(theClient, "To remove a key you must specify the current one.");
-							return true;
+							return ;
 						} else {
 							/* Keys match */
 							if(!negargs.empty()) negargs += " ";
@@ -155,12 +155,12 @@ for( string::const_iterator itr = modeString.begin() ;
 						}
 					} else {
 						bot->Notice(theClient, "You cannot dekey a channel that has no key.");
-						return true;
+						return ;
 					}
 				}
 			} else {
 				bot->Notice(theClient, "Setting +k requires a key to be specified.");
-				return true;
+				return ;
 			}
 			break;
 		}
@@ -176,11 +176,11 @@ for( string::const_iterator itr = modeString.begin() ;
 						++curarg;
 					} else {
 						bot->Notice(theClient, "Please specify a limit above zero.");
-						return true;
+						return ;
 					}
 				} else {
 					bot->Notice(theClient, "Setting +l requires a limit to be specified.");
-					return true;
+					return ;
 				}
 			} else {
 				/* Limit can be unset without an argument */
@@ -188,7 +188,7 @@ for( string::const_iterator itr = modeString.begin() ;
 					curFlag = CF_l;
 				} else {
 					bot->Notice(theClient, "You cannot remove a nonexistant limit.");
-					return true;
+					return ;
 				}
 			}
 			break;
@@ -202,24 +202,24 @@ for( string::const_iterator itr = modeString.begin() ;
 /* Check for overlap between positive and negative */
 if((positive & negative) != 0) {
 	bot->Notice(theClient, "You cannot both set and remove a mode.");
-	return true;
+	return ;
 }
 
 /* Check for no modes */
 if(!positive && !negative) {
 	bot->Notice(theClient, "Actually setting some modes would be a good idea.");
-	return true;
+	return ;
 }
 
 /* Check for mutually exclusive modes */
 if((positive & CF_p) && (positive & CF_s)) {
 	bot->Notice(theClient, "You cannot set +p and +s at the same time.");
-	return true;
+	return ;
 }
 
 if((positive & CF_S) && (positive & CF_c)) {
 	bot->Notice(theClient, "You cannot set +S and +c at the same time.");
-	return true;
+	return ;
 }
 
 if(positive & CF_S) negative |= CF_c;
@@ -275,7 +275,7 @@ bot->Notice(theClient, "Changing modes on %s to: %s.",
 	theChan->getName().c_str(),
 	outString.c_str());
 
-return true;
+return ;
 } // MODECommand::Exec
  
 } // namespace gnuworld

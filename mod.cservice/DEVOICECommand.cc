@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: DEVOICECommand.cc,v 1.4 2002-09-13 21:30:38 jeekay Exp $
+ * $Id: DEVOICECommand.cc,v 1.5 2004-05-16 13:08:16 jeekay Exp $
  */
 
 #include	<string>
@@ -21,12 +21,12 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char DEVOICECommand_cc_rcsId[] = "$Id: DEVOICECommand.cc,v 1.4 2002-09-13 21:30:38 jeekay Exp $" ;
+const char DEVOICECommand_cc_rcsId[] = "$Id: DEVOICECommand.cc,v 1.5 2004-05-16 13:08:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
-bool DEVOICECommand::Exec( iClient* theClient, const string& Message )
+void DEVOICECommand::Exec( iClient* theClient, const string& Message )
 {
 	bot->incStat("COMMANDS.DEVOICE");
 
@@ -36,7 +36,7 @@ bool DEVOICECommand::Exec( iClient* theClient, const string& Message )
 	if( st.size() < 2 )
 	{
 		Usage(theClient);
-		return true;
+		return ;
 	}
 
 	/*
@@ -46,7 +46,7 @@ bool DEVOICECommand::Exec( iClient* theClient, const string& Message )
 
 	sqlUser* theUser = bot->isAuthed(theClient, true);
 	if (!theUser) {
-		return false;
+		return ;
 	}
 
 	/*
@@ -57,7 +57,7 @@ bool DEVOICECommand::Exec( iClient* theClient, const string& Message )
 	if (!theChan) {
 		bot->Notice(theClient, bot->getResponse(theUser, language::chan_not_reg).c_str(),
 			st[1].c_str());
-		return false;
+		return ;
 	}
 
 #ifdef FEATURE_FORCELOG
@@ -76,7 +76,7 @@ bool DEVOICECommand::Exec( iClient* theClient, const string& Message )
 			bot->getResponse(theUser,
 				language::i_am_not_on_chan,
 				string("I'm not in that channel!")));
-		return false;
+		return ;
 	}
 
 	/*
@@ -87,7 +87,7 @@ bool DEVOICECommand::Exec( iClient* theClient, const string& Message )
 	if (level < level::devoice)
 	{
 		bot->Notice(theClient, bot->getResponse(theUser, language::insuf_access).c_str());
-		return false;
+		return ;
 	}
 
 	Channel* tmpChan = Network->findChannel(theChan->getName());
@@ -95,7 +95,7 @@ bool DEVOICECommand::Exec( iClient* theClient, const string& Message )
 	{
 		bot->Notice(theClient, bot->getResponse(theUser, language::chan_is_empty).c_str(),
 			theChan->getName().c_str());
-		return false;
+		return ;
 	}
 
 
@@ -186,7 +186,7 @@ bool DEVOICECommand::Exec( iClient* theClient, const string& Message )
 
 	// devoice them.
 	bot->DeVoice(tmpChan, devoiceList);
-	return true ;
+	return ;
 }
 
 } // namespace gnuworld.

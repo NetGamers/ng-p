@@ -4,7 +4,7 @@
  *
  * Sends a notice to all users as 'CService'
  *
- * $Id: GLOBNOTICECommand.cc,v 1.4 2002-10-20 02:12:07 jeekay Exp $
+ * $Id: GLOBNOTICECommand.cc,v 1.5 2004-05-16 13:08:16 jeekay Exp $
  */
 
 #include <string>
@@ -13,12 +13,12 @@
 
 #include "cservice.h"
 
-const char GLOBNOTICECommand_cc_rcsId[] = "$Id: GLOBNOTICECommand.cc,v 1.4 2002-10-20 02:12:07 jeekay Exp $";
+const char GLOBNOTICECommand_cc_rcsId[] = "$Id: GLOBNOTICECommand.cc,v 1.5 2004-05-16 13:08:16 jeekay Exp $";
 
 namespace gnuworld
 {
 
-bool GLOBNOTICECommand::Exec( iClient* theClient, const string& Message )
+void GLOBNOTICECommand::Exec( iClient* theClient, const string& Message )
 {
 
 /*
@@ -29,7 +29,7 @@ bool GLOBNOTICECommand::Exec( iClient* theClient, const string& Message )
 
 sqlUser* theUser = bot->isAuthed(theClient, false);
 
-if(!theUser && !theClient->isOper()) { return false; }
+if(!theUser && !theClient->isOper()) { return ; }
 
 int admLevel;
 if(theUser) admLevel = bot->getAdminAccessLevel(theUser);
@@ -37,7 +37,7 @@ else admLevel = 0;
 
 sqlCommandLevel* globalNoticeLevel = bot->getLevelRequired("GLOBNOTICE", "ADMIN");
 
-if((admLevel < globalNoticeLevel->getLevel()) && !(theClient->isOper())) { return false; }
+if((admLevel < globalNoticeLevel->getLevel()) && !(theClient->isOper())) { return ; }
 
 // Lets actually get on with the command now ;)
 
@@ -48,7 +48,7 @@ StringTokenizer st( Message );
 if(st.size() < 3)
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 string sourceNick;
@@ -59,7 +59,7 @@ else { sourceNick = "CService"; }
 if(st[1][0] != '$')
 	{
 	bot->Notice(theClient, "Target should be of the form $*.org");
-	return false;
+	return ;
 	}
 
 string outString = st.assemble(2);
@@ -74,7 +74,7 @@ bot->Write("%sAAC O %s :%s", charYY, outTarget.c_str(), outString.c_str());
 bot->Write("%sAAC Q :Done", charYY);
 
 bot->Notice(theClient, "Successfully global noticed.");
-return true;
+return ;
 
 } // GLOBNOTICECommand::Exec
 

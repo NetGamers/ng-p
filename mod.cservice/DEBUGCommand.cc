@@ -4,7 +4,7 @@
  *
  * Distributed under the GNU Public Licence
  *
- * $Id: DEBUGCommand.cc,v 1.5 2002-10-20 02:12:06 jeekay Exp $
+ * $Id: DEBUGCommand.cc,v 1.6 2004-05-16 13:08:16 jeekay Exp $
  */
 
 #include	<string>
@@ -15,13 +15,13 @@
 
 #include "cservice.h"
 
-const char DEBUGCommand_cc_rcsId[] = "$Id: DEBUGCommand.cc,v 1.5 2002-10-20 02:12:06 jeekay Exp $" ;
+const char DEBUGCommand_cc_rcsId[] = "$Id: DEBUGCommand.cc,v 1.6 2004-05-16 13:08:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::string ;
 
-bool DEBUGCommand::Exec( iClient* theClient, const string& Message )
+void DEBUGCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.DEBUG");
 
@@ -32,11 +32,11 @@ StringTokenizer st( Message ) ;
 if( st.size() < 2 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 sqlUser* theUser = bot->isAuthed(theClient, true);
-if(!theUser) { return false; }
+if(!theUser) { return ; }
 
 int aLevel = bot->getAdminAccessLevel(theUser);
 sqlCommandLevel* debugCommandLevel = bot->getLevelRequired("DEBUG", "ADMIN");
@@ -44,7 +44,7 @@ sqlCommandLevel* debugCommandLevel = bot->getLevelRequired("DEBUG", "ADMIN");
 if(aLevel < debugCommandLevel->getLevel())
 	{
 	bot->Notice(theClient, "Sorry, you have insufficient access to perform that command.");
-	return false;
+	return ;
 	}
 
 string command = string_upper(st[1]);
@@ -74,13 +74,13 @@ if("SERVERS" == command)
 			}
 		++netServers;
 		}
-	return true;
+	return ;
 	}
 
 if( st.size() < 3 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 string option = string_upper(st[2]);
@@ -97,13 +97,13 @@ if("LOCK" == command && "LIST" == option)
 		++myCommands;
 		}
 		
-	return true;
+	return ;
 	}
 
 if ( st.size() < 5 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 string function = string_upper(st[3]);
@@ -114,7 +114,7 @@ if("LOCK" == command && "ADD" == option)
 	if("DEBUG" == function)
 		{
 		bot->Notice(theClient, "I don't think that'd be a very good idea.");
-		return false;
+		return ;
 		}
 	
 	cservice::lockedCommandsType::const_iterator myCommand;
@@ -122,7 +122,7 @@ if("LOCK" == command && "ADD" == option)
 	if(myCommand != bot->lockedCommands.end())
 		{
 		bot->Notice(theClient, "%s is already locked", function.c_str());
-		return false;
+		return ;
 		}
 	
 	bot->lockedCommands[function] = data;
@@ -133,7 +133,7 @@ if("LOCK" == command && "ADD" == option)
 		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
 		function.c_str(), data.c_str());
 	
-	return true;
+	return ;
 	}
 
 if("LOCK" == command && "REM" == option)
@@ -143,7 +143,7 @@ if("LOCK" == command && "REM" == option)
 	if(myCommand == bot->lockedCommands.end())
 		{
 		bot->Notice(theClient, "%s is not locked", function.c_str());
-		return false;
+		return ;
 		}
 	
 	bot->lockedCommands.erase(myCommand->first);
@@ -154,12 +154,12 @@ if("LOCK" == command && "REM" == option)
 		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
 		function.c_str(), data.c_str());
 	
-	return true;
+	return ;
 	}
 
 Usage(theClient);
 
-return true ;
+return ;
 } // DEBUGCommand::Exec
 
 } // namespace gnuworld.

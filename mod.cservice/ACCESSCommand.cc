@@ -12,7 +12,7 @@
  * Displays all "Level" records for a specified channel.
  * Can optionally narrow down selection using a number of switches.
  *
- * $Id: ACCESSCommand.cc,v 1.8 2002-11-05 00:24:27 jeekay Exp $
+ * $Id: ACCESSCommand.cc,v 1.9 2004-05-16 13:08:15 jeekay Exp $
  */
 
 #include	<string>
@@ -26,7 +26,7 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 
-const char ACCESSCommand_cc_rcsId[] = "$Id: ACCESSCommand.cc,v 1.8 2002-11-05 00:24:27 jeekay Exp $" ;
+const char ACCESSCommand_cc_rcsId[] = "$Id: ACCESSCommand.cc,v 1.9 2004-05-16 13:08:15 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -37,7 +37,7 @@ static const char* queryHeader =    "SELECT channels.name,users.user_name,levels
 static const char* queryCondition = "WHERE levels.channel_id=channels.id AND levels.user_id=users.id AND users.id=users_lastseen.user_id ";
 static const char* queryFooter =    "ORDER BY levels.access DESC;";
 
-bool ACCESSCommand::Exec( iClient* theClient, const string& Message )
+void ACCESSCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.ACCESS");
 
@@ -50,7 +50,7 @@ StringTokenizer st( Message ) ;
 if( st.size() < 3 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 sqlUser* theUser = bot->isAuthed(theClient, false);
@@ -62,7 +62,7 @@ if (!theChan)
 			language::chan_not_reg).c_str(),
 		st[1].c_str()
 		);
-	return false;
+	return ;
 	}
 
 /* Don't let ordinary people view * accesses */
@@ -76,7 +76,7 @@ if (theChan->getName() == "*")
 				language::chan_not_reg).c_str(),
 			st[1].c_str()
 		);
-		return false;
+		return ;
 		}
 
 	if (theUser && !bot->getAdminAccessLevel(theUser))
@@ -86,7 +86,7 @@ if (theChan->getName() == "*")
 				language::chan_not_reg).c_str(),
 			st[1].c_str()
 		);
-		return false;
+		return ;
 		}
 	}
 
@@ -106,7 +106,7 @@ bool isOper = theClient->isOper();
 if(!(hasAccess || !isInvis || isAdmin || isOper)) {
   bot->Notice(theClient, "Sorry, you have insufficient access to list the users in %s.",
     theChan->getName().c_str());
-  return true;
+  return ;
 }
 
 /*
@@ -201,7 +201,7 @@ for( StringTokenizer::const_iterator ptr = st.begin() ; ptr != st.end() ;
 					bot->getResponse(theUser,
 						language::inval_min_lvl).c_str()
 				);
-				return false;
+				return ;
 				}
 			currentType = 0;
 			break;
@@ -215,7 +215,7 @@ for( StringTokenizer::const_iterator ptr = st.begin() ; ptr != st.end() ;
 					bot->getResponse(theUser,
 						language::inval_max_lvl).c_str()
 				);
-				return false;
+				return ;
 				}
 
 			currentType = 0;
@@ -288,7 +288,7 @@ if( PGRES_TUPLES_OK != status )
 	elog	<< "ACCESS> SQL Error: "
 		<< bot->SQLDb->ErrorMessage()
 		<< endl ;
-	return false ;
+	return ;
 	}
 
 sqlLevel::flagType flag = 0 ;
@@ -449,7 +449,7 @@ else
 		);
 	}
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld.

@@ -8,7 +8,7 @@
  *
  * Caveats: None.
  *
- * $Id: SAYCommand.cc,v 1.2 2002-10-20 02:12:08 jeekay Exp $
+ * $Id: SAYCommand.cc,v 1.3 2004-05-16 13:08:17 jeekay Exp $
  */
 
 #include	<string>
@@ -18,13 +18,13 @@
 #include	"cservice.h"
 #include	"responses.h"
 
-const char SAYCommand_cc_rcsId[] = "$Id: SAYCommand.cc,v 1.2 2002-10-20 02:12:08 jeekay Exp $" ;
+const char SAYCommand_cc_rcsId[] = "$Id: SAYCommand.cc,v 1.3 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::string ;
 
-bool SAYCommand::Exec( iClient* theClient, const string& Message )
+void SAYCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.SAY");
 
@@ -32,7 +32,7 @@ StringTokenizer st( Message ) ;
 if( st.size() < 3 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 /*
@@ -43,7 +43,7 @@ if( st.size() < 3 )
 sqlUser* theUser = bot->isAuthed(theClient, false);
 if (!theUser)
 	{
-	return false;
+	return ;
 	}
 
 int admLevel = bot->getAdminAccessLevel(theUser);
@@ -59,7 +59,7 @@ if (admLevel < sayLevel->getLevel())
 			language::insuf_access,
 			string("Sorry, you have insufficient access to perform that command.")));
  */
-	return false;
+	return ;
 	}
 /*
  *  First, check the channel is registered.
@@ -73,11 +73,11 @@ if (!theChan)
 			language::chan_not_reg,
 			string("Sorry, %s isn't registered with me.")).c_str(),
 			st[1].c_str());
-	return false;
+	return ;
 	}
 
 bot->Message(st[1], st.assemble(2).c_str());
-return true;
+return ;
 }
 
 } // namespace gnuworld.

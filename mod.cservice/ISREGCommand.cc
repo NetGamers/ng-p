@@ -7,14 +7,14 @@
 #include	"cservice.h"
 #include	"responses.h"
 
-const char ISREGCommand_cc_rcsId[] = "$Id: ISREGCommand.cc,v 1.1 2002-01-14 23:14:17 morpheus Exp $" ;
+const char ISREGCommand_cc_rcsId[] = "$Id: ISREGCommand.cc,v 1.2 2004-05-16 13:08:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
 using std::string ;
 
-bool ISREGCommand::Exec( iClient* theClient, const string& Message )
+void ISREGCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.ISREG");
 
@@ -22,7 +22,7 @@ StringTokenizer st( Message ) ;
 if( st.size() < 2 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 sqlUser* theUser = bot->isAuthed(theClient, false);
@@ -45,7 +45,7 @@ else
 		st[1].c_str());
 	}
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld.

@@ -9,7 +9,7 @@
  *
  * Caveats: None.
  *
- * $Id: SEARCHCommand.cc,v 1.3 2002-09-13 21:30:40 jeekay Exp $
+ * $Id: SEARCHCommand.cc,v 1.4 2004-05-16 13:08:17 jeekay Exp $
  */
 
 #include	<string>
@@ -21,7 +21,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char SEARCHCommand_cc_rcsId[] = "$Id: SEARCHCommand.cc,v 1.3 2002-09-13 21:30:40 jeekay Exp $" ;
+const char SEARCHCommand_cc_rcsId[] = "$Id: SEARCHCommand.cc,v 1.4 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -33,7 +33,7 @@ static const char* queryHeader =    "SELECT channels.name,channels.keywords FROM
 static const char* queryCondition = "WHERE channels.keywords ~* ";
 static const char* queryFooter =    "ORDER BY channels.name DESC;";
 
-bool SEARCHCommand::Exec( iClient* theClient, const string& Message )
+void SEARCHCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.SEARCH");
 
@@ -41,7 +41,7 @@ StringTokenizer st( Message ) ;
 if( st.size() < 2 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 sqlUser* theUser = bot->isAuthed(theClient, false);
@@ -75,7 +75,7 @@ if( PGRES_TUPLES_OK != status )
 	elog	<< "SEARCH> SQL Error: "
 		<< bot->SQLDb->ErrorMessage()
 		<< endl ;
-	return false ;
+	return ;
 	}
 
 for( int i = 0 ; i < bot->SQLDb->Tuples(); i++ )
@@ -112,7 +112,7 @@ if( 0 == results )
 			matchString.c_str() );
 	}
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld.

@@ -4,7 +4,7 @@
  *
  * Distributed under the GNU Public Licence
  *
- * $Id: CHINFOCommand.cc,v 1.7 2003-02-05 19:04:29 jeekay Exp $
+ * $Id: CHINFOCommand.cc,v 1.8 2004-05-16 13:08:16 jeekay Exp $
  */
 
 #include	<string>
@@ -14,13 +14,13 @@
 #include "cservice.h"
 #include "levels.h"
 
-const char CHINFOCommand_cc_rcsId[] = "$Id: CHINFOCommand.cc,v 1.7 2003-02-05 19:04:29 jeekay Exp $" ;
+const char CHINFOCommand_cc_rcsId[] = "$Id: CHINFOCommand.cc,v 1.8 2004-05-16 13:08:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::string ;
 
-bool CHINFOCommand::Exec( iClient* theClient, const string& Message )
+void CHINFOCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.CHINFO");
 
@@ -29,11 +29,11 @@ StringTokenizer st( Message ) ;
 if( st.size() != 4 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 sqlUser* theUser = bot->isAuthed(theClient, true);
-if(!theUser) { return false; }
+if(!theUser) { return ; }
 
 string option = string_upper(st[1]);
 string target = st[2];
@@ -44,14 +44,14 @@ sqlUser* targetUser = bot->getUserRecord(target);
 if(!targetUser)
 	{
 	bot->Notice(theClient, "%s is not registered with me.", target.c_str());
-	return false;
+	return ;
 	}
 
 int targetLevel = bot->getAdminAccessLevel(targetUser);
 if(targetLevel && (aLevel < level::chinfo::admin))
 	{
 	bot->Notice(theClient, "Sorry, you have insufficient access to perform that command.");
-	return false;
+	return ;
 	}
 
 /****************
@@ -68,7 +68,7 @@ if((aLevel >= level::chinfo::email) && ("EMAIL" == option))
 	bot->logAdminMessage("%s (%s) - CHINFO - EMAIL - %s to %s",
 		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
 		targetUser->getUserName().c_str(), newdata.c_str());
-	return true;
+	return ;
 	}
 
 /***********************
@@ -85,7 +85,7 @@ if((aLevel >= level::chinfo::verification) && ("VERIFICATION" == option))
 	bot->logAdminMessage("%s (%s) - CHINFO - VERIFICATION - %s to %s",
 		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
 		targetUser->getUserName().c_str(), newdata.c_str());
-	return true;
+	return ;
 	}
 
 /***************
@@ -100,7 +100,7 @@ if((aLevel >= level::chinfo::nick) && ("NICK" == option))
 		{
 		bot->Notice(theClient, "Sorry, the nick %s is already in use.",
 			newUser->getUserName().c_str());
-		return false;
+		return ;
 		}
 	
 	/* Next - check legality of new nick */
@@ -109,13 +109,13 @@ if((aLevel >= level::chinfo::nick) && ("NICK" == option))
 		{
 		bot->Notice(theClient, "Sorry, %s is an illegal nickname.",
 			newdata.c_str());
-		return false;
+		return ;
 		}
 
   if(targetUser->isAuthed()) {
     bot->Notice(theClient, "%s is currently logged in. Cannot CHINFO NICK this user.",
       targetUser->getUserName().c_str());
-    return true;
+    return ;
   }
 	
 	/* Save copy of current name */
@@ -139,12 +139,12 @@ if((aLevel >= level::chinfo::nick) && ("NICK" == option))
 	bot->logAdminMessage("%s (%s) - CHINFO - NICK - %s to %s",
 		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
 		userName.c_str(), newdata.c_str());
-	return true;
+	return ;
 	}
 
 Usage(theClient);
 
-return true;
+return ;
 } // CHINFOCommand::Exec
 
 } // namespace gnuworld.

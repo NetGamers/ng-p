@@ -8,14 +8,14 @@
 #include	"cservice.h"
 #include	"responses.h"
 
-const char QUOTECommand_cc_rcsId[] = "$Id: QUOTECommand.cc,v 1.2 2002-10-20 02:12:08 jeekay Exp $" ;
+const char QUOTECommand_cc_rcsId[] = "$Id: QUOTECommand.cc,v 1.3 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
 using std::string ;
 
-bool QUOTECommand::Exec( iClient* theClient, const string& Message )
+void QUOTECommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.QUOTE");
 
@@ -23,13 +23,13 @@ StringTokenizer st( Message ) ;
 if( st.size() < 1 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 sqlUser* theUser = bot->isAuthed(theClient, true);
 if (!theUser)
 	{
-	return false;
+	return ;
  	}
 
 int admLevel = bot->getAdminAccessLevel(theUser);
@@ -41,12 +41,12 @@ if (admLevel < quoteCommandLevel->getLevel())
 		bot->getResponse(theUser,
 			language::insuf_access,
 			string("Sorry, you have insufficient access to perform that command.")));
-	return false;
+	return ;
 	}
 
 bot->Write( st.assemble(1) );
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld.

@@ -17,29 +17,29 @@
 
 #include	"cservice.h"
 
-const char UPDATEDBCommand_cc_rcsId[] = "$Id: UPDATEDBCommand.cc,v 1.6 2002-11-09 20:38:01 jeekay Exp $" ;
+const char UPDATEDBCommand_cc_rcsId[] = "$Id: UPDATEDBCommand.cc,v 1.7 2004-05-16 13:08:18 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::string ;
 
-bool UPDATEDBCommand::Exec( iClient* theClient, const string& Message )
+void UPDATEDBCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.UPDATEDB");
 
 StringTokenizer st( Message ) ;
 if( st.size() != 1 ) {
   Usage(theClient);
-  return true;
+  return ;
 }
 
 sqlUser* theUser = bot->isAuthed(theClient, true);
-if(!theUser) { return 0; }
+if(!theUser) { return ; }
 
 int aLevel = bot->getAdminAccessLevel(theUser);
 sqlCommandLevel* updatedbLevel = bot->getLevelRequired("UPDATEDB", "ADMIN");
 
-if(aLevel < updatedbLevel->getLevel()) { return 0; }
+if(aLevel < updatedbLevel->getLevel()) { return ; }
 
 bot->Notice(theClient, "Starting updatedb routine...");
 
@@ -73,7 +73,7 @@ bot->logAdminMessage("%s (%s) - UPDATEDB - Updated %d channels",
   theClient->getNickName().c_str(), theUser->getUserName().c_str(),
   mismatchCount);
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld.

@@ -10,7 +10,7 @@
  *
  * Todo: Support ircu2.10.11's CLEARMODE feature.
  *
- * $Id: CLEARMODECommand.cc,v 1.5 2003-03-30 02:54:08 jeekay Exp $
+ * $Id: CLEARMODECommand.cc,v 1.6 2004-05-16 13:08:16 jeekay Exp $
  */
 
 #include	<string>
@@ -21,14 +21,14 @@
 #include	"responses.h"
 #include	"Network.h"
 
-const char CLEARMODECommand_cc_rcsId[] = "$Id: CLEARMODECommand.cc,v 1.5 2003-03-30 02:54:08 jeekay Exp $" ;
+const char CLEARMODECommand_cc_rcsId[] = "$Id: CLEARMODECommand.cc,v 1.6 2004-05-16 13:08:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
 using std::ends;
 
-bool CLEARMODECommand::Exec( iClient* theClient, const string& Message )
+void CLEARMODECommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.CLEARMODE");
 
@@ -36,13 +36,13 @@ StringTokenizer st( Message ) ;
 if( st.size() < 2 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 sqlUser* theUser = bot->isAuthed(theClient, true);
 if(!theUser)
 	{
-	return false;
+	return ;
 	}
 
 sqlChannel* theChan = bot->getChannelRecord(st[1]);
@@ -51,7 +51,7 @@ if(!theChan)
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::chan_not_reg).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 #ifdef FEATURE_FORCELOG
@@ -69,7 +69,7 @@ if (!theChan->getInChan())
 	{
 	bot->Notice(theClient, bot->getResponse(theUser,
 		language::i_am_not_on_chan, "I'm not in that channel!"));
-	return false;
+	return ;
 	}
 
 int level = bot->getEffectiveAccessLevel(theUser, theChan, true);
@@ -78,7 +78,7 @@ if(level < level::clearmode)
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::insuf_access).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 // Cannot clear modes, if E hasn't joined.
@@ -89,7 +89,7 @@ if(!tmpChan)
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::chan_is_empty).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 stringstream s;
@@ -119,7 +119,7 @@ bot->Write( s );
 bot->Notice(theClient, "%s: Cleared channel modes.",
 	theChan->getName().c_str());
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld.

@@ -12,13 +12,13 @@
 #include	"ELog.h"
 #include	"cservice.h"
 
-const char OFFICIALCommand_cc_rcsId[] = "$Id: OFFICIALCommand.cc,v 1.2 2003-01-15 12:54:50 jeekay Exp $" ;
+const char OFFICIALCommand_cc_rcsId[] = "$Id: OFFICIALCommand.cc,v 1.3 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::string ;
 
-bool OFFICIALCommand::Exec( iClient* theClient, const string& Message )
+void OFFICIALCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.OFFICIAL");
 
@@ -30,14 +30,14 @@ bot->incStat("COMMANDS.OFFICIAL");
  */
 
 sqlUser* theUser=bot->isAuthed(theClient, true);
-if(!theUser) return true;
+if(!theUser) return ;
 
 int admLevel = bot->getAdminAccessLevel(theUser);
 sqlCommandLevel* officialLevel = bot->getLevelRequired("OFFICIAL", "ADMIN");
 
 if(admLevel < officialLevel->getLevel()) {
   bot->Notice(theClient, "Sorry, you have insufficient access to perform that command.");
-  return true;
+  return ;
 }
 
 StringTokenizer st( Message ) ;
@@ -48,7 +48,7 @@ StringTokenizer st( Message ) ;
 
 if( st.size() < 2 )	{
 	Usage(theClient);
-	return true;
+	return ;
 }
 
 string command = string_upper(st[1]);
@@ -64,7 +64,7 @@ if("LIST" == command) {
       itr->second.c_str());
   }
   
-  return true;
+  return ;
 }
 
 /***********************
@@ -73,13 +73,13 @@ if("LIST" == command) {
 
 if( st.size() < 3 )	{
 	Usage(theClient);
-	return true;
+	return ;
 }
 
 sqlUser* targetUser = bot->getUserRecord(st[2]);
 if(!targetUser) {
   bot->Notice(theClient, "Sorry, %s is not registered with me.", st[2].c_str());
-  return true;
+  return ;
 }
 
 /*************
@@ -92,14 +92,14 @@ if("CHECK" == command) {
   if(0 == verify) {
     bot->Notice(theClient, "%s does not have an official verify assigned.",
       targetUser->getUserName().c_str());
-    return false;
+    return ;
   }
   
   bot->Notice(theClient, "%s has verify %u: %s",
     targetUser->getUserName().c_str(),
     verify,
     bot->getVerify(verify).c_str());
-  return true;
+  return ;
 }
 
 
@@ -119,7 +119,7 @@ if("CLEAR" == command) {
   bot->Notice(theClient, "%s's official verify has been cleared.",
     targetUser->getUserName().c_str());
 
-  return true;
+  return ;
 }
 
 /***********************
@@ -128,7 +128,7 @@ if("CLEAR" == command) {
 
 if( st.size() < 4 ) {
   Usage(theClient);
-  return true;
+  return ;
 }
 
 if("SET" == command) {
@@ -137,7 +137,7 @@ if("SET" == command) {
   
   if("" == newVerify) {
     bot->Notice(theClient, "Verify level %u does not to exist.", newVerifyLevel);
-    return true;
+    return ;
   }
   
   bot->Notice(theClient, "%s had verify %u: %s",
@@ -153,11 +153,11 @@ if("SET" == command) {
     newVerifyLevel,
     bot->getVerify(newVerifyLevel).c_str());
   
-  return true;
+  return ;
 }
 
 Usage(theClient);
-return true ;
+return ;
 }
 
 } // namespace gnuworld.

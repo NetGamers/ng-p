@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: REGISTERCommand.cc,v 1.6 2002-10-20 02:12:08 jeekay Exp $
+ * $Id: REGISTERCommand.cc,v 1.7 2004-05-16 13:08:17 jeekay Exp $
  */
 
 #include	<string>
@@ -21,14 +21,14 @@
 #include	"cservice.h"
 #include	"responses.h"
 
-const char REGISTERCommand_cc_rcsId[] = "$Id: REGISTERCommand.cc,v 1.6 2002-10-20 02:12:08 jeekay Exp $" ;
+const char REGISTERCommand_cc_rcsId[] = "$Id: REGISTERCommand.cc,v 1.7 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
 using std::ends;
 
-bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
+void REGISTERCommand::Exec( iClient* theClient, const string& Message )
 {
 	bot->incStat("COMMANDS.REGISTER");
 
@@ -36,7 +36,7 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 	if( st.size() < 3 )
 	{
 		Usage(theClient);
-		return true;
+		return ;
 	}
 
 	/*
@@ -45,7 +45,7 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 	 */
 
 	sqlUser* theUser = bot->isAuthed(theClient, true);
-	if (!theUser) return false;
+	if (!theUser) return ;
 	
 	/*
 	 *  Check the user has sufficient access for this command..
@@ -60,7 +60,7 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 			bot->getResponse(theUser,
 				language::insuf_access,
 				string("You have insufficient access to perform that command.")));
-		return false;
+		return ;
 	}
 
 	// Check the channel is not currently in the database either
@@ -76,13 +76,13 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 		{
 		elog << "REGISTER::sql> SQL Error: "
 				 << bot->SQLDb->ErrorMessage() << endl;
-		return false;
+		return ;
 		}
 	
 	if(bot->SQLDb->Tuples() > 0)
 		{
 		bot->Notice(theClient, "%s is already in the database", st[1].c_str());
-		return false;
+		return ;
 		}
 
  	/*
@@ -98,7 +98,7 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 				language::chan_already_reg,
 				string("%s is already registered with me.")).c_str(),
 			st[1].c_str());
-		return false;
+		return ;
 	}
 
 	sqlUser* tmpUser = bot->getUserRecord(st[2]);
@@ -109,7 +109,7 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 				language::not_registered,
 				string("The user %s doesn't appear to be registered.")).c_str(),
 			st[2].c_str());
-		return true;
+		return ;
 		}
 
 	string::size_type pos = st[1].find_first_of( ',' ); /* Don't allow comma's in channel names. :) */
@@ -120,7 +120,7 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 			bot->getResponse(theUser,
 				language::inval_chan_name,
 				string("Invalid channel name.")));
-		return false;
+		return ;
 	}
 
 	/*
@@ -199,7 +199,7 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 				st[1].c_str());
 		} else {
 			bot->Notice(theClient, "Unable to update the channel in the database!");
-			return false;
+			return ;
 		}
 
 	}
@@ -246,12 +246,12 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 			 * If we can't find the channel in the db, something has gone
 			 * horribly wrong.
 			 */
-			return false;
+			return ;
 		}
 
 	} else
 	{
-		return false;
+		return ;
 	}
 
 	/*
@@ -277,7 +277,7 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 		{
 			bot->Notice(theClient, "Couldn't automatically add the level 500 Manager, check it doesn't already exist.");
 			delete(newManager);
-			return (false);
+			return ;
 		}
 
 	/*
@@ -287,7 +287,7 @@ bool REGISTERCommand::Exec( iClient* theClient, const string& Message )
 	pair<int, int> thePair( newManager->getUserId(), newManager->getChannelId());
 	bot->sqlLevelCache.insert(cservice::sqlLevelHashType::value_type(thePair, newManager));
 
-	return true;
+	return ;
 }
 
 } // namespace gnuworld.

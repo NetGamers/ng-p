@@ -12,7 +12,7 @@
 #include	<ctime>
 #include	<cstdlib>
 #include	<cstring>
-#include  <stdarg.h>
+#include	<stdarg.h>
 
 #include	"client.h"
 #include	"EConfig.h"
@@ -26,7 +26,7 @@
 #include	"Network.h"
 #include	"StringTokenizer.h"
 
-#include  "cservice.h"
+#include	"cservice.h"
 #include	"cservice_config.h"
 #include	"constants.h"
 #include	"levels.h"

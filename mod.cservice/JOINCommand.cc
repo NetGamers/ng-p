@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: JOINCommand.cc,v 1.5 2003-10-31 19:23:56 jeekay Exp $
+ * $Id: JOINCommand.cc,v 1.6 2004-05-16 13:08:16 jeekay Exp $
  */
 
 
@@ -21,13 +21,13 @@
 #include	"responses.h"
 #include	"Network.h"
 
-const char JOINCommand_cc_rcsId[] = "$Id: JOINCommand.cc,v 1.5 2003-10-31 19:23:56 jeekay Exp $" ;
+const char JOINCommand_cc_rcsId[] = "$Id: JOINCommand.cc,v 1.6 2004-05-16 13:08:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::string ;
 
-bool JOINCommand::Exec( iClient* theClient, const string& Message )
+void JOINCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.JOIN");
 
@@ -35,7 +35,7 @@ StringTokenizer st( Message ) ;
 if( st.size() < 2 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 /*
@@ -46,7 +46,7 @@ if( st.size() < 2 )
 sqlUser* theUser = bot->isAuthed(theClient, true);
 if (!theUser)
 	{
-	return false;
+	return ;
 	}
 
 /*
@@ -59,7 +59,7 @@ if (!theChan)
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::chan_not_reg).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 #ifdef FEATURE_FORCELOG
@@ -80,7 +80,7 @@ if (level < level::join)
 	{
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::insuf_access).c_str());
-	return false;
+	return ;
 	}
 
 /* Check the bot isn't in the channel. */
@@ -88,7 +88,7 @@ if (theChan->getInChan())
 	{
 	bot->Notice(theClient, bot->getResponse(theUser,
 		language::already_on_chan, "I'm already in that channel!"));
-	return false;
+	return ;
 	}
 
 bot->writeChannelLog(theChan, theClient, sqlChannel::EV_JOIN, "");
@@ -108,7 +108,7 @@ bot->joinCount++;
 bot->reopQ.insert(cservice::reopQType::value_type(theChan->getName(),
 	bot->currentTime() + 15) );
 
-return true;
+return ;
 }
 
 } // namespace gnuworld

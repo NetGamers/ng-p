@@ -8,7 +8,7 @@
  *
  * Caveats: None.
  *
- * $Id: LBANLISTCommand.cc,v 1.3 2002-02-20 19:32:35 morpheus Exp $
+ * $Id: LBANLISTCommand.cc,v 1.4 2004-05-16 13:08:16 jeekay Exp $
  */
 
 #include	<string>
@@ -23,14 +23,14 @@
 #include	"cservice_config.h"
 #include	"time.h"
 
-const char LBANLISTCommand_cc_rcsId[] = "$Id: LBANLISTCommand.cc,v 1.3 2002-02-20 19:32:35 morpheus Exp $" ;
+const char LBANLISTCommand_cc_rcsId[] = "$Id: LBANLISTCommand.cc,v 1.4 2004-05-16 13:08:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::string ;
 using namespace level;
 
-bool LBANLISTCommand::Exec( iClient* theClient, const string& Message )
+void LBANLISTCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.LBANLIST");
 
@@ -38,7 +38,7 @@ StringTokenizer st( Message ) ;
 if( st.size() < 3 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 // Is the channel registered?
@@ -46,7 +46,7 @@ if( st.size() < 3 )
 sqlUser* theUser = bot->isAuthed(theClient,true);
 if(!theUser)
 	{
-	return false;
+	return ;
 	}
 sqlChannel* theChan = bot->getChannelRecord(st[1]);
 if(!theChan)
@@ -56,7 +56,7 @@ if(!theChan)
 			language::chan_not_reg,
 			string("Sorry, %s isn't registered with me.")).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 int level = bot->getEffectiveAccessLevel(theUser, theChan, true);
@@ -65,7 +65,7 @@ int admLevel = bot->getAdminAccessLevel(theUser);
 if( (level < level::banlist) && (admLevel < level::globalbanlist) )
 	{
 	bot->Notice(theClient, "Sorry, you have insufficient access to perform that command");
-	return false;
+	return ;
 	}
 
 /* Show all results? */
@@ -167,7 +167,7 @@ else
 			string("No match!")));
 	}
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld.

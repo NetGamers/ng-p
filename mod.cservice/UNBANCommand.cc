@@ -8,7 +8,7 @@
  *
  * Caveats: None.
  *
- * $Id: UNBANCommand.cc,v 1.5 2002-09-24 20:06:18 jeekay Exp $
+ * $Id: UNBANCommand.cc,v 1.6 2004-05-16 13:08:17 jeekay Exp $
  */
 
 #include	<string>
@@ -21,7 +21,7 @@
 #include	"responses.h"
 #include	"match.h"
 
-const char UNBANCommand_cc_rcsId[] = "$Id: UNBANCommand.cc,v 1.5 2002-09-24 20:06:18 jeekay Exp $" ;
+const char UNBANCommand_cc_rcsId[] = "$Id: UNBANCommand.cc,v 1.6 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -30,7 +30,7 @@ using std::ends ;
 using std::string ;
 using namespace level;
 
-bool UNBANCommand::Exec( iClient* theClient, const string& Message )
+void UNBANCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.UNBAN");
 
@@ -39,7 +39,7 @@ StringTokenizer st( Message ) ;
 if( st.size() < 3 )
 	{
     Usage(theClient);
-    return true;
+    return ;
 	}
 
 // Is the user authorised?
@@ -47,7 +47,7 @@ if( st.size() < 3 )
 sqlUser* theUser = bot->isAuthed(theClient, true);
 if(!theUser)
 	{
-	return false;
+	return ;
 	}
 
 /* Is the channel registered? */
@@ -61,7 +61,7 @@ if(!theChan)
 		string("Sorry, %s isn't registered with me.")).c_str(),
 	st[1].c_str());
 
-	return false;
+	return ;
 	}
 
 #ifdef FEATURE_FORCELOG
@@ -81,7 +81,7 @@ if (!theChan->getInChan())
 		bot->getResponse(theUser,
 			language::i_am_not_on_chan,
 			string("I'm not in that channel!")));
-	return false;
+	return ;
 	}
 
 Channel* theChannel = Network->findChannel(theChan->getName());
@@ -90,16 +90,16 @@ if (!theChannel)
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::chan_is_empty).c_str(),
 		theChan->getName().c_str());
-	return false;
+	return ;
 	}
 
 /* Check we are opped */
 ChannelUser* tmpBotUser = theChannel->findUser(bot->getInstance());
-if(!tmpBotUser) return false;
+if(!tmpBotUser) return ;
 if(!tmpBotUser->getMode(ChannelUser::MODE_O)) {
   bot->Notice(theClient, "I am not opped in %s", 
     theChan->getName().c_str());
-  return false;
+  return ;
 }
 
 // Check level.
@@ -112,7 +112,7 @@ if(level < level::unban)
 			language::insuf_access,
 			string("Sorry, you have insufficient access to "
 				"perform that command.")));
-	return false;
+	return ;
 	}
 
 vector< sqlBan* >::iterator ptr = theChan->banList.begin();
@@ -136,7 +136,7 @@ if( isNick )
 				string("I can't find %s on channel %s")).c_str(),
 				st[2].c_str(),
 				theChan->getName().c_str());
-		return true;
+		return ;
 		}
 
 	banTarget = aNick->getNickUserHost();
@@ -245,7 +245,7 @@ bot->Notice(theClient,
 		string("Removed %i bans that matched %s")).c_str(),
 	banCount, banTarget.c_str());
 
-return true;
+return ;
 
 }
 

@@ -19,23 +19,23 @@ namespace gnuworld
 {
 using std::string ;
 
-bool UPDATEIDLECommand::Exec( iClient* theClient, const string& Message )
+void UPDATEIDLECommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.UPDATEIDLE");
 
 StringTokenizer st( Message ) ;
 if( st.size() != 1 ) {
   Usage(theClient);
-  return true;
+  return ;
 }
 
 sqlUser* theUser = bot->isAuthed(theClient, true);
-if(!theUser) { return 0; }
+if(!theUser) { return ; }
 
 int aLevel = bot->getAdminAccessLevel(theUser);
 sqlCommandLevel* updatedbLevel = bot->getLevelRequired("UPDATEIDLE", "ADMIN");
 
-if(aLevel < updatedbLevel->getLevel()) { return 0; }
+if(aLevel < updatedbLevel->getLevel()) { return ; }
 
 bot->Notice(theClient, "Starting updateidle routine...");
 
@@ -73,7 +73,7 @@ bot->logAdminMessage("%s (%s) - UPDATEIDLE - Parted %d channels",
   theClient->getNickName().c_str(), theUser->getUserName().c_str(),
   mismatchCount);
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld.

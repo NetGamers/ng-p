@@ -8,13 +8,13 @@ namespace gnuworld
 using std::ends;
 using std::string;
  
-bool SETTIMECommand::Exec( iClient* theClient, const string& Message )
+void SETTIMECommand::Exec( iClient* theClient, const string& Message )
 { 
 
 if(!theClient->isOper())
         {
         bot->Notice(theClient, "This command is reserved to IRC Operators");
-        return true;
+        return ;
         }
 								
 stringstream s;
@@ -23,7 +23,7 @@ s	<< server->getCharYY() << " SE " << time(NULL) << ":" << server->getName()
 
 bot->Write( s ) ; 
 
-return true;
+return ;
 } 
 
 } // namespace gnuworld.

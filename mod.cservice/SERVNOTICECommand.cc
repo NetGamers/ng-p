@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: SERVNOTICECommand.cc,v 1.2 2002-10-20 02:12:09 jeekay Exp $
+ * $Id: SERVNOTICECommand.cc,v 1.3 2004-05-16 13:08:17 jeekay Exp $
  */
 
 #include	<string>
@@ -21,13 +21,13 @@
 #include	"cservice.h"
 #include	"responses.h"
 
-const char SERVNOTICECommand_cc_rcsId[] = "$Id: SERVNOTICECommand.cc,v 1.2 2002-10-20 02:12:09 jeekay Exp $" ;
+const char SERVNOTICECommand_cc_rcsId[] = "$Id: SERVNOTICECommand.cc,v 1.3 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::map ;
 
-bool SERVNOTICECommand::Exec( iClient* theClient, const string& Message )
+void SERVNOTICECommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.SERVNOTICE");
 
@@ -35,7 +35,7 @@ StringTokenizer st( Message ) ;
 if( st.size() < 3 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 /*
@@ -46,7 +46,7 @@ if( st.size() < 3 )
 sqlUser* theUser = bot->isAuthed(theClient, true);
 if (!theUser)
 	{
-	return false;
+	return ;
 	}
 
 /*
@@ -60,7 +60,7 @@ if (admLevel < servnoticeLevel->getLevel())
 	{
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::insuf_access).c_str());
-	return false;
+	return ;
 	}
 
 Channel* tmpChan = Network->findChannel(st[1]);
@@ -69,13 +69,13 @@ if (!tmpChan)
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::chan_is_empty).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 string theMessage = st.assemble(2);
 bot->serverNotice(tmpChan, theMessage.c_str());
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld.

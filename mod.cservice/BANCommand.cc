@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: BANCommand.cc,v 1.9 2004-04-26 21:43:09 jeekay Exp $
+ * $Id: BANCommand.cc,v 1.10 2004-05-16 13:08:16 jeekay Exp $
  */
 
 #include	<new>
@@ -33,7 +33,7 @@
 #include	"responses.h"
 #include	"match.h"
 
-const char BANCommand_cc_rcsId[] = "$Id: BANCommand.cc,v 1.9 2004-04-26 21:43:09 jeekay Exp $" ;
+const char BANCommand_cc_rcsId[] = "$Id: BANCommand.cc,v 1.10 2004-05-16 13:08:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -42,7 +42,7 @@ using std::ends;
 using std::string ;
 using namespace level;
 
-bool BANCommand::Exec( iClient* theClient, const string& Message )
+void BANCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.BAN");
 
@@ -50,7 +50,7 @@ StringTokenizer st( Message ) ;
 if( st.size() < 3 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 
@@ -58,7 +58,7 @@ if( st.size() < 3 )
 sqlUser* theUser = bot->isAuthed(theClient, true);
 if(!theUser)
 	{
-	return false;
+	return ;
 	}
 
 /* Do not allow bans on * channel */
@@ -68,7 +68,7 @@ if(st[1][0] != '#')
 	bot->Notice(theClient,
 		bot->getResponse(theUser,
 			language::inval_chan_name).c_str());
-	return false;
+	return ;
 	}
 
 /* Is the channel registered? */
@@ -80,7 +80,7 @@ if(!theChan)
 			theUser,
 			language::chan_not_reg).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 
@@ -102,7 +102,7 @@ if (!theChan->getInChan())
 		bot->getResponse(theUser,
 			language::i_am_not_on_chan).c_str()
 		);
-	return false;
+	return ;
 	}
 
 /*
@@ -116,16 +116,16 @@ if (!theChannel)
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::chan_is_empty).c_str(),
 		theChan->getName().c_str());
-	return false;
+	return ;
 	}
 
 /* Check we are opped */
 ChannelUser* tmpBotUser = theChannel->findUser(bot->getInstance());
-if(!tmpBotUser) return false;
+if(!tmpBotUser) return ;
 if(!tmpBotUser->getMode(ChannelUser::MODE_O)) {
   bot->Notice(theClient, "I am not opped in %s", 
     theChan->getName().c_str());
-  return false;
+  return ;
 }
 
 int oCount = 0;
@@ -204,7 +204,7 @@ if(level < level::ban)
 		bot->getResponse(theUser,
 			language::insuf_access).c_str()
 		);
-	return false;
+	return ;
 	}
 
 // TODO: Violation of the rule of numbers
@@ -213,7 +213,7 @@ if(banLevel < 1 || banLevel > level || 500 < banLevel)
 	bot->Notice(theClient,
 		bot->getResponse(theUser,language::ban_level_range).c_str(),
 		(500 < level) ? 500 : level);
-	return true;
+	return ;
 	}
 
 // TODO: Violation of the rule of numbers
@@ -223,7 +223,7 @@ if(banTime < 1 || banTime > 672)
 		bot->getResponse(theUser,
 		language::ban_duration).c_str()
 	);
-	return true;
+	return ;
 	}
 
 // TODO: Violation of the rule of numbers
@@ -233,7 +233,7 @@ if(banReason.size() > 128)
 		bot->getResponse(theUser,
 		language::ban_reason_size).c_str()
 	);
-	return true;
+	return ;
 	}
 
 int banDuration = banTime * 3600;
@@ -244,7 +244,7 @@ if(bot->validUserMask(banTarget) && level < level::massban)
 {
 	bot->Notice(theClient, bot->getResponse(theUser,
 													language::insuf_access).c_str());
-	return false;
+	return ;
 }
 
 
@@ -260,7 +260,7 @@ if( isNick )
 			language::cant_find_on_chan).c_str(),
 			st[2].c_str(), theChan->getName().c_str()
 		);
-		return true;
+		return ;
 		}
 
 	/* Ban and kick this user */
@@ -284,7 +284,7 @@ while (ptr != theChan->banList.end())
 			bot->getResponse(theUser,
 			language::ban_exists).c_str()
 		);
-		return true;
+		return ;
 		}
 
 	/*
@@ -317,7 +317,7 @@ while (ptr != theChan->banList.end())
 			bot->getResponse(theUser,
 			language::ban_covered).c_str(),
 			banTarget.c_str(), theBan->getBanMask().c_str());
-		return true;
+		return ;
 		}
 	// Carry on regardless.
 	else
@@ -415,7 +415,7 @@ bot->Notice(theClient,
 	theChannel->getName().c_str(),
 	newBan->getLevel());
 
-return true ;
+return ;
 }
 
 } // Namespace GNUWorld.

@@ -20,7 +20,7 @@
  *
  * Caveats: None
  *
- * $Id: OPCommand.cc,v 1.4 2002-02-01 04:31:30 jeekay Exp $
+ * $Id: OPCommand.cc,v 1.5 2004-05-16 13:08:17 jeekay Exp $
  */
 
 #include	<string>
@@ -35,13 +35,13 @@
 
 using std::map ;
 
-const char OPCommand_cc_rcsId[] = "$Id: OPCommand.cc,v 1.4 2002-02-01 04:31:30 jeekay Exp $" ;
+const char OPCommand_cc_rcsId[] = "$Id: OPCommand.cc,v 1.5 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::string ;
 
-bool OPCommand::Exec( iClient* theClient, const string& Message )
+void OPCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.OP");
 
@@ -49,7 +49,7 @@ StringTokenizer st( Message ) ;
 if( st.size() < 2 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 /*
@@ -60,7 +60,7 @@ if( st.size() < 2 )
 sqlUser* theUser = bot->isAuthed(theClient, true);
 if (!theUser)
 	{
-	return false;
+	return ;
 	}
 
 /*
@@ -73,7 +73,7 @@ if (!theChan)
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::chan_not_reg).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 /* Check the bot is in the channel. */
@@ -84,7 +84,7 @@ if (!theChan->getInChan())
 		bot->getResponse(theUser,
 			language::i_am_not_on_chan,
 			string("I'm not in that channel!")));
-	return false;
+	return ;
 	}
 
 
@@ -107,7 +107,7 @@ if (level < level::op)
 	{
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::insuf_access).c_str());
-	return false;
+	return ;
 	}
 
 Channel* tmpChan = Network->findChannel(theChan->getName());
@@ -116,7 +116,7 @@ if (!tmpChan)
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::chan_is_empty).c_str(),
 		theChan->getName().c_str());
-	return false;
+	return ;
 	}
 
 /*
@@ -124,13 +124,13 @@ if (!tmpChan)
  */
 
 ChannelUser* tmpBotUser = tmpChan->findUser(bot->getInstance());
-if (!tmpBotUser) return false;
+if (!tmpBotUser) return ;
 if(!tmpBotUser->getMode(ChannelUser::MODE_O))
 		{
 		bot->Notice(theClient, bot->getResponse(theUser,
 			language::im_not_opped, "I'm not opped in %s").c_str(),
 			theChan->getName().c_str());
-		return false;
+		return ;
 		}
 
 /*
@@ -144,7 +144,7 @@ if(theChan->getFlag(sqlChannel::F_NOOP))
 			language::noop_set,
 			string("The NOOP flag is set on %s")).c_str(),
 		theChan->getName().c_str());
-	return false;
+	return ;
 	}
 
 /*
@@ -296,7 +296,7 @@ for( ; counter < st2.size() ; ++counter )
 // Op them.
 bot->Op(tmpChan, opList);
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld.

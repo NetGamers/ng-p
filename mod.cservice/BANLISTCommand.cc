@@ -9,7 +9,7 @@
  *
  * Caveats: None.
  *
- * $Id: BANLISTCommand.cc,v 1.2 2002-02-18 03:33:44 jeekay Exp $
+ * $Id: BANLISTCommand.cc,v 1.3 2004-05-16 13:08:16 jeekay Exp $
  */
 
 #include        <string>
@@ -20,27 +20,27 @@
 #include        "levels.h"
 #include        "responses.h"
 
-const char BANLISTCommand_cc_rcsId[] = "$Id: BANLISTCommand.cc,v 1.2 2002-02-18 03:33:44 jeekay Exp $" ;
+const char BANLISTCommand_cc_rcsId[] = "$Id: BANLISTCommand.cc,v 1.3 2004-05-16 13:08:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::string ;
 using namespace level;
 
-bool BANLISTCommand::Exec( iClient* theClient, const string& Message )
+void BANLISTCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.BANLIST");
 StringTokenizer st( Message ) ;
 if( st.size() < 2 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 sqlUser* theUser = bot->isAuthed(theClient, true);
 if (!theUser)
 	{
-	return false;
+	return ;
 	}
 
 sqlChannel* theChan = bot->getChannelRecord(st[1]);
@@ -49,7 +49,7 @@ if (!theChan)
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::chan_not_reg).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 Channel* tmpChan = Network->findChannel(st[1]);
@@ -57,7 +57,7 @@ if (!tmpChan)
 	{
 	bot->Notice(theClient, bot->getResponse(theUser, language::chan_is_empty).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 /*
@@ -71,7 +71,7 @@ if ( (level < level::banlist) && (admLevel < level::globalbanlist) )
 	{
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::insuf_access).c_str());
-		return false;
+		return ;
 	}
 
 
@@ -97,7 +97,7 @@ else	{
 		st[1].c_str());
 	}
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld.

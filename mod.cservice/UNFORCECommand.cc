@@ -8,13 +8,13 @@
 #include	"cservice.h"
 #include	"responses.h"
 
-const char UNFORCECommand_cc_rcsId[] = "$Id: UNFORCECommand.cc,v 1.3 2002-10-20 02:12:09 jeekay Exp $" ;
+const char UNFORCECommand_cc_rcsId[] = "$Id: UNFORCECommand.cc,v 1.4 2004-05-16 13:08:18 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::string ;
 
-bool UNFORCECommand::Exec( iClient* theClient, const string& Message )
+void UNFORCECommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.UNFORCE");
 
@@ -22,7 +22,7 @@ StringTokenizer st( Message ) ;
 if( st.size() < 2 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 /*
@@ -33,7 +33,7 @@ if( st.size() < 2 )
 sqlUser* theUser = bot->isAuthed(theClient, true);
 if (!theUser)
 	{
-	return false;
+	return ;
  	}
 
 sqlChannel* admChan = bot->getChannelRecord("*");
@@ -48,7 +48,7 @@ if (admLevel < forceLevel->getLevel())
 			language::insuf_access,
 			string("Sorry, you have insufficient access to "
 				"perform that command.")));
-	return false;
+	return ;
 	}
 
 /*
@@ -63,7 +63,7 @@ if (!theChan)
 			language::chan_not_reg,
 			string("Sorry, %s isn't registered with me.")).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 /*
@@ -86,7 +86,7 @@ if(ptr != theChan->forceMap.end())
 	bot->logAdminMessage("%s (%s) - UNFORCE - %s",
 		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
 		theChan->getName().c_str());
-	return true;
+	return ;
 	}
 
 bot->Notice(theClient,
@@ -96,7 +96,7 @@ bot->Notice(theClient,
 			"%s, perhaps it expired?")).c_str(),
 	theChan->getName().c_str());
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld

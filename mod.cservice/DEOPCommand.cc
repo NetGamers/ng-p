@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: DEOPCommand.cc,v 1.3 2002-01-29 23:27:44 jeekay Exp $
+ * $Id: DEOPCommand.cc,v 1.4 2004-05-16 13:08:16 jeekay Exp $
  */
 
 #include	<string>
@@ -21,13 +21,13 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char DEOPCommand_cc_rcsId[] = "$Id: DEOPCommand.cc,v 1.3 2002-01-29 23:27:44 jeekay Exp $" ;
+const char DEOPCommand_cc_rcsId[] = "$Id: DEOPCommand.cc,v 1.4 2004-05-16 13:08:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::map ;
 
-bool DEOPCommand::Exec( iClient* theClient, const string& Message )
+void DEOPCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.DEOP");
 
@@ -36,7 +36,7 @@ StringTokenizer st( Message ) ;
 if( st.size() < 2 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 /*
@@ -47,7 +47,7 @@ if( st.size() < 2 )
 sqlUser* theUser = bot->isAuthed(theClient, true);
 if (!theUser)
 	{
-	return false;
+	return ;
 	}
 
 /*
@@ -60,7 +60,7 @@ if (!theChan)
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::chan_not_reg).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 #ifdef FEATURE_FORCELOG
@@ -80,7 +80,7 @@ if (!theChan->getInChan())
 		bot->getResponse(theUser,
 			language::i_am_not_on_chan,
 			string("I'm not in that channel!")));
-	return false;
+	return ;
 	}
 
 /*
@@ -92,7 +92,7 @@ if (level < level::deop)
 	{
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::insuf_access).c_str());
-	return false;
+	return ;
 	}
 
 Channel* tmpChan = Network->findChannel(theChan->getName());
@@ -101,7 +101,7 @@ if (!tmpChan)
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::chan_is_empty).c_str(),
 		theChan->getName().c_str());
-	return false;
+	return ;
 	}
 
 /*
@@ -111,13 +111,13 @@ if (!tmpChan)
 ChannelUser* tmpBotUser = tmpChan->findUser(bot->getInstance());
 if (!tmpBotUser)
 	{
-	return false;
+	return ;
 	}
 
 if(!tmpBotUser->getMode(ChannelUser::MODE_O))
 	{
 	bot->Notice(theClient, "I'm not opped in %s", theChan->getName().c_str());
-	return false;
+	return ;
 	}
 
 /*
@@ -240,7 +240,7 @@ while( counter < st2.size())
 
 // deOp them.
 bot->DeOp(tmpChan, deopList);
-return true ;
+return ;
 
 }
 

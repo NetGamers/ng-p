@@ -11,7 +11,7 @@
  *
  * Caveats: None
  *
- * $Id: TOPICCommand.cc,v 1.6 2003-01-28 22:37:48 jeekay Exp $
+ * $Id: TOPICCommand.cc,v 1.7 2004-05-16 13:08:17 jeekay Exp $
  */
 
 #include	<string>
@@ -23,14 +23,14 @@
 #include	"responses.h"
 #include	"Network.h"
 
-const char TOPICCommand_cc_rcsId[] = "$Id: TOPICCommand.cc,v 1.6 2003-01-28 22:37:48 jeekay Exp $" ;
+const char TOPICCommand_cc_rcsId[] = "$Id: TOPICCommand.cc,v 1.7 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
 using std::ends ;
 
-bool TOPICCommand::Exec( iClient* theClient, const string& Message )
+void TOPICCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.TOPIC");
 
@@ -38,13 +38,13 @@ StringTokenizer st( Message ) ;
 if( st.size() < 3 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 sqlUser* theUser = bot->isAuthed(theClient, true);
 if(!theUser)
 	{
-	return false;
+	return ;
 	}
 
 sqlChannel* theChan = bot->getChannelRecord(st[1]);
@@ -53,7 +53,7 @@ if(!theChan)
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::chan_not_reg).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 #ifdef FEATURE_FORCELOG
@@ -73,7 +73,7 @@ if (!theChan->getInChan())
 		bot->getResponse(theUser,
 			language::i_am_not_on_chan,
 			string("I'm not in that channel!")));
-	return false;
+	return ;
 	}
 
 int level = bot->getEffectiveAccessLevel(theUser, theChan, true);
@@ -82,7 +82,7 @@ if(level < level::topic)
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::insuf_access).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 // Cannot set topic, if the bot hasn't joined.
@@ -93,7 +93,7 @@ if(!tmpChan)
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::chan_is_empty).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 // Done with the checking.
@@ -106,7 +106,7 @@ if( topic.size() > 230 )
 	{
 	bot->Notice(theClient, "ERROR: Topic cannot exceed 230 chars. You attempted to use %u characters.",
 		topic.size());
-	return false;
+	return ;
         }
 
 stringstream s;
@@ -121,7 +121,7 @@ s	<< bot->getCharYYXXX()
 
 bot->Write( s );
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld.

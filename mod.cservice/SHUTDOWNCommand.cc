@@ -15,12 +15,12 @@
 #include	"cservice.h"
 #include	"responses.h"
 
-const char SHUTDOWNCommand_cc_rcsId[] = "$Id: SHUTDOWNCommand.cc,v 1.3 2002-10-20 02:12:09 jeekay Exp $" ;
+const char SHUTDOWNCommand_cc_rcsId[] = "$Id: SHUTDOWNCommand.cc,v 1.4 2004-05-16 13:08:17 jeekay Exp $" ;
 namespace gnuworld
 {
 using std::string ;
 
-bool SHUTDOWNCommand::Exec( iClient* theClient, const string& Message )
+void SHUTDOWNCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.SHUTDOWN");
 
@@ -28,7 +28,7 @@ StringTokenizer st( Message ) ;
 if( st.size() < 2 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 /*
@@ -39,7 +39,7 @@ if( st.size() < 2 )
 sqlUser* theUser = bot->isAuthed(theClient, false);
 if (!theUser)
 	{
-	return false;
+	return ;
 	}
 
 int admLevel = bot->getAdminAccessLevel(theUser);
@@ -51,7 +51,7 @@ if (admLevel < shutdownLevel->getLevel())
 		bot->getResponse(theUser,
 			language::insuf_access,
 			string("Sorry, you have insufficient access to perform that command.")));
-	return false;
+	return ;
 	}
 
 bot->logAdminMessage("%s issued the shutdown command! Bye! xxx!", theClient->getNickName().c_str());
@@ -64,7 +64,7 @@ sprintf( buf, "%s SQ %s :%s made me shutdown (%s)\n", bot->getCharYY(), bot->get
 
 bot->QuoteAsServer( buf );
 
-return true;
+return ;
 }
 
 } // namespace gnuworld.

@@ -8,7 +8,7 @@
  *
  * Caveats: None.
  *
- * $Id: UNSUSPENDCommand.cc,v 1.6 2002-10-20 02:12:09 jeekay Exp $
+ * $Id: UNSUSPENDCommand.cc,v 1.7 2004-05-16 13:08:18 jeekay Exp $
  */
 
 #include	<string>
@@ -21,14 +21,14 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char UNSUSPENDCommand_cc_rcsId[] = "$Id: UNSUSPENDCommand.cc,v 1.6 2002-10-20 02:12:09 jeekay Exp $" ;
+const char UNSUSPENDCommand_cc_rcsId[] = "$Id: UNSUSPENDCommand.cc,v 1.7 2004-05-16 13:08:18 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::string ;
 using namespace level;
 
-bool UNSUSPENDCommand::Exec( iClient* theClient, const string& Message )
+void UNSUSPENDCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.UNSUSPEND");
 
@@ -37,7 +37,7 @@ StringTokenizer st( Message ) ;
 if( st.size() < 2 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 // Is the user authorized?
@@ -49,13 +49,13 @@ if(!theUser)
 	bot->getResponse(theUser,
 		language::no_longer_auth,
 		string("Sorry, you are not authorised with me.")));
-	return false;
+	return ;
 	}
 
 if( st.size() < 3 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 
@@ -70,7 +70,7 @@ if(!theChan)
 			language::chan_not_reg,
 			string("Sorry, %s isn't registered with me.")).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 #ifdef FEATURE_FORCELOG
@@ -96,7 +96,7 @@ if (theChan->getName() == "*")
         if (level < susadminLevel->getLevel())
                 {
                 bot->Notice(theClient, "Sorry, you have insufficient access to perform that command");
-                return false;
+                return ;
                 }
         }
 
@@ -106,7 +106,7 @@ if(level < level::unsuspend)
 		bot->getResponse(theUser,
 			language::insuf_access,
 			string("Sorry, you have insufficient access to perform that command.")));
-	return false;
+	return ;
 	}
 
 // Check whether the user is in the access list.
@@ -115,7 +115,7 @@ if(!Target)
 	{
 	bot->Notice(theClient, "I don't know who %s is",
     	st[2].c_str());
-	return true;
+	return ;
 	}
 
 sqlLevel* aLevel = bot->getLevelRecord(Target, theChan);
@@ -126,7 +126,7 @@ if(!aLevel)
 		language::not_registered,
 		string("I don't know who %s is")).c_str(),
     	Target->getUserName().c_str(), theChan->getName().c_str());
-	return true;
+	return ;
 	}
 
 if (aLevel->getSuspendExpire() == 0)
@@ -136,7 +136,7 @@ if (aLevel->getSuspendExpire() == 0)
 			language::isnt_suspended,
 			string("%s isn't suspended on %s")).c_str(),
 		Target->getUserName().c_str(), theChan->getName().c_str());
-	return false;
+	return ;
 	}
 
 /*
@@ -147,7 +147,7 @@ if ((aLevel->getAccess()) >= level)
 	{
 	bot->Notice(theClient,
 		"Cannot unsuspend a user with equal or higher access than your own.");
-	return false;
+	return ;
 	}
 
 /*
@@ -158,7 +158,7 @@ if (aLevel->getSuspendLevel() > level)
 	{
 	bot->Notice(theClient,
 		"Cannot unsuspend a user that was suspended at a higher level than your own access.");
-	return false;
+	return ;
 	}
 
 aLevel->setSuspendExpire(0);
@@ -175,7 +175,7 @@ if( !aLevel->commit() )
 		"Error updating channel status." ) ;
 	elog	<< "UNSUSPEND> SQL error"
 		<< endl ;
-	return false ;
+	return ;
 	}
 
 bot->Notice(theClient,
@@ -184,7 +184,7 @@ bot->Notice(theClient,
 		string("SUSPENSION for %s is cancelled")).c_str(),
 	Target->getUserName().c_str());
 
-return true;
+return ;
 }
 
 } // namespace gnuworld.

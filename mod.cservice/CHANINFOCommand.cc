@@ -13,7 +13,7 @@
  *
  * Command is aliased "INFO".
  *
- * $Id: CHANINFOCommand.cc,v 1.27 2004-05-01 15:31:43 jeekay Exp $
+ * $Id: CHANINFOCommand.cc,v 1.28 2004-05-16 13:08:16 jeekay Exp $
  */
 
 #include  <string>
@@ -27,7 +27,7 @@
 #include  "levels.h"
 #include  "responses.h"
 
-const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.27 2004-05-01 15:31:43 jeekay Exp $" ;
+const char CHANINFOCommand_cc_rcsId[] = "$Id: CHANINFOCommand.cc,v 1.28 2004-05-16 13:08:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -38,14 +38,14 @@ using std::string ;
 static const char* queryHeader = "SELECT channels.name,users.user_name,levels.access,users_lastseen.last_seen FROM levels,channels,users,users_lastseen ";
 static const char* queryString = "WHERE levels.channel_id=channels.id AND users.id=users_lastseen.user_id AND levels.access = 500 AND levels.user_id = users.id ";
 
-bool CHANINFOCommand::Exec( iClient* theClient, const string& Message )
+void CHANINFOCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.INFO");
 
 StringTokenizer st( Message ) ;
 if( st.size() < 2 ) {
   Usage(theClient);
-  return true;
+  return ;
 }
 
 sqlUser* theUser = bot->isAuthed(theClient, false);
@@ -68,7 +68,7 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) ) {
         language::not_registered,
         string("The user %s doesn't appear to be registered.")).c_str(),
       st[1].c_str());
-    return true;
+    return ;
   } // if(!targetUser)
 
   /* Keep details private. */
@@ -80,7 +80,7 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) ) {
         bot->getResponse(theUser,
           language::no_peeking,
           string("Unable to view user details (Invisible)")));
-      return false;
+      return ;
     } // if(!admin or !oper)
   } // if(target is invisible)
 
@@ -241,7 +241,7 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) ) {
       elog  << "CHANINFO> SQL Error: "
         << bot->SQLDb->ErrorMessage()
         << endl ;
-      return false ;
+      return ;
     }
 
     for(int i = 0; i < bot->SQLDb->Tuples(); i++) {
@@ -274,7 +274,7 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) ) {
 
   }
 
-  return true;
+  return ;
 } // if(is a user)
 
 /*
@@ -288,7 +288,7 @@ if( !theChan ) {
       language::chan_not_reg,
       string("The channel %s is not registered")).c_str(),
     st[1].c_str());
-  return true;
+  return ;
 }
 
 /*
@@ -386,7 +386,7 @@ if( !theChan->getURL().empty() ) {
     theChan->getURL().c_str());
 }
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld.

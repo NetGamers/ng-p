@@ -10,7 +10,7 @@
 #include	"responses.h"
 #include	"networkData.h"
 
-const char NEWPASSCommand_cc_rcsId[] = "$Id: NEWPASSCommand.cc,v 1.4 2002-09-13 21:30:39 jeekay Exp $" ;
+const char NEWPASSCommand_cc_rcsId[] = "$Id: NEWPASSCommand.cc,v 1.5 2004-05-16 13:08:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -21,7 +21,7 @@ using std::setw;
 
 const char validChars[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.$*_";
 
-bool NEWPASSCommand::Exec( iClient* theClient, const string& Message )
+void NEWPASSCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.NEWPASS");
 
@@ -29,7 +29,7 @@ StringTokenizer st( Message ) ;
 if( st.size() < 2 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 /*
@@ -40,7 +40,7 @@ if( st.size() < 2 )
 sqlUser* tmpUser = bot->isAuthed(theClient, true);
 if (!tmpUser)
 	{
-	return false;
+	return ;
 	}
 
 /* Try and stop people using an invalid syntax.. */
@@ -51,19 +51,19 @@ if ( (string_lower(st[1]) == string_lower(tmpUser->getUserName()))
 		bot->getResponse(tmpUser,
 			language::pass_cant_be_nick,
 			string("Your passphrase cannot be your username or current nick - syntax is: NEWPASS <new passphrase>")));
-	return false;
+	return ;
 	}
 
 if (st.assemble(1).size() > 50)
 	{
 	bot->Notice(theClient, "Your passphrase cannot exceed 50 characters.");
-	return false;
+	return ;
 	}
 
 if (st.assemble(1).size() < 6)
 	{
 	bot->Notice(theClient, "Your passphrase cannot be less than 6 characters.");
-	return false;
+	return ;
 	}
 
 
@@ -129,7 +129,7 @@ else
 		"NEWPASS: Unable to commit to database" ) ;
 	}
 
-return true;
+return ;
 }
 
 } // namespace gnuworld.

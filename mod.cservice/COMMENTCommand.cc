@@ -12,13 +12,13 @@
 #include	"cservice.h"
 #include	"responses.h"
 
-const char COMMENTCommand_cc_rcsId[] = "$Id: COMMENTCommand.cc,v 1.8 2002-10-20 02:12:06 jeekay Exp $" ;
+const char COMMENTCommand_cc_rcsId[] = "$Id: COMMENTCommand.cc,v 1.9 2004-05-16 13:08:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::string ;
 
-bool COMMENTCommand::Exec( iClient* theClient, const string& Message )
+void COMMENTCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.COMMENT");
 
@@ -26,14 +26,14 @@ StringTokenizer st( Message ) ;
 if( st.size() < 3 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 sqlUser* theUser = bot->isAuthed(theClient, false);
 if (!theUser)
 	{
 	bot->Notice(theClient, "Sorry, You must be logged in to use this command.");
-	return false;
+	return ;
 	}
 
 int admLevel = bot->getAdminAccessLevel(theUser);
@@ -46,7 +46,7 @@ sqlCommandLevel* userCommentLevel = bot->getLevelRequired("USERCOMMENT", "ADMIN"
 
 if(st[1][0] == '#') // we HAVE a channel!!
 {
-	if (admLevel < chanCommentLevel->getLevel()) return false;
+	if (admLevel < chanCommentLevel->getLevel()) return ;
 
 	sqlChannel* targetChan = bot->getChannelRecord(st[1]);
 	if(!targetChan)
@@ -56,13 +56,13 @@ if(st[1][0] == '#') // we HAVE a channel!!
                 	        language::chan_not_reg).c_str(),
 	                st[1].c_str()
         	);
-	        return false;
+	        return ;
         	}
 
 	if(strlen(st.assemble(2).c_str()) > 230)
 		{
 		bot->Notice(theClient, "COMMENT can only be 230 chars long!");
-		return false;
+		return ;
 		}
 
 	if(string_upper(st[2]) == "OFF")
@@ -87,14 +87,14 @@ if(st[1][0] == '#') // we HAVE a channel!!
 			targetChan->getName().c_str(), myComment.c_str());
     bot->writeChannelLog(targetChan, theClient, sqlChannel::EV_COMMENT, st.assemble(2));
 		}
-return true;
+return ;
 }
 	
 /*
  *  Check the person we're trying to add is actually registered.
  */
 
-if (admLevel < userCommentLevel->getLevel()) return false;
+if (admLevel < userCommentLevel->getLevel()) return ;
 
 sqlUser* targetUser = bot->getUserRecord(st[1]);
 if (!targetUser)
@@ -104,13 +104,13 @@ if (!targetUser)
 			language::not_registered).c_str(),
 		st[1].c_str()
 	);
-	return false;
+	return ;
 	}
 
 if(strlen(st.assemble(2).c_str()) > 230)
 	{
 	bot->Notice(theClient, "COMMENT can only be 230 chars long!");
-	return false;
+	return ;
 	}
 
 
@@ -143,7 +143,7 @@ if (string_upper(st[2]) == "OFF") {
   targetUser->writeEvent(sqlUser::EV_COMMENT, theUser, st.assemble(2));
 }
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld.

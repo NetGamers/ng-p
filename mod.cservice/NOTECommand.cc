@@ -9,7 +9,7 @@
 
 #define LOG_SQL
 
-const char NOTECommand_cc_rcsId[] = "$Id: NOTECommand.cc,v 1.14 2004-05-01 15:31:43 jeekay Exp $" ;
+const char NOTECommand_cc_rcsId[] = "$Id: NOTECommand.cc,v 1.15 2004-05-16 13:08:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -17,7 +17,7 @@ namespace gnuworld
 using std::ends ;
 using std::string ;
 
-bool NOTECommand::Exec(iClient* theClient, const string& Message)
+void NOTECommand::Exec(iClient* theClient, const string& Message)
 {
 bot->incStat("COMMANDS.NOTE");
 
@@ -25,7 +25,7 @@ StringTokenizer st(Message) ;
 if (st.size() < 2)
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 /*
@@ -33,7 +33,7 @@ if (st.size() < 2)
  *  they aren't logged in - tell them they should be.
  */
 sqlUser* theUser = bot->isAuthed(theClient, true);
-if (!theUser) return false;
+if (!theUser) return ;
 		
 string cmd = string_upper(st[1]) ;
 	
@@ -46,7 +46,7 @@ if (cmd == "SEND")
 	if (st.size() < 4)
 		{
 		Usage(theClient);
-		return true;
+		return ;
 		}
 
 	sqlUser* targetUser = bot->getUserRecord(st[2]);
@@ -54,7 +54,7 @@ if (cmd == "SEND")
 		{
 		bot->Notice(theClient, bot->getResponse(theUser,
 			language::not_registered).c_str(), st[2].c_str());
-		return false;
+		return ;
 		} // No such target user
 		
 	/* First things first - is this user allowing incoming notes? */
@@ -72,7 +72,7 @@ if (cmd == "SEND")
 			<< bot->SQLDb->ErrorMessage()
 			<< endl;
 		bot->Notice(theClient, "Internal database error whilst sending note.");
-		return false;
+		return ;
 	} // Database error of some sort
 
 	for( int row = 0 ; row < bot->SQLDb->Tuples() ; ++row ) {
@@ -96,7 +96,7 @@ if (cmd == "SEND")
 		{
 		/* This note sending is not allowed */
 		bot->Notice(theClient, "Sorry, that user is not accepting notes from you.");
-		return true;
+		return ;
 		}
 		
 			
@@ -117,7 +117,7 @@ if (cmd == "SEND")
 			elog    << "NOTECommand> SQL Error: "
 				<< bot->SQLDb->ErrorMessage()
 				<< endl ;
-			return false ;
+			return ;
 			} // status != PGRES_TUPLES_OK
 		
 		int count = atoi(bot->SQLDb->GetValue(0,0));
@@ -147,7 +147,7 @@ if (cmd == "SEND")
 			if (PGRES_COMMAND_OK != status)
 				{
 				bot->dbErrorMessage(theClient);
-				return false;
+				return ;
 				} // status != PGRES_COMMAND_OK
 
 			bot->Notice(theClient, "Note sent to %s", targetUser->getUserName().c_str());
@@ -158,7 +158,7 @@ if (cmd == "SEND")
 					theUser->getUserName().c_str(), bot->getNickName().c_str());
 				} // targetClient exists
 		}// count < 15
-	return true;
+	return ;
 	} // if(cmd == "SEND"); 
 
 /*************
@@ -183,12 +183,12 @@ if (cmd == "READ")
 	if (PGRES_TUPLES_OK != status)
 		{
 		bot->dbErrorMessage(theClient);
-		return false;
+		return ;
 		}
 	if (!bot->SQLDb->Tuples())
 		{
 		bot->Notice(theClient, "You have no notes.");
-		return false;
+		return ;
 		}
 
 	for (int i = 0; i < bot->SQLDb->Tuples(); i++)
@@ -204,7 +204,7 @@ if (cmd == "READ")
 		bot->Notice(theClient, "TEXT: %s", bot->SQLDb->GetValue(i, 2));
 		}
 	bot->Notice(theClient, "End of notes.");
-	return true;
+	return ;
 	}
 
 /**************
@@ -216,7 +216,7 @@ if (cmd == "ERASE")
 	if (st.size() < 3)
 		{
 		Usage(theClient);
-		return false;
+		return ;
 		}
 		
 	stringstream theQuery;
@@ -238,11 +238,11 @@ if (cmd == "ERASE")
 	if (PGRES_COMMAND_OK != status)
 		{
 		bot->dbErrorMessage(theClient);
-		return false;
+		return ;
 		}
 		
 	bot->Notice(theClient, "Deleted %d note(s).", bot->SQLDb->CmdTuples());
-	return true;
+	return ;
 	}
 
 /**************
@@ -276,7 +276,7 @@ if (cmd == "ALLOW")
 			bot->Notice(theClient, "Internal database error clearing list.");
 			elog << "NOTECommand::CLEAR> Error: "
 				<< bot->SQLDb->ErrorMessage();
-			return true;
+			return ;
 			}
 		
 		int clearCount = atoi(bot->SQLDb->GetValue(0,0));
@@ -296,11 +296,11 @@ if (cmd == "ALLOW")
 			bot->Notice(theClient, "Internal database error clearing list.");
 			elog << "NOTE:CLEAR> Error: "
 				<< bot->SQLDb->ErrorMessage();
-			return true;
+			return ;
 			}
 		
 		bot->Notice(theClient, "Note allow list successfully cleared.");
-		return true;
+		return ;
 		}
 	
 	if("LIST" == option)
@@ -318,7 +318,7 @@ if (cmd == "ALLOW")
 			{
 			bot->Notice(theClient, "Internal database error listing allowed users.");
 			elog << "NOTE:LIST:SQLError> " << bot->SQLDb->ErrorMessage() << endl;
-			return false;
+			return ;
 			}
 		
 		string namesList;
@@ -334,13 +334,13 @@ if (cmd == "ALLOW")
 			theUser->getFlag(sqlUser::F_MEMO_REJECT) ? "ACCEPTED" : "REJECTED"
 			);
 		bot->Notice(theClient, "User list: %s", namesList.c_str());
-		return true;
+		return ;
 		}
 	
 	if(st.size() < 4)
 		{
 		Usage(theClient);
-		return false;
+		return ;
 		}
 	
 	string target = st[3];
@@ -348,7 +348,7 @@ if (cmd == "ALLOW")
 	if(!targetUser)
 		{
 		bot->Notice(theClient, "%s is not registered with me.", target.c_str());
-		return false;
+		return ;
 		}
 	
 	if("ADD" == option)
@@ -373,7 +373,7 @@ if (cmd == "ALLOW")
 			elog << "NOTE:ADD:SQLError> "
 				<< bot->SQLDb->ErrorMessage()
 				<< endl;
-			return false;
+			return ;
 			}
 		
 		int isExists = atoi(bot->SQLDb->GetValue(0,0));
@@ -381,7 +381,7 @@ if (cmd == "ALLOW")
 			{
 			bot->Notice(theClient, "%s is already in your allowed list.",
 				targetUser->getUserName().c_str());
-			return false;
+			return ;
 			}
 		
 		stringstream addInsert;
@@ -399,12 +399,12 @@ if (cmd == "ALLOW")
 			elog << "NOTE:ADD:SQLError> "
 				<< bot->SQLDb->ErrorMessage()
 				<< endl;
-			return false;
+			return ;
 			}
 		
 		bot->Notice(theClient, "%s successfully added to your list.",
 			targetUser->getUserName().c_str());
-		return true;
+		return ;
 		} // if("ADD" == option)
 	
 	if("REM" == option)
@@ -427,7 +427,7 @@ if (cmd == "ALLOW")
 			{
 			bot->Notice(theClient, "Internal database error removing from your allow list.");
 			elog << "NOTE:LIST:SQLError> " << bot->SQLDb->ErrorMessage() << endl;
-			return false;
+			return ;
 			}
 		
 		int isExists = atoi(bot->SQLDb->GetValue(0,0));
@@ -435,7 +435,7 @@ if (cmd == "ALLOW")
 			{
 			bot->Notice(theClient, "%s is not on your list.",
 				targetUser->getUserName().c_str());
-			return false;
+			return ;
 			}
 		
 		stringstream remDelete;
@@ -451,18 +451,18 @@ if (cmd == "ALLOW")
 			{
 			bot->Notice(theClient, "Internal database error removing from your allow list.");
 			elog << "NOTE:REM:SQLError> " << bot->SQLDb->ErrorMessage() << endl;
-			return false;
+			return ;
 			}
 		
 		bot->Notice(theClient, "%s successfully removed from your list.",
 			targetUser->getUserName().c_str());
-		return true;
+		return ;
 		}
-	return true;
+	return ;
 	}
 
 Usage(theClient);
-return true;
+return ;
 }
 
 } // namespace gnuworld

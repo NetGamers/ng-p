@@ -8,12 +8,12 @@
 #include	"cservice.h"
 #include	"responses.h"
 
-const char FORCECommand_cc_rcsId[] = "$Id: FORCECommand.cc,v 1.11 2002-10-20 02:12:07 jeekay Exp $" ;
+const char FORCECommand_cc_rcsId[] = "$Id: FORCECommand.cc,v 1.12 2004-05-16 13:08:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
-bool FORCECommand::Exec( iClient* theClient, const string& Message )
+void FORCECommand::Exec( iClient* theClient, const string& Message )
 {
 	bot->incStat("COMMANDS.FORCE");
 
@@ -21,7 +21,7 @@ bool FORCECommand::Exec( iClient* theClient, const string& Message )
 	if( st.size() < 2 )
 	{
 		Usage(theClient);
-		return true;
+		return ;
 	}
 
 	/*
@@ -30,7 +30,7 @@ bool FORCECommand::Exec( iClient* theClient, const string& Message )
 	 */
 
 	sqlUser* theUser = bot->isAuthed(theClient, true);
-	if (!theUser) return false;
+	if (!theUser) return ;
 
 	sqlChannel* admChan = bot->getChannelRecord("*");
 
@@ -44,7 +44,7 @@ bool FORCECommand::Exec( iClient* theClient, const string& Message )
 			bot->getResponse(theUser,
 				language::insuf_access,
 				string("Sorry, you have insufficient access to perform that command.")));
-		return false;
+		return ;
 	}
 
  	/*
@@ -57,7 +57,7 @@ bool FORCECommand::Exec( iClient* theClient, const string& Message )
 			bot->getResponse(theUser,
 				language::inval_chan_name,
 				string("Invalid channel name.")));
-		return false;
+		return ;
 	}
 
 	sqlChannel* theChan = bot->getChannelRecord(st[1]);
@@ -68,13 +68,13 @@ bool FORCECommand::Exec( iClient* theClient, const string& Message )
 				language::chan_not_reg,
 				string("Sorry, %s isn't registered with me.")).c_str(),
 			st[1].c_str());
-		return false;
+		return ;
 	}
 
 	if((theChan->getFlag(sqlChannel::F_NOFORCE)) && (admLevel < force2CommandLevel->getLevel()))
 	{
         	bot->Notice(theClient, "%s has NOFORCE set.", theChan->getName().c_str());
-        	return false;
+        	return ;
 	}
 
  	/*
@@ -97,7 +97,7 @@ bool FORCECommand::Exec( iClient* theClient, const string& Message )
 		theChan->getName().c_str(), admLevel);
 	bot->writeChannelLog(theChan, theClient, sqlChannel::EV_FORCE, "");
 
-	return true;
+	return ;
 }
 
 } // namespace gnuworld.

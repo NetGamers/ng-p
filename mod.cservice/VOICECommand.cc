@@ -20,7 +20,7 @@
  *
  * Caveats: None
  *
- * $Id: VOICECommand.cc,v 1.5 2002-02-06 19:34:53 jeekay Exp $
+ * $Id: VOICECommand.cc,v 1.6 2004-05-16 13:08:18 jeekay Exp $
  */
 
 #include	<string>
@@ -37,14 +37,14 @@
 using std::map ;
 using std::vector ;
 
-const char VOICECommand_cc_rcsId[] = "$Id: VOICECommand.cc,v 1.5 2002-02-06 19:34:53 jeekay Exp $" ;
+const char VOICECommand_cc_rcsId[] = "$Id: VOICECommand.cc,v 1.6 2004-05-16 13:08:18 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::map ;
 using std::vector ;
 
-bool VOICECommand::Exec( iClient* theClient, const string& Message )
+void VOICECommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.VOICE");
 
@@ -53,7 +53,7 @@ StringTokenizer st( Message ) ;
 if( st.size() < 2 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 /*
@@ -63,7 +63,7 @@ if( st.size() < 2 )
 sqlUser* theUser = bot->isAuthed(theClient, true);
 if (!theUser)
 	{
-	return false;
+	return ;
 	}
 
 /*
@@ -77,7 +77,7 @@ if (!theChan)
 		bot->getResponse(theUser,
 			language::chan_not_reg).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 #ifdef FEATURE_FORCELOG
@@ -97,7 +97,7 @@ if (!theChan->getInChan())
 		bot->getResponse(theUser,
 			language::i_am_not_on_chan,
 			string("I'm not in that channel!")));
-	return false;
+	return ;
 	}
 
 /*
@@ -109,7 +109,7 @@ if (level < level::voice)
 	{
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::insuf_access).c_str());
-	return false;
+	return ;
 	}
 
 Channel* tmpChan = Network->findChannel(theChan->getName());
@@ -118,7 +118,7 @@ if (!tmpChan)
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::chan_is_empty).c_str(),
 		theChan->getName().c_str());
-	return false;
+	return ;
 	}
 
 vector< iClient* > voiceList; // List of clients to Voice.
@@ -254,7 +254,7 @@ while (counter < st2.size())
 
 // Voice them.
 bot->Voice(tmpChan, voiceList);
-return true ;
+return ;
 }
 
 } // namespace gnuworld

@@ -3,7 +3,7 @@
  *
  * Allow global unsuspending of nicks/channels
  *
- * $Id: GUNSUSPENDCommand.cc,v 1.4 2002-10-20 02:12:07 jeekay Exp $
+ * $Id: GUNSUSPENDCommand.cc,v 1.5 2004-05-16 13:08:16 jeekay Exp $
  */
 
 #include <string>
@@ -12,12 +12,12 @@
 
 #include "cservice.h"
 
-const char GUNSUSPENDCommand_cc_rcsId[] = "$Id: GUNSUSPENDCommand.cc,v 1.4 2002-10-20 02:12:07 jeekay Exp $";
+const char GUNSUSPENDCommand_cc_rcsId[] = "$Id: GUNSUSPENDCommand.cc,v 1.5 2004-05-16 13:08:16 jeekay Exp $";
 
 namespace gnuworld
 {
 
-bool GUNSUSPENDCommand::Exec( iClient* theClient, const string& Message )
+void GUNSUSPENDCommand::Exec( iClient* theClient, const string& Message )
 {
 
 bot->incStat("COMMANDS.GUNSUSPEND");
@@ -28,13 +28,13 @@ StringTokenizer st( Message );
 if(st.size() < 3)
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 // Are they logged in? If not, dont tell them about admin commands.
 
 sqlUser* theUser = bot->isAuthed(theClient, false);
-if(!theUser) { return false; }
+if(!theUser) { return ; }
 
 int admLevel = bot->getAdminAccessLevel(theUser);
 sqlCommandLevel* channelSuspendLevel = bot->getLevelRequired("CSUSPEND", "ADMIN");
@@ -52,14 +52,14 @@ if((target[0] == '#') && (admLevel >= channelSuspendLevel->getLevel()))
 	if(!theChan)
 		{
 		bot->Notice(theClient, "Sorry, %s is not registered with me.", st[1].c_str());
-		return false;
+		return ;
 		}
 	
 	// Is the channel currently suspended?
 	if(!theChan->getFlag(sqlChannel::F_SUSPEND))
 		{
 		bot->Notice(theClient, "%s is not currently suspended.", st[1].c_str());
-		return false;
+		return ;
 		}
 	
 	theChan->setSuspendExpires(0);
@@ -73,7 +73,7 @@ if((target[0] == '#') && (admLevel >= channelSuspendLevel->getLevel()))
 		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
 		theChan->getName().c_str(),  reason.c_str());
 	
-	return true;
+	return ;
 	} // Unsuspending a channel
 
 
@@ -90,14 +90,14 @@ if(admLevel >= nickSuspendLevel->getLevel())
 	if(!targetUser)
 		{
 		bot->Notice(theClient, "The user %s does not appear to be registered.", target.c_str());
-		return true;
+		return ;
 		}
 	
 	// Is the target suspended?
 	if(!targetUser->getFlag(sqlUser::F_GLOBAL_SUSPEND))
 		{
 		bot->Notice(theClient, "%s is not globally suspended.", target.c_str());
-		return true;
+		return ;
 		}
 	
 	targetUser->setSuspendedExpire(0);
@@ -112,14 +112,14 @@ if(admLevel >= nickSuspendLevel->getLevel())
 		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
 		targetUser->getUserName().c_str(),  reason.c_str());
 	
-	return true;
+	return ;
 	}
 
 // We have managed to hit exactly nothing. The user does not have access.
 
 bot->Notice(theClient, "Sorry, you have insufficient access to perform that command.");
 
-return false;
+return ;
 
 } // GUNSUSPENDCommand::Exec
 

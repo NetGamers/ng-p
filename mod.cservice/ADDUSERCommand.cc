@@ -11,7 +11,7 @@
  *
  * Caveats: None
  *
- * $Id: ADDUSERCommand.cc,v 1.12 2003-09-02 23:12:07 jeekay Exp $
+ * $Id: ADDUSERCommand.cc,v 1.13 2004-05-16 13:08:15 jeekay Exp $
  */
 
 #include	<string>
@@ -25,7 +25,7 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char ADDUSERCommand_cc_rcsId[] = "$Id: ADDUSERCommand.cc,v 1.12 2003-09-02 23:12:07 jeekay Exp $" ;
+const char ADDUSERCommand_cc_rcsId[] = "$Id: ADDUSERCommand.cc,v 1.13 2004-05-16 13:08:15 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -35,7 +35,7 @@ using std::string ;
 
 static const char* queryHeader = "INSERT INTO levels (channel_id, user_id, access, flags, added, added_by, last_modif, last_modif_by, last_updated) ";
 
-bool ADDUSERCommand::Exec( iClient* theClient, const string& Message )
+void ADDUSERCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.ADDUSER");
 
@@ -43,7 +43,7 @@ StringTokenizer st( Message ) ;
 if( st.size() != 4 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 /*
@@ -54,7 +54,7 @@ if( st.size() != 4 )
 sqlUser* theUser = bot->isAuthed(theClient, true);
 if (!theUser)
 	{
-	return false;
+	return ;
 	}
 
 /*
@@ -69,7 +69,7 @@ if (!theChan)
 			language::chan_not_reg).c_str(),
 		st[1].c_str()
 	);
-	return false;
+	return ;
 	}
 
 #ifdef FEATURE_FORCELOG
@@ -99,7 +99,7 @@ if (theChan->getName() == "*")
 	if (level < theCommandLevel->getLevel())
 		{
 	        bot->Notice(theClient, "Sorry, you have insufficient access to perform that command");
-		return false;
+		return ;
 		}
 	}
 
@@ -109,7 +109,7 @@ if (level < level::adduser)
 		bot->getResponse(theUser,
 			language::insuf_access).c_str()
 	);
-	return false;
+	return ;
 	}
 
 /*
@@ -119,7 +119,7 @@ int targetAccess = atoi(st[3].c_str());
 
 if(targetAccess >= 499 && !bot->isForced(theChan, theUser)) {
 	bot->Notice(theClient, "Only CService may add users with 499+ access.");
-	return true;
+	return ;
 }
 
 if (level <= targetAccess)
@@ -128,7 +128,7 @@ if (level <= targetAccess)
 		bot->getResponse(theUser,
 			language::access_higher).c_str()
 	);
-	return false;
+	return ;
 	}
 
 if ((targetAccess <= 0) || (targetAccess > 999))
@@ -137,7 +137,7 @@ if ((targetAccess <= 0) || (targetAccess > 999))
 		bot->getResponse(theUser,
 			language::inval_access).c_str()
 	);
-	return false;
+	return ;
 	}
 
 /*
@@ -277,7 +277,7 @@ for(StringTokenizer::size_type counter = 0; counter < st2.size(); ++counter)
 	} // for() loop around arguments
 
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld.

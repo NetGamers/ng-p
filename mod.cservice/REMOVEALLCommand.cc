@@ -13,7 +13,7 @@
 #include 	"responses.h"
 #include	"cservice_config.h"
 
-const char REMOVEALLCommand_cc_rcsId[] = "$Id: REMOVEALLCommand.cc,v 1.7 2002-10-20 02:12:08 jeekay Exp $" ;
+const char REMOVEALLCommand_cc_rcsId[] = "$Id: REMOVEALLCommand.cc,v 1.8 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -21,7 +21,7 @@ namespace gnuworld
 using std::ends ;
 using std::string ;
 
-bool REMOVEALLCommand::Exec( iClient* theClient, const string& Message )
+void REMOVEALLCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.REMOVEALL");
 
@@ -29,7 +29,7 @@ StringTokenizer st( Message ) ;
 if( st.size() < 2 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 /*
@@ -40,7 +40,7 @@ if( st.size() < 2 )
 sqlUser* theUser = bot->isAuthed(theClient, true);
 if (!theUser)
 	{
-	return false;
+	return ;
 	}
 
 /*
@@ -55,7 +55,7 @@ if ((!theChan) || (st[1] == "*"))
 			language::chan_not_reg,
 			string("%s isn't registered with me")).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 /*
@@ -71,7 +71,7 @@ if (level < removeAllLevel->getLevel())
 		bot->getResponse(theUser,
 			language::insuf_access,
 			string("You have insufficient access to perform that command")));
-	return false;
+	return ;
 	}
 
 
@@ -86,7 +86,7 @@ if(!forceLevel)
 	bot->logAdminMessage("%s (%s) - REMOVEALL - Failed - %s Not Forced",
 		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
 		theChan->getName().c_str());
-	return false;
+	return ;
 	}
 
 /*
@@ -112,7 +112,7 @@ if( status != PGRES_TUPLES_OK )
 	elog	<< "REMOVEALL> SQL Error: "
 		<< bot->SQLDb->ErrorMessage()
 		<< endl ;
-	return false ;
+	return ;
 	}
 
 /*
@@ -174,7 +174,7 @@ if (bot->SQLDb->ExecCommandOk(deleteAllQuery.str().c_str()))
 		bot->Notice(theClient, "Please contact a database administrator!");
 	}
 
-return true;
+return ;
 }
 } // namespace gnuworld.
 

@@ -8,13 +8,13 @@
 #include	"cservice.h"
 #include	"responses.h"
 
-const char REHASHCommand_cc_rcsId[] = "$Id: REHASHCommand.cc,v 1.3 2003-01-14 21:52:15 jeekay Exp $" ;
+const char REHASHCommand_cc_rcsId[] = "$Id: REHASHCommand.cc,v 1.4 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::string ;
 
-bool REHASHCommand::Exec( iClient* theClient, const string& Message )
+void REHASHCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.REHASH");
 
@@ -22,11 +22,11 @@ StringTokenizer st( Message ) ;
 if( st.size() < 2 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 sqlUser* theUser = bot->isAuthed(theClient, true);
-if (!theUser) return false;
+if (!theUser) return ;
 
 int level = bot->getAdminAccessLevel(theUser);
 sqlCommandLevel* rehashCommandLevel = bot->getLevelRequired("REHASH", "ADMIN");
@@ -37,7 +37,7 @@ if (level < rehashCommandLevel->getLevel())
 		bot->getResponse(theUser,
 			language::insuf_access,
 			string("You have insufficient access to perform that command.")));
-	return false;
+	return ;
 }
 
 string option = string_upper(st[1]);
@@ -71,7 +71,7 @@ if ("OFFICIAL" == option) {
     noLoaded);
 }
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld.

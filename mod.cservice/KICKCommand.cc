@@ -11,7 +11,7 @@
 *
 * Suggestion: Support several nicks by seperating them with a comma.
 *             IE: /msg E kick #coder-com nick1,nick2,nick3 get outta here!
-* $Id: KICKCommand.cc,v 1.4 2002-10-19 20:07:11 jeekay Exp $
+* $Id: KICKCommand.cc,v 1.5 2004-05-16 13:08:16 jeekay Exp $
 */
 
 #include        <string>
@@ -24,14 +24,14 @@
 #include        "responses.h"
 #include		"match.h"
 
-const char KICKCommand_cc_rcsId[] = "$Id: KICKCommand.cc,v 1.4 2002-10-19 20:07:11 jeekay Exp $" ;
+const char KICKCommand_cc_rcsId[] = "$Id: KICKCommand.cc,v 1.5 2004-05-16 13:08:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
 using namespace level;
 
-bool KICKCommand::Exec( iClient* theClient, const string& Message )
+void KICKCommand::Exec( iClient* theClient, const string& Message )
 {
 	bot->incStat("COMMANDS.KICK");
 
@@ -40,7 +40,7 @@ bool KICKCommand::Exec( iClient* theClient, const string& Message )
 	if( st.size() < 3 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 	/*
@@ -49,7 +49,7 @@ bool KICKCommand::Exec( iClient* theClient, const string& Message )
 	 */
 
 	sqlUser* theUser = bot->isAuthed(theClient, true);
-	if (!theUser) return false;
+	if (!theUser) return ;
 
 	/*
 	 *  Check the channel is actually registered.
@@ -59,7 +59,7 @@ bool KICKCommand::Exec( iClient* theClient, const string& Message )
 	if (!theChan) {
 		bot->Notice(theClient, bot->getResponse(theUser, language::chan_not_reg).c_str(),
 		    st[1].c_str());
-		return false;
+		return ;
 	}
 
 #ifdef FEATURE_FORCELOG
@@ -78,7 +78,7 @@ bool KICKCommand::Exec( iClient* theClient, const string& Message )
 			bot->getResponse(theUser,
 				language::i_am_not_on_chan,
 				string("I'm not in that channel!")));
-		return false;
+		return ;
 	}
 
 	/*
@@ -89,7 +89,7 @@ bool KICKCommand::Exec( iClient* theClient, const string& Message )
 	if (level < level::kick)
 	{
 		bot->Notice(theClient, bot->getResponse(theUser, language::insuf_access).c_str());
-		return false;
+		return ;
 	}
 
 	Channel* tmpChan = Network->findChannel(theChan->getName());
@@ -97,7 +97,7 @@ bool KICKCommand::Exec( iClient* theClient, const string& Message )
 	{
 		bot->Notice(theClient, bot->getResponse(theUser, language::chan_is_empty).c_str(),
 		    theChan->getName().c_str());
-		return false;
+		return ;
 	}
 
 	/*
@@ -136,7 +136,7 @@ bool KICKCommand::Exec( iClient* theClient, const string& Message )
 		{
 			bot->Notice(theClient, bot->getResponse(theUser, language::dont_see_them).c_str(),
 			    st[2].c_str());
-			return false;
+			return ;
 		}
 
 		/*
@@ -148,7 +148,7 @@ bool KICKCommand::Exec( iClient* theClient, const string& Message )
 		{
 			bot->Notice(theClient, bot->getResponse(theUser, language::cant_find_on_chan).c_str(),
 				target->getNickName().c_str(), theChan->getName().c_str());
-			return false;
+			return ;
 		}
 
 		/* Don't kick +k things */
@@ -159,7 +159,7 @@ bool KICKCommand::Exec( iClient* theClient, const string& Message )
 					language::wouldnt_appreciate,
 					string("I don't think %s would appreciate that.")).c_str(),
 				target->getNickName().c_str());
-			return false;
+			return ;
 		}
 
 		toBoot.push_back(target);
@@ -171,7 +171,7 @@ bool KICKCommand::Exec( iClient* theClient, const string& Message )
 			bot->getResponse(theUser,
 				language::no_match,
 				string("No Match!")));
-		return false;
+		return ;
 	}
 
 	string args;
@@ -187,7 +187,7 @@ bool KICKCommand::Exec( iClient* theClient, const string& Message )
 	reason += args;
 
 	bot->Kick(tmpChan, toBoot, reason);
-	return true ;
+	return ;
 }
 
 } // namespace gnuworld.

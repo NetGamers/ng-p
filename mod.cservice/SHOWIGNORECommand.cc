@@ -7,13 +7,13 @@
 #include	"cservice.h"
 #include	"responses.h"
 
-const char SHOWIGNORECommand_cc_rcsId[] = "$Id: SHOWIGNORECommand.cc,v 1.1 2002-01-14 23:14:22 morpheus Exp $" ;
+const char SHOWIGNORECommand_cc_rcsId[] = "$Id: SHOWIGNORECommand.cc,v 1.2 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::string ;
 
-bool SHOWIGNORECommand::Exec( iClient* theClient, const string& Message )
+void SHOWIGNORECommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.SHOWIGNORE");
 
@@ -21,7 +21,7 @@ StringTokenizer st( Message ) ;
 if( st.size() < 1 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 size_t count = 0;
@@ -34,7 +34,7 @@ if( bot->silenceList.empty() )
 	bot->Notice(theClient, bot->getResponse(theUser,
 		language::ignore_list_empty,
 		string("Ignore list is empty")));
-	return true ;
+	return ;
 	}
 
 bot->Notice(theClient,
@@ -56,7 +56,7 @@ bot->Notice(theClient,
 	bot->getResponse(theUser, language::ignore_list_end,
 	string("-- End of Ignore List")));
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld.

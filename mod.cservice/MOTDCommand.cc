@@ -7,13 +7,13 @@
 #include	"cservice.h"
 #include 	"responses.h"
 
-const char MOTDCommand_cc_rcsId[] = "$Id: MOTDCommand.cc,v 1.2 2002-06-09 09:04:44 jeekay Exp $" ;
+const char MOTDCommand_cc_rcsId[] = "$Id: MOTDCommand.cc,v 1.3 2004-05-16 13:08:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::string ;
 
-bool MOTDCommand::Exec( iClient* theClient, const string& Message )
+void MOTDCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.MOTD");
 
@@ -21,7 +21,7 @@ StringTokenizer st( Message ) ;
 if( st.size() != 1 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 	sqlUser* theUser = bot->isAuthed(theClient, false);
@@ -33,7 +33,7 @@ if( st.size() != 1 )
 	
 	bot->sendMOTD(theClient);
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld.

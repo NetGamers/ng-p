@@ -8,20 +8,20 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.18 2004-05-16 12:45:42 jeekay Exp $" ;
+const char VERIFYCommand_cc_rcsId[] = "$Id: VERIFYCommand.cc,v 1.19 2004-05-16 13:08:18 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
 using std::string ;
  
-bool VERIFYCommand::Exec( iClient* theClient, const string& Message )
+void VERIFYCommand::Exec( iClient* theClient, const string& Message )
 { 
 StringTokenizer st( Message ) ;
 if( st.size() < 2 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	} 
  
 string extra;
@@ -32,7 +32,7 @@ if(!target)
 	{
 	bot->Notice(theClient, "Sorry, I don't see %s anywhere.",
 		st[1].c_str());
-	return true;
+	return ;
 	}
         
 if (target->getMode(iClient::MODE_SERVICES))
@@ -40,7 +40,7 @@ if (target->getMode(iClient::MODE_SERVICES))
 	bot->Notice(theClient, "%s is a NetGamers Service Bot.",
 		target->getNickName().c_str()
 		);
-	return true;
+	return ;
 	}
 
 /* 
@@ -61,7 +61,7 @@ if (!theUser)
 		bot->Notice(theClient, "%s is an IRC operator and is NOT logged in.",
 			target->getNickUserHost().c_str()
 			);
-		return true;
+		return ;
 		}
 	else
 		{
@@ -69,7 +69,7 @@ if (!theUser)
 			target->getNickUserHost().c_str()
 			);
 		}
-		return true;
+		return ;
 	}
 
 int oLevel = theUser->getVerify();
@@ -83,7 +83,7 @@ if ( (0 == level) && (0 == oLevel) )
 		target->getNickUserHost().c_str(),
 		theUser->getUserName().c_str(),
 		extra.c_str());
-	return true;
+	return ;
 	}
 
 if ((level >= level::admin::base) && (level < level::admin::cadmin)) 
@@ -92,7 +92,7 @@ if ((level >= level::admin::base) && (level < level::admin::cadmin))
 		target->getNickUserHost().c_str(),
 		extra.c_str(),
 		theUser->getUserName().c_str());
-	return true;
+	return ;
 	}
 
 if ((level >= level::admin::cadmin) && (level < level::admin::nadmin)) 
@@ -101,7 +101,7 @@ if ((level >= level::admin::cadmin) && (level < level::admin::nadmin))
 		target->getNickUserHost().c_str(),
 		extra.c_str(),
 		theUser->getUserName().c_str());
-	return true;
+	return ;
 	}
 
 if((level >= level::admin::nadmin) && (level < level::admin::director))
@@ -110,7 +110,7 @@ if((level >= level::admin::nadmin) && (level < level::admin::director))
 		target->getNickUserHost().c_str(),
 		extra.c_str(),
 		theUser->getUserName().c_str());
-  return true;
+  return ;
 	}
 
 if ((level >= level::admin::director) && (level < level::admin::amanager)) 
@@ -119,7 +119,7 @@ if ((level >= level::admin::director) && (level < level::admin::amanager))
 		target->getNickUserHost().c_str(),
 		extra.c_str(),
 		theUser->getUserName().c_str());
-	return true;
+	return ;
 	}
 
 if ((level >= level::admin::amanager) && (level < level::admin::manager))
@@ -128,7 +128,7 @@ if ((level >= level::admin::amanager) && (level < level::admin::manager))
 		target->getNickUserHost().c_str(),
 		extra.c_str(),
 		theUser->getUserName().c_str());
-	return true;
+	return ;
 	}
 
 if (level == level::admin::manager)
@@ -137,7 +137,7 @@ if (level == level::admin::manager)
 		target->getNickUserHost().c_str(),
 		extra.c_str(),
 		theUser->getUserName().c_str());
-	return true;
+	return ;
 	}
 
 if (level >= level::admin::coder)
@@ -146,7 +146,7 @@ if (level >= level::admin::coder)
 		target->getNickUserHost().c_str(),
 		extra.c_str(),
 		theUser->getUserName().c_str());
-	return true;
+	return ;
 	}
 
 if(oLevel)
@@ -154,12 +154,12 @@ if(oLevel)
 	bot->Notice(theClient, "%s is %s%s and logged in as %s",
 		target->getNickUserHost().c_str(), bot->getVerify(oLevel).c_str(),
 		extra.c_str(), theUser->getUserName().c_str());
-	return true;
+	return ;
 	}
 
 bot->logErrorMessage("ERROR: Impossible situation in VERIFY reached.");
 
-return true ;
+return ;
 }
 
 

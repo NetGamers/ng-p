@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: OPERPARTCommand.cc,v 1.3 2002-09-13 21:30:39 jeekay Exp $
+ * $Id: OPERPARTCommand.cc,v 1.4 2004-05-16 13:08:17 jeekay Exp $
  */
 
 
@@ -21,7 +21,7 @@
 #include	"responses.h"
 #include	"Network.h"
 
-const char OPERPARTCommand_cc_rcsId[] = "$Id: OPERPARTCommand.cc,v 1.3 2002-09-13 21:30:39 jeekay Exp $" ;
+const char OPERPARTCommand_cc_rcsId[] = "$Id: OPERPARTCommand.cc,v 1.4 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -29,7 +29,7 @@ namespace gnuworld
 using std::ends ;
 using std::string ;
 
-bool OPERPARTCommand::Exec( iClient* theClient, const string& Message )
+void OPERPARTCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.OPERPART");
 
@@ -37,7 +37,7 @@ StringTokenizer st( Message ) ;
 if( st.size() < 2 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 /*
@@ -53,7 +53,7 @@ if(!theClient->isOper())
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::ircops_only_cmd,
 		"This command is reserved to IRC Operators"));
-	return true;
+	return ;
 	}
 
 /*
@@ -66,7 +66,7 @@ if (!theChan)
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::chan_not_reg).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 /* Check the bot is in the channel. */
@@ -76,7 +76,7 @@ if (!theChan->getInChan())
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::i_am_not_on_chan,
 			string("I'm not in that channel!")));
-	return false;
+	return ;
 	}
 
 bot->writeChannelLog(theChan, theClient, sqlChannel::EV_OPERPART, "");
@@ -102,7 +102,7 @@ bot->joinCount--;
 
 bot->Part(theChan->getName(), "At the request of an IRC Operator");
 
-return true;
+return ;
 }
 
 } // namespace gnuworld.

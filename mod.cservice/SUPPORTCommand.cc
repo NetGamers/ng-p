@@ -6,7 +6,7 @@
 #include	"ELog.h"
 #include	"cservice.h"
 
-const char SUPPORTCommand_cc_rcsId[] = "$Id: SUPPORTCommand.cc,v 1.3 2002-09-13 21:30:40 jeekay Exp $" ;
+const char SUPPORTCommand_cc_rcsId[] = "$Id: SUPPORTCommand.cc,v 1.4 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -14,7 +14,7 @@ namespace gnuworld
 using std::ends ;
 using std::string ;
 
-bool SUPPORTCommand::Exec( iClient* theClient, const string& Message )
+void SUPPORTCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.SUPPORT");
 
@@ -22,13 +22,13 @@ StringTokenizer st( Message ) ;
 if( st.size() < 3 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 sqlUser* theUser = bot->isAuthed(theClient, true);
 if (!theUser)
 	{
-	return false;
+	return ;
 	}
 
 string support = st[2];
@@ -48,7 +48,7 @@ if (string_lower(support) == "no")
 } else
 {
 	bot->Notice(theClient, "Valid SUPPORT choices are YES and NO.");
-	return false;
+	return ;
 }
 
 /*
@@ -80,7 +80,7 @@ if( PGRES_TUPLES_OK != status )
 	elog	<< "SUPPORTCommand> SQL Error: "
 			<< bot->SQLDb->ErrorMessage()
 			<< endl ;
-	return false ;
+	return ;
 	}
 
 if (bot->SQLDb->Tuples() <= 0)
@@ -88,7 +88,7 @@ if (bot->SQLDb->Tuples() <= 0)
 	bot->Notice(theClient,
 		"The channel %s doesn't appear to have a pending application. Please ensure you have spelt the name correctly.",
 			channelName.c_str());
-	return false;
+	return ;
 }
 
 /*
@@ -118,7 +118,7 @@ if( PGRES_TUPLES_OK != status )
 	elog	<< "SUPPORTCommand> SQL Error: "
 			<< bot->SQLDb->ErrorMessage()
 			<< endl ;
-	return false ;
+	return ;
 	}
 
 if (bot->SQLDb->Tuples() <= 0)
@@ -126,7 +126,7 @@ if (bot->SQLDb->Tuples() <= 0)
 	bot->Notice(theClient,
 		"You don't appear to be listed as a supporter in %s, please ensure you have spelt the channel name correctly.",
 			channelName.c_str());
-	return false;
+	return ;
 }
 
 string currentSupport = bot->SQLDb->GetValue(0, 0);
@@ -136,7 +136,7 @@ if ((currentSupport == "Y") || (currentSupport == "N"))
 	bot->Notice(theClient,
 		"You have already made your decision on supporting %s, you cannot change it.",
 			channelName.c_str());
-		return false;
+		return ;
 }
 
 /*
@@ -169,7 +169,7 @@ if( PGRES_COMMAND_OK != status )
 			<< endl ;
 
 	bot->Notice(theClient, "An Error occured whilst processing your support. Please contact a CService Administrator.");
-	return false ;
+	return ;
 	}
 
 bot->Notice(theClient, "Done. Set your support for %s to %s.",
@@ -209,7 +209,7 @@ if (supportChar == 'Y')
 		elog	<< "SUPPORTCommand> SQL Error: "
 				<< bot->SQLDb->ErrorMessage()
 				<< endl ;
-		return false ;
+		return ;
 		}
 
 	int count = atoi(bot->SQLDb->GetValue(0,0));
@@ -236,7 +236,7 @@ if (supportChar == 'Y')
 			channelName.c_str());
 	}
 
-return true;
+return ;
 }
 
 /*
@@ -297,7 +297,7 @@ if (supportChar == 'N')
 		elog	<< "SUPPORTCommand> SQL Error: "
 				<< bot->SQLDb->ErrorMessage()
 				<< endl ;
-		return false ;
+		return ;
 	}
 
 	if(bot->SQLDb->Tuples() >= 0)
@@ -366,7 +366,7 @@ if (supportChar == 'N')
 
 }
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld.

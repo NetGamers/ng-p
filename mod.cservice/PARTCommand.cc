@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: PARTCommand.cc,v 1.3 2002-02-01 18:30:07 jeekay Exp $
+ * $Id: PARTCommand.cc,v 1.4 2004-05-16 13:08:17 jeekay Exp $
  */
 
 
@@ -20,13 +20,13 @@
 #include	"responses.h"
 #include	"Network.h"
 
-const char PARTCommand_cc_rcsId[] = "$Id: PARTCommand.cc,v 1.3 2002-02-01 18:30:07 jeekay Exp $" ;
+const char PARTCommand_cc_rcsId[] = "$Id: PARTCommand.cc,v 1.4 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::string ;
 
-bool PARTCommand::Exec( iClient* theClient, const string& Message )
+void PARTCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.PART");
 
@@ -34,7 +34,7 @@ StringTokenizer st( Message ) ;
 if( st.size() < 2 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 /*
@@ -45,7 +45,7 @@ if( st.size() < 2 )
 sqlUser* theUser = bot->isAuthed(theClient, true);
 if (!theUser)
 	{
-	return false;
+	return ;
 	}
 
 /*
@@ -58,7 +58,7 @@ if (!theChan)
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::chan_not_reg).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 #ifdef FEATURE_FORCELOG
@@ -76,7 +76,7 @@ if(theChan->getFlag(sqlChannel::F_LOCKED))
 	if(admLevel < level::set::locked)
 		{
 		bot->Notice(theClient, "The channel %s has been locked by a CService Administrator and I cannot be parted from there.", theChan->getName().c_str());
-		return true;
+		return ;
 		} // if(admLevel < level::set::locked)
 	} // if(theChan->getFlag(sqlChannel::F_LOCKED))
 
@@ -88,7 +88,7 @@ if (!theChan->getInChan())
 		bot->getResponse(theUser,
 			language::i_am_not_on_chan,
 			string("I'm not in that channel!")));
-	return false;
+	return ;
 	}
 
 /*
@@ -100,7 +100,7 @@ if (level < level::part)
 	{
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::insuf_access).c_str());
-	return false;
+	return ;
 	}
 
 theChan->setInChan(false);
@@ -112,7 +112,7 @@ if (bot->isForced(theChan, theUser))
 	{
 	bot->Part(theChan->getName(), "At the request of a CService Administrator");
 	bot->writeChannelLog(theChan, theClient, sqlChannel::EV_PART, "[CS-ADMIN]");
-	return true;
+	return ;
 	}
 
 /* Write a log of this event.. */
@@ -121,7 +121,7 @@ bot->writeChannelLog(theChan, theClient, sqlChannel::EV_PART, "");
 string partReason = "At the request of " + theUser->getUserName();
 
 bot->Part(theChan->getName(), partReason);
-return true;
+return ;
 }
 
 } // namespace gnuworld.

@@ -7,7 +7,7 @@
  * Suspends an user on the specified channel, if suspend duration 0
  * is defined, the user will be unsuspended.
  *
- * $Id: SUSPENDCommand.cc,v 1.6 2002-10-20 02:12:09 jeekay Exp $
+ * $Id: SUSPENDCommand.cc,v 1.7 2004-05-16 13:08:17 jeekay Exp $
  */
 
 #include	<string>
@@ -22,14 +22,14 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char SUSPENDCommand_cc_rcsId[] = "$Id: SUSPENDCommand.cc,v 1.6 2002-10-20 02:12:09 jeekay Exp $" ;
+const char SUSPENDCommand_cc_rcsId[] = "$Id: SUSPENDCommand.cc,v 1.7 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::string ;
 using namespace level;
 
-bool SUSPENDCommand::Exec( iClient* theClient, const string& Message )
+void SUSPENDCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.SUSPEND");
 
@@ -38,13 +38,13 @@ StringTokenizer st( Message ) ;
 sqlUser* theUser = bot->isAuthed(theClient, true);
 if(!theUser)
 	{
-	return false;
+	return ;
 	}
 
 if( st.size() < 4 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 /* Is the channel registered? */
@@ -55,7 +55,7 @@ if(!theChan)
 		bot->getResponse(theUser, language::chan_not_reg,
 			string("Sorry, %s isn't registered with me.")).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 #ifdef FEATURE_FORCELOG
@@ -81,7 +81,7 @@ if (theChan->getName() == "*")
         if (level < susadminLevel->getLevel())
                 {
                 bot->Notice(theClient, "Sorry, you have insufficient access to perform that command");
-                return false;
+                return ;
                 }
         }
 
@@ -91,7 +91,7 @@ if(level < level::suspend)
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::insuf_access,
 			string("Sorry, you have insufficient access to perform that command.")));
-	return false;
+	return ;
 	}
 
 /* Check whether the user is in the access list. */
@@ -102,7 +102,7 @@ if(!Target)
 		bot->getResponse(theUser, language::not_registered,
 			string("I don't know who %s is")).c_str(),
 	    	st[2].c_str());
-	return true;
+	return ;
 	}
 
 int usrLevel = bot->getAccessLevel(Target, theChan);
@@ -113,7 +113,7 @@ if(!usrLevel)
 			string("%s doesn't appear to have access in %s.")).c_str(),
 	    	Target->getUserName().c_str(),
 		theChan->getName().c_str());
-	return true;
+	return ;
 	}
 
 if (level <= usrLevel)
@@ -122,7 +122,7 @@ if (level <= usrLevel)
 		bot->getResponse(theUser,
 			language::suspend_access_higher,
 			string("Cannot suspend a user with equal or higher access than your own.")));
-	return false;
+	return ;
 	}
 
 string units;
@@ -149,7 +149,7 @@ if( st.size() >= 5 )
 		bot->Notice(theClient,
 			bot->getResponse(theUser, language::bogus_time,
 				string("bogus time units")));
-		return true;
+		return ;
 		}
 	} /* if( st.size() >= 5 ) */
 
@@ -160,7 +160,7 @@ if(finalDuration > 32140800 || finalDuration < 0)
 		bot->getResponse(theUser,
 			language::inval_suspend_dur,
 			string("Invalid suspend duration.")));
-	return true;
+	return ;
 	}
 
 sqlLevel* aLevel = bot->getLevelRecord(Target, theChan);
@@ -177,7 +177,7 @@ if( 0 == finalDuration )
 	aLevel->setSuspendBy( string() );
 	aLevel->commit();
 
-	return true;
+	return ;
 	}
 
 if (aLevel->getSuspendExpire() != 0)
@@ -188,7 +188,7 @@ if (aLevel->getSuspendExpire() != 0)
 			string("%s is already suspended on %s")).c_str(),
 		Target->getUserName().c_str(),
 		theChan->getName().c_str());
-	return false;
+	return ;
 	}
 
 /*
@@ -222,7 +222,7 @@ bot->Notice(theClient,
 	Target->getUserName().c_str(),
 	bot->prettyDuration(bot->currentTime() - finalDuration ).c_str());
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld.

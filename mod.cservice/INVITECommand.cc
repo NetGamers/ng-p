@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: INVITECommand.cc,v 1.3 2002-09-13 21:30:38 jeekay Exp $
+ * $Id: INVITECommand.cc,v 1.4 2004-05-16 13:08:16 jeekay Exp $
  */
 
 
@@ -21,19 +21,19 @@
 #include	"responses.h"
 #include	"Network.h"
 
-const char INVITECommand_cc_rcsId[] = "$Id: INVITECommand.cc,v 1.3 2002-09-13 21:30:38 jeekay Exp $" ;
+const char INVITECommand_cc_rcsId[] = "$Id: INVITECommand.cc,v 1.4 2004-05-16 13:08:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
-bool INVITECommand::Exec( iClient* theClient, const string& Message )
+void INVITECommand::Exec( iClient* theClient, const string& Message )
 {
 	bot->incStat("COMMANDS.INVITE");
 	StringTokenizer st( Message ) ;
 	if( st.size() < 2 )
 	{
 		Usage(theClient);
-		return true;
+		return ;
 	}
 
 	/*
@@ -43,7 +43,7 @@ bool INVITECommand::Exec( iClient* theClient, const string& Message )
 
 	sqlUser* theUser = bot->isAuthed(theClient, true);
 	if (!theUser) {
-		return false;
+		return ;
 	}
 
 	/*
@@ -54,7 +54,7 @@ bool INVITECommand::Exec( iClient* theClient, const string& Message )
 	if (!theChan) {
 		bot->Notice(theClient, bot->getResponse(theUser, language::chan_not_reg).c_str(),
 			st[1].c_str());
-		return false;
+		return ;
 	}
 
 #ifdef FEATURE_FORCELOG
@@ -73,7 +73,7 @@ bool INVITECommand::Exec( iClient* theClient, const string& Message )
 			bot->getResponse(theUser,
 				language::i_am_not_on_chan,
 				string("I'm not in that channel!")));
-		return false;
+		return ;
 	}
 
 	/*
@@ -84,7 +84,7 @@ bool INVITECommand::Exec( iClient* theClient, const string& Message )
 	if (level < level::invite)
 	{
 		bot->Notice(theClient, bot->getResponse(theUser, language::insuf_access).c_str());
-		return false;
+		return ;
 	}
 
 	/*
@@ -93,7 +93,7 @@ bool INVITECommand::Exec( iClient* theClient, const string& Message )
 
 	bot->Invite(theClient, theChan->getName());
 
-	return true;
+	return ;
 }
 
 } // namespace gnuworld.

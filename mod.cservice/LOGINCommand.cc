@@ -11,7 +11,7 @@
 #include	"Network.h"
 #include	"events.h"
 
-const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.18 2003-09-02 23:25:30 jeekay Exp $" ;
+const char LOGINCommand_cc_rcsId[] = "$Id: LOGINCommand.cc,v 1.19 2004-05-16 13:08:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -23,7 +23,7 @@ struct autoOpData {
 
 using std::ends;
 
-bool LOGINCommand::Exec( iClient* theClient, const string& Message )
+void LOGINCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.LOGIN");
 
@@ -31,7 +31,7 @@ StringTokenizer st( Message ) ;
 if( st.size() < 3 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 
@@ -43,7 +43,7 @@ if(loginTime >= (unsigned int)bot->currentTime())
 {
 	bot->Notice(theClient, "AUTHENTICATION FAILED as %s. (Unable to login during reconnection, please try again in %i seconds)",
 		st[1].c_str(), (loginTime - bot->currentTime()));
-	return false;
+	return ;
 }
 
 /*
@@ -58,7 +58,7 @@ if (tmpUser)
 		bot->getResponse(tmpUser, language::already_authed).c_str(),
 		tmpUser->getUserName().c_str());
 	bot->sendMOTD(theClient);
-	return false;
+	return ;
 	}
 
 /*
@@ -69,7 +69,7 @@ if (tmpUser)
 if(st[1][0] == '#')
 {
 	bot->Notice(theClient, "AUTHENTICATION FAILED as %s.", st[1].c_str());
-	return false;
+	return ;
 }
 
 // TODO: Force a refresh of the user's info from the db
@@ -81,7 +81,7 @@ if( !theUser )
 			language::not_registered,
 			string("AUTHENTICATION FAILED as %s.")).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 /* Is this an admin user? */
@@ -103,7 +103,7 @@ if(!bot->isPasswordRight(theUser, st.assemble(2)))
 			theUser->getUserName().c_str());
 	}
 	
-	return false;
+	return ;
 	}
 
 /* Dont exceed MAXLOGINS */
@@ -118,7 +118,7 @@ if(theUser->networkClientList.size() >= theUser->getMaxLogins()) {
 			theUser->getUserName().c_str());
 	}
 	
-	return false;
+	return ;
 }
 
 if(theUser->isAuthed()) {
@@ -152,7 +152,7 @@ if( NULL == newData )
 	elog	<< "LOGINCommand> newData is NULL for: "
 		<< theClient
 		<< endl ;
-	return false ;
+	return ;
 	}
 
 // Pointer back to the sqlUser from this iClient.
@@ -188,7 +188,7 @@ if (theUser->getFlag(sqlUser::F_GLOBAL_SUSPEND))
 	bot->Notice(theClient,
 		"..however your account has been suspended by a CService administrator."
 		" You will be unable to use any channel access you may have.");
-	return true;
+	return ;
 	}
 
 /*
@@ -214,7 +214,7 @@ if( PGRES_TUPLES_OK != status )
 	elog	<< "LOGIN> SQL Error: "
 		<< bot->SQLDb->ErrorMessage()
 		<< endl ;
-	return false ;
+	return ;
 	}
 
 typedef vector < autoOpData > autoOpVectorType;
@@ -367,7 +367,7 @@ if( PGRES_TUPLES_OK != status )
 	elog	<< "LOGIN> SQL Error: "
 		<< bot->SQLDb->ErrorMessage()
 		<< endl ;
-	return false ;
+	return ;
 	}
 
 if (bot->SQLDb->Tuples() > 0 && atoi(bot->SQLDb->GetValue(0, 0)) > 0)
@@ -406,7 +406,7 @@ if( PGRES_TUPLES_OK != status )
 	elog	<< "LOGIN> SQL Error: "
 		<< bot->SQLDb->ErrorMessage()
 		<< endl ;
-	return false ;
+	return ;
 	}
 
 
@@ -417,7 +417,7 @@ for(int i = 0; i < bot->SQLDb->Tuples(); i++)
 		bot->Notice(theClient, "You have been named as a supporter in a new channel application for %s. You may visit the website to register your support or to make an objection. Alternatively, you can type '\002/msg %s support %s YES\002' or '\002/msg %s support %s NO\002' to confirm or deny your support.", channelName.c_str(), botName.c_str(), channelName.c_str(), botName.c_str(), channelName.c_str());
 	}
 
-return true;
+return ;
 }
 
 } // namespace gnuworld.

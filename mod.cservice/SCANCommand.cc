@@ -4,7 +4,7 @@
  *
  * Distributed under the GNU Public Licence
  *
- * $Id: SCANCommand.cc,v 1.6 2002-10-20 02:12:09 jeekay Exp $
+ * $Id: SCANCommand.cc,v 1.7 2004-05-16 13:08:17 jeekay Exp $
  */
 
 #include	<string>
@@ -22,7 +22,7 @@ namespace gnuworld
 using std::ends ;
 using std::string ;
 
-bool SCANCommand::Exec( iClient* theClient, const string& Message )
+void SCANCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.SCAN");
 
@@ -31,11 +31,11 @@ StringTokenizer st( Message ) ;
 if( st.size() != 3 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 sqlUser* theUser = bot->isAuthed(theClient, true);
-if(!theUser) { return false; }
+if(!theUser) { return ; }
 
 int aLevel = bot->getAdminAccessLevel(theUser);
 sqlCommandLevel* scanLevel = bot->getLevelRequired("SCAN", "ADMIN");
@@ -43,7 +43,7 @@ sqlCommandLevel* scanLevel = bot->getLevelRequired("SCAN", "ADMIN");
 if(aLevel < scanLevel->getLevel())
 	{
 	bot->Notice(theClient, "Sorry, you have insufficient access to perform that command.");
-	return false;
+	return ;
 	}
 
 string option = string_upper(st[1]);
@@ -65,7 +65,7 @@ if("EMAIL" == option)
 		{
 		bot->Notice(theClient, "Internal database error.");
 		elog << "SCAN:SQLError> " << bot->SQLDb->ErrorMessage() << endl;
-		return false;
+		return ;
 		}
 	
 	for(int i = 0; i < bot->SQLDb->Tuples(); i++)
@@ -81,7 +81,7 @@ if("EMAIL" == option)
 		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
 		search.c_str());
 
-	return true;
+	return ;
 	}
 
 if("HOSTMASK" == option)
@@ -101,7 +101,7 @@ if("HOSTMASK" == option)
 		{
 		bot->Notice(theClient, "Internal database error.");
 		elog << "SCAN:SQLError> " << bot->SQLDb->ErrorMessage() << endl;
-		return false;
+		return ;
 		}
 	
 	for(int i = 0; i < bot->SQLDb->Tuples(); i++)
@@ -117,7 +117,7 @@ if("HOSTMASK" == option)
 		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
 		search.c_str());
 	
-	return true;
+	return ;
 	}
 
 if("NICK" == option)
@@ -136,7 +136,7 @@ if("NICK" == option)
 		{
 		bot->Notice(theClient, "Internal database error.");
 		elog << "SCAN:SQLError> " << bot->SQLDb->ErrorMessage() << endl;
-		return false;
+		return ;
 		}
 	
 	for(int i = 0; i < bot->SQLDb->Tuples(); i++)
@@ -150,10 +150,10 @@ if("NICK" == option)
 		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
 		search.c_str());
 	
-	return true;
+	return ;
 	}
 
-return true ;
+return ;
 } // SCANCommand::Exec
 
 } // namespace gnuworld.

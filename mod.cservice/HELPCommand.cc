@@ -8,7 +8,7 @@
  *
  * Caveats: Needs to be written :)
  *
- * $Id: HELPCommand.cc,v 1.3 2002-09-14 14:45:52 jeekay Exp $
+ * $Id: HELPCommand.cc,v 1.4 2004-05-16 13:08:16 jeekay Exp $
  */
 
 #include	<string>
@@ -18,21 +18,21 @@
 #include	"cservice.h" 
 #include 	"responses.h"
 
-const char HELPCommand_cc_rcsId[] = "$Id: HELPCommand.cc,v 1.3 2002-09-14 14:45:52 jeekay Exp $" ;
+const char HELPCommand_cc_rcsId[] = "$Id: HELPCommand.cc,v 1.4 2004-05-16 13:08:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
 const char* helpHeader = "\002NetGamers IRC Channel Services - Version 3\002";
  
-bool HELPCommand::Exec( iClient* theClient, const string& Message )
+void HELPCommand::Exec( iClient* theClient, const string& Message )
 { 
 	bot->incStat("COMMANDS.HELP");
 	StringTokenizer st( Message ) ;
 	if( st.size() > 2 )
 	{
 		Usage(theClient);
-		return true;
+		return ;
 	}
 
   if( st.size() < 2 ) {
@@ -63,7 +63,7 @@ bool HELPCommand::Exec( iClient* theClient, const string& Message )
     bot->Notice(theClient, "\002/msg P showcommands #Example\002 for a specific channel.");
     bot->Notice(theClient, "To get help about a certain command, type \002/msg P help <command>\002");
     bot->Notice(theClient, "You can view a full command list at \002http://www.netgamers.org/\002");
-    return true;
+    return ;
   }
 		
 	sqlUser* theUser = bot->isAuthed(theClient, false);
@@ -77,7 +77,7 @@ bool HELPCommand::Exec( iClient* theClient, const string& Message )
 	else
 		bot->Notice(theClient, "There is no help available for that topic.");
 
-	return true ;
+	return ;
 } 
 
 } // namespace gnuworld.

@@ -4,7 +4,7 @@
  * (c) Copyright 2002 Rasmus Hansen (GK@panet)
  * Distributed under the GNU Public License
  *
- * $Id: ADMINCMDSCommand.cc,v 1.19 2003-03-29 23:45:02 jeekay Exp $
+ * $Id: ADMINCMDSCommand.cc,v 1.20 2004-05-16 13:08:16 jeekay Exp $
  */
 
 #include	<string>
@@ -14,13 +14,13 @@
 #include	"cservice.h"
 #include  "levels.h"
 
-const char ADMINCMDSCommand_cc_rcsId[] = "$Id: ADMINCMDSCommand.cc,v 1.19 2003-03-29 23:45:02 jeekay Exp $" ;
+const char ADMINCMDSCommand_cc_rcsId[] = "$Id: ADMINCMDSCommand.cc,v 1.20 2004-05-16 13:08:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::string ;
 
-bool ADMINCMDSCommand::Exec( iClient* theClient, const string& Message )
+void ADMINCMDSCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.ADMINCMDS");
 
@@ -28,18 +28,18 @@ StringTokenizer st( Message ) ;
 if( st.size() != 1 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 sqlUser* theUser = bot->isAuthed(theClient, true);
-if(!theUser) { return false; }
+if(!theUser) { return ; }
 
 int aLevel = bot->getAdminAccessLevel(theUser);
 
 if(!aLevel)
 	{
 	bot->Notice(theClient, "Sorry, you have insufficient access to perform that command.");
-	return false;
+	return ;
 	}
 
 if(aLevel >= 950)
@@ -155,7 +155,7 @@ if(aLevel >= 1) {
   bot->Notice(theClient, "STATUS *");
 }
 
-return true ;
+return ;
 } // ADMINCMDSCommand::Exec
 
 } // namespace gnuworld.

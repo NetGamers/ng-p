@@ -10,7 +10,7 @@
 #include	"Network.h"
 #include	"cservice_config.h"
 
-const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.21 2003-10-11 15:24:55 jeekay Exp $" ;
+const char STATUSCommand_cc_rcsId[] = "$Id: STATUSCommand.cc,v 1.22 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
@@ -18,7 +18,7 @@ namespace gnuworld
 using std::ends ;
 using std::string ;
 
-bool STATUSCommand::Exec( iClient* theClient, const string& Message )
+void STATUSCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.STATUS");
 
@@ -26,7 +26,7 @@ StringTokenizer st( Message ) ;
 if( st.size() < 2 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 /*
@@ -37,7 +37,7 @@ if( st.size() < 2 )
 sqlUser* theUser = bot->isAuthed(theClient, true);
 if (!theUser)
 	{
-	return false;
+	return ;
 	}
 
 /*
@@ -56,7 +56,7 @@ if (st[1] == "*")
 		bot->Notice(theClient,
 			bot->getResponse(theUser, language::chan_not_reg).c_str(),
 			st[1].c_str());
-		return false;
+		return ;
 		}
 	
 	/*
@@ -102,7 +102,7 @@ if (st[1] == "*")
 		bot->prettyDuration(bot->getUplink()->getStartTime()
 			+ bot->dbTimeOffset).c_str());
 
-	return true;
+	return ;
 	} /// Channel query = *
 
 sqlChannel* theChan = bot->getChannelRecord(st[1]);
@@ -111,7 +111,7 @@ if (!theChan)
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::chan_not_reg).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 /*
@@ -127,7 +127,7 @@ if ((level < level::status) && (admLevel <= 0) && !theClient->isOper())
 	{
 	bot->Notice(theClient,
 		bot->getResponse(theUser, language::insuf_access).c_str());
-	return false;
+	return ;
 	}
 
 /*
@@ -242,7 +242,7 @@ if( PGRES_TUPLES_OK != status )
 	elog	<< "STATUS> SQL Error: "
 		<< bot->SQLDb->ErrorMessage()
 		<< endl ;
-	return false ;
+	return ;
 	}
 
 string authList;
@@ -336,7 +336,7 @@ if (admLevel >= 1)
 		}
 }
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld.

@@ -13,7 +13,7 @@
  * Shouldn't really happen, as trying to MODINFO a forced access doesn't
  * make sense - adduser and then MODINFO that :)
  *
- * $Id: MODINFOCommand.cc,v 1.9 2003-03-30 00:35:34 jeekay Exp $
+ * $Id: MODINFOCommand.cc,v 1.10 2004-05-16 13:08:16 jeekay Exp $
  */
 
 #include	<string>
@@ -25,13 +25,13 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char MODINFOCommand_cc_rcsId[] = "$Id: MODINFOCommand.cc,v 1.9 2003-03-30 00:35:34 jeekay Exp $" ;
+const char MODINFOCommand_cc_rcsId[] = "$Id: MODINFOCommand.cc,v 1.10 2004-05-16 13:08:16 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::string ;
 
-bool MODINFOCommand::Exec( iClient* theClient, const string& Message )
+void MODINFOCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.MODINFO");
 
@@ -39,14 +39,14 @@ StringTokenizer st( Message ) ;
 if( st.size() < 5 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 const string command = string_upper(st[2]);
 if ((command != "ACCESS") && (command != "AUTOMODE"))
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 /*
@@ -57,7 +57,7 @@ if ((command != "ACCESS") && (command != "AUTOMODE"))
 sqlUser* theUser = bot->isAuthed(theClient, true);
 if (!theUser)
 	{
-	return false;
+	return ;
 	}
 
 /*
@@ -72,7 +72,7 @@ if (!theChan)
 			language::chan_not_reg,
 			string("Sorry, %s isn't registered with me.")).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 
@@ -102,7 +102,7 @@ if (theChan->getName() == "*")
         if (level < chgAdminLevel->getLevel())
                 {
                 bot->Notice(theClient, "Sorry, you have insufficient access to perform that command");
-                return false;
+                return ;
                 }
         }
 
@@ -113,7 +113,7 @@ if (level < level::modinfo)
 		bot->getResponse(theUser,
 			language::insuf_access,
 			string("Sorry, you have insufficient access to perform that command.")));
-	return false;
+	return ;
 	}
 
 /*
@@ -127,7 +127,7 @@ if (!targetUser)
 		bot->getResponse(theUser,
 			language::not_registered,
 			string("Sorry, I don't know who %s is.")).c_str(), st[3].c_str());
-	return false;
+	return ;
 	}
 
 /*
@@ -143,7 +143,7 @@ if (targetLevel == 0)
 			string("%s doesn't appear to have access in %s.")).c_str(),
 		targetUser->getUserName().c_str(),
 		theChan->getName().c_str());
-	return false;
+	return ;
 	}
 
 /*
@@ -168,7 +168,7 @@ if (command == "ACCESS") {
 				bot->getResponse(theUser,
 					language::mod_access_higher,
 					string("Cannot modify a user with equal or higher access than your own.")));
-			return false;
+			return ;
 			}
 		}
 
@@ -179,7 +179,7 @@ if (command == "ACCESS") {
 			bot->getResponse(theUser,
 				language::inval_access,
 				string("Invalid access level.")));
-		return false;
+		return ;
 	}
 
 	if( (theChan->getName() != "*") &&
@@ -187,7 +187,7 @@ if (command == "ACCESS") {
 	    (!bot->isForced(theChan, theUser))) {
 		bot->Notice(theClient, "Only CService may modify users with"
 			" 499+ access.");
-		return false;
+		return ;
 	}
 
 	/*
@@ -199,7 +199,7 @@ if (command == "ACCESS") {
 		{
 		bot->Notice(theClient, "Cannot give a user higher or equal"
 			" access to your own.");
-		return false;
+		return ;
 		}
 
 	sqlLevel* aLevel = bot->getLevelRecord(targetUser, theChan);
@@ -210,7 +210,7 @@ if (command == "ACCESS") {
 	    !bot->isForced(theChan, theUser)) {
 		bot->Notice(theClient, "Only CService may modify users with"
 			" 499+ access.");
-		return false;
+		return ;
 	}
 	
 	/* If the new level is below 100 or 25 as appropriate and
@@ -277,7 +277,7 @@ if (command == "AUTOMODE")
 			bot->getResponse(theUser,
 				language::mod_access_higher,
 				string("Cannot modify a user with higher access than your own.")));
-		return false;
+		return ;
 		}
 
 	/*
@@ -300,7 +300,7 @@ if (command == "AUTOMODE")
 			targetUser->getUserName().c_str(),
 			theChan->getName().c_str());
 
-		return false;
+		return ;
 		}
 
 	if (string_upper(st[4]) == "VOICE")
@@ -318,7 +318,7 @@ if (command == "AUTOMODE")
 				string("Set AUTOMODE to VOICE for %s on channel %s")).c_str(),
 			targetUser->getUserName().c_str(),
 			theChan->getName().c_str());
-		return false;
+		return ;
 		}
 
 	if (string_upper(st[4]) == "NONE")
@@ -336,14 +336,14 @@ if (command == "AUTOMODE")
 				string("Set AUTOMODE to NONE for %s on channel %s")).c_str(),
 			targetUser->getUserName().c_str(),
 			theChan->getName().c_str());
-		return false;
+		return ;
 		}
 
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld

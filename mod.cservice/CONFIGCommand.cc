@@ -3,7 +3,7 @@
  *
  * 2003-04-29 GK@NG Initial creation
  *
- * $Id: CONFIGCommand.cc,v 1.1 2003-04-29 18:39:38 jeekay Exp $
+ * $Id: CONFIGCommand.cc,v 1.2 2004-05-16 13:08:16 jeekay Exp $
  */
 
 #include	<string>
@@ -17,7 +17,7 @@ namespace gnuworld
 
 using std::string ;
 
-bool CONFIGCommand::Exec( iClient* theClient, const string& Message )
+void CONFIGCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.CONFIG");
 
@@ -30,7 +30,7 @@ bot->incStat("COMMANDS.CONFIG");
 StringTokenizer st( Message ) ;
 if( st.size() < 2 ) {
 	Usage(theClient);
-	return true;
+	return ;
 }
 
 sqlUser* theUser = bot->isAuthed(theClient, false);
@@ -39,7 +39,7 @@ sqlCommandLevel* theLevel = bot->getLevelRequired("CONFIG", "ADMIN");
 
 if(!theUser || bot->getAdminAccessLevel(theUser) < theLevel->getLevel()) {
 	bot->Notice(theClient, "Sorry, you have insufficient access to perform that command");
-	return false;
+	return ;
 }
 
 string command = string_upper(st[1]);
@@ -55,12 +55,12 @@ if("VIEW" == command) {
 			ptr->second.c_str());
 	}
 
-	return true;
+	return ;
 }
 
 if( st.size() < 4 ) {
 	Usage(theClient);
-	return true;
+	return ;
 }
 
 if("SET" == command) {
@@ -68,7 +68,7 @@ if("SET" == command) {
 	if(bot->getConfigItem(theName).empty()) {
 		bot->Notice(theClient, "Config item %s does not exist.",
 			theName.c_str());
-		return false;
+		return ;
 	}
 	
 	stringstream theQuery;
@@ -88,7 +88,7 @@ if("SET" == command) {
 	
 	if(PGRES_COMMAND_OK != status) {
 		bot->Notice(theClient, "Error updating database.");
-		return false;
+		return ;
 	}
 	
 	bot->preloadConfigCache();
@@ -97,10 +97,10 @@ if("SET" == command) {
 		theName.c_str(),
 		st.assemble(3).c_str());
 
-	return true;
+	return ;
 }
 
-return true ;
+return ;
 } // bool CONFIGCommand::Exec(iClient*, const string&)
 
 } // namespace gnuworld.

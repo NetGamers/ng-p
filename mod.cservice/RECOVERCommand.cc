@@ -11,14 +11,14 @@
 #include	"cservice_config.h"
 #include	"Network.h"
 
-const char RECOVERCommand_cc_rcsId[] = "$Id: RECOVERCommand.cc,v 1.9 2003-11-08 19:06:02 jeekay Exp $" ;
+const char RECOVERCommand_cc_rcsId[] = "$Id: RECOVERCommand.cc,v 1.10 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
 using std::ends;
 
-bool RECOVERCommand::Exec( iClient* theClient, const string& Message )
+void RECOVERCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.RECOVER");
 
@@ -27,7 +27,7 @@ bot->incStat("COMMANDS.RECOVER");
 StringTokenizer st( Message ) ;
 if( st.size() != 1  && !(st.size() >= 4) ) {
   Usage(theClient);
-  return true;
+  return ;
 }
 
 /*
@@ -40,13 +40,13 @@ sqlUser* theUser;
  
 if(st.size() == 1) {
   theUser = bot->isAuthed(theClient, true);
-  if(!theUser) return false;
+  if(!theUser) return ;
   
   targetClient = Network->findNick(theUser->getUserName());
   if(!targetClient) {
     bot->Notice(theClient, "Unable to find %s on the network.", 
       theUser->getUserName().c_str());
-    return true;
+    return ;
   }
 } else if (st.size() >= 4) {
   /* We need to check:
@@ -58,35 +58,35 @@ if(st.size() == 1) {
   
   if(!theUser) {
     bot->Notice(theClient, "AUTHENTICATION FAILED as %s", st[2].c_str());
-    return true;
+    return ;
   }
   
   if(!bot->isPasswordRight(theUser, st.assemble(3))) {
     bot->Notice(theClient, "AUTHENTICATION FAILED as %s", st[2].c_str());
-    return true;
+    return ;
   }
   
   targetClient = Network->findNick(st[1]);
   if(!targetClient) {
     bot->Notice(theClient, "Unable to find %s on the network.", st[1].c_str());
-    return true;
+    return ;
   }
   
   sqlUser* recTargetUser = bot->isAuthed(targetClient, false);
   if(recTargetUser != theUser) {
     bot->Notice(theClient, "%s is not logged in as %s",
       targetClient->getNickName().c_str(), theUser->getUserName().c_str());
-    return true;
+    return ;
   }
 } else {
 	Usage(theClient);
-	return false;
+	return ;
 }
  
 if(!targetClient || targetClient == theClient || targetClient->getMode(iClient::MODE_SERVICES)) {
   bot->Notice(theClient, "Unable to recover %s.",
     theUser->getUserName().c_str());
-  return false;
+  return ;
 }
 
 /* If the user is suspended, they have their RECOVER priviledges revoked */
@@ -95,7 +95,7 @@ if (theUser->getFlag(sqlUser::F_GLOBAL_SUSPEND))
         {
         bot->Notice(theClient,
                 "You have been suspended by a Cservice Administrator. This command is disabled until the suspend expires");
-        return false;
+        return ;
         }
 
 /*
@@ -116,7 +116,7 @@ bot->Write(s);
 
 server->PostEvent(gnuworld::EVT_NSKILL, static_cast<void*>(targetClient));
 bot->Notice(theClient,"Recover Successful For %s", targetNick.c_str());
-return true;
+return ;
 }
 
 } // namespace gnuworld.

@@ -8,7 +8,7 @@
  *
  * Caveats: None
  *
- * $Id: PURGECommand.cc,v 1.13 2004-01-17 17:43:31 jeekay Exp $
+ * $Id: PURGECommand.cc,v 1.14 2004-05-16 13:08:17 jeekay Exp $
  */
 
 #include	<string>
@@ -22,14 +22,14 @@
 #include	"cservice_config.h"
 #include	"responses.h"
 
-const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.13 2004-01-17 17:43:31 jeekay Exp $" ;
+const char PURGECommand_cc_rcsId[] = "$Id: PURGECommand.cc,v 1.14 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
 
 using std::ends;
 
-bool PURGECommand::Exec( iClient* theClient, const string& Message )
+void PURGECommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.PURGE");
 
@@ -39,7 +39,7 @@ StringTokenizer st( Message ) ;
 if( st.size() < 3 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 /*
@@ -50,7 +50,7 @@ if( st.size() < 3 )
 sqlUser* theUser = bot->isAuthed(theClient, true);
 if (!theUser)
 	{
-	return false;
+	return ;
 	}
 
 /*
@@ -66,7 +66,7 @@ if (level < purgeCommandLevel->getLevel())
 		bot->getResponse(theUser,
 			language::insuf_access,
 			string("You have insufficient access to perform that command")));
-	return false;
+	return ;
 	}
 
 /*
@@ -79,7 +79,7 @@ if("FORCE" == string_upper(st[1]))
 	if(st.size() < 4)
 		{
 		Usage(theClient);
-		return false;
+		return ;
 		}
 	
 	/* Is this chan registered? */
@@ -88,7 +88,7 @@ if("FORCE" == string_upper(st[1]))
 		{
 		bot->Notice(theClient, "Sorry, %s is currently registered with me. Please PURGE first.",
 			theChan->getName().c_str());
-		return false;
+		return ;
 		}
 	
 	/* This channel is not currently registered
@@ -110,7 +110,7 @@ if("FORCE" == string_upper(st[1]))
 		{
 		bot->Notice(theClient, "Internal database error.");
 		elog << "PURGEFORCE:SQLError> " << bot->SQLDb->ErrorMessage() << endl;
-		return false;
+		return ;
 		}
 	
 	/* Did we actually find any entries? */
@@ -118,7 +118,7 @@ if("FORCE" == string_upper(st[1]))
 	if(bot->SQLDb->Tuples() != 1)
 		{
 		bot->Notice(theClient, "That channel is not in the database.");
-		return false;
+		return ;
 		}
 	
 	int chanID = atoi(bot->SQLDb->GetValue(0,0));
@@ -136,7 +136,7 @@ if("FORCE" == string_upper(st[1]))
 		{
 		bot->Notice(theClient, "Internal database error.");
 		elog << "PURGEFORCE:SQLError> " << bot->SQLDb->ErrorMessage() << endl;
-		return false;
+		return ;
 		}
 
 	/* Now delete the channel proper */
@@ -153,14 +153,14 @@ if("FORCE" == string_upper(st[1]))
 		{
 		bot->Notice(theClient, "Internal database error.");
 		elog << "PURGEFORCE:SQLError> " << bot->SQLDb->ErrorMessage() << endl;
-		return false;
+		return ;
 		}
 	
 	bot->logAdminMessage("%s (%s) - PURGE FORCE - %s - %s",
 		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
 		st[2].c_str(), st.assemble(3).c_str());
 	bot->Notice(theClient, "Successfully purged %s", st[2].c_str());
-	return true;
+	return ;
 	}
 
 /*
@@ -176,7 +176,7 @@ if ((!theChan) || (st[1] == "*"))
 			language::chan_not_reg,
 			string("%s isn't registered with me")).c_str(),
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 /* 
@@ -186,7 +186,7 @@ if ((!theChan) || (st[1] == "*"))
 if(theChan->getFlag(sqlChannel::F_NOPURGE)) 
 { 
 	bot->Notice(theClient, "%s has NOPURGE set, so I'm not purging it.", theChan->getName().c_str()); 
-	return false; 
+	return ; 
 }
 
 /* Don't purge LOCKED channels */
@@ -194,7 +194,7 @@ if(theChan->getFlag(sqlChannel::F_LOCKED)) {
 	bot->Notice(theClient, "%s has LOCKED set, so I'm not purging it.",
 		theChan->getName().c_str()
 		);
-	return false;
+	return ;
 }
 
 /* Don't purge commented channels. */
@@ -202,7 +202,7 @@ if(!theChan->getComment().empty()) {
 	bot->Notice(theClient, "%s is commented, so I'm not purging it.",
 		theChan->getName().c_str()
 		);
-	return false;
+	return ;
 }
 
 /*
@@ -236,7 +236,7 @@ if( status != PGRES_TUPLES_OK )
 	elog	<< "PURGE> SQL Error: "
 		<< bot->SQLDb->ErrorMessage()
 		<< endl ;
-	return false ;
+	return ;
 	}
 		else
 	{
@@ -282,7 +282,7 @@ if( status != PGRES_COMMAND_OK )
 	elog	<< "PURGE> SQL Error: "
 		<< bot->SQLDb->ErrorMessage()
 		<< endl ;
-	return false ;
+	return ;
 	}
 
 /* 
@@ -343,7 +343,7 @@ assert(theChan);
 
 delete(theChan);
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld.

@@ -4,7 +4,7 @@
  *
  * Suspends a channel for 12 hours, can be removed only by cservice admin
  *
- * $Id: OPERSUSPENDCommand.cc,v 1.1 2002-01-14 23:14:19 morpheus Exp $
+ * $Id: OPERSUSPENDCommand.cc,v 1.2 2004-05-16 13:08:17 jeekay Exp $
  */
 
 #include	<string>
@@ -18,14 +18,14 @@
 #include	"levels.h"
 #include	"responses.h"
 
-const char OPERSUSPENDCommand_cc_rcsId[] = "$Id: OPERSUSPENDCommand.cc,v 1.1 2002-01-14 23:14:19 morpheus Exp $" ;
+const char OPERSUSPENDCommand_cc_rcsId[] = "$Id: OPERSUSPENDCommand.cc,v 1.2 2004-05-16 13:08:17 jeekay Exp $" ;
 
 namespace gnuworld
 {
 using std::string ;
 using namespace level;
 
-bool OPERSUSPENDCommand::Exec( iClient* theClient, const string& Message )
+void OPERSUSPENDCommand::Exec( iClient* theClient, const string& Message )
 {
 bot->incStat("COMMANDS.OPERSUSPEND");
 
@@ -33,7 +33,7 @@ StringTokenizer st( Message ) ;
 if( st.size() < 2 )
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 /* Is the user an oper? */
@@ -41,13 +41,13 @@ if( st.size() < 2 )
 if(!theClient->isOper())
 	{
 	bot->Notice(theClient,"This command is reserved to IRC Operators");
-	return true;
+	return ;
 	}
 
 if (st[1][0] != '#')
 {
 	bot->Notice(theClient,"You can only suspend Channels");
-	return true;
+	return ;
 }
 
 
@@ -57,7 +57,7 @@ if(!theChan)
 	{
 	bot->Notice(theClient,"Sorry, %s isn't registered with me.",
 		st[1].c_str());
-	return false;
+	return ;
 	}
 
 /* Check level. */
@@ -67,7 +67,7 @@ bot->Notice(theClient,"Channel %s been suspended",st[1].c_str());
 bot->logAdminMessage("%s has asked me to suspend %s",theClient->getNickUserHost().c_str()
 			,st[1].c_str());
 
-return true ;
+return ;
 }
 
 } // namespace gnuworld.

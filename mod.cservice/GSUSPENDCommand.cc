@@ -3,7 +3,7 @@
  *
  * Allow global suspending of nicks/channels
  *
- * $Id: GSUSPENDCommand.cc,v 1.6 2002-10-20 02:12:07 jeekay Exp $
+ * $Id: GSUSPENDCommand.cc,v 1.7 2004-05-16 13:08:16 jeekay Exp $
  */
 
 #include <string>
@@ -12,12 +12,12 @@
 
 #include "cservice.h"
 
-const char GSUSPENDCommand_cc_rcsId[] = "$Id: GSUSPENDCommand.cc,v 1.6 2002-10-20 02:12:07 jeekay Exp $";
+const char GSUSPENDCommand_cc_rcsId[] = "$Id: GSUSPENDCommand.cc,v 1.7 2004-05-16 13:08:16 jeekay Exp $";
 
 namespace gnuworld
 {
 
-bool GSUSPENDCommand::Exec( iClient* theClient, const string& Message )
+void GSUSPENDCommand::Exec( iClient* theClient, const string& Message )
 {
 
 bot->incStat("COMMANDS.GSUSPEND");
@@ -28,13 +28,13 @@ StringTokenizer st( Message );
 if(st.size() < 4)
 	{
 	Usage(theClient);
-	return true;
+	return ;
 	}
 
 // Are they logged in? If not, dont tell them about admin commands.
 
 sqlUser* theUser = bot->isAuthed(theClient, false);
-if(!theUser) { return false; }
+if(!theUser) { return ; }
 
 int admLevel = bot->getAdminAccessLevel(theUser);
 sqlCommandLevel* channelSuspendLevel = bot->getLevelRequired("CSUSPEND", "ADMIN");
@@ -80,13 +80,13 @@ if((target[0] == '#') && (admLevel >= channelSuspendLevel->getLevel()))
 	if(!theChan)
 		{
 		bot->Notice(theClient, "Sorry, %s is not registered with me.", target.c_str());
-		return false;
+		return ;
 		}
 	
 	if(theChan->getFlag(sqlChannel::F_SUSPEND))
 		{
 		bot->Notice(theClient, "Sorry, %s is already suspended.", target.c_str());
-		return false;
+		return ;
 		}
 	
 	time_t suspendExpires = ::time(NULL) + (duration*3600);
@@ -103,7 +103,7 @@ if((target[0] == '#') && (admLevel >= channelSuspendLevel->getLevel()))
 		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
 		theChan->getName().c_str(), duration, reason.c_str());
 	
-	return true;
+	return ;
 	}
 
 // We are suspending a nick
@@ -118,20 +118,20 @@ if(admLevel >= nickSuspendLevel->getLevel())
 	if(!targetUser)
 		{
 		bot->Notice(theClient, "The user %s does not appear to be registered.", target.c_str());
-		return true;
+		return ;
 		}
 	
 	int targetLevel = bot->getAdminAccessLevel(targetUser);
 	if( targetLevel >= admLevel)
 		{
 		bot->Notice(theClient, "Cannot suspend a user with equal or higher access to your own.");
-		return false;
+		return ;
 		}
 	
 	if(targetUser->getFlag(sqlUser::F_GLOBAL_SUSPEND))
 		{
 		bot->Notice(theClient, "%s is already globally suspended.", targetUser->getUserName().c_str());
-		return true;
+		return ;
 		}
 	
 	time_t suspendedExpire = ::time(NULL) + (duration*3600);
@@ -147,14 +147,14 @@ if(admLevel >= nickSuspendLevel->getLevel())
 		theClient->getNickName().c_str(), theUser->getUserName().c_str(),
 		targetUser->getUserName().c_str(), duration, reason.c_str());
 	
-	return true;
+	return ;
 	}
 
 // We have managed to hit exactly nothing. The user does not have access.
 
 bot->Notice(theClient, "Sorry, you have insufficient access to perform that command.");
 
-return false;
+return ;
 
 } // GSUSPENDCommand::Exec
 
