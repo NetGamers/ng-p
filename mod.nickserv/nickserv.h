@@ -1,6 +1,6 @@
 
 #ifndef __NICKSERV_H
-#define __NICKSERV_H "$Id: nickserv.h,v 1.10 2002-02-06 01:06:50 jeekay Exp $"
+#define __NICKSERV_H "$Id: nickserv.h,v 1.11 2002-02-08 23:22:32 jeekay Exp $"
 
 
 #include	<string>
@@ -275,17 +275,15 @@ public:
 	commandIterator findCommand( const string& theComm )
 		{ return commandMap.find( theComm ) ; }
 
-	
+	inline const cmDatabase* getSQLDb( void ) const
+		{ return SQLDb; }
+
+protected:
 
 	/**
 	 * PostgreSQL Database
 	 */
 	cmDatabase* SQLDb;
-
-	
-		
-protected:
-
 
 	/**
 	 * The command handler table.
