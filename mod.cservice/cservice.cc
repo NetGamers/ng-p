@@ -207,6 +207,7 @@ RegisterCommand(new FORCECommand(this, "FORCE", "<#channel>", 8));
 RegisterCommand(new UNFORCECommand(this, "UNFORCE", "<#channel>", 8));
 RegisterCommand(new SERVNOTICECommand(this, "SERVNOTICE", "<#channel> <text>", 5));
 RegisterCommand(new GLOBNOTICECommand(this, "GLOBNOTICE", "<$*.target> <text>", 5));
+RegisterCommand(new GLOBNOTICECommand(this, "GLOBALNOTICE", "<$*.target> <text>", 5));
 RegisterCommand(new SAYCommand(this, "SAY", "<#channel> <text>", 5));
 RegisterCommand(new QUOTECommand(this, "QUOTE", "<text>", 5));
 RegisterCommand(new REHASHCommand(this, "REHASH", "[translations|help]", 5));

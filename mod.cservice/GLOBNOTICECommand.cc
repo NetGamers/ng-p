@@ -4,7 +4,7 @@
  *
  * Sends a notice to all users as 'CService'
  *
- * $Id: GLOBNOTICECommand.cc,v 1.2 2002-02-23 00:57:24 jeekay Exp $
+ * $Id: GLOBNOTICECommand.cc,v 1.3 2002-04-07 21:41:20 jeekay Exp $
  */
 
 #include <string>
@@ -13,7 +13,7 @@
 #include "cservice.h"
 #include "levels.h"
 
-const char GLOBNOTICECommand_cc_rcsId[] = "$Id: GLOBNOTICECommand.cc,v 1.2 2002-02-23 00:57:24 jeekay Exp $";
+const char GLOBNOTICECommand_cc_rcsId[] = "$Id: GLOBNOTICECommand.cc,v 1.3 2002-04-07 21:41:20 jeekay Exp $";
 
 namespace gnuworld
 {
@@ -41,12 +41,18 @@ if((admLevel < level::globnotice) && !(theClient->isOper())) { return false; }
 
 bot->incStat("COMMANDS.GLOBNOTICE");
 
+// GLOB[AL]NOTICE $target.dom Message
 StringTokenizer st( Message );
 if(st.size() < 3)
 	{
 	Usage(theClient);
 	return true;
 	}
+
+string sourceNick;
+if(string_upper(st[0]) == "GLOBALNOTICE")
+	{ sourceNick = "Global"; }
+else { sourceNick = "CService"; }
 
 if(st[1][0] != '$')
 	{
@@ -60,8 +66,8 @@ string outTarget = st[1];
 // Lets introduce the nick
 
 const char* charYY = bot->getCharYY();
-bot->Write("%s N CService 1 31337 global notice.pa +iodk B]AAAB %sAAC :CService Global Notice",
-					 charYY, charYY);
+bot->Write("%s N %s 1 31337 global notice.pa +iodk B]AAAB %sAAC :CService Global Notice",
+					 charYY, sourceNick.c_str(), charYY);
 bot->Write("%sAAC O %s :%s", charYY, outTarget.c_str(), outString.c_str());
 bot->Write("%sAAC Q :Done", charYY);
 
