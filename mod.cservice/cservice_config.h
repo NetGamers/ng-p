@@ -1,7 +1,7 @@
 /* cservice_config.h */
 
 #ifndef __CSERVICE_CONFIG_H
-#define __CSERVICE_CONFIG_H "$Id: cservice_config.h,v 1.1 2002-01-14 23:14:23 morpheus Exp $"
+#define __CSERVICE_CONFIG_H "$Id: cservice_config.h,v 1.2 2002-01-16 00:00:21 morpheus Exp $"
 
 /**
  * Define this if you wish for all SQL queries to be sent
@@ -42,5 +42,7 @@
  * Enable a feature that invites the user into channels he's not in if he logins and has the INVITE flag set
  */
 #define FEATURE_INVITE
+
+#define FEATURE_NOFORCE
 
 #endif // __CSERVICE_CONFIG_H

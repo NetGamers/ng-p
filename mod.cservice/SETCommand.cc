@@ -18,7 +18,7 @@
  *
  * Caveats: None.
  *
- * $Id: SETCommand.cc,v 1.1 2002-01-14 23:14:21 morpheus Exp $
+ * $Id: SETCommand.cc,v 1.2 2002-01-16 00:00:20 morpheus Exp $
  */
 
 #include	<string>
@@ -30,7 +30,7 @@
 #include	"responses.h"
 #include	"cservice_config.h"
 
-const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.1 2002-01-14 23:14:21 morpheus Exp $" ;
+const char SETCommand_cc_rcsId[] = "$Id: SETCommand.cc,v 1.2 2002-01-16 00:00:20 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -637,6 +637,44 @@ else
 			theChan->getFlag(sqlChannel::F_AUTOTOPIC) ? "ON" : "OFF");
 	    return true;
 	}
+#ifdef FEATURE_NOFORCE
+	if(option == "NOFORCE")
+	{
+		if(level < level::set::noforce)
+		{
+			bot->Notice(theClient,
+				bot->getResponse(theUser,
+					language::insuf_access,
+					string("You do not have enough access!")));
+			return true;
+		}
+		if(value == "ON") 
+		{
+			theChan->setFlag(sqlChannel::F_NOFORCE);
+		}
+		else if(value == "OFF") theChan->removeFlag(sqlChannel::F_NOFORCE);
+		else
+		{
+			bot->Notice(theClient,
+                        bot->getResponse(theUser,
+                                language::set_cmd_status,
+                                string("Your %s for %s is %s")).c_str(),
+                                option.c_str(),
+                                theChan->getName().c_str(),
+                                theChan->getFlag(sqlChannel::F_NOFORCE) ? "ON" : "OFF");
+                	return true;
+		}
+		theChan->commit();
+		bot->Notice(theClient,
+                        bot->getResponse(theUser,
+                                language::set_cmd_status,
+                                string("Your %s for %s is %s")).c_str(),
+                                option.c_str(),
+                                theChan->getName().c_str(),
+                                theChan->getFlag(sqlChannel::F_NOFORCE) ? "ON" : "OFF");
+                return true;
+	}
+#endif
 
 #ifdef FEATURE_INVITE
 	if(option == "AUTOINVITE")

@@ -1,7 +1,7 @@
 /* sqlChannel.h */
 
 #ifndef __SQLCHANNEL_H
-#define __SQLCHANNEL_H "$Id: sqlChannel.h,v 1.1 2002-01-14 23:14:25 morpheus Exp $"
+#define __SQLCHANNEL_H "$Id: sqlChannel.h,v 1.2 2002-01-16 00:00:22 morpheus Exp $"
 
 #include	<string>
 #include	<map>
@@ -40,7 +40,7 @@ public:
 	static const flagType	F_OPONLY; 	// Deprecated.
 	static const flagType	F_AUTOJOIN;
 	static const flagType   F_FLOATLIM;
-
+	static const flagType   F_NOFORCE;
 	/*
 	 *   Channel 'Event' Flags, used in the channelog table.
 	 *   These flags are used to filter channel log records.
@@ -53,6 +53,7 @@ public:
 	static const int	EV_OPERJOIN;
 	static const int	EV_OPERPART;
 	static const int	EV_FORCE;
+	static const int	EV_NOFORCE;
 	static const int	EV_REGISTER;
 	static const int	EV_PURGE;
 

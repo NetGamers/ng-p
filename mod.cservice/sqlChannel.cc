@@ -9,7 +9,7 @@
  * 30/12/2000: Moved static SQL data to constants.h --Gte
  * Set loadData up to take data from rows other than 0.
  *
- * $Id: sqlChannel.cc,v 1.1 2002-01-14 23:14:24 morpheus Exp $
+ * $Id: sqlChannel.cc,v 1.2 2002-01-16 00:00:22 morpheus Exp $
  */
 
 #include	<strstream>
@@ -25,7 +25,7 @@
 #include	"cservice_config.h"
 
 const char sqlChannel_h_rcsId[] = __SQLCHANNEL_H ;
-const char sqlChannel_cc_rcsId[] = "$Id: sqlChannel.cc,v 1.1 2002-01-14 23:14:24 morpheus Exp $" ;
+const char sqlChannel_cc_rcsId[] = "$Id: sqlChannel.cc,v 1.2 2002-01-16 00:00:22 morpheus Exp $" ;
 
 namespace gnuworld
 {
@@ -52,6 +52,7 @@ const sqlChannel::flagType sqlChannel::F_NOOP      = 0x00040000 ;
 const sqlChannel::flagType sqlChannel::F_AUTOTOPIC = 0x00080000 ;
 const sqlChannel::flagType sqlChannel::F_OPONLY    = 0x00100000 ; // Deprecated
 const sqlChannel::flagType sqlChannel::F_AUTOJOIN  = 0x00200000 ;
+const sqlChannel::flagType sqlChannel::F_NOFORCE   = 0x00400000 ;
 
 const int sqlChannel::EV_MISC     = 1 ;
 const int sqlChannel::EV_JOIN     = 2 ;
