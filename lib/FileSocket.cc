@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * $Id: FileSocket.cc,v 1.3 2002-07-27 14:54:09 jeekay Exp $
+ * $Id: FileSocket.cc,v 1.4 2004-04-26 21:30:26 jeekay Exp $
  */
 
 #include	<sys/types.h>
@@ -25,6 +25,7 @@
 #include	<fcntl.h>
 #include	<unistd.h>
 
+#include	<assert.h>
 #include	<string>
 #include	<iostream>
 
@@ -36,7 +37,7 @@
 #include	"ELog.h"
 
 const char FileSocket_h_rcsId[] = __FILESOCKET_H ;
-const char FileSocket_cc_rcsId[] = "$Id: FileSocket.cc,v 1.3 2002-07-27 14:54:09 jeekay Exp $" ;
+const char FileSocket_cc_rcsId[] = "$Id: FileSocket.cc,v 1.4 2004-04-26 21:30:26 jeekay Exp $" ;
 const char ELog_h_rcsId[] = __ELOG_H ;
 
 namespace gnuworld
