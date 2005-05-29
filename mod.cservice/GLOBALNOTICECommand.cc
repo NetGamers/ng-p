@@ -5,7 +5,7 @@
  *
  * Sends a notice to all users as 'CService'
  *
- * $Id: GLOBALNOTICECommand.cc,v 1.3 2005-03-31 23:46:37 jeekay Exp $
+ * $Id: GLOBALNOTICECommand.cc,v 1.4 2005-05-29 21:04:53 jeekay Exp $
  */
 
 #include	<string>
@@ -50,6 +50,14 @@ bot->incStat("COMMANDS.GLOBALNOTICE");
 StringTokenizer st( Message );
 if(st.size() < 4) {
 	Usage(theClient);
+	return ;
+}
+
+/*
+ * Protect users that try to use the old syntax
+ */
+if(st[2][0] == '$') {
+	bot->Notice(theClient, "You no longer need to use the $*.org argument.");
 	return ;
 }
 

@@ -1,5 +1,6 @@
 2005-03-31 1.2.21 Jeekay
 * Remove need to manually type $*.org in global notices
+* Added guard against people trying to use the old GLOBALNOTICE syntax
 * Change 850 to 'Assistant Manager' and 800 to 'Supervisor'
 * Bumped version to 1.2.21
 
