@@ -8,7 +8,7 @@
  *
  * Caveats: None.
  *
- * $Id: LBANLISTCommand.cc,v 1.6 2004-08-25 20:32:41 jeekay Exp $
+ * $Id: LBANLISTCommand.cc,v 1.7 2005-08-27 10:42:51 jeekay Exp $
  */
 
 #include	<string>
@@ -145,14 +145,12 @@ for( vector< sqlBan* >::const_iterator ptr = theChan->banList.begin() ; ptr != t
 
 if( (results >= MAX_LBAN_RESULTS) && !showAll)
 	{
-	bot->Notice(theClient,
-		bot->getResponse(theUser,
-			language::more_than_max,
-			string("There are more than 15 matching entries.")));
-	bot->Notice(theClient,
-		bot->getResponse(theUser,
-			language::restrict_query,
-			string("Please restrict your query.")));
+	bot->Notice(theClient, "There are more than %u matching entries.",
+		MAX_LBAN_RESULTS
+		);
+	bot->Notice(theClient, "Please restrict your query or consult "
+		"http://www.netgamers.org/."
+		);
 	}
 else if (results > 0)
 	{
