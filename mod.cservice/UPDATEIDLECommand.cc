@@ -50,7 +50,7 @@ int mismatchCount = 0;
 for(myChanItr = bot->sqlChannelIDCache.begin(); myChanItr != bot->sqlChannelIDCache.end(); myChanItr++) {
   sqlChannel* sqlChan = myChanItr->second;
   if(!sqlChan) {
-    bot->Notice(theClient, "Wierd error with channel id %d", myChanItr->first);
+    bot->Notice(theClient, "Weird error with channel id %d", myChanItr->first);
     continue;
   }
 
@@ -59,8 +59,22 @@ for(myChanItr = bot->sqlChannelIDCache.begin(); myChanItr != bot->sqlChannelIDCa
   Channel* netChan = Network->findChannel(sqlChan->getName());
   if(!netChan) { continue; }
   
-  if(netChan->size() == 1) {
-  	/* We are the only person in this channel */
+  bool servicesOnly = true;
+  Channel::const_userIterator userItr = netChan->userList_begin();
+  for( ; userItr != netChan->userList_end() ; ++userItr ) {
+  	ChannelUser *theChanUser = userItr->second;
+  	/* Check if the user is either a service or special */
+	if( theChanUser->getIntYY() != 50 &&
+	    theChanUser->getIntYY() != 40 ) {
+		servicesOnly = false;
+		break;
+	}
+	
+  }
+  
+  if( ! servicesOnly) { continue; }
+
+	/* We are the only person in this channel */
 	bot->Notice(theClient, "Channel %s is idle.",
 		netChan->getName().c_str()
 		);
@@ -68,7 +82,6 @@ for(myChanItr = bot->sqlChannelIDCache.begin(); myChanItr != bot->sqlChannelIDCa
 	bot->partIdleChannel(sqlChan);
 	
 	mismatchCount++;
-  }
 }
 
 bot->Notice(theClient, "Total idle channels found: %d", mismatchCount);

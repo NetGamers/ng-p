@@ -1,5 +1,6 @@
 2005-05-29 1.2.22 Jeekay
 * Fix erronous error message in LBANLIST to always display MAX_LBAN_RESULTS
+* Changed UPDATEIDLE to part channels if only P or Secnet are present
 * Bumped version to 1.2.22
 
 2005-03-31 1.2.21 Jeekay
