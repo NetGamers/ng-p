@@ -1,6 +1,6 @@
 /**********************************************************************
  * $Workfile: MD5.H $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *  $Modtime: 1/08/97 6:35p $
  *
  * PURPOSE:
@@ -12,7 +12,7 @@
  *
  * NOTE:
  * Currently the md5::update length is limited to unsigned int, which may
- * be less than unsigned long.
+ * be less than unit32_t.
  * 
  * COPYRIGHT:
  * Copyright (c) 1995, 1996, 1997 Tree Frog Software, All rights reserved.
@@ -59,7 +59,7 @@
  * So there! 
  **********************************************************************/
 #ifndef MD5_H
-#define MD5_H "$Id: md5hash.h,v 1.3 2002-07-27 14:54:10 jeekay Exp $"
+#define MD5_H "$Id: md5hash.h,v 1.4 2006-10-17 23:05:02 jeekay Exp $"
 
 #include <iostream>
  
@@ -67,9 +67,6 @@
 
 namespace gnuworld
 {
-
-using std::istream ;
-using std::ostream ;
 
 class md5Digest;     // Forward declaration.
 
@@ -82,16 +79,17 @@ public:
    void init(  void );                 // Used for reinitialization.
    void clear( void );                 // Used to wipe clean interal data.
 protected:
-   unsigned long  m_state[4];         // State (ABCD)
-   unsigned long  m_count[2];         // Number of bits, modulo 2^64 (lsb first).
+   uint32_t  m_state[4];              // State (ABCD)
+   uint32_t  m_count[2];              // Number of bits, modulo 2^64 (lsb first).
    unsigned char  m_buffer[64];       // Input buffer.
    void transform( const unsigned char block[64] );
-   void encode( unsigned char  *output, const unsigned long  *input, int len );
+   void encode( unsigned char  *output, const uint32_t  *input, int32_t len );
    void encode( md5Digest &digest );
-   void decode( unsigned long  *output, const unsigned char  *input, int len );
+   void decode( uint32_t  *output, const unsigned char  *input, int32_t len );
 };
 
 class md5Digest {
+   friend class md5 ;
 public:
    md5Digest(  void );              // Automatically calls md5Digest::clear().
    ~md5Digest( void );              // Automatically calls md5Digest::clear().
@@ -102,11 +100,13 @@ public:
 private:
    unsigned char m_data[ MD5_DIGEST_LENGTH ];
 
-   friend int      operator==( const md5Digest &lhs, const md5Digest &rhs );
-   friend int      operator!=( const md5Digest &lhs, const md5Digest &rhs );
-   friend istream& operator>>( istream& stream,       md5Digest& digest );
-   friend ostream& operator<<( ostream& stream, const md5Digest& digest );
-   friend void     md5::encode( md5Digest &digest );
+   friend int32_t      operator==( const md5Digest &lhs, const md5Digest &rhs );
+   friend int32_t      operator!=( const md5Digest &lhs, const md5Digest &rhs );
+   friend std::istream& operator>>( std::istream& stream,
+				md5Digest& digest );
+   friend std::ostream& operator<<( std::ostream& stream,
+				const md5Digest& digest );
+//   friend void     md5::encode( md5Digest &digest );
 };
 
 } // namespace gnuworld

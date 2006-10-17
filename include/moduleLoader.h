@@ -18,11 +18,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
  *
- * "$Id: moduleLoader.h,v 1.3 2002-07-27 14:54:07 jeekay Exp $"
+ * $Id: moduleLoader.h,v 1.4 2006-10-17 23:05:02 jeekay Exp $
  */
 
 #ifndef __MODULELOADER_H
-#define __MODULELOADER_H "$Id: moduleLoader.h,v 1.3 2002-07-27 14:54:07 jeekay Exp $"
+#define __MODULELOADER_H "$Id: moduleLoader.h,v 1.4 2006-10-17 23:05:02 jeekay Exp $"
 
 #include	<iostream>
 #include	<string>
@@ -35,15 +35,12 @@
 namespace gnuworld
 {
 
-using std::string ;
-using std::endl ;
-
 /**
  * This is a templated module loader class.  The templated type is the
  * type of object to retrieve from the module.  This class is used with
  * libtool for maximum portability.
  */
-template< typename modType, typename argType = string >
+template< typename modType, typename argType = std::string >
 class moduleLoader
 { 
 
@@ -73,15 +70,29 @@ protected:
 	/**
 	 * The name of the module which this instance represents.
 	 */
-	string			moduleName ;
+	std::string		moduleName ;
+
+	/**
+	 * This variable is true if there was an error in loading
+	 * or resolving a symbol, false otherwise.
+	 */
+	bool			hasError ;
+
+	/**
+	 * Provide a protected mutator for this class to use to modify
+	 * the error value.
+	 */
+	inline void		setError( bool newVal = true )
+		{ hasError = newVal ; }
 
 public:
 	/**
 	 * Constructor, takes a module filename as the only
 	 * parameter.
 	 */
-	moduleLoader( const string& _moduleName )
-	 : moduleName( _moduleName )
+	moduleLoader( const std::string& _moduleName )
+	 : moduleName( _moduleName ),
+	   hasError( false )
 	{
 	// Initialize the function pointer to 0
 	modFunc = 0 ;
@@ -93,21 +104,22 @@ public:
 		elog	<< "moduleLoader> Failed to initialize "
 			<< "module loading system: "
 			<< lt_dlerror()
-			<< endl ;
-		::exit( 0 ) ;
+			<< std::endl ;
+		setError() ;
+		return ;
 		}
 
-	string fileName( moduleName ) ;
+	std::string fileName( moduleName ) ;
 	if( fileName[ 0 ] != '/' )
 		{
 		// No absolute path specified
 		// Attempt to find the module in the currect directory
-		fileName = string( "./" ) + fileName ;
+		fileName = std::string( "./" ) + fileName ;
 		}
 
 	// Libtool libraries end with .la, and at this point, this class
 	// only supports libtool libraries
-	if( string::npos == fileName.find( ".la" ) )
+	if( std::string::npos == fileName.find( ".la" ) )
 		{
 		// TODO: This should be more thorough
 		fileName += ".la" ;
@@ -115,7 +127,7 @@ public:
 
 //	elog	<< "moduleLoader> Attempting to load module "
 //		<< fileName
-//		<< endl;
+//		<< std::endl;
 
 	// lt_dlopenext() will do all that lt_dlopen() does,
 	// but also check for .la, .so, .sl, etc extensions
@@ -127,14 +139,15 @@ public:
 			<< moduleName
 			<< "): "
 			<< lt_dlerror()
-			<< endl;
-		::exit( 0 ) ;
+			<< std::endl;
+		setError() ;
+		return ;
 		}
 
 //	elog	<< "moduleLoader> Module "
 //		<< moduleName
 //		<< " successfully loaded"
-//		<< endl;
+//		<< std::endl;
 	}
 
 	/**
@@ -147,7 +160,7 @@ public:
 		{
 		elog	<< "~moduleLoader> Error closing module: "
 			<< lt_dlerror()
-			<< endl ;
+			<< std::endl ;
 		}
 	moduleHandle = 0 ;
 	}
@@ -158,33 +171,39 @@ public:
 	 * This method will execute only once for each instance.
 	 * Each additional call after the initial call to laodObject()
 	 * will return the object previously created.
+	 * The symbolSuffix is used to distinguish between similarly
+	 * named symbols to be loaded from the same module.
 	 */
-	modType loadObject( argType arg )
+	modType loadObject( argType arg,
+		const std::string& symbolSuffix = std::string() )
 	{
-	if( modFunc != 0 )
+	if( getError() )
 		{
-		// Already loaded the object
-		return modPtr ;
+		// Error already present
+		return 0 ;
 		}
 
-	lt_ptr symPtr = lt_dlsym( moduleHandle, "_gnuwinit" ) ;
-	if( 0 == symPtr )
+	const std::string symbolName =
+		std::string( "_gnuwinit" ) + symbolSuffix ;
+	modFunc = (GNUWModuleFunc) lt_dlsym( moduleHandle,
+			symbolName.c_str() ) ;
+	if( 0 == modFunc )
 		{
 		elog	<< "moduleLoader::loadObject> Error: "
 			<< lt_dlerror()
-			<< endl ;
-		exit( 0 ) ;
+			<< std::endl ;
+		setError() ;
+		return 0 ;
 		}
-
-	modFunc = (GNUWModuleFunc) symPtr ;
 
 	modPtr = modFunc( arg );
 
-	// 0 is the global initializer
+	// Types usable by this class must support comparison against 0
 	if( 0 == modPtr )
 		{
 		elog	<< "moduleLoader> Unable to instantiate modType."
-			<< endl;
+			<< std::endl;
+		setError() ;
 		}
 
 	return modPtr ;
@@ -194,20 +213,26 @@ public:
 	 * Return a string containing the module's name, as passed
 	 * to the constructor
 	 */
-	inline const string&	getModuleName() const
+	inline const std::string&	getModuleName() const
 		{ return moduleName ; }
 
 	/**
 	 * Return the last error seen by the module system.
 	 */
-	inline const string&	getLastError() const
-		{ return ld_dlerror() ; }
+	inline const std::string&	getLastError() const
+		{ return ::lt_dlerror() ; }
 
 	/**
 	 * Return by value the object being loaded from the module.
 	 */
 	inline modType		getObject() const
 		{ return modPtr ; }
+
+	/**
+	 * Return true if an error occured, false otherwise.
+	 */
+	inline bool		getError() const
+		{ return hasError ; }
 
 } ;
 

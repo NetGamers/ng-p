@@ -3544,7 +3544,7 @@ SQLDb->ExecCommandOk(theLog.str().c_str());
  * Global method to replace ' with \' in strings for safe placement in
  * SQL statements.
  */
-const string gnuworld::escapeSQLChars(const string& theString)
+const string escapeSQLChars(const string& theString)
 {
 string retMe ;
 

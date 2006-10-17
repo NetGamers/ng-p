@@ -806,7 +806,7 @@ return;
 
 } // namespace nserv
 
-const string gnuworld::escapeSQLChars(const string& theString)
+const string escapeSQLChars(const string& theString)
 {
   string retMe ;
 
