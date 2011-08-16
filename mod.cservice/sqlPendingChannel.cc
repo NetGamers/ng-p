@@ -5,6 +5,7 @@
  * registration.
  */
  
+#include	<stdlib.h>
 #include	<string> 
 
 #include	<cstring> 

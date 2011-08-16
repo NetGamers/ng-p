@@ -1,8 +1,7 @@
 Makefile
-gnuworldDB.o
-gnuworldDB.lo
-gnuworldDB.la
-gnuworldDB.a
-gnuworldDB.so
-*.o *.lo *.la
+*.o
+*.lo
+*.a
+*.la
+*.so
 .deps/

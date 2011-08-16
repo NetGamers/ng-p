@@ -28,8 +28,9 @@
 
 #include	<ctime>
 
-#include	"Numeric.h"
 #include	"Channel.h"
+#include	"iServer.h"
+#include	"ELog.h"
 
 namespace gnuworld
 {
@@ -39,6 +40,7 @@ using std::list ;
 using std::map ;
 
 class xClient ;
+class Network ;
 
 /**
  * iClient objects represent network users.  This class provides
@@ -489,7 +491,7 @@ public:
 	 * this makes it extremely easy to output this client's
 	 * information to an output stream.
 	 */
-	friend ELog& operator<<( ELog& out,
+	inline friend ELog& operator<<( ELog& out,
 		const iClient& theClient )
 		{
 		out     << theClient.nickName << '!'

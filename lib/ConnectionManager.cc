@@ -1123,7 +1123,7 @@ newConnection->setIncoming() ;
 newConnection->setPending() ;
 
 // len is the size of a sockaddr structure, for use by accept()
-size_t len = sizeof( struct sockaddr ) ;
+socklen_t len = sizeof( struct sockaddr ) ;
 
 // Attempt to receive a pending connection.
 // The socket descriptor passed in is that of the listening socket.
@@ -1133,7 +1133,7 @@ size_t len = sizeof( struct sockaddr ) ;
 // the same options as the server socket, or -1 on error.
 int newFD = ::accept( cPtr->getSockFD(),
 	reinterpret_cast< sockaddr* >( newConnection->getAddr() ),
-	static_cast< socklen_t* >( &len ) ) ;
+	&len ) ;
 
 /*
  * From man page:

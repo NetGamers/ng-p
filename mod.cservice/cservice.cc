@@ -2697,7 +2697,9 @@ switch( theEvent )
 			tmpSqlUser->removeAuthedClient(tmpUser);
 			tmpSqlUser->removeFlag(sqlUser::F_LOGGEDIN);
 			elog	<< "cservice::OnEvent> Deauthenticated "
-        << "client: " << tmpUser << " from "
+				<< "client: "
+				<< tmpUser->getCharYYXXX()
+				<< " from "
 				<< "user: "
 				<< tmpSqlUser->getUserName()
 				<< endl;

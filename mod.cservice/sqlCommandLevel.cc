@@ -5,6 +5,7 @@
  *  20021013 - gk@ng - Initial creation
  */
 
+#include <stdlib.h>
 #include <sstream>
 
 #include "ELog.h"

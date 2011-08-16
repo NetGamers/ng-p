@@ -151,7 +151,7 @@ if( NULL == newData )
 	bot->Notice( theClient,
 		"Internal error." ) ;
 	elog	<< "LOGINCommand> newData is NULL for: "
-		<< theClient
+		<< theClient->getCharYYXXX()
 		<< endl ;
 	return ;
 	}

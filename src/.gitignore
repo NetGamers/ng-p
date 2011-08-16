@@ -1,4 +1,6 @@
 Makefile
-
-*.lo *.o *.la
+*.lo
+*.o
+*.la
 .deps/
+gnuworld

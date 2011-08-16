@@ -1,6 +1,9 @@
 Makefile
 .libs
-*.lo *.la
-config.log config.h config.status
+*.lo
+*.la
+config.log
+config.h
+config.status
 stamp-h
 libtool

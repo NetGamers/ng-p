@@ -1,4 +1,5 @@
 Makefile
-
-*.o *.lo *.la
+*.o
+*.lo
+*.la
 .deps/

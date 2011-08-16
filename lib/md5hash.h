@@ -60,6 +60,8 @@
 #define MD5_H
 
 #include <iostream>
+
+#include <stdint.h>
  
 #define MD5_DIGEST_LENGTH 16
 
