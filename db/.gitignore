@@ -5,4 +5,3 @@ gnuworldDB.la
 gnuworldDB.a
 gnuworldDB.so
 *.o *.lo *.la
-.deps/
