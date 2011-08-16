@@ -10,8 +10,6 @@
  * Sets a topic in the channel.
  *
  * Caveats: None
- *
- * $Id: TOPICCommand.cc,v 1.9 2004-08-25 20:33:13 jeekay Exp $
  */
 
 #include	<string>

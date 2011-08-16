@@ -12,8 +12,6 @@
  * This is fine, as the modified record doesn't really exist anyway.
  * Shouldn't really happen, as trying to MODINFO a forced access doesn't
  * make sense - adduser and then MODINFO that :)
- *
- * $Id: MODINFOCommand.cc,v 1.13 2004-11-20 20:44:46 jeekay Exp $
  */
 
 #include	<string>

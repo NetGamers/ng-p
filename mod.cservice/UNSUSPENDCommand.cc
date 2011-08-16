@@ -7,8 +7,6 @@
  * Unsuspends a specified user on a channel.
  *
  * Caveats: None.
- *
- * $Id: UNSUSPENDCommand.cc,v 1.9 2004-08-25 20:33:13 jeekay Exp $
  */
 
 #include	<string>

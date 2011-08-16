@@ -7,8 +7,6 @@
  * Makes cmaster join a registered channel.
  *
  * Caveats: None
- *
- * $Id: JOINCommand.cc,v 1.8 2004-08-25 20:32:41 jeekay Exp $
  */
 
 

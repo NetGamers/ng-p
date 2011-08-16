@@ -1,5 +1,5 @@
 #ifndef __RESPONSES_H
-#define __RESPONSES_H "$Id: responses.h,v 1.1 2002-01-14 23:14:24 morpheus Exp $"
+#define __RESPONSES_H
 
 /* 
  * responses.h
@@ -9,8 +9,6 @@
  * 
  * Defines 'response' ID's, unique references to textual responses
  * from the bot.
- *
- * $Id: responses.h,v 1.1 2002-01-14 23:14:24 morpheus Exp $
  */
 
 namespace gnuworld

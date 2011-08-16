@@ -1,5 +1,5 @@
 #ifndef __NICKSERVCOMMANDS_H
-#define __NICKSERVCOMMANDS_H "$Id: nickservCommands.h,v 1.7 2002-02-08 00:24:35 jeekay Exp $"
+#define __NICKSERVCOMMANDS_H
 
 #include	<string>
 #include	"iClient.h"

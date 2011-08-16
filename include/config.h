@@ -16,12 +16,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: config.h,v 1.4 2002-09-24 22:06:11 jeekay Exp $
  */
 
 #ifndef __CONFIG_H
-#define __CONFIG_H "$Id: config.h,v 1.4 2002-09-24 22:06:11 jeekay Exp $"
+#define __CONFIG_H
 
 /* config.h */
 /* GNUWorld main configuration file */

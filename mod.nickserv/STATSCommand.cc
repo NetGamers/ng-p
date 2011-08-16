@@ -8,8 +8,6 @@
 #include "nickserv.h"
 #include "levels.h"
 
-const char STATSCommand_cc_rcsId[] = "$Id: STATSCommand.cc,v 1.7 2002-09-13 21:27:34 jeekay Exp $";
-
 namespace gnuworld
 {
 

@@ -1,7 +1,7 @@
 /* sqlBan.h */
 
 #ifndef __SQLBAN_H
-#define __SQLBAN_H "$Id: sqlBan.h,v 1.1 2002-01-14 23:14:24 morpheus Exp $"
+#define __SQLBAN_H
 
 #include	<string>
 #include	<ctime>

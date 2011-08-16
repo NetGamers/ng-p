@@ -9,8 +9,6 @@
  * Caveats: None.
  *
  * Todo: Support ircu2.10.11's CLEARMODE feature.
- *
- * $Id: CLEARMODECommand.cc,v 1.8 2004-08-25 20:32:40 jeekay Exp $
  */
 
 #include	<string>

@@ -6,7 +6,7 @@
  */
 
 #ifndef __SQLPENDINGTRAFFIC_H
-#define __SQLPENDINGTRAFFIC_H "$Id: sqlPendingTraffic.h,v 1.1 2002-01-14 23:14:25 morpheus Exp $"
+#define __SQLPENDINGTRAFFIC_H
 
 #include	<string> 
  

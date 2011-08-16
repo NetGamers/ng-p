@@ -17,12 +17,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: Connection.h,v 1.2 2002-07-27 14:54:08 jeekay Exp $
  */
 
 #ifndef __CONNECTION_H
-#define __CONNECTION_H "$Id: Connection.h,v 1.2 2002-07-27 14:54:08 jeekay Exp $"
+#define __CONNECTION_H
 
 #include	<sys/types.h>
 #include	<netinet/in.h>

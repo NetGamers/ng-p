@@ -2,8 +2,6 @@
  * CONFIGCommand.cc
  *
  * 2003-04-29 GK@NG Initial creation
- *
- * $Id: CONFIGCommand.cc,v 1.3 2004-05-16 15:20:21 jeekay Exp $
  */
 
 #include	<string>

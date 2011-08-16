@@ -16,8 +16,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: msg_J.cc,v 1.3 2002-07-27 14:54:14 jeekay Exp $
  */
 
 #include	<new>
@@ -35,16 +33,6 @@
 #include	"ELog.h"
 #include	"StringTokenizer.h"
 #include	"ServerCommandHandler.h"
-
-const char server_h_rcsId[] = __SERVER_H ;
-const char xparameters_h_rcsId[] = __XPARAMETERS_H ;
-const char Network_h_rcsId[] = __NETWORK_H ;
-const char events_h_rcsId[] = __EVENTS_H ;
-const char ELog_h_rcsId[] = __ELOG_H ;
-const char Channel_h_rcsId[] = __CHANNEL_H ;
-const char iClient_h_rcsId[] = __ICLIENT_H ;
-const char ChannelUser_h_rcsId[] = __CHANNELUSER_H ;
-const char msg_J_cc_rcsId[] = "$Id: msg_J.cc,v 1.3 2002-07-27 14:54:14 jeekay Exp $" ;
 
 namespace gnuworld
 {

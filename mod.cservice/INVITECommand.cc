@@ -7,8 +7,6 @@
  * Invites a user to a channel they have access on.
  *
  * Caveats: None
- *
- * $Id: INVITECommand.cc,v 1.6 2004-08-25 20:32:40 jeekay Exp $
  */
 
 

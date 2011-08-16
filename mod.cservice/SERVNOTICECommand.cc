@@ -7,8 +7,6 @@
  * Sends a server notice to a channel.
  *
  * Caveats: None
- *
- * $Id: SERVNOTICECommand.cc,v 1.5 2004-08-25 20:33:02 jeekay Exp $
  */
 
 #include	<string>

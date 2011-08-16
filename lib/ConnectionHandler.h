@@ -17,12 +17,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: ConnectionHandler.h,v 1.1 2002-07-27 15:38:24 jeekay Exp $
  */
 
 #ifndef __CONNECTIONHANDLER_H
-#define __CONNECTIONHANDLER_H "$Id: ConnectionHandler.h,v 1.1 2002-07-27 15:38:24 jeekay Exp $"
+#define __CONNECTIONHANDLER_H
 
 #include	<sys/types.h>
 

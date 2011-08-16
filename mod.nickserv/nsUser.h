@@ -1,5 +1,5 @@
 #ifndef __NSUSER_H_
-#define __NSUSER_H_ "$Id: nsUser.h,v 1.5 2005-03-20 12:39:22 jeekay Exp $"
+#define __NSUSER_H_
 
 #include <string>
 #include <sys/time.h>

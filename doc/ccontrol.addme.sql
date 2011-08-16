@@ -1,4 +1,3 @@
--- "$Id: ccontrol.addme.sql,v 1.1 2002-01-14 23:19:16 morpheus Exp $"
 -- 2001-03-29 :  |MrBean|
 -- This script will add the first user to ccontrol
 -- it will create a user with a coder access by the handle of Admin

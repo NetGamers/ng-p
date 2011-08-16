@@ -17,8 +17,6 @@
  * Changed the implementation for SET LANG, everything is dynamic now.
  *
  * Caveats: None.
- *
- * $Id: SETCommand.cc,v 1.36 2004-11-26 22:39:52 jeekay Exp $
  */
 
 #include  <string>

@@ -16,8 +16,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: msg_S.cc,v 1.3 2002-07-27 14:54:15 jeekay Exp $
  */
 
 #include	<new>
@@ -33,14 +31,6 @@
 #include	"ELog.h"
 #include	"xparameters.h"
 #include	"ServerCommandHandler.h"
-
-const char msg_S_cc_rcsId[] = "$Id: msg_S.cc,v 1.3 2002-07-27 14:54:15 jeekay Exp $" ;
-const char server_h_rcsId[] = __SERVER_H ;
-const char events_h_rcsId[] = __EVENTS_H ;
-const char Network_h_rcsId[] = __NETWORK_H ;
-const char iServer_h_rcsId[] = __ISERVER_H ;
-const char ELog_h_rcsId[] = __ELOG_H ;
-const char xParameters_h_rcsId[] = __XPARAMETERS_H ;
 
 namespace gnuworld
 {

@@ -2,8 +2,6 @@
  * 20020211 - GK@panet - Initial writing
  *
  * Allow global unsuspending of nicks/channels
- *
- * $Id: GUNSUSPENDCommand.cc,v 1.7 2004-08-25 20:32:40 jeekay Exp $
  */
 
 #include <string>

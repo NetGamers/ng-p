@@ -16,12 +16,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: iClient.h,v 1.6 2005-03-20 12:39:21 jeekay Exp $
  */
 
 #ifndef __ICLIENT_H
-#define __ICLIENT_H "$Id: iClient.h,v 1.6 2005-03-20 12:39:21 jeekay Exp $"
+#define __ICLIENT_H
 
 #include	<string>
 #include	<list>

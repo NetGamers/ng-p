@@ -1,5 +1,5 @@
 #ifndef __JUUSER_H
-#define __JUUSER_H "$Id"
+#define __JUUSER_H
 
 #include <string>
 #include <sys/time.h>

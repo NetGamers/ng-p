@@ -21,12 +21,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: events.h,v 1.5 2002-07-27 14:54:07 jeekay Exp $
  */
 
 #ifndef __EVENTS_H
-#define __EVENTS_H "$Id: events.h,v 1.5 2002-07-27 14:54:07 jeekay Exp $"
+#define __EVENTS_H
 
 namespace gnuworld
 {

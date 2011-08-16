@@ -7,9 +7,6 @@
  * Removes a users access from a particular channel.
  *
  * Caveats: None
- *
- *
- * $Id: REMUSERCommand.cc,v 1.13 2004-11-20 20:44:46 jeekay Exp $
  */
 
 #include	<string>

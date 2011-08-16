@@ -1,15 +1,11 @@
 /*
  * 20020207 - GK@panet - Initial creation
  *
- * $Id: RELEASECommand.cc,v 1.1 2002-02-08 00:24:34 jeekay Exp $
- *
  */
  
- #include <string>
- #include "StringTokenizer.h"
- #include "nickserv.h"
-
-const char RELEASECommand_cc_rcsId[] = "$Id: RELEASECommand.cc,v 1.1 2002-02-08 00:24:34 jeekay Exp $";
+#include <string>
+#include "StringTokenizer.h"
+#include "nickserv.h"
 
 namespace gnuworld
 {

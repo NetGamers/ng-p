@@ -3,8 +3,6 @@
  *
  * (c) Copyright 2002 Rasmus Hansen (GK@panet)
  * Distributed under the GNU Public License
- *
- * $Id: ADMINCMDSCommand.cc,v 1.28 2005-04-02 21:46:23 jeekay Exp $
  */
 
 #include	<string>

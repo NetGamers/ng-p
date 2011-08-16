@@ -7,8 +7,6 @@
  * Registers a channel.
  *
  * Caveats: None
- *
- * $Id: REGISTERCommand.cc,v 1.9 2004-08-25 20:33:02 jeekay Exp $
  */
 
 #include	<string>

@@ -6,7 +6,7 @@
  */
 
 #ifndef __SQLCOMMANDLEVEL_H
-#define __SQLCOMMANDLEVEL_H "$Id: sqlCommandLevel.h,v 1.1 2002-10-20 02:12:11 jeekay Exp $"
+#define __SQLCOMMANDLEVEL_H
 
 #include <ctime>
 #include <string>

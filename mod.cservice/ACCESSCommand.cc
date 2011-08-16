@@ -11,8 +11,6 @@
  *
  * Displays all "Level" records for a specified channel.
  * Can optionally narrow down selection using a number of switches.
- *
- * $Id: ACCESSCommand.cc,v 1.13 2004-12-02 22:16:20 jeekay Exp $
  */
 
 #include	<string>

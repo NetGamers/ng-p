@@ -1,5 +1,4 @@
 ------------------------------------------------------------------------------------
--- "$Id: cservice.web.sql,v 1.1 2002-01-14 23:19:19 morpheus Exp $"
 -- Channel service DB SQL file for PostgreSQL.
 --
 -- Tables specific to webbased registration process.

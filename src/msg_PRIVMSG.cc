@@ -15,20 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: msg_PRIVMSG.cc,v 1.2 2002-07-01 00:28:30 jeekay Exp $
  */
 
 #include	"server.h"
 #include	"Network.h"
 #include	"ELog.h"
 #include	"xparameters.h"
-
-const char msg_PRIVMSG_cc_rcsId[] = "$Id: msg_PRIVMSG.cc,v 1.2 2002-07-01 00:28:30 jeekay Exp $" ;
-const char server_h_rcsId[] = __SERVER_H ;
-const char Network_h_rcsId[] = __NETWORK_H ;
-const char ELog_h_rcsId[] = __ELOG_H ;
-const char xParameters_h_rcsId[] = __XPARAMETERS_H ;
 
 namespace gnuworld
 {

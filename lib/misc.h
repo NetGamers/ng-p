@@ -18,12 +18,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: misc.h,v 1.3 2002-07-27 14:54:10 jeekay Exp $
  */
 
 #ifndef __MISC_H
-#define __MISC_H "$Id: misc.h,v 1.3 2002-07-27 14:54:10 jeekay Exp $"
+#define __MISC_H
 
 #include	<string>
 

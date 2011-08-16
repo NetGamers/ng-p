@@ -8,8 +8,6 @@
  * active channel banlist.
  *
  * Caveats: None.
- *
- * $Id: BANLISTCommand.cc,v 1.4 2004-08-25 20:32:35 jeekay Exp $
  */
 
 #include        <string>

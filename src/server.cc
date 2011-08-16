@@ -22,8 +22,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: server.cc,v 1.9 2004-08-31 21:20:50 jeekay Exp $
  */
 
 #include	<sys/time.h>
@@ -71,8 +69,6 @@
 #include	"ConnectionManager.h"
 #include	"ConnectionHandler.h"
 #include	"Connection.h"
-
-const char server_cc_rcsId[] = "$Id: server.cc,v 1.9 2004-08-31 21:20:50 jeekay Exp $" ;
 
 namespace gnuworld
 {

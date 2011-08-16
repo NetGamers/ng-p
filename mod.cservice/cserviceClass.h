@@ -1,5 +1,5 @@
 #ifndef __CSERVICECLASS_H
-#define __CSERVICECLASS_H "$Id: cserviceClass.h,v 1.24 2005-03-20 16:12:08 jeekay Exp $"
+#define __CSERVICECLASS_H
 
 #include	<map>
 

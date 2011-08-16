@@ -16,8 +16,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: Socket.cc,v 1.3 2002-07-27 14:54:09 jeekay Exp $
  */
 
 #include	<new>
@@ -52,10 +50,6 @@
 #ifdef HAVE_SYS_FILIO_H
 	#include	<sys/filio.h>
 #endif
-
-const char Socket_h_rcsId[] = __SOCKET_H ;
-const char Socket_cc_rcsId[] = "$Id: Socket.cc,v 1.3 2002-07-27 14:54:09 jeekay Exp $" ;
-const char ELog_h_rcsId[] = __ELOG_H ;
 
 namespace gnuworld
 {

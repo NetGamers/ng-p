@@ -3,8 +3,6 @@
  * (c) Copyright 2002 Rasmus Hansen (GK@panet)
  *
  * Distributed under the GNU Public Licence
- *
- * $Id: SCANCommand.cc,v 1.9 2004-08-25 20:33:02 jeekay Exp $
  */
 
 #include	<string>

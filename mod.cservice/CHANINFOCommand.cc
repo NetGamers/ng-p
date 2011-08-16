@@ -12,8 +12,6 @@
  * or a user. :)
  *
  * Command is aliased "INFO".
- *
- * $Id: CHANINFOCommand.cc,v 1.32 2004-11-20 20:44:46 jeekay Exp $
  */
 
 #include  <string>

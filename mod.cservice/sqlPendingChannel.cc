@@ -3,8 +3,6 @@
  * 
  * Class which contains details about channels which are 'pending'
  * registration.
- * 
- * $Id: sqlPendingChannel.cc,v 1.4 2004-08-25 20:33:19 jeekay Exp $
  */
  
 #include	<string> 
@@ -22,9 +20,6 @@
 #include	"sqlPendingChannel.h"
 #include	"sqlPendingTraffic.h"
  
-const char sqlPendingChannel_h_rcsId[] = __SQLPENDINGCHANNEL_H ;
-const char sqlPendingChannel_cc_rcsId[] = "$Id: sqlPendingChannel.cc,v 1.4 2004-08-25 20:33:19 jeekay Exp $" ;
-
 namespace gnuworld
 {
 using std::string ; 

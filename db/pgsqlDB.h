@@ -16,12 +16,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: pgsqlDB.h,v 1.2 2002-07-27 14:54:05 jeekay Exp $
  */
 
 #ifndef __PGSQLDB_H
-#define __PGSQLDB_H "$Id: pgsqlDB.h,v 1.2 2002-07-27 14:54:05 jeekay Exp $"
+#define __PGSQLDB_H
 
 #include	<sys/types.h>
 

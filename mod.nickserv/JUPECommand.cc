@@ -8,8 +8,6 @@
 #include "nickserv.h"
 #include "levels.h"
 
-const char JUPECommand_cc_rcsId[] = "$Id: JUPECommand.cc,v 1.7 2002-09-13 21:27:34 jeekay Exp $";
-
 namespace gnuworld
 {
 

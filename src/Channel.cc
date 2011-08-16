@@ -17,8 +17,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: Channel.cc,v 1.9 2003-11-02 16:47:10 jeekay Exp $
  */
 
 #include	<new>
@@ -36,8 +34,6 @@
 #include	"match.h"
 #include	"server.h"
 #include	"ConnectionManager.h"
-
-const char Channel_cc_rcsId[]	= "$Id: Channel.cc,v 1.9 2003-11-02 16:47:10 jeekay Exp $" ;
 
 namespace gnuworld
 {

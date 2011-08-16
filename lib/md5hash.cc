@@ -1,7 +1,5 @@
 /*************************************************************************
  * $Workfile: MD5.CPP $
- * $Revision: 1.3 $
- *  $Modtime: 1/08/97 6:35p $
  *
  * PURPOSE:
  * MD5 Message digest class derived from the RSA Data Security, Inc. 
@@ -56,8 +54,6 @@
 #include	<cstring>     // Needed for memcpy() and memset().
 #include	<inttypes.h>
 #include	"md5hash.h"
-
-const char rcsId[] = "$Id: md5hash.cc,v 1.3 2006-10-17 23:05:02 jeekay Exp $" ;
 
 namespace gnuworld
 {

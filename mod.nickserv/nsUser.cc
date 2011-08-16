@@ -1,6 +1,3 @@
-
-//"$id: $"
-
 #include "nsUser.h"
 #include <sys/time.h>
 namespace gnuworld

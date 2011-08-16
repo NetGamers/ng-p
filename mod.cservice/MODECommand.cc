@@ -2,8 +2,6 @@
  * MODECommand.cc
  *
  * 20020201 - Jeekay - Initial Version
- *
- * $Id: MODECommand.cc,v 1.12 2004-08-25 20:32:46 jeekay Exp $
  */
 
 #include <string>

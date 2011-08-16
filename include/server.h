@@ -17,12 +17,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: server.h,v 1.9 2005-03-20 12:39:20 jeekay Exp $
  */
 
 #ifndef __SERVER_H
-#define __SERVER_H "$Id: server.h,v 1.9 2005-03-20 12:39:20 jeekay Exp $"
+#define __SERVER_H
 
 #include	<string>
 #include	<vector>

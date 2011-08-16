@@ -17,15 +17,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *  
  */
 
 #include	<string>
 
 #include	"Buffer.h"
-
-const char Buffer_h_rcsId[] = __BUFFER_H ;
-const char Buffer_cc_rcsId[] = "$Id: Buffer.cc,v 1.3 2002-07-27 14:54:08 jeekay Exp $" ;
 
 namespace gnuworld
 {

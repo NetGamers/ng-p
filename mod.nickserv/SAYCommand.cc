@@ -2,8 +2,6 @@
  * SAYCommand.cc
  *
  * 20020130 - Jeekay - Initial version
- *
- * $Id: SAYCommand.cc,v 1.3 2002-03-18 20:01:45 jeekay Exp $
  */
 
 #include <string>

@@ -16,12 +16,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: ChannelUser.h,v 1.3 2002-07-27 14:54:06 jeekay Exp $
  */
 
 #ifndef __CHANNELUSER_H
-#define __CHANNELUSER_H "$Id: ChannelUser.h,v 1.3 2002-07-27 14:54:06 jeekay Exp $"
+#define __CHANNELUSER_H
 
 #include	<string>
 

@@ -5,7 +5,7 @@
  */
 
 #ifndef __SQLPENDINGCHANNEL_H
-#define __SQLPENDINGCHANNEL_H "$Id: sqlPendingChannel.h,v 1.1 2002-01-14 23:14:25 morpheus Exp $"
+#define __SQLPENDINGCHANNEL_H
 
 #include	<string> 
 #include	"sqlPendingTraffic.h"

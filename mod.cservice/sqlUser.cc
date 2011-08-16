@@ -3,8 +3,6 @@
  *
  * Storage class for accessing user information either from the backend
  * or internal storage.
- *
- * $Id: sqlUser.cc,v 1.17 2004-08-25 20:33:19 jeekay Exp $
  */
 
 #include	<string.h>

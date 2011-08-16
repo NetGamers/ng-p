@@ -16,8 +16,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: UnloadClientTimerHandler.cc,v 1.3 2002-07-27 14:54:12 jeekay Exp $
  */
 
 #include	<iostream>
@@ -25,10 +23,6 @@
 #include	"UnloadClientTimerHandler.h"
 #include	"server.h"
 #include	"ELog.h"
-
-const char UnloadClientTimerHandler_h_rcsId[] = __UNLOADCLIENTTIMERHANDLER_H ;
-const char UnloadClientTimerHandler_cc_rcsId[] = "$Id: UnloadClientTimerHandler.cc,v 1.3 2002-07-27 14:54:12 jeekay Exp $" ;
-const char ELog_h_rcsId[] = __ELOG_H ;
 
 namespace gnuworld
 {

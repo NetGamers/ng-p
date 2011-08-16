@@ -1,6 +1,3 @@
-
--- "$Id: ccontrol.update.sql,v 1.1 2002-01-14 23:19:18 morpheus Exp $"
-
 -- ccontrol database changes update
 -- this file will add the new features to an old database
 -- this script will only update the opers who doesnt have getlogs enabled

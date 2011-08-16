@@ -3,8 +3,6 @@
  * 
  * Storage class for accessing Ban information either from the backend
  * or internal storage.
- * 
- * $Id: sqlBan.cc,v 1.5 2004-08-25 20:33:13 jeekay Exp $
  */
  
 #include	<string> 
@@ -18,9 +16,6 @@
 #include	"cservice.h"
 #include	"cservice_config.h"
  
-const char sqlBan_h_rcsId[] = __SQLBAN_H ;
-const char sqlBan_cc_rcsId[] = "$Id: sqlBan.cc,v 1.5 2004-08-25 20:33:13 jeekay Exp $" ;
-
 namespace gnuworld
 {
 

@@ -15,8 +15,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: EConfig.cc,v 1.3 2002-07-27 14:54:08 jeekay Exp $
  */
 
 #include	<string>
@@ -31,12 +29,6 @@
 #include	"StringTokenizer.h"
 #include	"ELog.h"
 #include	"misc.h"
-
-const char EConfig_h_rcsId[] = __ECONFIG_H ;
-const char EConfig_cc_rcsId[] = "$Id: EConfig.cc,v 1.3 2002-07-27 14:54:08 jeekay Exp $" ;
-const char StringTokenizer_h_rcsId[] = __STRINGTOKENIZER_H ;
-const char ELog_h_rcsId[] = __ELOG_H ;
-const char misc_h_rcsId[] = __MISC_H ;
 
 namespace gnuworld
 {

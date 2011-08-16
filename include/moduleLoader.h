@@ -17,12 +17,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: moduleLoader.h,v 1.4 2006-10-17 23:05:02 jeekay Exp $
  */
 
 #ifndef __MODULELOADER_H
-#define __MODULELOADER_H "$Id: moduleLoader.h,v 1.4 2006-10-17 23:05:02 jeekay Exp $"
+#define __MODULELOADER_H
 
 #include	<iostream>
 #include	<string>

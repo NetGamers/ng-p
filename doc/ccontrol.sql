@@ -1,4 +1,3 @@
--- "$Id: ccontrol.sql,v 1.1 2002-01-14 23:19:17 morpheus Exp $"
 -- 2001-13-02  : |MrBean|
 -- Added level patch for ccontrol module
 

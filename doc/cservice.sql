@@ -1,4 +1,3 @@
--- "$Id: cservice.sql,v 1.2 2002-01-16 22:17:12 morpheus Exp $"
 -- Channel service DB SQL file for PostgreSQL.
 
 -- ChangeLog:

@@ -16,8 +16,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: misc.cc,v 1.3 2002-07-27 14:54:10 jeekay Exp $
  */
 
 #include	<string>
@@ -30,9 +28,6 @@
 #include	<cstring>
 
 #include	"misc.h"
-
-const char Misc_h_rcsId[] = __MISC_H ;
-const char Misc_cc_rcsId[] = "$Id: misc.cc,v 1.3 2002-07-27 14:54:10 jeekay Exp $" ;
 
 namespace gnuworld
 {

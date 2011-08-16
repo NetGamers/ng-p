@@ -3,8 +3,6 @@
  *
  * Storage class for accessing channel user/level information either from the backend
  * or internal storage.
- *
- * $Id: sqlLevel.cc,v 1.5 2004-08-25 20:33:19 jeekay Exp $
  */
 
 #include	<string>
@@ -20,9 +18,6 @@
 #include	"constants.h"
 #include	"cservice.h"
 #include	"cservice_config.h"
-
-const char sqlLevel_h_rcsId[] = __SQLLEVEL_H ;
-const char sqlLevel_cc_rcsId[] = "$Id: sqlLevel.cc,v 1.5 2004-08-25 20:33:19 jeekay Exp $" ;
 
 namespace gnuworld
 {

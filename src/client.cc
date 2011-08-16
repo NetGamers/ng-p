@@ -1,6 +1,5 @@
 /*
  * client.cc
- * $Id: client.cc,v 1.5 2003-03-30 02:55:40 jeekay Exp $
  */
 
 #include	<new>
@@ -28,8 +27,6 @@
 
 #include	"ELog.h"
 #include	"events.h"
-
-const char xClient_cc_rcsId[] = "$Id: client.cc,v 1.5 2003-03-30 02:55:40 jeekay Exp $" ;
 
 namespace gnuworld
 {

@@ -3,8 +3,6 @@
  *
  *
  * Suspends a channel for 12 hours, can be removed only by cservice admin
- *
- * $Id: OPERSUSPENDCommand.cc,v 1.4 2004-08-25 20:33:02 jeekay Exp $
  */
 
 #include	<string>

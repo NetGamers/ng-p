@@ -17,8 +17,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: msg_C.cc,v 1.3 2002-07-27 14:54:13 jeekay Exp $
  */
 
 #include	<new>
@@ -39,15 +37,6 @@
 #include	"Channel.h"
 #include	"ChannelUser.h"
 #include	"ServerCommandHandler.h"
-
-const char ELog_h_rcsId[] = __ELOG_H ;
-const char Socket_h_rcsId[] = __SOCKET_H ;
-const char StringTokenizer_h_rcsId[] = __STRINGTOKENIZER_H ;
-const char xparameters_h_rcsId[] = __XPARAMETERS_H ;
-const char iClient_h_rcsId[] = __ICLIENT_H ;
-const char Channel_h_rcsId[] = __CHANNEL_H ;
-const char ChannelUser_h_rcsId[] = __CHANNELUSER_H ;
-const char msg_C_cc_rcsId[] = "$Id: msg_C.cc,v 1.3 2002-07-27 14:54:13 jeekay Exp $" ;
 
 namespace gnuworld
 {

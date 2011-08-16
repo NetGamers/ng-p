@@ -8,8 +8,6 @@
  * keywords. Max 10 matches will be outputted.
  *
  * Caveats: None.
- *
- * $Id: SEARCHCommand.cc,v 1.5 2004-08-25 20:33:02 jeekay Exp $
  */
 
 #include	<string>

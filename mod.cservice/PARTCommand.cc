@@ -7,8 +7,6 @@
  * Makes cmaster leave a registered channel.
  *
  * Caveats: None
- *
- * $Id: PARTCommand.cc,v 1.6 2004-08-25 20:33:02 jeekay Exp $
  */
 
 

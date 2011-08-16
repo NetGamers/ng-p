@@ -1,6 +1,5 @@
-
 #ifndef __NICKSERV_H
-#define __NICKSERV_H "$Id: nickserv.h,v 1.18 2004-08-19 19:33:01 jeekay Exp $"
+#define __NICKSERV_H
 
 
 #include	<string>

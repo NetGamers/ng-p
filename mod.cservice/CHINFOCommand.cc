@@ -3,8 +3,6 @@
  * (c) Copyright 2002 Rasmus Hansen (GK@panet)
  *
  * Distributed under the GNU Public Licence
- *
- * $Id: CHINFOCommand.cc,v 1.10 2004-08-25 20:32:40 jeekay Exp $
  */
 
 #include	<string>

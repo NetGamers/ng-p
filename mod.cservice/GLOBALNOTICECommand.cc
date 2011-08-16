@@ -4,8 +4,6 @@
  * 20050320 - GK@ng    - Rename to GLOBALNOTICE
  *
  * Sends a notice to all users as 'CService'
- *
- * $Id: GLOBALNOTICECommand.cc,v 1.4 2005-05-29 21:04:53 jeekay Exp $
  */
 
 #include	<string>

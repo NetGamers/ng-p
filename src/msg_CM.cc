@@ -16,8 +16,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: msg_CM.cc,v 1.4 2003-03-30 02:55:40 jeekay Exp $
  */
 
 #include	<iostream>
@@ -30,8 +28,6 @@
 #include	"xparameters.h"
 #include	"ELog.h"
 #include	"ServerCommandHandler.h"
-
-const char msg_CM_cc_rcsId[] = "$Id: msg_CM.cc,v 1.4 2003-03-30 02:55:40 jeekay Exp $" ;
 
 namespace gnuworld
 {

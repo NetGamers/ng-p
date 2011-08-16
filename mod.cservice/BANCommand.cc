@@ -17,8 +17,6 @@
  * Bans a user on a channel, adds this ban to the internal banlist.
  *
  * Caveats: None.
- *
- * $Id: BANCommand.cc,v 1.12 2004-08-25 20:32:30 jeekay Exp $
  */
 
 #include	<new>

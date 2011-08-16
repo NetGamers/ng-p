@@ -1,7 +1,5 @@
 /* 
  * sqlPendingTraffic.cc
- * 
- * $Id: sqlPendingTraffic.cc,v 1.4 2004-08-25 20:33:19 jeekay Exp $
  */
  
 #include	<string> 
@@ -18,9 +16,6 @@
 #include	"cservice_config.h"
 #include	"sqlPendingTraffic.h"
  
-const char sqlPendingTraffic_h_rcsId[] = __SQLPENDINGTRAFFIC_H ;
-const char sqlPendingTraffic_cc_rcsId[] = "$Id: sqlPendingTraffic.cc,v 1.4 2004-08-25 20:33:19 jeekay Exp $" ;
-
 namespace gnuworld
 {
 using std::string ;

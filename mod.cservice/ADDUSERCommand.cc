@@ -10,8 +10,6 @@
  * Adds a new user to a channel, obeying common sense.
  *
  * Caveats: None
- *
- * $Id: ADDUSERCommand.cc,v 1.16 2004-11-20 20:44:46 jeekay Exp $
  */
 
 #include	<string>

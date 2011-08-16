@@ -16,8 +16,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: FileSocket.cc,v 1.4 2004-04-26 21:30:26 jeekay Exp $
  */
 
 #include	<sys/types.h>
@@ -35,10 +33,6 @@
 
 #include	"FileSocket.h"
 #include	"ELog.h"
-
-const char FileSocket_h_rcsId[] = __FILESOCKET_H ;
-const char FileSocket_cc_rcsId[] = "$Id: FileSocket.cc,v 1.4 2004-04-26 21:30:26 jeekay Exp $" ;
-const char ELog_h_rcsId[] = __ELOG_H ;
 
 namespace gnuworld
 {

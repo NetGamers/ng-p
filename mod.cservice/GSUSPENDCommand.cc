@@ -2,8 +2,6 @@
  * 20020211 - GK@panet - Initial writing
  *
  * Allow global suspending of nicks/channels
- *
- * $Id: GSUSPENDCommand.cc,v 1.9 2004-08-25 20:32:40 jeekay Exp $
  */
 
 #include	<string>

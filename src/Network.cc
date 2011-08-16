@@ -17,8 +17,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: Network.cc,v 1.3 2002-07-27 14:54:11 jeekay Exp $
  */
 
 #include	<new>
@@ -42,31 +40,10 @@
 #include	"ip.h"
 #include	"defs.h"
 
-/*
-#ifdef GNU_EXTENSIONS
- #include       <ext/hash_map>
-#else
- #include       <hash_map>
-#endif
-*/
-
-const char xNetwork_h_rcsId[] = __NETWORK_H ;
-const char xNetwork_cc_rcsId[] = "$Id: Network.cc,v 1.3 2002-07-27 14:54:11 jeekay Exp $" ;
-const char ELog_h_rcsId[] = __ELOG_H ;
-const char iClient_h_rcsId[] = __ICLIENT_H ;
-const char Channel_h_rcsId[] = __CHANNEL_H ;
-const char client_h_rcsId[] = __CLIENT_H ;
-const char misc_h_rcsId[] = __MISC_H ;
-const char Numeric_h_rcsId[] = __NUMERIC_H ;
-const char match_h_rcsId[] = __MATCH_H ;
-const char StringTokenizer_cc_rcsId[] = __STRINGTOKENIZER_H ;
-
 namespace gnuworld
 {
 
 using std::map ;
-//using HASHMAPNS::hash ;
-//using HASHMAPNS::hash_map ;
 using std::string ;
 using std::endl ;
 using std::list ;

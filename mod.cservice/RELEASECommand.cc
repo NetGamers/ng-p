@@ -3,8 +3,6 @@
  *
  * (c) Copyright 2002 Rasmus Hansen
  * Released under the GNU Public Licence
- *
- * $Id: RELEASECommand.cc,v 1.4 2004-08-25 20:33:02 jeekay Exp $
  */
 
 #include	<string>

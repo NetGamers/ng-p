@@ -1,5 +1,5 @@
 #ifndef __CSERVICECOMMANDS_H
-#define __CSERVICECOMMANDS_H "$Id: cserviceCommands.h,v 1.23 2005-03-20 16:39:27 jeekay Exp $"
+#define __CSERVICECOMMANDS_H
 
 #include	<string>
 #include	"iClient.h"

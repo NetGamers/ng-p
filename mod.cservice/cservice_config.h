@@ -1,7 +1,7 @@
 /* cservice_config.h */
 
 #ifndef __CSERVICE_CONFIG_H
-#define __CSERVICE_CONFIG_H "$Id: cservice_config.h,v 1.5 2002-02-06 19:34:53 jeekay Exp $"
+#define __CSERVICE_CONFIG_H
 
 /**
  * Define this if you wish for all SQL queries to be sent

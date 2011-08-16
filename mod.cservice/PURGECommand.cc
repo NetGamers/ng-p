@@ -7,8 +7,6 @@
  * Purges a channel.
  *
  * Caveats: None
- *
- * $Id: PURGECommand.cc,v 1.16 2004-08-25 20:33:02 jeekay Exp $
  */
 
 #include	<string>

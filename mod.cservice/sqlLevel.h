@@ -1,7 +1,7 @@
 /* sqlLevel.h */
 
 #ifndef __SQLLEVEL_H
-#define __SQLLEVEL_H "$Id: sqlLevel.h,v 1.1 2002-01-14 23:14:25 morpheus Exp $"
+#define __SQLLEVEL_H
 
 #include	<string>
 #include	<ctime>

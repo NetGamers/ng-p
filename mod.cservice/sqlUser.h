@@ -1,7 +1,7 @@
 /* sqlUser.h */
 
 #ifndef __SQLUSER_H
-#define __SQLUSER_H "$Id: sqlUser.h,v 1.13 2004-05-01 15:31:43 jeekay Exp $"
+#define __SQLUSER_H
 
 #include <ctime>
 #include <string>

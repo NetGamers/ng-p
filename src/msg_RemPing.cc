@@ -17,8 +17,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: msg_RemPing.cc,v 1.2 2002-07-01 00:28:30 jeekay Exp $
  */
 
 #include	<sys/time.h>
@@ -29,10 +27,6 @@
 
 #include	"server.h"
 #include	"xparameters.h"
-
-const char msg_RemPing_cc_rcsId[] = "$Id: msg_RemPing.cc,v 1.2 2002-07-01 00:28:30 jeekay Exp $" ;
-const char server_h_rcsId[] = __SERVER_H ;
-const char xParameters_h_rcsId[] = __XPARAMETERS_H ;
 
 namespace gnuworld
 {

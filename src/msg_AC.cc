@@ -14,8 +14,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * "$Id: msg_AC.cc,v 1.2 2002-07-27 14:54:12 jeekay Exp $"
  */
 
 #include	"ServerCommandHandler.h"
@@ -24,13 +22,6 @@
 #include	"Channel.h"
 #include	"Network.h"
 #include	"iClient.h"
-
-const char ServerCommandHandler_cc_rcsId[] = __SERVERCOMMANDHANDLER_H ;
-const char server_h_rcsId[] = __SERVER_H ;
-const char xparameters_h_rcsId[] = __XPARAMETERS_H ;
-const char Channel_h_rcsId[] = __CHANNEL_H ;
-const char Network_h_rcsId[] = __NETWORK_H ;
-const char msg_AC_cc_rcsId[] = "$Id: msg_AC.cc,v 1.2 2002-07-27 14:54:12 jeekay Exp $" ;
 
 namespace gnuworld
 {

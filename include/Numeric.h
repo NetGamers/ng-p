@@ -18,12 +18,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: Numeric.h,v 1.3 2002-07-27 14:54:06 jeekay Exp $
  */
 
 #ifndef __NUMERIC_H
-#define __NUMERIC_H "$Id: Numeric.h,v 1.3 2002-07-27 14:54:06 jeekay Exp $"
+#define __NUMERIC_H
 
 /*
  * Numeric nicks are new as of version ircu2.10.00beta1.

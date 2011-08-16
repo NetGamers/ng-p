@@ -1,4 +1,3 @@
--- "$Id: cservice.addme.sql,v 1.1 2002-01-14 23:19:19 morpheus Exp $"
 -- 2001-02-23 : |MrBean|
 -- This script will reigster the admin channel * 
 -- And will create an admin by the name of Admin  

@@ -1,7 +1,7 @@
 /* levels.h - Contains access requirements for various commands */
 
 #ifndef _LEVELS_H
-#define _LEVELS_H "$Id: levels.h,v 1.5 2002-02-08 23:22:32 jeekay Exp $"
+#define _LEVELS_H
 
 namespace gnuworld
 {

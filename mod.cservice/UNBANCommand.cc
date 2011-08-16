@@ -7,8 +7,6 @@
  * Unbans a user from a channel.
  *
  * Caveats: None.
- *
- * $Id: UNBANCommand.cc,v 1.8 2004-08-25 20:33:13 jeekay Exp $
  */
 
 #include	<string>

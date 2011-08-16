@@ -7,8 +7,6 @@
  * Command to keep Kev happy :)
  *
  * Caveats: None.
- *
- * $Id: SAYCommand.cc,v 1.5 2004-08-25 20:33:02 jeekay Exp $
  */
 
 #include	<string>

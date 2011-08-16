@@ -2,8 +2,6 @@
  * REMUSERIDCommand.cc - Allow purging of a user nick
  *
  * 20020308 GK@PAnet - Initial Writing
- *
- * $Id: REMUSERIDCommand.cc,v 1.20 2004-11-20 20:44:46 jeekay Exp $
  */
 
 #include	<string>

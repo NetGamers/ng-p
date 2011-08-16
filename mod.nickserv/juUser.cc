@@ -1,8 +1,6 @@
 /*
  * juUser.cc - 20020204 - Initial Version - GK@PAnet
  *
- * $Id: juUser.cc,v 1.3 2002-02-06 01:06:49 jeekay Exp $
- *
  */
 
 #include "juUser.h"

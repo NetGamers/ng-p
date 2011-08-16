@@ -1,7 +1,5 @@
 /**********************************************************************
  * $Workfile: MD5.H $
- * $Revision: 1.4 $
- *  $Modtime: 1/08/97 6:35p $
  *
  * PURPOSE:
  * MD5 Message-Digest class derived from the RSA Data Security, Inc. 
@@ -59,7 +57,7 @@
  * So there! 
  **********************************************************************/
 #ifndef MD5_H
-#define MD5_H "$Id: md5hash.h,v 1.4 2006-10-17 23:05:02 jeekay Exp $"
+#define MD5_H
 
 #include <iostream>
  

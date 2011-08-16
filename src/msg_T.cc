@@ -16,8 +16,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: msg_T.cc,v 1.3 2002-07-27 14:54:16 jeekay Exp $
  */
 
 #include	<iostream>
@@ -29,14 +27,6 @@
 #include	"config.h"
 #include	"Channel.h"
 #include	"ServerCommandHandler.h"
-
-const char msg_T_cc_rcsId[] = "$Id: msg_T.cc,v 1.3 2002-07-27 14:54:16 jeekay Exp $" ;
-const char xParameters_h_rcsId[] = __XPARAMETERS_H ;
-const char server_h_rcsId[] = __SERVER_H ;
-const char ELog_h_rcsId[] = __ELOG_H ;
-const char Channel_h_rcsId[] = __CHANNEL_H ;
-const char Network_h_rcsId[] = __NETWORK_H ;
-const char config_h_rcsId[] = __CONFIG_H ;
 
 namespace gnuworld
 {

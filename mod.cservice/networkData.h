@@ -1,7 +1,7 @@
 /* networkData.h */
 
 #ifndef __NETWORKDATA_H
-#define __NETWORKDATA_H "$Id: networkData.h,v 1.2 2004-01-25 16:01:09 jeekay Exp $"
+#define __NETWORKDATA_H
 
 #include	<string>
 #include	<ctime>

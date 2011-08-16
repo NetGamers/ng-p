@@ -7,8 +7,6 @@
  * DEOP's one or more users on a channel the user as access on.
  *
  * Caveats: None
- *
- * $Id: DEOPCommand.cc,v 1.6 2004-08-25 20:32:40 jeekay Exp $
  */
 
 #include	<string>

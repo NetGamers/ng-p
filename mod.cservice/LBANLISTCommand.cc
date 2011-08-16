@@ -7,8 +7,6 @@
  * Lists internal bot banlist for a channel.
  *
  * Caveats: None.
- *
- * $Id: LBANLISTCommand.cc,v 1.7 2005-08-27 10:42:51 jeekay Exp $
  */
 
 #include	<string>

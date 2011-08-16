@@ -1,5 +1,5 @@
 #ifndef __SQL_H
-#define __SQL_H "$Id: sql.h,v 1.1 2002-10-20 02:12:11 jeekay Exp $"
+#define __SQL_H
 
 #include <string>
 

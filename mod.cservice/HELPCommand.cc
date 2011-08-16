@@ -7,8 +7,6 @@
  * Outputs channel service help.
  *
  * Caveats: Needs to be written :)
- *
- * $Id: HELPCommand.cc,v 1.7 2005-03-20 17:16:23 jeekay Exp $
  */
 
 #include	<string>

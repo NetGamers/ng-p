@@ -16,12 +16,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * "$Id: ServerCommandHandler.h,v 1.1 2002-07-27 14:54:06 jeekay Exp $"
  */
 
 #ifndef __SERVERCOMMANDHANDLER_H
-#define __SERVERCOMMANDHANDLER_H "$Id: ServerCommandHandler.h,v 1.1 2002-07-27 14:54:06 jeekay Exp $"
+#define __SERVERCOMMANDHANDLER_H
 
 #include	"xparameters.h"
 

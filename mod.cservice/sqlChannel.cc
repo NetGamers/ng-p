@@ -8,8 +8,6 @@
  * Initial Version.
  * 30/12/2000: Moved static SQL data to constants.h --Gte
  * Set loadData up to take data from rows other than 0.
- *
- * $Id: sqlChannel.cc,v 1.13 2004-11-26 22:39:52 jeekay Exp $
  */
 
 #include	<string>
@@ -22,9 +20,6 @@
 #include	"constants.h"
 #include	"cservice.h"
 #include	"cservice_config.h"
-
-const char sqlChannel_h_rcsId[] = __SQLCHANNEL_H ;
-const char sqlChannel_cc_rcsId[] = "$Id: sqlChannel.cc,v 1.13 2004-11-26 22:39:52 jeekay Exp $" ;
 
 namespace gnuworld
 {

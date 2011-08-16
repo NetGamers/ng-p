@@ -1,5 +1,4 @@
-
--- 2001-03-02 |MrBean| "$Id: ccontrol.help.sql,v 1.1 2002-01-14 23:19:17 morpheus Exp $"
+-- 2001-03-02 |MrBean|
 -- Created the file and added all help topics to the database
 
 -- 2201-03-11 |MrBean|

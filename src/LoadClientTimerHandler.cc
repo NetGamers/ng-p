@@ -16,8 +16,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
  * USA.
- *
- * $Id: LoadClientTimerHandler.cc,v 1.3 2002-07-27 14:54:11 jeekay Exp $
  */
 
 #include	<iostream>
@@ -25,11 +23,6 @@
 #include	"LoadClientTimerHandler.h"
 #include	"server.h"
 #include	"ELog.h"
-
-const char LoadClientTimerHandler_h_rcsId[] = __LOADCLIENTTIMERHANDLER_H ;
-const char LoadClientTimerHandler_cc_rcsId[] = "$Id: LoadClientTimerHandler.cc,v 1.3 2002-07-27 14:54:11 jeekay Exp $" ;
-const char ELog_h_rcsId[] = __ELOG_H ;
-const char server_h_rcsId[] = __SERVER_H ;
 
 namespace gnuworld
 {

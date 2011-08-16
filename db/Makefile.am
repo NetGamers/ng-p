@@ -1,5 +1,4 @@
 ## Process this file with automake to produce Makefile.in
-## "$Id: Makefile.am,v 1.3 2002-07-27 14:54:05 jeekay Exp $"
 
 lib_LTLIBRARIES = libgnuworld_db.la
 libgnuworld_db_la_SOURCES = gnuworldDB.cc pgsqlDB.cc

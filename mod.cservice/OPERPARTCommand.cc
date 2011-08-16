@@ -7,8 +7,6 @@
  * Allows an oper to part cmaster from a registered channel.
  *
  * Caveats: None
- *
- * $Id: OPERPARTCommand.cc,v 1.6 2004-08-25 20:33:01 jeekay Exp $
  */
 
 

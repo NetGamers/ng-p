@@ -19,8 +19,6 @@
  * OP's one or more users on a channel the user as access on.
  *
  * Caveats: None
- *
- * $Id: OPCommand.cc,v 1.7 2004-08-25 20:33:01 jeekay Exp $
  */
 
 #include	<string>
