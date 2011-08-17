@@ -3,4 +3,5 @@ Makefile
 *.o
 *.la
 .deps/
+.libs/
 gnuworld

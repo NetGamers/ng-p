@@ -5,11 +5,14 @@ AC_REVISION($Revision: 1.2 $)
 AC_INIT
 AC_CONFIG_SRCDIR([src/main.cc])
 AM_INIT_AUTOMAKE(gnuworld,0.0)
-AM_CONFIG_HEADER(include/defs.h)
+AC_CONFIG_HEADERS([include/defs.h])
 
 dnl Enable building of the convenience library
 dnl and set LIBLTDL accordingly
-AC_LIBLTDL_CONVENIENCE
+dnl Configure libtool
+LT_CONFIG_LTDL_DIR([libltdl])
+LT_INIT([dlopen])
+LTDL_INIT([convenience])
 
 dnl Substitute INCLTDL and LIBLTDL in the Makefiles
 dnl For some reason, INCLTDL and LIBLTDL aren't set
@@ -17,13 +20,7 @@ dnl properly on OpenBSD
 INCLTDL="-I`pwd`/libltdl"
 LIBLTDL="`pwd`/libltdl/libltdlc.la"
 
-AC_ISC_POSIX
-
-dnl Check for dlopen support
-AC_LIBTOOL_DLOPEN
-
-dnl Configure libtool
-AM_PROG_LIBTOOL
+AC_SEARCH_LIBS([strerror],[cposix])
 
 CFLAGS="$CFLAGS -Wall -pipe"
 CXXFLAGS="$CXXFLAGS -Wall -pipe"
@@ -32,15 +29,10 @@ prefix="`pwd`"
 libdir="`pwd`/bin"
 glibdir="`pwd`/lib"
 
-AC_PROG_CC
 AC_PROG_CXX
-AC_PROG_CPP
 AC_LANG([C++])
 
 AC_PROG_MAKE_SET(gmake)
-
-dnl Configure libltdl
-AC_CONFIG_SUBDIRS(libltdl)
 
 threadLib=no
 
@@ -91,7 +83,7 @@ AC_CHECK_HEADERS(sys/types.h sys/socket.h netinet/in.h sys/un.h pthread.h)
 
 AC_HEADER_STDC
 AC_HEADER_TIME
-AC_TYPE_SIGNAL
+
 AC_TYPE_MODE_T
 AC_TYPE_PID_T
 AC_TYPE_SIZE_T
@@ -112,35 +104,30 @@ else
 fi
 
 AC_ARG_WITH(debug,
-	AC_HELP_STRING([--without-debug],
-		       [Disable debugging in the executables]),
+	AS_HELP_STRING([--without-debug],[Disable debugging in the executables]),
 	[dummy=true],
 	[CXXFLAGS="$CXXFLAGS -g"]
 )
 
 AC_ARG_WITH(pedantic,
-	AC_HELP_STRING([--with-pedantic],
-			[Add -pedantic to compile options]),
+	AS_HELP_STRING([--with-pedantic],[Add -pedantic to compile options]),
 	[CXXFLAGS="$CXXFLAGS -pedantic"]
 )
 
 AC_ARG_WITH(optimization,
-	AC_HELP_STRING([--with-optimization],
-			[Optimize the executables]),
+	AS_HELP_STRING([--with-optimization],[Optimize the executables]),
 	[CXXFLAGS="$CXXFLAGS -O"],
 	[CXXFLAGS="$CXXFLAGS -O0"]
 )
 
 AC_ARG_WITH(prof,
-	AC_HELP_STRING([--with-prof],
-			[Generate profiling information]),
+	AS_HELP_STRING([--with-prof],[Generate profiling information]),
 	[CXXFLAGS="$CXXFLAGS -pg"]
 )
 
 PGSQL_LIB=/usr/local/pgsql/lib
 AC_ARG_WITH(pgsql-lib,
-	AC_HELP_STRING([--with-pgsql-lib=PGSQLLIBDIR],
-			[Specify location to find libpq++.so, default is \
+	AS_HELP_STRING([--with-pgsql-lib=PGSQLLIBDIR],[Specify location to find libpq++.so, default is \
 /usr/local/pgsql/lib]),
 	[PGSQL_LIB=$withval]
 )
@@ -148,8 +135,7 @@ dnl echo PGSQL_LIB: $PGSQL_LIB
 
 PGSQL_INCLUDE=/usr/local/pgsql/include
 AC_ARG_WITH(pgsql-include,
-	AC_HELP_STRING([--with-pgsql-include=PGSQLINCLUDEDIR],
-			[Specify location to find libpq++.h, default is \
+	AS_HELP_STRING([--with-pgsql-include=PGSQLINCLUDEDIR],[Specify location to find libpq++.h, default is \
 /usr/local/pgsql/include]),
 	[PGSQL_INCLUDE=$withval]
 )
@@ -234,8 +220,7 @@ MOD_DIRS=""
 searchForMods=yes
 
 AC_ARG_ENABLE(modules,
-	AC_HELP_STRING([--enable-modules=mods],
-		[Enable one or more modules; all modules found in the \
+	AS_HELP_STRING([--enable-modules=mods],[Enable one or more modules; all modules found in the \
 current directory are enabled by default.  Specify "no" (without quotes) \
 to build server only]),
 [

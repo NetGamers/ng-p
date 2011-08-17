@@ -1,8 +1,9 @@
 *.0
+*.a
 *.la
 *.so
-gnuworld gnuworld.pid
+gnuworld
+gnuworld.pid
 debug.log
 socket.log
 *core*
-

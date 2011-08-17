@@ -1,9 +1,13 @@
-Makefile
+.deps
 .libs
-*.lo
 *.la
-config.log
+*.o
+*.lo
+Makefile
 config.h
+config.log
 config.status
-stamp-h
 libtool
+stamp-h*
+autom4te.cache
+configure.lineno
