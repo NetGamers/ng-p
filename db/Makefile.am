@@ -5,4 +5,4 @@ libgnuworld_db_la_SOURCES = gnuworldDB.cc pgsqlDB.cc
 
 libgnuworld_db_la_LDFLAGS = -version-info 0:0:0 -rpath $(bindir) \
 	-L@PGSQL_LIB@ -lpq++
-INCLUDES = -I@PGSQL_INCLUDE@
+AM_CPPFLAGS = $(all_includes) -I@PGSQL_INCLUDE@

@@ -50,9 +50,6 @@ using std::vector ;
 namespace nserv
 {
 
-using gnuworld::xServer;
-
-
 /*
  *  Exported function used by moduleLoader to gain an
  *  instance of this module.

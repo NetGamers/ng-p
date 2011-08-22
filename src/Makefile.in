@@ -364,7 +364,7 @@ gnuworld_SOURCES = Channel.cc \
 	main.cc \
 	server.cc
 
-INCLUDES = $(INCLTDL)
+AM_CPPFLAGS = $(all_includes) $(INCLTDL)
 lib_LTLIBRARIES = lib_msg_AC.la \
 	lib_msg_AD.la \
 	lib_msg_B.la \
@@ -475,9 +475,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  src/Makefile
+	  $(AUTOMAKE) --foreign  src/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

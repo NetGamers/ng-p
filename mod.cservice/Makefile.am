@@ -81,4 +81,4 @@ libcservice_la_SOURCES = cservice.cc \
 	VERIFYCommand.cc \
 	VOICECommand.cc
 
-INCLUDES = -I@PGSQL_INCLUDE@ $(INCLTDL)
+AM_CPPFLAGS = $(all_includes) -I@PGSQL_INCLUDE@ $(INCLTDL)

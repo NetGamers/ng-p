@@ -17,7 +17,7 @@ gnuworld_SOURCES = Channel.cc \
 	ip.cc \
 	main.cc \
 	server.cc
-INCLUDES = $(INCLTDL)
+AM_CPPFLAGS = $(all_includes) $(INCLTDL)
 
 lib_LTLIBRARIES = lib_msg_AC.la \
 	lib_msg_AD.la \

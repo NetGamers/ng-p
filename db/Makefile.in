@@ -215,7 +215,7 @@ libgnuworld_db_la_SOURCES = gnuworldDB.cc pgsqlDB.cc
 libgnuworld_db_la_LDFLAGS = -version-info 0:0:0 -rpath $(bindir) \
 	-L@PGSQL_LIB@ -lpq++
 
-INCLUDES = -I@PGSQL_INCLUDE@
+AM_CPPFLAGS = $(all_includes) -I@PGSQL_INCLUDE@
 all: all-am
 
 .SUFFIXES:
@@ -229,9 +229,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  db/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  db/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  db/Makefile
+	  $(AUTOMAKE) --foreign  db/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

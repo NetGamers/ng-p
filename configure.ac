@@ -1,10 +1,9 @@
 echo Configuring GNUWorld...
 echo
 
-AC_REVISION($Revision: 1.2 $)
-AC_INIT
+AC_INIT([gnuworld],[1.0],[jeekay@netgamers.org])
 AC_CONFIG_SRCDIR([src/main.cc])
-AM_INIT_AUTOMAKE(gnuworld,0.0)
+AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AC_CONFIG_HEADERS([include/defs.h])
 
 dnl Enable building of the convenience library

@@ -53,6 +53,7 @@ protected:
   	 * Pointer to the loaded module. 
 	 */
 	lt_dlhandle		moduleHandle ;
+	lt_dladvise		moduleAdvise ;
 
 	/**
 	 * Pointer to the initialisation function.	
@@ -123,13 +124,18 @@ public:
 		fileName += ".la" ;
 		}
 
-//	elog	<< "moduleLoader> Attempting to load module "
-//		<< fileName
-//		<< std::endl;
+	elog	<< "moduleLoader> Attempting to load module "
+		<< fileName
+		<< std::endl;
 
 	// lt_dlopenext() will do all that lt_dlopen() does,
 	// but also check for .la, .so, .sl, etc extensions
-	moduleHandle = lt_dlopen( fileName.c_str() ) ;
+	lt_dladvise_init(&moduleAdvise);
+	lt_dladvise_global(&moduleAdvise);
+
+	moduleHandle = lt_dlopenadvise( fileName.c_str() , moduleAdvise ) ;
+
+	lt_dladvise_destroy(&moduleAdvise);
 
 	if( 0 == moduleHandle )
 		{
@@ -142,10 +148,10 @@ public:
 		return ;
 		}
 
-//	elog	<< "moduleLoader> Module "
-//		<< moduleName
-//		<< " successfully loaded"
-//		<< std::endl;
+	elog	<< "moduleLoader> Module "
+		<< moduleName
+		<< " successfully loaded"
+		<< std::endl;
 	}
 
 	/**

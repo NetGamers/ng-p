@@ -11,4 +11,4 @@ libnickserv_la_SOURCES = nickserv.cc \
 			STATSCommand.cc
 
 libnickserv_la_LDFLAGS = -module -export-dynamic -L@PGSQL_LIB@ -lpq++
-INCLUDES = -I@PGSQL_INCLUDE@ $(INCLTDL)
+AM_CPPFLAGS = $(all_includes) -I@PGSQL_INCLUDE@ $(INCLTDL)
