@@ -259,10 +259,10 @@ intYY = atoi( conf.Require( "numeric" )->second.c_str() ) ;
 intXXX = atoi( conf.Require( "maxclients" )->second.c_str() ) ;
 commandMapFileName = conf.Require( "command_map" )->second ;
 
-commandHandlerPrefix = conf.Require( "command_handler_path" )->second ;
-if( commandHandlerPrefix[ commandHandlerPrefix.size() - 1 ] != '/' )
+libPrefix = conf.Require( "libdir" )->second;
+if( libPrefix[ libPrefix.size() - 1 ] != '/' )
 	{
-	commandHandlerPrefix += '/' ;
+	libPrefix += '/' ;
 	}
 
 glineUpdateInterval = static_cast< time_t >( atoi(
@@ -298,14 +298,15 @@ while( std::getline( commandMapFile, line ) )
 		continue ;
 		}
 
+	// module_file_name module_loader_symbol command_key
 	StringTokenizer st( line ) ;
-	if( st.size() != 2 )
+	if( st.size() != 3 )
 		{
 		elog	<< "xServer::loadCommandHandlers> "
 			<< commandMapFileName
 			<< ":"
 			<< lineNumber
-			<< "> Invalid syntax, 2 tokens expected, "
+			<< "> Invalid syntax, 3 tokens expected, "
 			<< st.size()
 			<< " tokens found"
 			<< endl ;
@@ -314,7 +315,9 @@ while( std::getline( commandMapFile, line ) )
 		}
 
 	// st[ 0 ] is the filename of the module
-	// st[ 1 ] is the command key to which the handler will
+	// st[ 1 ] is the symbol name to lookup, minus the preceeding
+	// _gnuwinit_
+	// st[ 2 ] is the command key to which the handler will
 	//  be registered
 
 	// Let's make sure that the filename is correct
@@ -322,12 +325,12 @@ while( std::getline( commandMapFile, line ) )
 
 	// We need the entire path to the command handler in the
 	// fileName.
-	if( string::npos == fileName.find( commandHandlerPrefix ) )
+	if( string::npos == fileName.find( libPrefix ) )
 		{
 		// Need to put the command handler path prefix in
 		// the filename
-		// commandHandlerPrefix has a trailing '/'
-		fileName = commandHandlerPrefix + fileName ;
+		// libPrefix has a trailing '/'
+		fileName = libPrefix + fileName ;
 		}
 
 	// All module names end with ".la" for libtool libraries
@@ -337,10 +340,14 @@ while( std::getline( commandMapFile, line ) )
 		fileName += ".la" ;
 		}
 
-	if( !loadCommandHandler( fileName, st[ 1 ] ) )
+	if( !loadCommandHandler( fileName, st[ 1 ], st[ 2 ] ) )
 		{
-		elog	<< "xSerer::loadCommandHandlers> Failed to load "
-			<< "handler for "
+		elog	<< "xServer::loadCommandHandlers> Failed to load "
+			<< "handler for message token "
+			<< st[ 2 ]
+			<< ", from module file: "
+			<< fileName
+			<< ", with symbol suffix: "
 			<< st[ 1 ]
 			<< endl ;
 		returnVal = false ;
@@ -359,10 +366,12 @@ elog	<< "xServer> Loaded "
 	<< endl ;
 
 commandMapFile.close() ;
+
 return returnVal ;
 }
 
 bool xServer::loadCommandHandler( const string& fileName,
+	const string& symbolName,
 	const string& commandKey )
 {
 // Let's first check to see if the module is already open
@@ -375,12 +384,18 @@ if( NULL == ml )
 	assert( ml != 0 ) ;
 	}
 
-ServerCommandHandler* sch = ml->loadObject( this ) ;
+string symbolSuffix = string( "_" ) + symbolName ;
+
+ServerCommandHandler* sch = ml->loadObject( this, symbolSuffix ) ;
 if( NULL == sch )
 	{
-	elog	<< "xServer::loadCommandHandler> Error loading "
-		<< "module file "
+	elog    << "xServer::loadCommandHandler> Failed to load "
+		<< "handler for message token "
+		<< commandKey
+		<< ", from module file: "
 		<< fileName
+		<< ", with symbol suffix: "
+		<< symbolName
 		<< endl ;
 
 	delete( ml ) ; ml = 0 ;

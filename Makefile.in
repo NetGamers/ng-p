@@ -209,7 +209,7 @@ subdirs = @subdirs@
 sys_symbol_underscore = @sys_symbol_underscore@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-SUBDIRS = lib libltdl db src @MOD_DIRS@
+SUBDIRS = lib libircu libltdl db src @MOD_DIRS@
 all: all-recursive
 
 .SUFFIXES:

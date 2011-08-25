@@ -18,21 +18,12 @@
  * USA.
  */
 
-#include	<string>
-#include	<iostream>
-
-#include	"server.h"
 #include	"Network.h"
-#include	"iClient.h"
-#include	"client.h"
 #include	"ELog.h"
-#include	"xparameters.h"
-#include	"ServerCommandHandler.h"
 
 namespace gnuworld
 {
 
-using std::string ;
 using std::endl ;
 
 CREATE_HANDLER(msg_P)

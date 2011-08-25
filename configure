@@ -16527,7 +16527,7 @@ fi
 
 
 
-ac_config_files="$ac_config_files Makefile db/Makefile lib/Makefile src/Makefile mod.cservice/Makefile mod.nickserv/Makefile"
+ac_config_files="$ac_config_files Makefile db/Makefile lib/Makefile libircu/Makefile src/Makefile mod.cservice/Makefile mod.nickserv/Makefile"
 
 
 cat >confcache <<\_ACEOF
@@ -17621,6 +17621,7 @@ do
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "db/Makefile") CONFIG_FILES="$CONFIG_FILES db/Makefile" ;;
     "lib/Makefile") CONFIG_FILES="$CONFIG_FILES lib/Makefile" ;;
+    "libircu/Makefile") CONFIG_FILES="$CONFIG_FILES libircu/Makefile" ;;
     "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
     "mod.cservice/Makefile") CONFIG_FILES="$CONFIG_FILES mod.cservice/Makefile" ;;
     "mod.nickserv/Makefile") CONFIG_FILES="$CONFIG_FILES mod.nickserv/Makefile" ;;

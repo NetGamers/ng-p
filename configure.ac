@@ -272,7 +272,11 @@ AC_SUBST(PGSQL_INCLUDE)
 AC_SUBST(PGSQL_LIB)
 AC_SUBST(bindir)
 
-AC_CONFIG_FILES([Makefile db/Makefile lib/Makefile src/Makefile \
+AC_CONFIG_FILES([Makefile \
+db/Makefile \
+lib/Makefile \
+libircu/Makefile \
+src/Makefile \
 mod.cservice/Makefile \
 mod.nickserv/Makefile])
 

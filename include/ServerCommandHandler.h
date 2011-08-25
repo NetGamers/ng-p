@@ -30,7 +30,6 @@ class xServer ;
 
 class ServerCommandHandler
 {
-
 protected:
 	xServer		*theServer ;
 
@@ -43,7 +42,6 @@ public:
 	{}
 
 	virtual bool Execute( const xParameters& ) = 0 ;
-
 } ;
 
 #define CREATE_HANDLER(name) \
@@ -61,7 +59,7 @@ public: \
 \
 extern "C" \
 { \
-  name* _gnuwinit( xServer* theServer ) \
+  name* _gnuwinit_##name( xServer* theServer ) \
     { \
       return new name( theServer ) ; \
     } \
@@ -70,7 +68,7 @@ extern "C" \
 #define CREATE_LOADER(name) \
 extern "C" \
 { \
-  name* _gnuwinit( xServer* theServer ) \
+  name* _gnuwinit_##name( xServer* theServer ) \
     { \
       return new name( theServer ) ; \
     } \

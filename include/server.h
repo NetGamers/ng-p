@@ -1254,10 +1254,10 @@ protected:
 	string			commandMapFileName ;
 
 	/**
-	 * The path prefix to the command handler, of the form
-	 * "/path/to/command/map/file"
+	 * The path prefix to the gnuworld libraries, of the form
+	 * "/path/to/lib/dir"
 	 */
-	string			commandHandlerPrefix ;
+	string			libPrefix ;
 
 	/**
 	 * Burst() is called when the network connection is
@@ -1410,6 +1410,7 @@ protected:
 	 * (commandKey).
 	 */
 	bool		loadCommandHandler( const string& fileName,
+				const string& symbolName,
 				const string& commandKey ) ;
 
 	/**
