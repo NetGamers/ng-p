@@ -49,12 +49,15 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
-am_gnuworld_OBJECTS = Channel.$(OBJEXT) ChannelUser.$(OBJEXT) \
-	LoadClientTimerHandler.$(OBJEXT) Network.$(OBJEXT) \
-	ServerTimerHandlers.$(OBJEXT) \
-	UnloadClientTimerHandler.$(OBJEXT) client.$(OBJEXT) \
-	iClient.$(OBJEXT) iServer.$(OBJEXT) ip.$(OBJEXT) \
-	main.$(OBJEXT) server.$(OBJEXT)
+am_gnuworld_OBJECTS = gnuworld-Channel.$(OBJEXT) \
+	gnuworld-ChannelUser.$(OBJEXT) \
+	gnuworld-LoadClientTimerHandler.$(OBJEXT) \
+	gnuworld-Network.$(OBJEXT) \
+	gnuworld-ServerTimerHandlers.$(OBJEXT) \
+	gnuworld-UnloadClientTimerHandler.$(OBJEXT) \
+	gnuworld-client.$(OBJEXT) gnuworld-iClient.$(OBJEXT) \
+	gnuworld-iServer.$(OBJEXT) gnuworld-ip.$(OBJEXT) \
+	gnuworld-main.$(OBJEXT) gnuworld-server.$(OBJEXT)
 gnuworld_OBJECTS = $(am_gnuworld_OBJECTS)
 gnuworld_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/include
@@ -210,6 +213,7 @@ subdirs = @subdirs@
 sys_symbol_underscore = @sys_symbol_underscore@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
+gnuworld_CXXFLAGS = $(INCLTDL)
 gnuworld_LDFLAGS = -rpath $(bindir) $(glibdir)/libgnuworld.la \
 	-R$(bindir) -export-dynamic -module $(LIBLTDL)
 
@@ -298,18 +302,18 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Channel.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ChannelUser.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/LoadClientTimerHandler.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Network.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ServerTimerHandlers.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/UnloadClientTimerHandler.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/client.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/iClient.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/iServer.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ip.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/server.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gnuworld-Channel.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gnuworld-ChannelUser.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gnuworld-LoadClientTimerHandler.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gnuworld-Network.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gnuworld-ServerTimerHandlers.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gnuworld-UnloadClientTimerHandler.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gnuworld-client.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gnuworld-iClient.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gnuworld-iServer.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gnuworld-ip.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gnuworld-main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gnuworld-server.Po@am__quote@
 
 .cc.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
@@ -331,6 +335,174 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
+
+gnuworld-Channel.o: Channel.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -MT gnuworld-Channel.o -MD -MP -MF "$(DEPDIR)/gnuworld-Channel.Tpo" -c -o gnuworld-Channel.o `test -f 'Channel.cc' || echo '$(srcdir)/'`Channel.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/gnuworld-Channel.Tpo" "$(DEPDIR)/gnuworld-Channel.Po"; else rm -f "$(DEPDIR)/gnuworld-Channel.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Channel.cc' object='gnuworld-Channel.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -c -o gnuworld-Channel.o `test -f 'Channel.cc' || echo '$(srcdir)/'`Channel.cc
+
+gnuworld-Channel.obj: Channel.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -MT gnuworld-Channel.obj -MD -MP -MF "$(DEPDIR)/gnuworld-Channel.Tpo" -c -o gnuworld-Channel.obj `if test -f 'Channel.cc'; then $(CYGPATH_W) 'Channel.cc'; else $(CYGPATH_W) '$(srcdir)/Channel.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/gnuworld-Channel.Tpo" "$(DEPDIR)/gnuworld-Channel.Po"; else rm -f "$(DEPDIR)/gnuworld-Channel.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Channel.cc' object='gnuworld-Channel.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -c -o gnuworld-Channel.obj `if test -f 'Channel.cc'; then $(CYGPATH_W) 'Channel.cc'; else $(CYGPATH_W) '$(srcdir)/Channel.cc'; fi`
+
+gnuworld-ChannelUser.o: ChannelUser.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -MT gnuworld-ChannelUser.o -MD -MP -MF "$(DEPDIR)/gnuworld-ChannelUser.Tpo" -c -o gnuworld-ChannelUser.o `test -f 'ChannelUser.cc' || echo '$(srcdir)/'`ChannelUser.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/gnuworld-ChannelUser.Tpo" "$(DEPDIR)/gnuworld-ChannelUser.Po"; else rm -f "$(DEPDIR)/gnuworld-ChannelUser.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ChannelUser.cc' object='gnuworld-ChannelUser.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -c -o gnuworld-ChannelUser.o `test -f 'ChannelUser.cc' || echo '$(srcdir)/'`ChannelUser.cc
+
+gnuworld-ChannelUser.obj: ChannelUser.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -MT gnuworld-ChannelUser.obj -MD -MP -MF "$(DEPDIR)/gnuworld-ChannelUser.Tpo" -c -o gnuworld-ChannelUser.obj `if test -f 'ChannelUser.cc'; then $(CYGPATH_W) 'ChannelUser.cc'; else $(CYGPATH_W) '$(srcdir)/ChannelUser.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/gnuworld-ChannelUser.Tpo" "$(DEPDIR)/gnuworld-ChannelUser.Po"; else rm -f "$(DEPDIR)/gnuworld-ChannelUser.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ChannelUser.cc' object='gnuworld-ChannelUser.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -c -o gnuworld-ChannelUser.obj `if test -f 'ChannelUser.cc'; then $(CYGPATH_W) 'ChannelUser.cc'; else $(CYGPATH_W) '$(srcdir)/ChannelUser.cc'; fi`
+
+gnuworld-LoadClientTimerHandler.o: LoadClientTimerHandler.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -MT gnuworld-LoadClientTimerHandler.o -MD -MP -MF "$(DEPDIR)/gnuworld-LoadClientTimerHandler.Tpo" -c -o gnuworld-LoadClientTimerHandler.o `test -f 'LoadClientTimerHandler.cc' || echo '$(srcdir)/'`LoadClientTimerHandler.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/gnuworld-LoadClientTimerHandler.Tpo" "$(DEPDIR)/gnuworld-LoadClientTimerHandler.Po"; else rm -f "$(DEPDIR)/gnuworld-LoadClientTimerHandler.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='LoadClientTimerHandler.cc' object='gnuworld-LoadClientTimerHandler.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -c -o gnuworld-LoadClientTimerHandler.o `test -f 'LoadClientTimerHandler.cc' || echo '$(srcdir)/'`LoadClientTimerHandler.cc
+
+gnuworld-LoadClientTimerHandler.obj: LoadClientTimerHandler.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -MT gnuworld-LoadClientTimerHandler.obj -MD -MP -MF "$(DEPDIR)/gnuworld-LoadClientTimerHandler.Tpo" -c -o gnuworld-LoadClientTimerHandler.obj `if test -f 'LoadClientTimerHandler.cc'; then $(CYGPATH_W) 'LoadClientTimerHandler.cc'; else $(CYGPATH_W) '$(srcdir)/LoadClientTimerHandler.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/gnuworld-LoadClientTimerHandler.Tpo" "$(DEPDIR)/gnuworld-LoadClientTimerHandler.Po"; else rm -f "$(DEPDIR)/gnuworld-LoadClientTimerHandler.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='LoadClientTimerHandler.cc' object='gnuworld-LoadClientTimerHandler.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -c -o gnuworld-LoadClientTimerHandler.obj `if test -f 'LoadClientTimerHandler.cc'; then $(CYGPATH_W) 'LoadClientTimerHandler.cc'; else $(CYGPATH_W) '$(srcdir)/LoadClientTimerHandler.cc'; fi`
+
+gnuworld-Network.o: Network.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -MT gnuworld-Network.o -MD -MP -MF "$(DEPDIR)/gnuworld-Network.Tpo" -c -o gnuworld-Network.o `test -f 'Network.cc' || echo '$(srcdir)/'`Network.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/gnuworld-Network.Tpo" "$(DEPDIR)/gnuworld-Network.Po"; else rm -f "$(DEPDIR)/gnuworld-Network.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Network.cc' object='gnuworld-Network.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -c -o gnuworld-Network.o `test -f 'Network.cc' || echo '$(srcdir)/'`Network.cc
+
+gnuworld-Network.obj: Network.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -MT gnuworld-Network.obj -MD -MP -MF "$(DEPDIR)/gnuworld-Network.Tpo" -c -o gnuworld-Network.obj `if test -f 'Network.cc'; then $(CYGPATH_W) 'Network.cc'; else $(CYGPATH_W) '$(srcdir)/Network.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/gnuworld-Network.Tpo" "$(DEPDIR)/gnuworld-Network.Po"; else rm -f "$(DEPDIR)/gnuworld-Network.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Network.cc' object='gnuworld-Network.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -c -o gnuworld-Network.obj `if test -f 'Network.cc'; then $(CYGPATH_W) 'Network.cc'; else $(CYGPATH_W) '$(srcdir)/Network.cc'; fi`
+
+gnuworld-ServerTimerHandlers.o: ServerTimerHandlers.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -MT gnuworld-ServerTimerHandlers.o -MD -MP -MF "$(DEPDIR)/gnuworld-ServerTimerHandlers.Tpo" -c -o gnuworld-ServerTimerHandlers.o `test -f 'ServerTimerHandlers.cc' || echo '$(srcdir)/'`ServerTimerHandlers.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/gnuworld-ServerTimerHandlers.Tpo" "$(DEPDIR)/gnuworld-ServerTimerHandlers.Po"; else rm -f "$(DEPDIR)/gnuworld-ServerTimerHandlers.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ServerTimerHandlers.cc' object='gnuworld-ServerTimerHandlers.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -c -o gnuworld-ServerTimerHandlers.o `test -f 'ServerTimerHandlers.cc' || echo '$(srcdir)/'`ServerTimerHandlers.cc
+
+gnuworld-ServerTimerHandlers.obj: ServerTimerHandlers.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -MT gnuworld-ServerTimerHandlers.obj -MD -MP -MF "$(DEPDIR)/gnuworld-ServerTimerHandlers.Tpo" -c -o gnuworld-ServerTimerHandlers.obj `if test -f 'ServerTimerHandlers.cc'; then $(CYGPATH_W) 'ServerTimerHandlers.cc'; else $(CYGPATH_W) '$(srcdir)/ServerTimerHandlers.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/gnuworld-ServerTimerHandlers.Tpo" "$(DEPDIR)/gnuworld-ServerTimerHandlers.Po"; else rm -f "$(DEPDIR)/gnuworld-ServerTimerHandlers.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ServerTimerHandlers.cc' object='gnuworld-ServerTimerHandlers.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -c -o gnuworld-ServerTimerHandlers.obj `if test -f 'ServerTimerHandlers.cc'; then $(CYGPATH_W) 'ServerTimerHandlers.cc'; else $(CYGPATH_W) '$(srcdir)/ServerTimerHandlers.cc'; fi`
+
+gnuworld-UnloadClientTimerHandler.o: UnloadClientTimerHandler.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -MT gnuworld-UnloadClientTimerHandler.o -MD -MP -MF "$(DEPDIR)/gnuworld-UnloadClientTimerHandler.Tpo" -c -o gnuworld-UnloadClientTimerHandler.o `test -f 'UnloadClientTimerHandler.cc' || echo '$(srcdir)/'`UnloadClientTimerHandler.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/gnuworld-UnloadClientTimerHandler.Tpo" "$(DEPDIR)/gnuworld-UnloadClientTimerHandler.Po"; else rm -f "$(DEPDIR)/gnuworld-UnloadClientTimerHandler.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnloadClientTimerHandler.cc' object='gnuworld-UnloadClientTimerHandler.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -c -o gnuworld-UnloadClientTimerHandler.o `test -f 'UnloadClientTimerHandler.cc' || echo '$(srcdir)/'`UnloadClientTimerHandler.cc
+
+gnuworld-UnloadClientTimerHandler.obj: UnloadClientTimerHandler.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -MT gnuworld-UnloadClientTimerHandler.obj -MD -MP -MF "$(DEPDIR)/gnuworld-UnloadClientTimerHandler.Tpo" -c -o gnuworld-UnloadClientTimerHandler.obj `if test -f 'UnloadClientTimerHandler.cc'; then $(CYGPATH_W) 'UnloadClientTimerHandler.cc'; else $(CYGPATH_W) '$(srcdir)/UnloadClientTimerHandler.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/gnuworld-UnloadClientTimerHandler.Tpo" "$(DEPDIR)/gnuworld-UnloadClientTimerHandler.Po"; else rm -f "$(DEPDIR)/gnuworld-UnloadClientTimerHandler.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='UnloadClientTimerHandler.cc' object='gnuworld-UnloadClientTimerHandler.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -c -o gnuworld-UnloadClientTimerHandler.obj `if test -f 'UnloadClientTimerHandler.cc'; then $(CYGPATH_W) 'UnloadClientTimerHandler.cc'; else $(CYGPATH_W) '$(srcdir)/UnloadClientTimerHandler.cc'; fi`
+
+gnuworld-client.o: client.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -MT gnuworld-client.o -MD -MP -MF "$(DEPDIR)/gnuworld-client.Tpo" -c -o gnuworld-client.o `test -f 'client.cc' || echo '$(srcdir)/'`client.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/gnuworld-client.Tpo" "$(DEPDIR)/gnuworld-client.Po"; else rm -f "$(DEPDIR)/gnuworld-client.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='client.cc' object='gnuworld-client.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -c -o gnuworld-client.o `test -f 'client.cc' || echo '$(srcdir)/'`client.cc
+
+gnuworld-client.obj: client.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -MT gnuworld-client.obj -MD -MP -MF "$(DEPDIR)/gnuworld-client.Tpo" -c -o gnuworld-client.obj `if test -f 'client.cc'; then $(CYGPATH_W) 'client.cc'; else $(CYGPATH_W) '$(srcdir)/client.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/gnuworld-client.Tpo" "$(DEPDIR)/gnuworld-client.Po"; else rm -f "$(DEPDIR)/gnuworld-client.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='client.cc' object='gnuworld-client.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -c -o gnuworld-client.obj `if test -f 'client.cc'; then $(CYGPATH_W) 'client.cc'; else $(CYGPATH_W) '$(srcdir)/client.cc'; fi`
+
+gnuworld-iClient.o: iClient.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -MT gnuworld-iClient.o -MD -MP -MF "$(DEPDIR)/gnuworld-iClient.Tpo" -c -o gnuworld-iClient.o `test -f 'iClient.cc' || echo '$(srcdir)/'`iClient.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/gnuworld-iClient.Tpo" "$(DEPDIR)/gnuworld-iClient.Po"; else rm -f "$(DEPDIR)/gnuworld-iClient.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='iClient.cc' object='gnuworld-iClient.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -c -o gnuworld-iClient.o `test -f 'iClient.cc' || echo '$(srcdir)/'`iClient.cc
+
+gnuworld-iClient.obj: iClient.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -MT gnuworld-iClient.obj -MD -MP -MF "$(DEPDIR)/gnuworld-iClient.Tpo" -c -o gnuworld-iClient.obj `if test -f 'iClient.cc'; then $(CYGPATH_W) 'iClient.cc'; else $(CYGPATH_W) '$(srcdir)/iClient.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/gnuworld-iClient.Tpo" "$(DEPDIR)/gnuworld-iClient.Po"; else rm -f "$(DEPDIR)/gnuworld-iClient.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='iClient.cc' object='gnuworld-iClient.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -c -o gnuworld-iClient.obj `if test -f 'iClient.cc'; then $(CYGPATH_W) 'iClient.cc'; else $(CYGPATH_W) '$(srcdir)/iClient.cc'; fi`
+
+gnuworld-iServer.o: iServer.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -MT gnuworld-iServer.o -MD -MP -MF "$(DEPDIR)/gnuworld-iServer.Tpo" -c -o gnuworld-iServer.o `test -f 'iServer.cc' || echo '$(srcdir)/'`iServer.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/gnuworld-iServer.Tpo" "$(DEPDIR)/gnuworld-iServer.Po"; else rm -f "$(DEPDIR)/gnuworld-iServer.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='iServer.cc' object='gnuworld-iServer.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -c -o gnuworld-iServer.o `test -f 'iServer.cc' || echo '$(srcdir)/'`iServer.cc
+
+gnuworld-iServer.obj: iServer.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -MT gnuworld-iServer.obj -MD -MP -MF "$(DEPDIR)/gnuworld-iServer.Tpo" -c -o gnuworld-iServer.obj `if test -f 'iServer.cc'; then $(CYGPATH_W) 'iServer.cc'; else $(CYGPATH_W) '$(srcdir)/iServer.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/gnuworld-iServer.Tpo" "$(DEPDIR)/gnuworld-iServer.Po"; else rm -f "$(DEPDIR)/gnuworld-iServer.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='iServer.cc' object='gnuworld-iServer.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -c -o gnuworld-iServer.obj `if test -f 'iServer.cc'; then $(CYGPATH_W) 'iServer.cc'; else $(CYGPATH_W) '$(srcdir)/iServer.cc'; fi`
+
+gnuworld-ip.o: ip.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -MT gnuworld-ip.o -MD -MP -MF "$(DEPDIR)/gnuworld-ip.Tpo" -c -o gnuworld-ip.o `test -f 'ip.cc' || echo '$(srcdir)/'`ip.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/gnuworld-ip.Tpo" "$(DEPDIR)/gnuworld-ip.Po"; else rm -f "$(DEPDIR)/gnuworld-ip.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ip.cc' object='gnuworld-ip.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -c -o gnuworld-ip.o `test -f 'ip.cc' || echo '$(srcdir)/'`ip.cc
+
+gnuworld-ip.obj: ip.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -MT gnuworld-ip.obj -MD -MP -MF "$(DEPDIR)/gnuworld-ip.Tpo" -c -o gnuworld-ip.obj `if test -f 'ip.cc'; then $(CYGPATH_W) 'ip.cc'; else $(CYGPATH_W) '$(srcdir)/ip.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/gnuworld-ip.Tpo" "$(DEPDIR)/gnuworld-ip.Po"; else rm -f "$(DEPDIR)/gnuworld-ip.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ip.cc' object='gnuworld-ip.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -c -o gnuworld-ip.obj `if test -f 'ip.cc'; then $(CYGPATH_W) 'ip.cc'; else $(CYGPATH_W) '$(srcdir)/ip.cc'; fi`
+
+gnuworld-main.o: main.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -MT gnuworld-main.o -MD -MP -MF "$(DEPDIR)/gnuworld-main.Tpo" -c -o gnuworld-main.o `test -f 'main.cc' || echo '$(srcdir)/'`main.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/gnuworld-main.Tpo" "$(DEPDIR)/gnuworld-main.Po"; else rm -f "$(DEPDIR)/gnuworld-main.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='main.cc' object='gnuworld-main.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -c -o gnuworld-main.o `test -f 'main.cc' || echo '$(srcdir)/'`main.cc
+
+gnuworld-main.obj: main.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -MT gnuworld-main.obj -MD -MP -MF "$(DEPDIR)/gnuworld-main.Tpo" -c -o gnuworld-main.obj `if test -f 'main.cc'; then $(CYGPATH_W) 'main.cc'; else $(CYGPATH_W) '$(srcdir)/main.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/gnuworld-main.Tpo" "$(DEPDIR)/gnuworld-main.Po"; else rm -f "$(DEPDIR)/gnuworld-main.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='main.cc' object='gnuworld-main.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -c -o gnuworld-main.obj `if test -f 'main.cc'; then $(CYGPATH_W) 'main.cc'; else $(CYGPATH_W) '$(srcdir)/main.cc'; fi`
+
+gnuworld-server.o: server.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -MT gnuworld-server.o -MD -MP -MF "$(DEPDIR)/gnuworld-server.Tpo" -c -o gnuworld-server.o `test -f 'server.cc' || echo '$(srcdir)/'`server.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/gnuworld-server.Tpo" "$(DEPDIR)/gnuworld-server.Po"; else rm -f "$(DEPDIR)/gnuworld-server.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='server.cc' object='gnuworld-server.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -c -o gnuworld-server.o `test -f 'server.cc' || echo '$(srcdir)/'`server.cc
+
+gnuworld-server.obj: server.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -MT gnuworld-server.obj -MD -MP -MF "$(DEPDIR)/gnuworld-server.Tpo" -c -o gnuworld-server.obj `if test -f 'server.cc'; then $(CYGPATH_W) 'server.cc'; else $(CYGPATH_W) '$(srcdir)/server.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/gnuworld-server.Tpo" "$(DEPDIR)/gnuworld-server.Po"; else rm -f "$(DEPDIR)/gnuworld-server.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='server.cc' object='gnuworld-server.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gnuworld_CXXFLAGS) $(CXXFLAGS) -c -o gnuworld-server.obj `if test -f 'server.cc'; then $(CYGPATH_W) 'server.cc'; else $(CYGPATH_W) '$(srcdir)/server.cc'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

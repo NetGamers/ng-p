@@ -2,6 +2,7 @@
 
 bin_PROGRAMS = gnuworld
 
+gnuworld_CXXFLAGS = $(INCLTDL)
 gnuworld_LDFLAGS = -rpath $(bindir) $(glibdir)/libgnuworld.la \
 	-R$(bindir) -export-dynamic -module $(LIBLTDL)
 gnuworld_DEPENDENCIES = $(LIBLTDL) $(glibdir)/libgnuworld.la
