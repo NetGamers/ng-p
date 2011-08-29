@@ -146,8 +146,23 @@ void REMUSERCommand::Exec( iClient* theClient, const string& Message )
 	 *  Unless they are trying to remove themself.. in which case its ok ;)
 	 */
 
-	if(targetLevel == 499 && !bot->isForced(theChan, theUser)) {
-		bot->Notice(theClient, "Only CService may remove users with 499+ access.");
+	/* My Karnaugh map for this says:
+	 * F - Forced
+	 * N - New
+	 * S - Supporter
+	 *       F
+	 *       0 1
+	 * NS 00 1 1
+	 *    01 1 1
+	 *    11 0 1
+	 *    10 1 1
+	 *
+	 * Which solves to F+!N+N!S
+	 * or, for the negative, !FNS
+	 */
+
+	if(!bot->isForced(theChan, theUser) && bot->isNew(theChan) && targetLevel == 499) {
+		bot->Notice(theClient, "Only CService may remove users with 499+ access inside the NEW period.");
 		return ;
 	}
 
@@ -221,7 +236,7 @@ void REMUSERCommand::Exec( iClient* theClient, const string& Message )
 	elog << "sqlQuery> " << theQuery.str().c_str() << endl;
 #endif
 
-	if ((status = bot->SQLDb->Exec(theQuery.str().c_str())) == PGRES_COMMAND_OK)
+	if ( bot->SQLDb->ExecCommandOk(theQuery.str().c_str()) )
 	{
 		bot->Notice(theClient,
 			bot->getResponse(theUser,

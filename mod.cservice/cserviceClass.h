@@ -148,6 +148,9 @@ public:
 	/* Checks to see if this users is forced on this channel */
 	unsigned short isForced(sqlChannel*, sqlUser*);
 
+	/** Checks to see if this channel is 'new'. */
+	bool isNew( sqlChannel* );
+
 	/* Fetch a channel record for a channel. */
 	sqlChannel* getChannelRecord( const string& );
 	sqlChannel* getChannelRecord( int );
@@ -267,6 +270,9 @@ public:
 	/** Duration after which a channel will be idle parted. */
 	int idleChannelPartPeriod;
 
+	/** Duration after registration that a channel is considered new. */
+	int newChannelPeriod;
+
 	/* Duration in seconds at which a 'pending' channel should
 	 * be notified that it is so. */
 	int pendingChanPeriod;
@@ -341,7 +347,7 @@ public:
 	void doAutoTopic(sqlChannel*);
 
 	/* Automatically updates the floating limit for this channel */ 
-        void doFloatingLimit(sqlChannel*, Channel*); 
+	void doFloatingLimit(sqlChannel*, Channel*);
 
 	/* Bans & kicks a specified user with a specific reason */
 	bool doInternalBanAndKick(sqlChannel*, iClient*, const string&);

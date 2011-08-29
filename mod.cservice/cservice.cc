@@ -294,6 +294,7 @@ nickNickServ = cserviceConfig->Require("nickservNick")->second;
 loginDelay = atoi((cserviceConfig->Require( "login_delay" )->second).c_str());
 preloadUserDays = atoi((cserviceConfig->Require( "preload_user_days" )->second).c_str());
 idleChannelPartPeriod = atoi((cserviceConfig->Require( "idle_channel_part_period" )->second).c_str());
+newChannelPeriod = atoi((cserviceConfig->Require( "new_channel_period" )->second).c_str());
 
 userHits = 0;
 userCacheHits = 0;
@@ -748,6 +749,18 @@ if (!theChan->forceMap.empty())
 	}
 
 return 0;
+}
+
+/**
+ * Check to see if this is a 'new' channel.
+ */
+bool cservice::isNew(sqlChannel* theChan)
+{
+if( (::time(NULL) - theChan->getRegisteredTS()) < newChannelPeriod ) {
+	return true;
+} else {
+	return false;
+}
 }
 
 /**

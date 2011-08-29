@@ -205,6 +205,7 @@ if (theChan->getFlag(sqlChannel::F_AUTOJOIN))    flagsSet += "AUTOJOIN ";
 if (theChan->getFlag(sqlChannel::F_LOCKED))      flagsSet += "LOCKED ";
 if (theChan->getFlag(sqlChannel::F_NOFORCE))     flagsSet += "NOFORCE ";
 if (theChan->getFlag(sqlChannel::F_STRICTVOICE)) flagsSet += "STRICTVOICE ";
+if (bot->isNew(theChan))                         flagsSet += "NEW ";
 if (theChan->getFlag(sqlChannel::F_INVISIBLE)) {
 	stringstream invisible;
 	invisible	<< "INVISIBLE("
