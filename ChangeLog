@@ -1,3 +1,8 @@
+2011-08-29 jeekay
+	* Added 'NEW' flag to STATUS for new channels
+	* Added 'new_channel_period' parameter
+	* Allow REMUSER for supporters after NEW flag lapses
+
 2003-01-15 18:36  jeekay
 
 	* CVSROOT/loginfo (1.11): Hmm
